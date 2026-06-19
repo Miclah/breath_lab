@@ -3,5 +3,21 @@
   "appTitle": "BreathLab",
   "@appTitle": {
     "description": "The application title shown in the OS task switcher"
+  },
+  "navTimer": "Timer",
+  "@navTimer": {
+    "description": "Bottom nav label for the Timer tab"
+  },
+  "navTables": "Tables",
+  "@navTables": {
+    "description": "Bottom nav label for the Tables tab"
+  },
+  "navProgress": "Progress",
+  "@navProgress": {
+    "description": "Bottom nav label for the Progress tab"
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Bottom nav label for the Settings tab"
   }
 }

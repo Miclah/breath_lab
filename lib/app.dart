@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/shell/app_shell.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/theme_data.dart';
 
@@ -16,7 +17,7 @@ class BreathLabApp extends ConsumerWidget {
       theme: buildLightTheme(),
       darkTheme: buildDarkTheme(),
       themeMode: ThemeMode.system,
-      home: const Scaffold(),
+      home: const AppShell(),
     );
   }
 }

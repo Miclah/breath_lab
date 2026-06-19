@@ -10,4 +10,16 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get appTitle => 'BreathLab';
+
+  @override
+  String get navTimer => 'Časovač';
+
+  @override
+  String get navTables => 'Tabuľky';
+
+  @override
+  String get navProgress => 'Pokrok';
+
+  @override
+  String get navSettings => 'Nastavenia';
 }

@@ -1,4 +1,8 @@
 {
   "@@locale": "sk",
-  "appTitle": "BreathLab"
+  "appTitle": "BreathLab",
+  "navTimer": "Časovač",
+  "navTables": "Tabuľky",
+  "navProgress": "Pokrok",
+  "navSettings": "Nastavenia"
 }

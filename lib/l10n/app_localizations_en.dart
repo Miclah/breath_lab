@@ -10,4 +10,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'BreathLab';
+
+  @override
+  String get navTimer => 'Timer';
+
+  @override
+  String get navTables => 'Tables';
+
+  @override
+  String get navProgress => 'Progress';
+
+  @override
+  String get navSettings => 'Settings';
 }

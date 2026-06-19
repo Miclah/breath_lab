@@ -103,6 +103,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'BreathLab'**
   String get appTitle;
+
+  /// Bottom nav label for the Timer tab
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get navTimer;
+
+  /// Bottom nav label for the Tables tab
+  ///
+  /// In en, this message translates to:
+  /// **'Tables'**
+  String get navTables;
+
+  /// Bottom nav label for the Progress tab
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get navProgress;
+
+  /// Bottom nav label for the Settings tab
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
 }
 
 class _AppLocalizationsDelegate
