@@ -1,13 +1,12 @@
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
 .buildlog/
 .history
-
-
+docs/
+CLAUDE.md
 
 # Flutter repo-specific
 /bin/cache/
