@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'theme/theme_data.dart';
+
 void main() {
   runApp(const BreathLabApp());
 }
@@ -9,6 +11,12 @@ class BreathLabApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: 'BreathLab', home: Scaffold());
+    return MaterialApp(
+      title: 'BreathLab',
+      theme: buildLightTheme(),
+      darkTheme: buildDarkTheme(),
+      themeMode: ThemeMode.system,
+      home: const Scaffold(),
+    );
   }
 }
