@@ -127,6 +127,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get navSettings;
+
+  /// Title of the safety first-launch screen
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Information'**
+  String get safetyTitle;
+
+  /// Intro paragraph on the safety screen
+  ///
+  /// In en, this message translates to:
+  /// **'Before using BreathLab, please read and acknowledge these safety rules.'**
+  String get safetyDescription;
+
+  /// Safety rule 1 — no solo water breath holds
+  ///
+  /// In en, this message translates to:
+  /// **'Never hold your breath in water while alone.'**
+  String get safetyRule1;
+
+  /// Safety rule 2 — no hyperventilation
+  ///
+  /// In en, this message translates to:
+  /// **'Never hyperventilate before a breath hold.'**
+  String get safetyRule2;
+
+  /// Safety rule 3 — stop on warning signs
+  ///
+  /// In en, this message translates to:
+  /// **'Stop immediately if you feel dizzy, tingling, or loss of control.'**
+  String get safetyRule3;
+
+  /// Acknowledge button on the safety screen
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get safetyAcknowledge;
+
+  /// Settings section header for appearance options
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearanceSection;
+
+  /// Label for the theme selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get settingsThemeLabel;
+
+  /// Dark theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// Light theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// System (follow OS) theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
 }
 
 class _AppLocalizationsDelegate

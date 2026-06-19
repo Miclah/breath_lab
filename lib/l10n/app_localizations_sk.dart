@@ -22,4 +22,39 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get navSettings => 'Nastavenia';
+
+  @override
+  String get safetyTitle => 'Bezpečnostné informácie';
+
+  @override
+  String get safetyDescription =>
+      'Pred použitím BreathLab si prečítaj a potvrď tieto bezpečnostné pravidlá.';
+
+  @override
+  String get safetyRule1 => 'Nikdy nezadržiavaj dych vo vode sám/sama.';
+
+  @override
+  String get safetyRule2 => 'Nikdy nehyperventiluj pred zadržaním dychu.';
+
+  @override
+  String get safetyRule3 =>
+      'Okamžite prestaň, ak pocítiš závraty, mravčenie alebo stratu kontroly.';
+
+  @override
+  String get safetyAcknowledge => 'Rozumiem';
+
+  @override
+  String get settingsAppearanceSection => 'Vzhľad';
+
+  @override
+  String get settingsThemeLabel => 'Téma';
+
+  @override
+  String get themeDark => 'Tmavá';
+
+  @override
+  String get themeLight => 'Svetlá';
+
+  @override
+  String get themeSystem => 'Systém';
 }
