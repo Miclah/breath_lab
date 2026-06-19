@@ -4,5 +4,11 @@
   "navTimer": "Časovač",
   "navTables": "Tabuľky",
   "navProgress": "Pokrok",
-  "navSettings": "Nastavenia"
+  "navSettings": "Nastavenia",
+  "safetyTitle": "Bezpečnostné informácie",
+  "safetyDescription": "Pred použitím BreathLab si prečítaj a potvrď tieto bezpečnostné pravidlá.",
+  "safetyRule1": "Nikdy nezadržiavaj dych vo vode sám/sama.",
+  "safetyRule2": "Nikdy nehyperventiluj pred zadržaním dychu.",
+  "safetyRule3": "Okamžite prestaň, ak pocítiš závraty, mravčenie alebo stratu kontroly.",
+  "safetyAcknowledge": "Rozumiem"
 }

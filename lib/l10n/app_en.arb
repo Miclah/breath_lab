@@ -19,5 +19,29 @@
   "navSettings": "Settings",
   "@navSettings": {
     "description": "Bottom nav label for the Settings tab"
+  },
+  "safetyTitle": "Safety Information",
+  "@safetyTitle": {
+    "description": "Title of the safety first-launch screen"
+  },
+  "safetyDescription": "Before using BreathLab, please read and acknowledge these safety rules.",
+  "@safetyDescription": {
+    "description": "Intro paragraph on the safety screen"
+  },
+  "safetyRule1": "Never hold your breath in water while alone.",
+  "@safetyRule1": {
+    "description": "Safety rule 1 — no solo water breath holds"
+  },
+  "safetyRule2": "Never hyperventilate before a breath hold.",
+  "@safetyRule2": {
+    "description": "Safety rule 2 — no hyperventilation"
+  },
+  "safetyRule3": "Stop immediately if you feel dizzy, tingling, or loss of control.",
+  "@safetyRule3": {
+    "description": "Safety rule 3 — stop on warning signs"
+  },
+  "safetyAcknowledge": "I understand",
+  "@safetyAcknowledge": {
+    "description": "Acknowledge button on the safety screen"
   }
 }
