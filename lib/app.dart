@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/safety/safety_provider.dart';
 import 'features/safety/safety_screen.dart';
+import 'features/settings/theme_mode_provider.dart';
 import 'features/shell/app_shell.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/theme_data.dart';
@@ -13,6 +14,8 @@ class BreathLabApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final safetyAsync = ref.watch(safetyAcknowledgedProvider);
+    final themeMode =
+        ref.watch(themeModeProvider).valueOrNull ?? ThemeMode.system;
 
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
@@ -20,7 +23,7 @@ class BreathLabApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       theme: buildLightTheme(),
       darkTheme: buildDarkTheme(),
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       home: safetyAsync.when(
         data: (acknowledged) =>
             acknowledged ? const AppShell() : const SafetyScreen(),

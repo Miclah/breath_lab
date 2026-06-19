@@ -43,5 +43,25 @@
   "safetyAcknowledge": "I understand",
   "@safetyAcknowledge": {
     "description": "Acknowledge button on the safety screen"
+  },
+  "settingsAppearanceSection": "Appearance",
+  "@settingsAppearanceSection": {
+    "description": "Settings section header for appearance options"
+  },
+  "settingsThemeLabel": "Theme",
+  "@settingsThemeLabel": {
+    "description": "Label for the theme selector in Settings"
+  },
+  "themeDark": "Dark",
+  "@themeDark": {
+    "description": "Dark theme option label"
+  },
+  "themeLight": "Light",
+  "@themeLight": {
+    "description": "Light theme option label"
+  },
+  "themeSystem": "System",
+  "@themeSystem": {
+    "description": "System (follow OS) theme option label"
   }
 }
