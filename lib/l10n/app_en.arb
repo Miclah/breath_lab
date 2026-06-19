@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "BreathLab",
+  "@appTitle": {
+    "description": "The application title shown in the OS task switcher"
+  }
+}
