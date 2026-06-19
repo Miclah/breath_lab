@@ -83,4 +83,31 @@ class BreathLabColors {
     infoText: Color(0xFF85B7EB),
     success: Color(0xFF639922),
   );
+
+  static const BreathLabColorScheme light = BreathLabColorScheme(
+    canvas: Color(0xFFF5F7FA),
+    surface: Color(0xFFFFFFFF),
+    surfaceElevated: Color(0xFFF0F2F5),
+    surfaceHover: Color(0xFFE8EAEF),
+    border: Color(0xFFD8DCE3),
+    borderHover: Color(0xFFB8BFC9),
+    textPrimary: Color(0xFF1A1D23),
+    textSecondary: Color(0xFF5A6474),
+    textTertiary: Color(0xFF8B95A5),
+    textOnPrimary: Color(0xFFE1F5EE),
+    textOnDanger: Color(0xFFFCEBEB),
+    primary: Color(0xFF0F6E56),
+    primarySurface: Color(0xFFE1F5EE),
+    primaryText: Color(0xFF085041),
+    warning: Color(0xFFBA7517),
+    warningSurface: Color(0xFFFAEEDA),
+    warningText: Color(0xFF633806),
+    danger: Color(0xFFA32D2D),
+    dangerSurface: Color(0xFFFCEBEB),
+    dangerText: Color(0xFF791F1F),
+    info: Color(0xFF185FA5),
+    infoSurface: Color(0xFFE6F1FB),
+    infoText: Color(0xFF0C447C),
+    success: Color(0xFF3B6D11),
+  );
 }
