@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../progress/progress_screen.dart';
+import '../settings/settings_screen.dart';
+import '../tables/tables_screen.dart';
+import '../timer/timer_screen.dart';
 import 'nav_provider.dart';
 
 class AppShell extends ConsumerWidget {
@@ -12,11 +16,11 @@ class AppShell extends ConsumerWidget {
     final selectedIndex = ref.watch(navIndexProvider);
     final l10n = AppLocalizations.of(context)!;
 
-    final bodies = <Widget>[
-      Center(child: Text(l10n.navTimer)),
-      Center(child: Text(l10n.navTables)),
-      Center(child: Text(l10n.navProgress)),
-      Center(child: Text(l10n.navSettings)),
+    const bodies = <Widget>[
+      TimerScreen(),
+      TablesScreen(),
+      ProgressScreen(),
+      SettingsScreen(),
     ];
 
     return Scaffold(
