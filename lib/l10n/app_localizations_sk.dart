@@ -77,4 +77,7 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get presetFullSessionTooltip =>
       '2-minútová príprava s dychovým sprievodcom, potom zadrž dych';
+
+  @override
+  String get prepGoLabel => 'Štart!';
 }

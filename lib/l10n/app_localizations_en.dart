@@ -76,4 +76,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get presetFullSessionTooltip =>
       '2-minute prep with breathing guide, then hold';
+
+  @override
+  String get prepGoLabel => 'Go!';
 }

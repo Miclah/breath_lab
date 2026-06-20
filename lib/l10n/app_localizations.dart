@@ -229,6 +229,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'2-minute prep with breathing guide, then hold'**
   String get presetFullSessionTooltip;
+
+  /// Label shown at the end of the 3-second prep countdown before the hold begins
+  ///
+  /// In en, this message translates to:
+  /// **'Go!'**
+  String get prepGoLabel;
 }
 
 class _AppLocalizationsDelegate

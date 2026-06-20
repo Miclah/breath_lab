@@ -21,5 +21,6 @@
   "presetFullSession": "Plné sedenie",
   "presetQuickMaxTooltip": "Bez prípravy, ihneď zadrž dych",
   "presetStandardTooltip": "3-sekundové odpočítavanie, potom zadrž dych",
-  "presetFullSessionTooltip": "2-minútová príprava s dychovým sprievodcom, potom zadrž dych"
+  "presetFullSessionTooltip": "2-minútová príprava s dychovým sprievodcom, potom zadrž dych",
+  "prepGoLabel": "Štart!"
 }

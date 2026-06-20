@@ -87,5 +87,9 @@
   "presetFullSessionTooltip": "2-minute prep with breathing guide, then hold",
   "@presetFullSessionTooltip": {
     "description": "Long-press tooltip for the Full session preset chip"
+  },
+  "prepGoLabel": "Go!",
+  "@prepGoLabel": {
+    "description": "Label shown at the end of the 3-second prep countdown before the hold begins"
   }
 }
