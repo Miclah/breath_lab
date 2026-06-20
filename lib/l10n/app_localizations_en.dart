@@ -57,4 +57,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeSystem => 'System';
+
+  @override
+  String get presetQuickMax => 'Quick max';
+
+  @override
+  String get presetStandard => 'Standard';
+
+  @override
+  String get presetFullSession => 'Full session';
+
+  @override
+  String get presetQuickMaxTooltip => 'No prep, hold immediately';
+
+  @override
+  String get presetStandardTooltip => '3-second countdown, then hold';
+
+  @override
+  String get presetFullSessionTooltip =>
+      '2-minute prep with breathing guide, then hold';
 }

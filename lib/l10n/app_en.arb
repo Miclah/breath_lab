@@ -63,5 +63,29 @@
   "themeSystem": "System",
   "@themeSystem": {
     "description": "System (follow OS) theme option label"
+  },
+  "presetQuickMax": "Quick max",
+  "@presetQuickMax": {
+    "description": "Quick preset chip label — no prep, hold immediately"
+  },
+  "presetStandard": "Standard",
+  "@presetStandard": {
+    "description": "Quick preset chip label — 3-second countdown"
+  },
+  "presetFullSession": "Full session",
+  "@presetFullSession": {
+    "description": "Quick preset chip label — 2-minute prep with breathing guide"
+  },
+  "presetQuickMaxTooltip": "No prep, hold immediately",
+  "@presetQuickMaxTooltip": {
+    "description": "Long-press tooltip for the Quick max preset chip"
+  },
+  "presetStandardTooltip": "3-second countdown, then hold",
+  "@presetStandardTooltip": {
+    "description": "Long-press tooltip for the Standard preset chip"
+  },
+  "presetFullSessionTooltip": "2-minute prep with breathing guide, then hold",
+  "@presetFullSessionTooltip": {
+    "description": "Long-press tooltip for the Full session preset chip"
   }
 }

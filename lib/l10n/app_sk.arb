@@ -15,5 +15,11 @@
   "settingsThemeLabel": "Téma",
   "themeDark": "Tmavá",
   "themeLight": "Svetlá",
-  "themeSystem": "Systém"
+  "themeSystem": "Systém",
+  "presetQuickMax": "Rýchly max",
+  "presetStandard": "Štandard",
+  "presetFullSession": "Plné sedenie",
+  "presetQuickMaxTooltip": "Bez prípravy, ihneď zadrž dych",
+  "presetStandardTooltip": "3-sekundové odpočítavanie, potom zadrž dych",
+  "presetFullSessionTooltip": "2-minútová príprava s dychovým sprievodcom, potom zadrž dych"
 }

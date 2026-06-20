@@ -77,3 +77,6 @@ class TimerNotifier extends Notifier<TimerState> {
 final timerProvider = NotifierProvider<TimerNotifier, TimerState>(
   TimerNotifier.new,
 );
+
+/// Session-local prep mode selection. Null means "use the user's saved default".
+final selectedPresetProvider = StateProvider<PrepMode?>((ref) => null);

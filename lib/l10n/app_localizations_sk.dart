@@ -57,4 +57,24 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get themeSystem => 'Systém';
+
+  @override
+  String get presetQuickMax => 'Rýchly max';
+
+  @override
+  String get presetStandard => 'Štandard';
+
+  @override
+  String get presetFullSession => 'Plné sedenie';
+
+  @override
+  String get presetQuickMaxTooltip => 'Bez prípravy, ihneď zadrž dych';
+
+  @override
+  String get presetStandardTooltip =>
+      '3-sekundové odpočítavanie, potom zadrž dych';
+
+  @override
+  String get presetFullSessionTooltip =>
+      '2-minútová príprava s dychovým sprievodcom, potom zadrž dych';
 }

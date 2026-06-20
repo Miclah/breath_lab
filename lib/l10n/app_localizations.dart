@@ -193,6 +193,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get themeSystem;
+
+  /// Quick preset chip label — no prep, hold immediately
+  ///
+  /// In en, this message translates to:
+  /// **'Quick max'**
+  String get presetQuickMax;
+
+  /// Quick preset chip label — 3-second countdown
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get presetStandard;
+
+  /// Quick preset chip label — 2-minute prep with breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Full session'**
+  String get presetFullSession;
+
+  /// Long-press tooltip for the Quick max preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'No prep, hold immediately'**
+  String get presetQuickMaxTooltip;
+
+  /// Long-press tooltip for the Standard preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'3-second countdown, then hold'**
+  String get presetStandardTooltip;
+
+  /// Long-press tooltip for the Full session preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'2-minute prep with breathing guide, then hold'**
+  String get presetFullSessionTooltip;
 }
 
 class _AppLocalizationsDelegate
