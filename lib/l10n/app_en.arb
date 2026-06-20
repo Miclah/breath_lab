@@ -91,5 +91,17 @@
   "prepGoLabel": "Go!",
   "@prepGoLabel": {
     "description": "Label shown at the end of the 3-second prep countdown before the hold begins"
+  },
+  "prepBreatheIn": "Breathe in...",
+  "@prepBreatheIn": {
+    "description": "Text shown inside the breathing circle during the inhale phase"
+  },
+  "prepBreatheOut": "Breathe out...",
+  "@prepBreatheOut": {
+    "description": "Text shown inside the breathing circle during the exhale phase"
+  },
+  "prepSkip": "Skip →",
+  "@prepSkip": {
+    "description": "Button that skips the prep breathing guide and starts the hold immediately"
   }
 }

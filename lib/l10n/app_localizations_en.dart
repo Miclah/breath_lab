@@ -79,4 +79,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prepGoLabel => 'Go!';
+
+  @override
+  String get prepBreatheIn => 'Breathe in...';
+
+  @override
+  String get prepBreatheOut => 'Breathe out...';
+
+  @override
+  String get prepSkip => 'Skip →';
 }

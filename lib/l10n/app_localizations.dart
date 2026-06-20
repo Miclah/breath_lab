@@ -235,6 +235,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go!'**
   String get prepGoLabel;
+
+  /// Text shown inside the breathing circle during the inhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe in...'**
+  String get prepBreatheIn;
+
+  /// Text shown inside the breathing circle during the exhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe out...'**
+  String get prepBreatheOut;
+
+  /// Button that skips the prep breathing guide and starts the hold immediately
+  ///
+  /// In en, this message translates to:
+  /// **'Skip →'**
+  String get prepSkip;
 }
 
 class _AppLocalizationsDelegate
