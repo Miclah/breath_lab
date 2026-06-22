@@ -103,5 +103,25 @@
   "prepSkip": "Skip →",
   "@prepSkip": {
     "description": "Button that skips the prep breathing guide and starts the hold immediately"
+  },
+  "timerStartButton": "Start",
+  "@timerStartButton": {
+    "description": "Action button label when timer is idle"
+  },
+  "timerStopButton": "Stop",
+  "@timerStopButton": {
+    "description": "Action button label during an active hold"
+  },
+  "timerResetButton": "Reset",
+  "@timerResetButton": {
+    "description": "Action button label in the done state before the result screen is available"
+  },
+  "timerStateLabelHold": "hold",
+  "@timerStateLabelHold": {
+    "description": "State label shown below the timer number during an active hold"
+  },
+  "timerStateLabelDone": "done",
+  "@timerStateLabelDone": {
+    "description": "State label shown below the timer number after a hold is stopped"
   }
 }

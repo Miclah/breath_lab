@@ -253,6 +253,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skip →'**
   String get prepSkip;
+
+  /// Action button label when timer is idle
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get timerStartButton;
+
+  /// Action button label during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get timerStopButton;
+
+  /// Action button label in the done state before the result screen is available
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get timerResetButton;
+
+  /// State label shown below the timer number during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'hold'**
+  String get timerStateLabelHold;
+
+  /// State label shown below the timer number after a hold is stopped
+  ///
+  /// In en, this message translates to:
+  /// **'done'**
+  String get timerStateLabelDone;
 }
 
 class _AppLocalizationsDelegate

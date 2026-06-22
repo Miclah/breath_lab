@@ -89,4 +89,19 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get prepSkip => 'Preskočiť →';
+
+  @override
+  String get timerStartButton => 'Štart';
+
+  @override
+  String get timerStopButton => 'Stop';
+
+  @override
+  String get timerResetButton => 'Resetovať';
+
+  @override
+  String get timerStateLabelHold => 'drž';
+
+  @override
+  String get timerStateLabelDone => 'hotovo';
 }

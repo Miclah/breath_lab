@@ -88,4 +88,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prepSkip => 'Skip →';
+
+  @override
+  String get timerStartButton => 'Start';
+
+  @override
+  String get timerStopButton => 'Stop';
+
+  @override
+  String get timerResetButton => 'Reset';
+
+  @override
+  String get timerStateLabelHold => 'hold';
+
+  @override
+  String get timerStateLabelDone => 'done';
 }

@@ -25,5 +25,10 @@
   "prepGoLabel": "Štart!",
   "prepBreatheIn": "Nádych...",
   "prepBreatheOut": "Výdych...",
-  "prepSkip": "Preskočiť →"
+  "prepSkip": "Preskočiť →",
+  "timerStartButton": "Štart",
+  "timerStopButton": "Stop",
+  "timerResetButton": "Resetovať",
+  "timerStateLabelHold": "drž",
+  "timerStateLabelDone": "hotovo"
 }
