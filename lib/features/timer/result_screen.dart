@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/device_id_provider.dart';
+import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/settings_repository.dart';
+import '../../data/repositories/tags_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
@@ -18,28 +21,120 @@ String _fmt(Duration d) {
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
 /// and Save / Discard buttons. Replaces the timer ring area entirely.
-class ResultView extends ConsumerWidget {
+class ResultView extends ConsumerStatefulWidget {
   const ResultView({super.key});
 
-  void _resetSessionState(WidgetRef ref) {
+  @override
+  ConsumerState<ResultView> createState() => _ResultViewState();
+}
+
+class _ResultViewState extends ConsumerState<ResultView>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pbController;
+  late final Animation<double> _pbScale;
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _pbController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _pbScale = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween(
+          begin: 1.0,
+          end: 1.15,
+        ).chain(CurveTween(curve: Curves.easeOut)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: Tween(
+          begin: 1.15,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeIn)),
+        weight: 50,
+      ),
+    ]).animate(_pbController);
+  }
+
+  @override
+  void dispose() {
+    _pbController.dispose();
+    super.dispose();
+  }
+
+  void _resetSessionState() {
     ref.read(selectedLungVolumeProvider.notifier).state = null;
     ref.read(selectedTagIdsProvider.notifier).state = const {};
     ref.read(pendingCustomTagsProvider.notifier).state = const [];
   }
 
-  void _save(WidgetRef ref) {
-    // TODO(phase-1b-13): persist hold + tags to DB and check for PB
-    _resetSessionState(ref);
+  Future<void> _save() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      final timerState = ref.read(timerProvider);
+      final durationMs = timerState.holdElapsed.inMilliseconds;
+
+      final LungVolume lungVolume =
+          ref.read(selectedLungVolumeProvider) ??
+          await ref.read(defaultLungVolumeProvider.future);
+      final currentMaxMs = await ref.read(currentMaxMsProvider.future);
+      final isPb = currentMaxMs == null || durationMs > currentMaxMs;
+
+      final deviceId = await ref.read(deviceIdProvider.future);
+      final holdsRepo = await ref.read(holdsRepositoryProvider.future);
+      final tagsRepo = ref.read(tagsRepositoryProvider);
+      final settingsRepo = ref.read(settingsRepositoryProvider);
+
+      final holdId = holdsRepo.newId();
+      final now = DateTime.now();
+
+      await holdsRepo.save(
+        Hold(
+          id: holdId,
+          createdAt: now,
+          updatedAt: now,
+          deviceId: deviceId,
+          duration: timerState.holdElapsed,
+          contractionTime: timerState.contractionTime,
+          type: HoldType.max,
+          lungVolume: lungVolume,
+          prepMode: timerState.prepMode,
+          isPb: isPb,
+        ),
+      );
+
+      final selectedTagIds = ref.read(selectedTagIdsProvider);
+      await holdsRepo.saveHoldTags(holdId, selectedTagIds.toList());
+
+      for (final text in ref.read(pendingCustomTagsProvider)) {
+        final tag = await tagsRepo.insertCustom(text);
+        await holdsRepo.saveHoldTags(holdId, [tag.id]);
+      }
+
+      if (isPb) {
+        await settingsRepo.setCurrentMaxMs(durationMs);
+        ref.invalidate(currentMaxMsProvider);
+        await _pbController.forward(from: 0);
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+    if (!mounted) return;
+    _resetSessionState();
     ref.read(timerProvider.notifier).reset();
   }
 
-  void _discard(WidgetRef ref) {
-    _resetSessionState(ref);
+  void _discard() {
+    _resetSessionState();
     ref.read(timerProvider.notifier).reset();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(timerProvider);
     final c = context.appColors;
@@ -53,11 +148,16 @@ class ResultView extends ConsumerWidget {
         children: [
           const SizedBox(height: Spacing.xxxxl),
 
-          // Hold duration
-          Text(
-            _fmt(state.holdElapsed),
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
-              fontSize: isDesktop ? 64.0 : null,
+          // Hold duration — pulses on PB
+          AnimatedBuilder(
+            animation: _pbScale,
+            builder: (_, child) =>
+                Transform.scale(scale: _pbScale.value, child: child),
+            child: Text(
+              _fmt(state.holdElapsed),
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: isDesktop ? 64.0 : null,
+              ),
             ),
           ),
 
@@ -106,14 +206,20 @@ class ResultView extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(Radius.lg),
                 ),
               ),
-              onPressed: () => _save(ref),
-              child: Text(l10n.resultSaveButton),
+              onPressed: _saving ? null : _save,
+              child: _saving
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l10n.resultSaveButton),
             ),
           ),
 
           // Discard button
           TextButton(
-            onPressed: () => _discard(ref),
+            onPressed: _saving ? null : _discard,
             child: Text(
               l10n.resultDiscardButton,
               style: Theme.of(

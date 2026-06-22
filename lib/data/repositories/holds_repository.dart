@@ -55,6 +55,16 @@ class HoldsRepository {
     return row == null ? null : _fromRow(row);
   }
 
+  Future<void> saveHoldTags(String holdId, List<String> tagIds) async {
+    for (final tagId in tagIds) {
+      await _db
+          .into(_db.holdTags)
+          .insertOnConflictUpdate(
+            db.HoldTagsCompanion.insert(holdId: holdId, tagId: tagId),
+          );
+    }
+  }
+
   Future<void> delete(String id) async {
     final now = DateTime.now().millisecondsSinceEpoch;
     await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
