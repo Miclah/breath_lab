@@ -82,3 +82,7 @@ final timerProvider = NotifierProvider<TimerNotifier, TimerState>(
 
 /// Session-local prep mode selection. Null means "use the user's saved default".
 final selectedPresetProvider = StateProvider<PrepMode?>((ref) => null);
+
+/// Session-local lung volume override on the result screen.
+/// Null means "use the user's saved default from settings".
+final selectedLungVolumeProvider = StateProvider<LungVolume?>((ref) => null);

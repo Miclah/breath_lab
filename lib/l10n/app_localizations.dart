@@ -283,6 +283,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'done'**
   String get timerStateLabelDone;
+
+  /// Save button on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get resultSaveButton;
+
+  /// Discard button on the result screen — discards the hold without saving
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get resultDiscardButton;
+
+  /// Label for the first-contraction time stat on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Contraction'**
+  String get resultContraction;
+
+  /// Label for the struggle-phase duration stat on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle'**
+  String get resultStruggle;
+
+  /// Lung volume selector segment label for full lungs — kept as training term in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get lungVolFull;
+
+  /// Lung volume selector segment label for functional residual capacity — training abbreviation, same in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'FRC'**
+  String get lungVolFrc;
+
+  /// Lung volume selector segment label for empty lungs — kept as training term in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get lungVolEmpty;
+
+  /// Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Plné pľúca · Full lungs'**
+  String get lungVolFullHint;
+
+  /// Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Pasívny výdych · Passive exhale'**
+  String get lungVolFrcHint;
+
+  /// Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Po výdychu · After exhale'**
+  String get lungVolEmptyHint;
 }
 
 class _AppLocalizationsDelegate

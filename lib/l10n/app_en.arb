@@ -123,5 +123,45 @@
   "timerStateLabelDone": "done",
   "@timerStateLabelDone": {
     "description": "State label shown below the timer number after a hold is stopped"
+  },
+  "resultSaveButton": "Save",
+  "@resultSaveButton": {
+    "description": "Save button on the result screen"
+  },
+  "resultDiscardButton": "Discard",
+  "@resultDiscardButton": {
+    "description": "Discard button on the result screen — discards the hold without saving"
+  },
+  "resultContraction": "Contraction",
+  "@resultContraction": {
+    "description": "Label for the first-contraction time stat on the result screen"
+  },
+  "resultStruggle": "Struggle",
+  "@resultStruggle": {
+    "description": "Label for the struggle-phase duration stat on the result screen"
+  },
+  "lungVolFull": "Full",
+  "@lungVolFull": {
+    "description": "Lung volume selector segment label for full lungs — kept as training term in both languages"
+  },
+  "lungVolFrc": "FRC",
+  "@lungVolFrc": {
+    "description": "Lung volume selector segment label for functional residual capacity — training abbreviation, same in both languages"
+  },
+  "lungVolEmpty": "Empty",
+  "@lungVolEmpty": {
+    "description": "Lung volume selector segment label for empty lungs — kept as training term in both languages"
+  },
+  "lungVolFullHint": "Plné pľúca · Full lungs",
+  "@lungVolFullHint": {
+    "description": "Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec"
+  },
+  "lungVolFrcHint": "Pasívny výdych · Passive exhale",
+  "@lungVolFrcHint": {
+    "description": "Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec"
+  },
+  "lungVolEmptyHint": "Po výdychu · After exhale",
+  "@lungVolEmptyHint": {
+    "description": "Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec"
   }
 }

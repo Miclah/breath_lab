@@ -11,6 +11,7 @@ import '../../theme/tokens.dart';
 import 'preset_chip_row.dart';
 import 'prep_phase_widget.dart';
 import 'providers.dart';
+import 'result_screen.dart';
 import 'timer_ring.dart';
 
 String _fmtDuration(Duration d) {
@@ -91,29 +92,31 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         autofocus: true,
         onKeyEvent: (_, event) => _onKey(event),
         child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hPad),
-            child: Column(
-              children: [
-                const SizedBox(height: Spacing.lg),
-                if (state.isIdle) const PresetChipRow(),
-                Expanded(
-                  child: state.isPrep
-                      ? const PrepPhaseWidget()
-                      : _buildRing(
-                          context,
-                          state,
-                          l10n,
-                          c,
-                          isDesktop,
-                          ringValue,
-                        ),
+          child: state.isDone
+              ? const ResultView()
+              : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: hPad),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: Spacing.lg),
+                      if (state.isIdle) const PresetChipRow(),
+                      Expanded(
+                        child: state.isPrep
+                            ? const PrepPhaseWidget()
+                            : _buildRing(
+                                context,
+                                state,
+                                l10n,
+                                c,
+                                isDesktop,
+                                ringValue,
+                              ),
+                      ),
+                      _buildButton(context, state, l10n, c),
+                      const SizedBox(height: Spacing.xl),
+                    ],
+                  ),
                 ),
-                _buildButton(context, state, l10n, c),
-                const SizedBox(height: Spacing.xl),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -195,7 +198,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       );
     }
 
-    // idle or done
+    // idle — Start button
     return SizedBox(
       width: double.infinity,
       height: 48,
@@ -205,12 +208,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
             borderRadius: BorderRadius.circular(Radius.lg),
           ),
         ),
-        onPressed: state.isDone
-            ? () => ref.read(timerProvider.notifier).reset()
-            : _startAction,
-        child: Text(
-          state.isDone ? l10n.timerResetButton : l10n.timerStartButton,
-        ),
+        onPressed: _startAction,
+        child: Text(l10n.timerStartButton),
       ),
     );
   }

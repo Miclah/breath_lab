@@ -30,5 +30,15 @@
   "timerStopButton": "Stop",
   "timerResetButton": "Resetovať",
   "timerStateLabelHold": "drž",
-  "timerStateLabelDone": "hotovo"
+  "timerStateLabelDone": "hotovo",
+  "resultSaveButton": "Uložiť",
+  "resultDiscardButton": "Zahodiť",
+  "resultContraction": "Kontrakcia",
+  "resultStruggle": "Boj",
+  "lungVolFull": "Full",
+  "lungVolFrc": "FRC",
+  "lungVolEmpty": "Empty",
+  "lungVolFullHint": "Plné pľúca · Full lungs",
+  "lungVolFrcHint": "Pasívny výdych · Passive exhale",
+  "lungVolEmptyHint": "Po výdychu · After exhale"
 }

@@ -104,4 +104,34 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get timerStateLabelDone => 'hotovo';
+
+  @override
+  String get resultSaveButton => 'Uložiť';
+
+  @override
+  String get resultDiscardButton => 'Zahodiť';
+
+  @override
+  String get resultContraction => 'Kontrakcia';
+
+  @override
+  String get resultStruggle => 'Boj';
+
+  @override
+  String get lungVolFull => 'Full';
+
+  @override
+  String get lungVolFrc => 'FRC';
+
+  @override
+  String get lungVolEmpty => 'Empty';
+
+  @override
+  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+
+  @override
+  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+
+  @override
+  String get lungVolEmptyHint => 'Po výdychu · After exhale';
 }

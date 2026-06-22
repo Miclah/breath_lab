@@ -103,4 +103,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timerStateLabelDone => 'done';
+
+  @override
+  String get resultSaveButton => 'Save';
+
+  @override
+  String get resultDiscardButton => 'Discard';
+
+  @override
+  String get resultContraction => 'Contraction';
+
+  @override
+  String get resultStruggle => 'Struggle';
+
+  @override
+  String get lungVolFull => 'Full';
+
+  @override
+  String get lungVolFrc => 'FRC';
+
+  @override
+  String get lungVolEmpty => 'Empty';
+
+  @override
+  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+
+  @override
+  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+
+  @override
+  String get lungVolEmptyHint => 'Po výdychu · After exhale';
 }
