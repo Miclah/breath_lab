@@ -8,6 +8,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'providers.dart';
+import 'tag_chip_row.dart';
 
 String _fmt(Duration d) {
   final m = d.inMinutes.toString().padLeft(2, '0');
@@ -20,14 +21,20 @@ String _fmt(Duration d) {
 class ResultView extends ConsumerWidget {
   const ResultView({super.key});
 
+  void _resetSessionState(WidgetRef ref) {
+    ref.read(selectedLungVolumeProvider.notifier).state = null;
+    ref.read(selectedTagIdsProvider.notifier).state = const {};
+    ref.read(pendingCustomTagsProvider.notifier).state = const [];
+  }
+
   void _save(WidgetRef ref) {
     // TODO(phase-1b-13): persist hold + tags to DB and check for PB
-    ref.read(selectedLungVolumeProvider.notifier).state = null;
+    _resetSessionState(ref);
     ref.read(timerProvider.notifier).reset();
   }
 
   void _discard(WidgetRef ref) {
-    ref.read(selectedLungVolumeProvider.notifier).state = null;
+    _resetSessionState(ref);
     ref.read(timerProvider.notifier).reset();
   }
 
@@ -76,6 +83,11 @@ class ResultView extends ConsumerWidget {
               ],
             ),
           ],
+
+          const SizedBox(height: Spacing.lg),
+
+          // Tag chips
+          const TagChipRow(),
 
           const Spacer(),
 

@@ -163,5 +163,45 @@
   "lungVolEmptyHint": "Po výdychu · After exhale",
   "@lungVolEmptyHint": {
     "description": "Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec"
+  },
+  "tagTired": "Tired",
+  "@tagTired": {
+    "description": "Built-in session tag — user felt tired"
+  },
+  "tagWellRested": "Well rested",
+  "@tagWellRested": {
+    "description": "Built-in session tag — user felt well rested"
+  },
+  "tagFullStomach": "Full stomach",
+  "@tagFullStomach": {
+    "description": "Built-in session tag — user had a full stomach"
+  },
+  "tagEmptyStomach": "Empty stomach",
+  "@tagEmptyStomach": {
+    "description": "Built-in session tag — user had an empty stomach"
+  },
+  "tagAnxious": "Anxious",
+  "@tagAnxious": {
+    "description": "Built-in session tag — user felt anxious"
+  },
+  "tagGreatPrep": "Great prep",
+  "@tagGreatPrep": {
+    "description": "Built-in session tag — user had great preparation"
+  },
+  "tagSamba": "Samba / LMC",
+  "@tagSamba": {
+    "description": "Built-in session tag — samba / loss of motor control occurred"
+  },
+  "tagCold": "Cold",
+  "@tagCold": {
+    "description": "Built-in session tag — cold environment or water"
+  },
+  "tagHot": "Hot",
+  "@tagHot": {
+    "description": "Built-in session tag — hot environment or water"
+  },
+  "tagAddLabel": "+ Add tag",
+  "@tagAddLabel": {
+    "description": "Chip at the end of the tag row — opens text input to add a custom tag"
   }
 }

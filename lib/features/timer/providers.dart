@@ -86,3 +86,11 @@ final selectedPresetProvider = StateProvider<PrepMode?>((ref) => null);
 /// Session-local lung volume override on the result screen.
 /// Null means "use the user's saved default from settings".
 final selectedLungVolumeProvider = StateProvider<LungVolume?>((ref) => null);
+
+/// IDs of built-in tags selected on the result screen.
+final selectedTagIdsProvider = StateProvider<Set<String>>((ref) => const {});
+
+/// Custom tag label texts added by the user on the result screen (not yet persisted).
+final pendingCustomTagsProvider = StateProvider<List<String>>(
+  (ref) => const [],
+);

@@ -40,5 +40,15 @@
   "lungVolEmpty": "Empty",
   "lungVolFullHint": "Plné pľúca · Full lungs",
   "lungVolFrcHint": "Pasívny výdych · Passive exhale",
-  "lungVolEmptyHint": "Po výdychu · After exhale"
+  "lungVolEmptyHint": "Po výdychu · After exhale",
+  "tagTired": "Unavený",
+  "tagWellRested": "Oddýchnutý",
+  "tagFullStomach": "Plný žalúdok",
+  "tagEmptyStomach": "Prázdny žalúdok",
+  "tagAnxious": "Nervózny",
+  "tagGreatPrep": "Skvelá príprava",
+  "tagSamba": "Samba / LMC",
+  "tagCold": "Studeno",
+  "tagHot": "Teplo",
+  "tagAddLabel": "+ Pridať tag"
 }

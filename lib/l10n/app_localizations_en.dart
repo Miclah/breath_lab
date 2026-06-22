@@ -133,4 +133,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lungVolEmptyHint => 'Po výdychu · After exhale';
+
+  @override
+  String get tagTired => 'Tired';
+
+  @override
+  String get tagWellRested => 'Well rested';
+
+  @override
+  String get tagFullStomach => 'Full stomach';
+
+  @override
+  String get tagEmptyStomach => 'Empty stomach';
+
+  @override
+  String get tagAnxious => 'Anxious';
+
+  @override
+  String get tagGreatPrep => 'Great prep';
+
+  @override
+  String get tagSamba => 'Samba / LMC';
+
+  @override
+  String get tagCold => 'Cold';
+
+  @override
+  String get tagHot => 'Hot';
+
+  @override
+  String get tagAddLabel => '+ Add tag';
 }

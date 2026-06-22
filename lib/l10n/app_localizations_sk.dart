@@ -134,4 +134,34 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get lungVolEmptyHint => 'Po výdychu · After exhale';
+
+  @override
+  String get tagTired => 'Unavený';
+
+  @override
+  String get tagWellRested => 'Oddýchnutý';
+
+  @override
+  String get tagFullStomach => 'Plný žalúdok';
+
+  @override
+  String get tagEmptyStomach => 'Prázdny žalúdok';
+
+  @override
+  String get tagAnxious => 'Nervózny';
+
+  @override
+  String get tagGreatPrep => 'Skvelá príprava';
+
+  @override
+  String get tagSamba => 'Samba / LMC';
+
+  @override
+  String get tagCold => 'Studeno';
+
+  @override
+  String get tagHot => 'Teplo';
+
+  @override
+  String get tagAddLabel => '+ Pridať tag';
 }

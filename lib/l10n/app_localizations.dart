@@ -343,6 +343,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Po výdychu · After exhale'**
   String get lungVolEmptyHint;
+
+  /// Built-in session tag — user felt tired
+  ///
+  /// In en, this message translates to:
+  /// **'Tired'**
+  String get tagTired;
+
+  /// Built-in session tag — user felt well rested
+  ///
+  /// In en, this message translates to:
+  /// **'Well rested'**
+  String get tagWellRested;
+
+  /// Built-in session tag — user had a full stomach
+  ///
+  /// In en, this message translates to:
+  /// **'Full stomach'**
+  String get tagFullStomach;
+
+  /// Built-in session tag — user had an empty stomach
+  ///
+  /// In en, this message translates to:
+  /// **'Empty stomach'**
+  String get tagEmptyStomach;
+
+  /// Built-in session tag — user felt anxious
+  ///
+  /// In en, this message translates to:
+  /// **'Anxious'**
+  String get tagAnxious;
+
+  /// Built-in session tag — user had great preparation
+  ///
+  /// In en, this message translates to:
+  /// **'Great prep'**
+  String get tagGreatPrep;
+
+  /// Built-in session tag — samba / loss of motor control occurred
+  ///
+  /// In en, this message translates to:
+  /// **'Samba / LMC'**
+  String get tagSamba;
+
+  /// Built-in session tag — cold environment or water
+  ///
+  /// In en, this message translates to:
+  /// **'Cold'**
+  String get tagCold;
+
+  /// Built-in session tag — hot environment or water
+  ///
+  /// In en, this message translates to:
+  /// **'Hot'**
+  String get tagHot;
+
+  /// Chip at the end of the tag row — opens text input to add a custom tag
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add tag'**
+  String get tagAddLabel;
 }
 
 class _AppLocalizationsDelegate
