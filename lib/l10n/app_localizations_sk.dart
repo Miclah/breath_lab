@@ -164,4 +164,16 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tagAddLabel => '+ Pridať tag';
+
+  @override
+  String get historyEmpty => 'Zatiaľ žiadne pokusy.';
+
+  @override
+  String get historyDetailClose => 'Zavrieť';
+
+  @override
+  String get historyPbBadge => 'PB';
+
+  @override
+  String get historyLungVolLabel => 'Objem';
 }

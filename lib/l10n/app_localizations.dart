@@ -403,6 +403,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+ Add tag'**
   String get tagAddLabel;
+
+  /// Empty state message on the history list
+  ///
+  /// In en, this message translates to:
+  /// **'No holds saved yet.'**
+  String get historyEmpty;
+
+  /// Close button on the hold detail bottom sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get historyDetailClose;
+
+  /// Short badge label shown on a personal-best hold row
+  ///
+  /// In en, this message translates to:
+  /// **'PB'**
+  String get historyPbBadge;
+
+  /// Label for the lung volume stat in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get historyLungVolLabel;
 }
 
 class _AppLocalizationsDelegate

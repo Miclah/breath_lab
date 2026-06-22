@@ -163,4 +163,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tagAddLabel => '+ Add tag';
+
+  @override
+  String get historyEmpty => 'No holds saved yet.';
+
+  @override
+  String get historyDetailClose => 'Close';
+
+  @override
+  String get historyPbBadge => 'PB';
+
+  @override
+  String get historyLungVolLabel => 'Volume';
 }

@@ -97,3 +97,20 @@ final holdsRepositoryProvider = FutureProvider<HoldsRepository>((ref) async {
   final deviceId = await ref.watch(deviceIdProvider.future);
   return HoldsRepository(database, deviceId);
 });
+
+/// All non-deleted holds, newest first.
+final allHoldsProvider = FutureProvider<List<Hold>>((ref) async {
+  final repo = await ref.watch(holdsRepositoryProvider.future);
+  return repo.getAll();
+});
+
+/// Maps holdId → tag count for all holds. Fetched once; invalidate after save.
+final holdTagCountsProvider = FutureProvider<Map<String, int>>((ref) async {
+  final database = ref.watch(databaseProvider);
+  final rows = await database.select(database.holdTags).get();
+  final counts = <String, int>{};
+  for (final row in rows) {
+    counts[row.holdId] = (counts[row.holdId] ?? 0) + 1;
+  }
+  return counts;
+});

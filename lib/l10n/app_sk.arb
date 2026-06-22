@@ -50,5 +50,9 @@
   "tagSamba": "Samba / LMC",
   "tagCold": "Studeno",
   "tagHot": "Teplo",
-  "tagAddLabel": "+ Pridať tag"
+  "tagAddLabel": "+ Pridať tag",
+  "historyEmpty": "Zatiaľ žiadne pokusy.",
+  "historyDetailClose": "Zavrieť",
+  "historyPbBadge": "PB",
+  "historyLungVolLabel": "Objem"
 }

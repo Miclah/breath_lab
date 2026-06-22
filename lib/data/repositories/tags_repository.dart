@@ -48,3 +48,17 @@ final tagsRepositoryProvider = Provider<TagsRepository>((ref) {
 final builtInTagsProvider = FutureProvider<List<db.Tag>>((ref) {
   return ref.watch(tagsRepositoryProvider).getAllActive();
 });
+
+/// Tags linked to a specific hold, loaded on demand (e.g. detail sheet).
+final holdTagsProvider = FutureProvider.family<List<db.Tag>, String>((
+  ref,
+  holdId,
+) async {
+  final database = ref.watch(databaseProvider);
+  final tagIdRows = await (database.select(
+    database.holdTags,
+  )..where((t) => t.holdId.equals(holdId))).get();
+  final ids = tagIdRows.map((r) => r.tagId).toList();
+  if (ids.isEmpty) return [];
+  return (database.select(database.tags)..where((t) => t.id.isIn(ids))).get();
+});

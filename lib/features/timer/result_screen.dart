@@ -115,6 +115,9 @@ class _ResultViewState extends ConsumerState<ResultView>
         await holdsRepo.saveHoldTags(holdId, [tag.id]);
       }
 
+      ref.invalidate(allHoldsProvider);
+      ref.invalidate(holdTagCountsProvider);
+
       if (isPb) {
         await settingsRepo.setCurrentMaxMs(durationMs);
         ref.invalidate(currentMaxMsProvider);

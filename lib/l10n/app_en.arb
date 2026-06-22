@@ -203,5 +203,21 @@
   "tagAddLabel": "+ Add tag",
   "@tagAddLabel": {
     "description": "Chip at the end of the tag row — opens text input to add a custom tag"
+  },
+  "historyEmpty": "No holds saved yet.",
+  "@historyEmpty": {
+    "description": "Empty state message on the history list"
+  },
+  "historyDetailClose": "Close",
+  "@historyDetailClose": {
+    "description": "Close button on the hold detail bottom sheet"
+  },
+  "historyPbBadge": "PB",
+  "@historyPbBadge": {
+    "description": "Short badge label shown on a personal-best hold row"
+  },
+  "historyLungVolLabel": "Volume",
+  "@historyLungVolLabel": {
+    "description": "Label for the lung volume stat in the hold detail sheet"
   }
 }
