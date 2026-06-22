@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/hold.dart';
@@ -47,6 +48,7 @@ class TimerNotifier extends Notifier<TimerState> {
   void markContraction() {
     if (!state.isHolding) return;
     if (state.contractionTime != null) return;
+    HapticFeedback.lightImpact();
     state = state.copyWith(contractionTime: _holdStopwatch.elapsed);
   }
 

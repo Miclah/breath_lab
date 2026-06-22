@@ -13,6 +13,12 @@ import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'timer_ring.dart';
 
+String _fmtDuration(Duration d) {
+  final m = d.inMinutes.toString().padLeft(2, '0');
+  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
+  return '$m:$s';
+}
+
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
 
@@ -55,17 +61,15 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       }
       return KeyEventResult.handled;
     }
+    if (event.logicalKey == LogicalKeyboardKey.keyC) {
+      ref.read(timerProvider.notifier).markContraction();
+      return KeyEventResult.handled;
+    }
     if (event.logicalKey == LogicalKeyboardKey.escape) {
       if (!state.isIdle) notifier.reset();
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
-  }
-
-  static String _fmt(Duration d) {
-    final m = d.inMinutes.toString().padLeft(2, '0');
-    final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-    return '$m:$s';
   }
 
   @override
@@ -133,25 +137,35 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     if (state.isHolding) stateLabel = l10n.timerStateLabelHold;
     if (state.isDone) stateLabel = l10n.timerStateLabelDone;
 
-    return Center(
-      child: TimerRing(
-        value: ringValue,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(_fmt(elapsed), style: timerStyle),
-            if (stateLabel != null) ...[
-              const SizedBox(height: Spacing.xs),
-              Text(
-                stateLabel,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-              ),
-            ],
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onDoubleTap: () => ref.read(timerProvider.notifier).markContraction(),
+          child: TimerRing(
+            value: ringValue,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_fmtDuration(elapsed), style: timerStyle),
+                if (stateLabel != null) ...[
+                  const SizedBox(height: Spacing.xs),
+                  Text(
+                    stateLabel,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
+        if (state.contractionTime != null) ...[
+          const SizedBox(height: Spacing.md),
+          _ContractionBadge(time: state.contractionTime!),
+        ],
+      ],
     );
   }
 
@@ -198,6 +212,35 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
           state.isDone ? l10n.timerResetButton : l10n.timerStartButton,
         ),
       ),
+    );
+  }
+}
+
+/// Small indicator shown below the ring when the first contraction is marked.
+class _ContractionBadge extends StatelessWidget {
+  const _ContractionBadge({required this.time});
+
+  final Duration time;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: c.primary, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: Spacing.xs),
+        Text(
+          _fmtDuration(time),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: c.textSecondary),
+        ),
+      ],
     );
   }
 }
