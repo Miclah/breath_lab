@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+extension BreathLabTheme on BuildContext {
+  BreathLabColorScheme get appColors =>
+      Theme.of(this).brightness == Brightness.dark
+      ? BreathLabColors.dark
+      : BreathLabColors.light;
+}
+
 class BreathLabColorScheme {
   const BreathLabColorScheme({
     required this.canvas,

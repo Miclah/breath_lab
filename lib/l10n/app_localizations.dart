@@ -193,6 +193,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get themeSystem;
+
+  /// Quick preset chip label — no prep, hold immediately
+  ///
+  /// In en, this message translates to:
+  /// **'Quick max'**
+  String get presetQuickMax;
+
+  /// Quick preset chip label — 3-second countdown
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get presetStandard;
+
+  /// Quick preset chip label — 2-minute prep with breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Full session'**
+  String get presetFullSession;
+
+  /// Long-press tooltip for the Quick max preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'No prep, hold immediately'**
+  String get presetQuickMaxTooltip;
+
+  /// Long-press tooltip for the Standard preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'3-second countdown, then hold'**
+  String get presetStandardTooltip;
+
+  /// Long-press tooltip for the Full session preset chip
+  ///
+  /// In en, this message translates to:
+  /// **'2-minute prep with breathing guide, then hold'**
+  String get presetFullSessionTooltip;
+
+  /// Label shown at the end of the 3-second prep countdown before the hold begins
+  ///
+  /// In en, this message translates to:
+  /// **'Go!'**
+  String get prepGoLabel;
+
+  /// Text shown inside the breathing circle during the inhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe in...'**
+  String get prepBreatheIn;
+
+  /// Text shown inside the breathing circle during the exhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe out...'**
+  String get prepBreatheOut;
+
+  /// Button that skips the prep breathing guide and starts the hold immediately
+  ///
+  /// In en, this message translates to:
+  /// **'Skip →'**
+  String get prepSkip;
+
+  /// Action button label when timer is idle
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get timerStartButton;
+
+  /// Action button label during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get timerStopButton;
+
+  /// Action button label in the done state before the result screen is available
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get timerResetButton;
+
+  /// State label shown below the timer number during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'hold'**
+  String get timerStateLabelHold;
+
+  /// State label shown below the timer number after a hold is stopped
+  ///
+  /// In en, this message translates to:
+  /// **'done'**
+  String get timerStateLabelDone;
+
+  /// Save button on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get resultSaveButton;
+
+  /// Discard button on the result screen — discards the hold without saving
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get resultDiscardButton;
+
+  /// Label for the first-contraction time stat on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Contraction'**
+  String get resultContraction;
+
+  /// Label for the struggle-phase duration stat on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle'**
+  String get resultStruggle;
+
+  /// Lung volume selector segment label for full lungs — kept as training term in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get lungVolFull;
+
+  /// Lung volume selector segment label for functional residual capacity — training abbreviation, same in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'FRC'**
+  String get lungVolFrc;
+
+  /// Lung volume selector segment label for empty lungs — kept as training term in both languages
+  ///
+  /// In en, this message translates to:
+  /// **'Empty'**
+  String get lungVolEmpty;
+
+  /// Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Plné pľúca · Full lungs'**
+  String get lungVolFullHint;
+
+  /// Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Pasívny výdych · Passive exhale'**
+  String get lungVolFrcHint;
+
+  /// Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec
+  ///
+  /// In en, this message translates to:
+  /// **'Po výdychu · After exhale'**
+  String get lungVolEmptyHint;
+
+  /// Built-in session tag — user felt tired
+  ///
+  /// In en, this message translates to:
+  /// **'Tired'**
+  String get tagTired;
+
+  /// Built-in session tag — user felt well rested
+  ///
+  /// In en, this message translates to:
+  /// **'Well rested'**
+  String get tagWellRested;
+
+  /// Built-in session tag — user had a full stomach
+  ///
+  /// In en, this message translates to:
+  /// **'Full stomach'**
+  String get tagFullStomach;
+
+  /// Built-in session tag — user had an empty stomach
+  ///
+  /// In en, this message translates to:
+  /// **'Empty stomach'**
+  String get tagEmptyStomach;
+
+  /// Built-in session tag — user felt anxious
+  ///
+  /// In en, this message translates to:
+  /// **'Anxious'**
+  String get tagAnxious;
+
+  /// Built-in session tag — user had great preparation
+  ///
+  /// In en, this message translates to:
+  /// **'Great prep'**
+  String get tagGreatPrep;
+
+  /// Built-in session tag — samba / loss of motor control occurred
+  ///
+  /// In en, this message translates to:
+  /// **'Samba / LMC'**
+  String get tagSamba;
+
+  /// Built-in session tag — cold environment or water
+  ///
+  /// In en, this message translates to:
+  /// **'Cold'**
+  String get tagCold;
+
+  /// Built-in session tag — hot environment or water
+  ///
+  /// In en, this message translates to:
+  /// **'Hot'**
+  String get tagHot;
+
+  /// Chip at the end of the tag row — opens text input to add a custom tag
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add tag'**
+  String get tagAddLabel;
+
+  /// Empty state message on the history list
+  ///
+  /// In en, this message translates to:
+  /// **'No holds saved yet.'**
+  String get historyEmpty;
+
+  /// Close button on the hold detail bottom sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get historyDetailClose;
+
+  /// Short badge label shown on a personal-best hold row
+  ///
+  /// In en, this message translates to:
+  /// **'PB'**
+  String get historyPbBadge;
+
+  /// Label for the lung volume stat in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get historyLungVolLabel;
 }
 
 class _AppLocalizationsDelegate

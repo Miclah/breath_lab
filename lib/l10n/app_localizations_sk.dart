@@ -57,4 +57,123 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get themeSystem => 'Systém';
+
+  @override
+  String get presetQuickMax => 'Rýchly max';
+
+  @override
+  String get presetStandard => 'Štandard';
+
+  @override
+  String get presetFullSession => 'Plné sedenie';
+
+  @override
+  String get presetQuickMaxTooltip => 'Bez prípravy, ihneď zadrž dych';
+
+  @override
+  String get presetStandardTooltip =>
+      '3-sekundové odpočítavanie, potom zadrž dych';
+
+  @override
+  String get presetFullSessionTooltip =>
+      '2-minútová príprava s dychovým sprievodcom, potom zadrž dych';
+
+  @override
+  String get prepGoLabel => 'Štart!';
+
+  @override
+  String get prepBreatheIn => 'Nádych...';
+
+  @override
+  String get prepBreatheOut => 'Výdych...';
+
+  @override
+  String get prepSkip => 'Preskočiť →';
+
+  @override
+  String get timerStartButton => 'Štart';
+
+  @override
+  String get timerStopButton => 'Stop';
+
+  @override
+  String get timerResetButton => 'Resetovať';
+
+  @override
+  String get timerStateLabelHold => 'drž';
+
+  @override
+  String get timerStateLabelDone => 'hotovo';
+
+  @override
+  String get resultSaveButton => 'Uložiť';
+
+  @override
+  String get resultDiscardButton => 'Zahodiť';
+
+  @override
+  String get resultContraction => 'Kontrakcia';
+
+  @override
+  String get resultStruggle => 'Boj';
+
+  @override
+  String get lungVolFull => 'Full';
+
+  @override
+  String get lungVolFrc => 'FRC';
+
+  @override
+  String get lungVolEmpty => 'Empty';
+
+  @override
+  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+
+  @override
+  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+
+  @override
+  String get lungVolEmptyHint => 'Po výdychu · After exhale';
+
+  @override
+  String get tagTired => 'Unavený';
+
+  @override
+  String get tagWellRested => 'Oddýchnutý';
+
+  @override
+  String get tagFullStomach => 'Plný žalúdok';
+
+  @override
+  String get tagEmptyStomach => 'Prázdny žalúdok';
+
+  @override
+  String get tagAnxious => 'Nervózny';
+
+  @override
+  String get tagGreatPrep => 'Skvelá príprava';
+
+  @override
+  String get tagSamba => 'Samba / LMC';
+
+  @override
+  String get tagCold => 'Studeno';
+
+  @override
+  String get tagHot => 'Teplo';
+
+  @override
+  String get tagAddLabel => '+ Pridať tag';
+
+  @override
+  String get historyEmpty => 'Zatiaľ žiadne pokusy.';
+
+  @override
+  String get historyDetailClose => 'Zavrieť';
+
+  @override
+  String get historyPbBadge => 'PB';
+
+  @override
+  String get historyLungVolLabel => 'Objem';
 }

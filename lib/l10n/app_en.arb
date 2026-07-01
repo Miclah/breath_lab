@@ -63,5 +63,161 @@
   "themeSystem": "System",
   "@themeSystem": {
     "description": "System (follow OS) theme option label"
+  },
+  "presetQuickMax": "Quick max",
+  "@presetQuickMax": {
+    "description": "Quick preset chip label — no prep, hold immediately"
+  },
+  "presetStandard": "Standard",
+  "@presetStandard": {
+    "description": "Quick preset chip label — 3-second countdown"
+  },
+  "presetFullSession": "Full session",
+  "@presetFullSession": {
+    "description": "Quick preset chip label — 2-minute prep with breathing guide"
+  },
+  "presetQuickMaxTooltip": "No prep, hold immediately",
+  "@presetQuickMaxTooltip": {
+    "description": "Long-press tooltip for the Quick max preset chip"
+  },
+  "presetStandardTooltip": "3-second countdown, then hold",
+  "@presetStandardTooltip": {
+    "description": "Long-press tooltip for the Standard preset chip"
+  },
+  "presetFullSessionTooltip": "2-minute prep with breathing guide, then hold",
+  "@presetFullSessionTooltip": {
+    "description": "Long-press tooltip for the Full session preset chip"
+  },
+  "prepGoLabel": "Go!",
+  "@prepGoLabel": {
+    "description": "Label shown at the end of the 3-second prep countdown before the hold begins"
+  },
+  "prepBreatheIn": "Breathe in...",
+  "@prepBreatheIn": {
+    "description": "Text shown inside the breathing circle during the inhale phase"
+  },
+  "prepBreatheOut": "Breathe out...",
+  "@prepBreatheOut": {
+    "description": "Text shown inside the breathing circle during the exhale phase"
+  },
+  "prepSkip": "Skip →",
+  "@prepSkip": {
+    "description": "Button that skips the prep breathing guide and starts the hold immediately"
+  },
+  "timerStartButton": "Start",
+  "@timerStartButton": {
+    "description": "Action button label when timer is idle"
+  },
+  "timerStopButton": "Stop",
+  "@timerStopButton": {
+    "description": "Action button label during an active hold"
+  },
+  "timerResetButton": "Reset",
+  "@timerResetButton": {
+    "description": "Action button label in the done state before the result screen is available"
+  },
+  "timerStateLabelHold": "hold",
+  "@timerStateLabelHold": {
+    "description": "State label shown below the timer number during an active hold"
+  },
+  "timerStateLabelDone": "done",
+  "@timerStateLabelDone": {
+    "description": "State label shown below the timer number after a hold is stopped"
+  },
+  "resultSaveButton": "Save",
+  "@resultSaveButton": {
+    "description": "Save button on the result screen"
+  },
+  "resultDiscardButton": "Discard",
+  "@resultDiscardButton": {
+    "description": "Discard button on the result screen — discards the hold without saving"
+  },
+  "resultContraction": "Contraction",
+  "@resultContraction": {
+    "description": "Label for the first-contraction time stat on the result screen"
+  },
+  "resultStruggle": "Struggle",
+  "@resultStruggle": {
+    "description": "Label for the struggle-phase duration stat on the result screen"
+  },
+  "lungVolFull": "Full",
+  "@lungVolFull": {
+    "description": "Lung volume selector segment label for full lungs — kept as training term in both languages"
+  },
+  "lungVolFrc": "FRC",
+  "@lungVolFrc": {
+    "description": "Lung volume selector segment label for functional residual capacity — training abbreviation, same in both languages"
+  },
+  "lungVolEmpty": "Empty",
+  "@lungVolEmpty": {
+    "description": "Lung volume selector segment label for empty lungs — kept as training term in both languages"
+  },
+  "lungVolFullHint": "Plné pľúca · Full lungs",
+  "@lungVolFullHint": {
+    "description": "Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec"
+  },
+  "lungVolFrcHint": "Pasívny výdych · Passive exhale",
+  "@lungVolFrcHint": {
+    "description": "Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec"
+  },
+  "lungVolEmptyHint": "Po výdychu · After exhale",
+  "@lungVolEmptyHint": {
+    "description": "Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec"
+  },
+  "tagTired": "Tired",
+  "@tagTired": {
+    "description": "Built-in session tag — user felt tired"
+  },
+  "tagWellRested": "Well rested",
+  "@tagWellRested": {
+    "description": "Built-in session tag — user felt well rested"
+  },
+  "tagFullStomach": "Full stomach",
+  "@tagFullStomach": {
+    "description": "Built-in session tag — user had a full stomach"
+  },
+  "tagEmptyStomach": "Empty stomach",
+  "@tagEmptyStomach": {
+    "description": "Built-in session tag — user had an empty stomach"
+  },
+  "tagAnxious": "Anxious",
+  "@tagAnxious": {
+    "description": "Built-in session tag — user felt anxious"
+  },
+  "tagGreatPrep": "Great prep",
+  "@tagGreatPrep": {
+    "description": "Built-in session tag — user had great preparation"
+  },
+  "tagSamba": "Samba / LMC",
+  "@tagSamba": {
+    "description": "Built-in session tag — samba / loss of motor control occurred"
+  },
+  "tagCold": "Cold",
+  "@tagCold": {
+    "description": "Built-in session tag — cold environment or water"
+  },
+  "tagHot": "Hot",
+  "@tagHot": {
+    "description": "Built-in session tag — hot environment or water"
+  },
+  "tagAddLabel": "+ Add tag",
+  "@tagAddLabel": {
+    "description": "Chip at the end of the tag row — opens text input to add a custom tag"
+  },
+  "historyEmpty": "No holds saved yet.",
+  "@historyEmpty": {
+    "description": "Empty state message on the history list"
+  },
+  "historyDetailClose": "Close",
+  "@historyDetailClose": {
+    "description": "Close button on the hold detail bottom sheet"
+  },
+  "historyPbBadge": "PB",
+  "@historyPbBadge": {
+    "description": "Short badge label shown on a personal-best hold row"
+  },
+  "historyLungVolLabel": "Volume",
+  "@historyLungVolLabel": {
+    "description": "Label for the lung volume stat in the hold detail sheet"
   }
 }
