@@ -59,6 +59,24 @@ class Settings extends Table {
   Set<Column> get primaryKey => {key};
 }
 
+class TableSessions extends Table {
+  TextColumn get id => text()();
+  IntColumn get createdAt => integer()();
+  IntColumn get updatedAt => integer()();
+  TextColumn get deviceId => text()();
+  // 'co2' | 'o2'
+  TextColumn get type => text()();
+  IntColumn get basedOnMaxMs => integer()();
+  IntColumn get roundsTotal => integer()();
+  IntColumn get roundsCompleted => integer()();
+  // JSON-encoded list of per-round hold/rest results
+  TextColumn get roundDetails => text()();
+  IntColumn get deleted => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // ---------------------------------------------------------------------------
 // Database
 // ---------------------------------------------------------------------------
@@ -75,18 +93,23 @@ const _builtInTagKeys = [
   'tag.hot',
 ];
 
-@DriftDatabase(tables: [Holds, Tags, HoldTags, Settings])
+@DriftDatabase(tables: [Holds, Tags, HoldTags, Settings, TableSessions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
       await _seedBuiltInTags();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(tableSessions);
+      }
     },
   );
 

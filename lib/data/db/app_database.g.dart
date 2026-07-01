@@ -1583,6 +1583,630 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   }
 }
 
+class $TableSessionsTable extends TableSessions
+    with TableInfo<$TableSessionsTable, TableSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TableSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+    'device_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _basedOnMaxMsMeta = const VerificationMeta(
+    'basedOnMaxMs',
+  );
+  @override
+  late final GeneratedColumn<int> basedOnMaxMs = GeneratedColumn<int>(
+    'based_on_max_ms',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roundsTotalMeta = const VerificationMeta(
+    'roundsTotal',
+  );
+  @override
+  late final GeneratedColumn<int> roundsTotal = GeneratedColumn<int>(
+    'rounds_total',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roundsCompletedMeta = const VerificationMeta(
+    'roundsCompleted',
+  );
+  @override
+  late final GeneratedColumn<int> roundsCompleted = GeneratedColumn<int>(
+    'rounds_completed',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roundDetailsMeta = const VerificationMeta(
+    'roundDetails',
+  );
+  @override
+  late final GeneratedColumn<String> roundDetails = GeneratedColumn<String>(
+    'round_details',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deviceId,
+    type,
+    basedOnMaxMs,
+    roundsTotal,
+    roundsCompleted,
+    roundDetails,
+    deleted,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'table_sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TableSession> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deviceIdMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('based_on_max_ms')) {
+      context.handle(
+        _basedOnMaxMsMeta,
+        basedOnMaxMs.isAcceptableOrUnknown(
+          data['based_on_max_ms']!,
+          _basedOnMaxMsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_basedOnMaxMsMeta);
+    }
+    if (data.containsKey('rounds_total')) {
+      context.handle(
+        _roundsTotalMeta,
+        roundsTotal.isAcceptableOrUnknown(
+          data['rounds_total']!,
+          _roundsTotalMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundsTotalMeta);
+    }
+    if (data.containsKey('rounds_completed')) {
+      context.handle(
+        _roundsCompletedMeta,
+        roundsCompleted.isAcceptableOrUnknown(
+          data['rounds_completed']!,
+          _roundsCompletedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundsCompletedMeta);
+    }
+    if (data.containsKey('round_details')) {
+      context.handle(
+        _roundDetailsMeta,
+        roundDetails.isAcceptableOrUnknown(
+          data['round_details']!,
+          _roundDetailsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundDetailsMeta);
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TableSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TableSession(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      basedOnMaxMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}based_on_max_ms'],
+      )!,
+      roundsTotal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rounds_total'],
+      )!,
+      roundsCompleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rounds_completed'],
+      )!,
+      roundDetails: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}round_details'],
+      )!,
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted'],
+      )!,
+    );
+  }
+
+  @override
+  $TableSessionsTable createAlias(String alias) {
+    return $TableSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class TableSession extends DataClass implements Insertable<TableSession> {
+  final String id;
+  final int createdAt;
+  final int updatedAt;
+  final String deviceId;
+  final String type;
+  final int basedOnMaxMs;
+  final int roundsTotal;
+  final int roundsCompleted;
+  final String roundDetails;
+  final int deleted;
+  const TableSession({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deviceId,
+    required this.type,
+    required this.basedOnMaxMs,
+    required this.roundsTotal,
+    required this.roundsCompleted,
+    required this.roundDetails,
+    required this.deleted,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    map['device_id'] = Variable<String>(deviceId);
+    map['type'] = Variable<String>(type);
+    map['based_on_max_ms'] = Variable<int>(basedOnMaxMs);
+    map['rounds_total'] = Variable<int>(roundsTotal);
+    map['rounds_completed'] = Variable<int>(roundsCompleted);
+    map['round_details'] = Variable<String>(roundDetails);
+    map['deleted'] = Variable<int>(deleted);
+    return map;
+  }
+
+  TableSessionsCompanion toCompanion(bool nullToAbsent) {
+    return TableSessionsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deviceId: Value(deviceId),
+      type: Value(type),
+      basedOnMaxMs: Value(basedOnMaxMs),
+      roundsTotal: Value(roundsTotal),
+      roundsCompleted: Value(roundsCompleted),
+      roundDetails: Value(roundDetails),
+      deleted: Value(deleted),
+    );
+  }
+
+  factory TableSession.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TableSession(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deviceId: serializer.fromJson<String>(json['deviceId']),
+      type: serializer.fromJson<String>(json['type']),
+      basedOnMaxMs: serializer.fromJson<int>(json['basedOnMaxMs']),
+      roundsTotal: serializer.fromJson<int>(json['roundsTotal']),
+      roundsCompleted: serializer.fromJson<int>(json['roundsCompleted']),
+      roundDetails: serializer.fromJson<String>(json['roundDetails']),
+      deleted: serializer.fromJson<int>(json['deleted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deviceId': serializer.toJson<String>(deviceId),
+      'type': serializer.toJson<String>(type),
+      'basedOnMaxMs': serializer.toJson<int>(basedOnMaxMs),
+      'roundsTotal': serializer.toJson<int>(roundsTotal),
+      'roundsCompleted': serializer.toJson<int>(roundsCompleted),
+      'roundDetails': serializer.toJson<String>(roundDetails),
+      'deleted': serializer.toJson<int>(deleted),
+    };
+  }
+
+  TableSession copyWith({
+    String? id,
+    int? createdAt,
+    int? updatedAt,
+    String? deviceId,
+    String? type,
+    int? basedOnMaxMs,
+    int? roundsTotal,
+    int? roundsCompleted,
+    String? roundDetails,
+    int? deleted,
+  }) => TableSession(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deviceId: deviceId ?? this.deviceId,
+    type: type ?? this.type,
+    basedOnMaxMs: basedOnMaxMs ?? this.basedOnMaxMs,
+    roundsTotal: roundsTotal ?? this.roundsTotal,
+    roundsCompleted: roundsCompleted ?? this.roundsCompleted,
+    roundDetails: roundDetails ?? this.roundDetails,
+    deleted: deleted ?? this.deleted,
+  );
+  TableSession copyWithCompanion(TableSessionsCompanion data) {
+    return TableSession(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      type: data.type.present ? data.type.value : this.type,
+      basedOnMaxMs: data.basedOnMaxMs.present
+          ? data.basedOnMaxMs.value
+          : this.basedOnMaxMs,
+      roundsTotal: data.roundsTotal.present
+          ? data.roundsTotal.value
+          : this.roundsTotal,
+      roundsCompleted: data.roundsCompleted.present
+          ? data.roundsCompleted.value
+          : this.roundsCompleted,
+      roundDetails: data.roundDetails.present
+          ? data.roundDetails.value
+          : this.roundDetails,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TableSession(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('type: $type, ')
+          ..write('basedOnMaxMs: $basedOnMaxMs, ')
+          ..write('roundsTotal: $roundsTotal, ')
+          ..write('roundsCompleted: $roundsCompleted, ')
+          ..write('roundDetails: $roundDetails, ')
+          ..write('deleted: $deleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deviceId,
+    type,
+    basedOnMaxMs,
+    roundsTotal,
+    roundsCompleted,
+    roundDetails,
+    deleted,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TableSession &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deviceId == this.deviceId &&
+          other.type == this.type &&
+          other.basedOnMaxMs == this.basedOnMaxMs &&
+          other.roundsTotal == this.roundsTotal &&
+          other.roundsCompleted == this.roundsCompleted &&
+          other.roundDetails == this.roundDetails &&
+          other.deleted == this.deleted);
+}
+
+class TableSessionsCompanion extends UpdateCompanion<TableSession> {
+  final Value<String> id;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<String> deviceId;
+  final Value<String> type;
+  final Value<int> basedOnMaxMs;
+  final Value<int> roundsTotal;
+  final Value<int> roundsCompleted;
+  final Value<String> roundDetails;
+  final Value<int> deleted;
+  final Value<int> rowid;
+  const TableSessionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.basedOnMaxMs = const Value.absent(),
+    this.roundsTotal = const Value.absent(),
+    this.roundsCompleted = const Value.absent(),
+    this.roundDetails = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TableSessionsCompanion.insert({
+    required String id,
+    required int createdAt,
+    required int updatedAt,
+    required String deviceId,
+    required String type,
+    required int basedOnMaxMs,
+    required int roundsTotal,
+    required int roundsCompleted,
+    required String roundDetails,
+    this.deleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       deviceId = Value(deviceId),
+       type = Value(type),
+       basedOnMaxMs = Value(basedOnMaxMs),
+       roundsTotal = Value(roundsTotal),
+       roundsCompleted = Value(roundsCompleted),
+       roundDetails = Value(roundDetails);
+  static Insertable<TableSession> custom({
+    Expression<String>? id,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<String>? deviceId,
+    Expression<String>? type,
+    Expression<int>? basedOnMaxMs,
+    Expression<int>? roundsTotal,
+    Expression<int>? roundsCompleted,
+    Expression<String>? roundDetails,
+    Expression<int>? deleted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deviceId != null) 'device_id': deviceId,
+      if (type != null) 'type': type,
+      if (basedOnMaxMs != null) 'based_on_max_ms': basedOnMaxMs,
+      if (roundsTotal != null) 'rounds_total': roundsTotal,
+      if (roundsCompleted != null) 'rounds_completed': roundsCompleted,
+      if (roundDetails != null) 'round_details': roundDetails,
+      if (deleted != null) 'deleted': deleted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TableSessionsCompanion copyWith({
+    Value<String>? id,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<String>? deviceId,
+    Value<String>? type,
+    Value<int>? basedOnMaxMs,
+    Value<int>? roundsTotal,
+    Value<int>? roundsCompleted,
+    Value<String>? roundDetails,
+    Value<int>? deleted,
+    Value<int>? rowid,
+  }) {
+    return TableSessionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deviceId: deviceId ?? this.deviceId,
+      type: type ?? this.type,
+      basedOnMaxMs: basedOnMaxMs ?? this.basedOnMaxMs,
+      roundsTotal: roundsTotal ?? this.roundsTotal,
+      roundsCompleted: roundsCompleted ?? this.roundsCompleted,
+      roundDetails: roundDetails ?? this.roundDetails,
+      deleted: deleted ?? this.deleted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (basedOnMaxMs.present) {
+      map['based_on_max_ms'] = Variable<int>(basedOnMaxMs.value);
+    }
+    if (roundsTotal.present) {
+      map['rounds_total'] = Variable<int>(roundsTotal.value);
+    }
+    if (roundsCompleted.present) {
+      map['rounds_completed'] = Variable<int>(roundsCompleted.value);
+    }
+    if (roundDetails.present) {
+      map['round_details'] = Variable<String>(roundDetails.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<int>(deleted.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TableSessionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('type: $type, ')
+          ..write('basedOnMaxMs: $basedOnMaxMs, ')
+          ..write('roundsTotal: $roundsTotal, ')
+          ..write('roundsCompleted: $roundsCompleted, ')
+          ..write('roundDetails: $roundDetails, ')
+          ..write('deleted: $deleted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1590,6 +2214,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TagsTable tags = $TagsTable(this);
   late final $HoldTagsTable holdTags = $HoldTagsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
+  late final $TableSessionsTable tableSessions = $TableSessionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1599,6 +2224,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     tags,
     holdTags,
     settings,
+    tableSessions,
   ];
 }
 
@@ -2435,6 +3061,309 @@ typedef $$SettingsTableProcessedTableManager =
       Setting,
       PrefetchHooks Function()
     >;
+typedef $$TableSessionsTableCreateCompanionBuilder =
+    TableSessionsCompanion Function({
+      required String id,
+      required int createdAt,
+      required int updatedAt,
+      required String deviceId,
+      required String type,
+      required int basedOnMaxMs,
+      required int roundsTotal,
+      required int roundsCompleted,
+      required String roundDetails,
+      Value<int> deleted,
+      Value<int> rowid,
+    });
+typedef $$TableSessionsTableUpdateCompanionBuilder =
+    TableSessionsCompanion Function({
+      Value<String> id,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<String> deviceId,
+      Value<String> type,
+      Value<int> basedOnMaxMs,
+      Value<int> roundsTotal,
+      Value<int> roundsCompleted,
+      Value<String> roundDetails,
+      Value<int> deleted,
+      Value<int> rowid,
+    });
+
+class $$TableSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $TableSessionsTable> {
+  $$TableSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get basedOnMaxMs => $composableBuilder(
+    column: $table.basedOnMaxMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get roundsTotal => $composableBuilder(
+    column: $table.roundsTotal,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get roundsCompleted => $composableBuilder(
+    column: $table.roundsCompleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get roundDetails => $composableBuilder(
+    column: $table.roundDetails,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TableSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TableSessionsTable> {
+  $$TableSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get basedOnMaxMs => $composableBuilder(
+    column: $table.basedOnMaxMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get roundsTotal => $composableBuilder(
+    column: $table.roundsTotal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get roundsCompleted => $composableBuilder(
+    column: $table.roundsCompleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get roundDetails => $composableBuilder(
+    column: $table.roundDetails,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TableSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TableSessionsTable> {
+  $$TableSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<int> get basedOnMaxMs => $composableBuilder(
+    column: $table.basedOnMaxMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get roundsTotal => $composableBuilder(
+    column: $table.roundsTotal,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get roundsCompleted => $composableBuilder(
+    column: $table.roundsCompleted,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get roundDetails => $composableBuilder(
+    column: $table.roundDetails,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+}
+
+class $$TableSessionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $TableSessionsTable,
+          TableSession,
+          $$TableSessionsTableFilterComposer,
+          $$TableSessionsTableOrderingComposer,
+          $$TableSessionsTableAnnotationComposer,
+          $$TableSessionsTableCreateCompanionBuilder,
+          $$TableSessionsTableUpdateCompanionBuilder,
+          (
+            TableSession,
+            BaseReferences<_$AppDatabase, $TableSessionsTable, TableSession>,
+          ),
+          TableSession,
+          PrefetchHooks Function()
+        > {
+  $$TableSessionsTableTableManager(_$AppDatabase db, $TableSessionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TableSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TableSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TableSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<String> deviceId = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<int> basedOnMaxMs = const Value.absent(),
+                Value<int> roundsTotal = const Value.absent(),
+                Value<int> roundsCompleted = const Value.absent(),
+                Value<String> roundDetails = const Value.absent(),
+                Value<int> deleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TableSessionsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deviceId: deviceId,
+                type: type,
+                basedOnMaxMs: basedOnMaxMs,
+                roundsTotal: roundsTotal,
+                roundsCompleted: roundsCompleted,
+                roundDetails: roundDetails,
+                deleted: deleted,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required int createdAt,
+                required int updatedAt,
+                required String deviceId,
+                required String type,
+                required int basedOnMaxMs,
+                required int roundsTotal,
+                required int roundsCompleted,
+                required String roundDetails,
+                Value<int> deleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TableSessionsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deviceId: deviceId,
+                type: type,
+                basedOnMaxMs: basedOnMaxMs,
+                roundsTotal: roundsTotal,
+                roundsCompleted: roundsCompleted,
+                roundDetails: roundDetails,
+                deleted: deleted,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TableSessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $TableSessionsTable,
+      TableSession,
+      $$TableSessionsTableFilterComposer,
+      $$TableSessionsTableOrderingComposer,
+      $$TableSessionsTableAnnotationComposer,
+      $$TableSessionsTableCreateCompanionBuilder,
+      $$TableSessionsTableUpdateCompanionBuilder,
+      (
+        TableSession,
+        BaseReferences<_$AppDatabase, $TableSessionsTable, TableSession>,
+      ),
+      TableSession,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2446,4 +3375,6 @@ class $AppDatabaseManager {
       $$HoldTagsTableTableManager(_db, _db.holdTags);
   $$SettingsTableTableManager get settings =>
       $$SettingsTableTableManager(_db, _db.settings);
+  $$TableSessionsTableTableManager get tableSessions =>
+      $$TableSessionsTableTableManager(_db, _db.tableSessions);
 }
