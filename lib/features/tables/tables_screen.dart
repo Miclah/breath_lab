@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
+import 'round_list_item.dart';
 
 // Default table config per PRD §1 — configurable in Settings in a later phase.
 const _co2Rounds = 7;
@@ -17,13 +18,6 @@ const _co2RestDecrementS = 15;
 const _o2Rounds = 8;
 const _o2MaxHoldPercent = 0.8;
 const _o2RestS = 120;
-
-String _fmt(int ms) {
-  final d = Duration(milliseconds: ms);
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
 
 List<TableRoundPlan> _computeRounds(TableType type, int maxMs) {
   return switch (type) {
@@ -90,10 +84,10 @@ class TablesScreen extends ConsumerWidget {
                         itemCount: rounds.length,
                         separatorBuilder: (_, _) =>
                             const SizedBox(height: Spacing.sm),
-                        itemBuilder: (context, i) => _RoundRow(
+                        itemBuilder: (context, i) => RoundListItem(
                           number: i + 1,
                           round: rounds[i],
-                          l10n: l10n,
+                          state: RoundItemState.upcoming,
                         ),
                       ),
                     ),
@@ -203,87 +197,12 @@ class _InfoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(Radius.md),
         ),
         child: Text(
-          l10n.tablesBasedOnMax(_fmt(maxMs)),
+          l10n.tablesBasedOnMax(formatRoundMs(maxMs)),
           style: Theme.of(
             context,
           ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
         ),
       ),
-    );
-  }
-}
-
-class _RoundRow extends StatelessWidget {
-  const _RoundRow({
-    required this.number,
-    required this.round,
-    required this.l10n,
-  });
-
-  final int number;
-  final TableRoundPlan round;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Spacing.lg,
-        vertical: Spacing.md,
-      ),
-      decoration: BoxDecoration(
-        color: c.surface,
-        border: Border.all(color: c.border),
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
-      child: Row(
-        children: [
-          Text(
-            l10n.tablesRoundLabel(number),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: c.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const Spacer(),
-          _RoundStat(
-            label: l10n.tablesHoldLabel,
-            value: _fmt(round.holdMs),
-            c: c,
-          ),
-          const SizedBox(width: Spacing.xl),
-          _RoundStat(
-            label: l10n.tablesRestLabel,
-            value: _fmt(round.restMs),
-            c: c,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RoundStat extends StatelessWidget {
-  const _RoundStat({required this.label, required this.value, required this.c});
-
-  final String label;
-  final String value;
-  final BreathLabColorScheme c;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          label,
-          style: Theme.of(
-            context,
-          ).textTheme.labelSmall?.copyWith(color: c.textTertiary),
-        ),
-        Text(value, style: Theme.of(context).textTheme.bodyMedium),
-      ],
     );
   }
 }
