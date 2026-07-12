@@ -22,11 +22,24 @@ class RoundListItem extends StatelessWidget {
     required this.number,
     required this.round,
     required this.state,
+    this.elapsedMs,
+    this.phaseLabel,
+    this.onStopHold,
   });
 
   final int number;
   final TableRoundPlan round;
   final RoundItemState state;
+
+  /// Live elapsed time within the current hold/rest phase, while active.
+  final int? elapsedMs;
+
+  /// "hold" / "rest" label shown below the live timer, while active.
+  final String? phaseLabel;
+
+  /// If set, shows a button to end the current hold early. Only meaningful
+  /// during the hold phase.
+  final VoidCallback? onStopHold;
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +92,35 @@ class RoundListItem extends StatelessWidget {
           if (state == RoundItemState.active) ...[
             const SizedBox(height: Spacing.md),
             Center(
-              child: Text(
-                '--:--',
-                style: BreathLabTypography.timerDisplay.copyWith(
-                  color: c.warningText,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    elapsedMs == null ? '--:--' : formatRoundMs(elapsedMs!),
+                    style: BreathLabTypography.timerDisplay.copyWith(
+                      color: c.warningText,
+                    ),
+                  ),
+                  if (phaseLabel != null) ...[
+                    const SizedBox(height: Spacing.xxs),
+                    Text(
+                      phaseLabel!,
+                      style: BreathLabTypography.bodySm.copyWith(
+                        color: c.warningText,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
+            if (onStopHold != null) ...[
+              const SizedBox(height: Spacing.sm),
+              Center(
+                child: OutlinedButton(
+                  onPressed: onStopHold,
+                  child: Text(l10n.timerStopButton),
+                ),
+              ),
+            ],
           ],
         ],
       ),

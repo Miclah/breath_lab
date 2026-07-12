@@ -469,6 +469,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rest'**
   String get tablesRestLabel;
+
+  /// State label shown below the live timer on the active table round during a hold
+  ///
+  /// In en, this message translates to:
+  /// **'hold'**
+  String get tablesPhaseLabelHold;
+
+  /// State label shown below the live timer on the active table round during rest
+  ///
+  /// In en, this message translates to:
+  /// **'rest'**
+  String get tablesPhaseLabelRest;
 }
 
 class _AppLocalizationsDelegate

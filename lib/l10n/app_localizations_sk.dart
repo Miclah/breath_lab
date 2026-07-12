@@ -202,4 +202,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tablesRestLabel => 'Oddych';
+
+  @override
+  String get tablesPhaseLabelHold => 'zadržanie';
+
+  @override
+  String get tablesPhaseLabelRest => 'oddych';
 }

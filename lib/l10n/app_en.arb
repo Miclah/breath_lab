@@ -258,5 +258,13 @@
   "tablesRestLabel": "Rest",
   "@tablesRestLabel": {
     "description": "Label for the rest duration of a table round"
+  },
+  "tablesPhaseLabelHold": "hold",
+  "@tablesPhaseLabelHold": {
+    "description": "State label shown below the live timer on the active table round during a hold"
+  },
+  "tablesPhaseLabelRest": "rest",
+  "@tablesPhaseLabelRest": {
+    "description": "State label shown below the live timer on the active table round during rest"
   }
 }

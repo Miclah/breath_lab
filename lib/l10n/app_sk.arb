@@ -61,5 +61,7 @@
   "tablesNoMaxYet": "Najprv zadrž dych na maximum, aby sa vygenerovala tabuľka.",
   "tablesRoundLabel": "R{number}",
   "tablesHoldLabel": "Zadržanie",
-  "tablesRestLabel": "Oddych"
+  "tablesRestLabel": "Oddych",
+  "tablesPhaseLabelHold": "zadržanie",
+  "tablesPhaseLabelRest": "oddych"
 }

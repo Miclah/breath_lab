@@ -200,4 +200,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tablesRestLabel => 'Rest';
+
+  @override
+  String get tablesPhaseLabelHold => 'hold';
+
+  @override
+  String get tablesPhaseLabelRest => 'rest';
 }
