@@ -5,10 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/co2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
+import 'providers.dart';
 
 class TableSessionNotifier extends Notifier<TableSessionState> {
   final _stopwatch = Stopwatch();
   Timer? _ticker;
+
+  /// The rest-phase second (3, 2, or 1) the countdown tick was last played
+  /// for, so each second only triggers one tick.
+  int? _lastCountdownSecond;
 
   @override
   TableSessionState build() => const TableSessionState();
@@ -24,6 +29,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       rounds: rounds,
     );
     _startTicker();
+    ref.read(audioServiceProvider).playHoldStart();
   }
 
   /// End the current hold before its planned duration. The actual (shorter)
@@ -37,6 +43,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
   void reset() {
     _stopTicker();
     _stopwatch.reset();
+    _lastCountdownSecond = null;
     state = const TableSessionState();
   }
 
@@ -51,9 +58,17 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
         _completeHold(completed: true);
         return;
       }
-      if (state.isResting && elapsedMs >= round.restMs) {
-        _completeRest();
-        return;
+      if (state.isResting) {
+        final remainingMs = round.restMs - elapsedMs;
+        if (remainingMs <= 0) {
+          _completeRest();
+          return;
+        }
+        final remainingS = (remainingMs / 1000).ceil();
+        if (remainingS <= 3 && remainingS != _lastCountdownSecond) {
+          _lastCountdownSecond = remainingS;
+          ref.read(audioServiceProvider).playCountdownTick();
+        }
       }
       state = state.copyWith(elapsed: _stopwatch.elapsed);
     });
@@ -69,6 +84,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       restMs: 0,
       completed: completed,
     );
+    _lastCountdownSecond = null;
     _stopwatch
       ..reset()
       ..start();
@@ -77,6 +93,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       elapsed: Duration.zero,
       completedRounds: [...state.completedRounds, detail],
     );
+    ref.read(audioServiceProvider).playRestStart();
   }
 
   void _completeRest() {
@@ -100,6 +117,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
         elapsed: Duration.zero,
         completedRounds: details,
       );
+      ref.read(audioServiceProvider).playRoundDone();
       return;
     }
 
@@ -112,6 +130,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       elapsed: Duration.zero,
       completedRounds: details,
     );
+    ref.read(audioServiceProvider).playHoldStart();
   }
 
   void _stopTicker() {
