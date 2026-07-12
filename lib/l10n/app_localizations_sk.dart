@@ -176,4 +176,30 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get historyLungVolLabel => 'Objem';
+
+  @override
+  String get tablesCo2Toggle => 'CO₂';
+
+  @override
+  String get tablesO2Toggle => 'O₂';
+
+  @override
+  String tablesBasedOnMax(String max) {
+    return 'Na základe maxima $max';
+  }
+
+  @override
+  String get tablesNoMaxYet =>
+      'Najprv zadrž dych na maximum, aby sa vygenerovala tabuľka.';
+
+  @override
+  String tablesRoundLabel(int number) {
+    return 'R$number';
+  }
+
+  @override
+  String get tablesHoldLabel => 'Zadržanie';
+
+  @override
+  String get tablesRestLabel => 'Oddych';
 }

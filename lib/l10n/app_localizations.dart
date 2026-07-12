@@ -427,6 +427,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Volume'**
   String get historyLungVolLabel;
+
+  /// Pill toggle segment label for the CO₂ table
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂'**
+  String get tablesCo2Toggle;
+
+  /// Pill toggle segment label for the O₂ table
+  ///
+  /// In en, this message translates to:
+  /// **'O₂'**
+  String get tablesO2Toggle;
+
+  /// Info card text showing the current max hold the table is calculated from
+  ///
+  /// In en, this message translates to:
+  /// **'Based on max {max}'**
+  String tablesBasedOnMax(String max);
+
+  /// Empty state shown on the Tables screen when no current max is set yet
+  ///
+  /// In en, this message translates to:
+  /// **'Do a max hold first to generate your table.'**
+  String get tablesNoMaxYet;
+
+  /// Round number label in the table round list, e.g. R1, R2
+  ///
+  /// In en, this message translates to:
+  /// **'R{number}'**
+  String tablesRoundLabel(int number);
+
+  /// Label for the hold duration of a table round
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get tablesHoldLabel;
+
+  /// Label for the rest duration of a table round
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get tablesRestLabel;
 }
 
 class _AppLocalizationsDelegate
