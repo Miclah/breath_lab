@@ -517,6 +517,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'First session of this type — nothing to compare yet.'**
   String get tablesSummaryNoPrevious;
+
+  /// Single history-list row summarizing a completed table session
+  ///
+  /// In en, this message translates to:
+  /// **'{type} table · {completed}/{total} rounds · avg {avg}'**
+  String tablesHistoryRow(String type, int completed, int total, String avg);
 }
 
 class _AppLocalizationsDelegate

@@ -231,4 +231,9 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get tablesSummaryNoPrevious =>
       'Prvá séria tohto typu — zatiaľ niet s čím porovnávať.';
+
+  @override
+  String tablesHistoryRow(String type, int completed, int total, String avg) {
+    return '$type tabuľka · $completed/$total kôl · priemer $avg';
+  }
 }

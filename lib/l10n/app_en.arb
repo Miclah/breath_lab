@@ -304,5 +304,25 @@
   "tablesSummaryNoPrevious": "First session of this type — nothing to compare yet.",
   "@tablesSummaryNoPrevious": {
     "description": "Shown on the table session summary screen when there is no previous same-type session to compare against"
+  },
+  "tablesHistoryRow": "{type} table · {completed}/{total} rounds · avg {avg}",
+  "@tablesHistoryRow": {
+    "description": "Single history-list row summarizing a completed table session",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "example": "CO₂"
+      },
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "avg": {
+        "type": "String",
+        "example": "0:48"
+      }
+    }
   }
 }

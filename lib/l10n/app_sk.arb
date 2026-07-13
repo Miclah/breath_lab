@@ -69,5 +69,6 @@
   "tablesSummaryTotalHold": "Celkový čas zadržania",
   "tablesSummaryAverageHold": "Priemerné zadržanie",
   "tablesSummaryVsPrevious": "{delta} oproti minulej sérii",
-  "tablesSummaryNoPrevious": "Prvá séria tohto typu — zatiaľ niet s čím porovnávať."
+  "tablesSummaryNoPrevious": "Prvá séria tohto typu — zatiaľ niet s čím porovnávať.",
+  "tablesHistoryRow": "{type} tabuľka · {completed}/{total} kôl · priemer {avg}"
 }

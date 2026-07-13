@@ -229,4 +229,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tablesSummaryNoPrevious =>
       'First session of this type — nothing to compare yet.';
+
+  @override
+  String tablesHistoryRow(String type, int completed, int total, String avg) {
+    return '$type table · $completed/$total rounds · avg $avg';
+  }
 }
