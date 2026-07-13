@@ -571,6 +571,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{sessions} sessions · best week: {days} days'**
   String progressHeatmapStat(int sessions, int days);
+
+  /// Empty state shown in place of the progress chart when there is no data in the selected range
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough holds yet to show a trend.'**
+  String get progressChartEmpty;
 }
 
 class _AppLocalizationsDelegate

@@ -364,5 +364,9 @@
         "type": "int"
       }
     }
+  },
+  "progressChartEmpty": "Not enough holds yet to show a trend.",
+  "@progressChartEmpty": {
+    "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
   }
 }

@@ -260,4 +260,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String progressHeatmapStat(int sessions, int days) {
     return '$sessions sessions · best week: $days days';
   }
+
+  @override
+  String get progressChartEmpty => 'Not enough holds yet to show a trend.';
 }

@@ -78,5 +78,6 @@
   "progressHeatmapTitle": "Posledných 12 týždňov",
   "progressHeatmapLegendLess": "Menej",
   "progressHeatmapLegendMore": "Viac",
-  "progressHeatmapStat": "{sessions} tréningov · najlepší týždeň: {days} dní"
+  "progressHeatmapStat": "{sessions} tréningov · najlepší týždeň: {days} dní",
+  "progressChartEmpty": "Zatiaľ nedostatok pokusov na zobrazenie trendu."
 }

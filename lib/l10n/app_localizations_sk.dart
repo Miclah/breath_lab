@@ -262,4 +262,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String progressHeatmapStat(int sessions, int days) {
     return '$sessions tréningov · najlepší týždeň: $days dní';
   }
+
+  @override
+  String get progressChartEmpty =>
+      'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
 }
