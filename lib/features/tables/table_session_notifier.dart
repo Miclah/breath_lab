@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/settings_repository.dart';
+import '../../data/repositories/table_sessions_repository.dart';
+import '../../domain/models/hold.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/co2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
@@ -19,13 +23,14 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
   TableSessionState build() => const TableSessionState();
 
   /// Begin a session with the given planned rounds.
-  void start(TableType type, List<TableRoundPlan> rounds) {
+  void start(TableType type, List<TableRoundPlan> rounds, int basedOnMaxMs) {
     _stopwatch
       ..reset()
       ..start();
     state = TableSessionState(
       phase: TableSessionPhase.hold,
       type: type,
+      basedOnMaxMs: basedOnMaxMs,
       rounds: rounds,
     );
     _startTicker();
@@ -40,12 +45,78 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
     _completeHold(completed: false);
   }
 
-  /// Return to idle, clearing all session progress.
+  /// End the whole session before all rounds are done, persisting whatever
+  /// rounds were completed (or partially held) so far.
+  Future<void> stopSession() async {
+    if (state.isIdle || state.isDone) return;
+    _stopTicker();
+    final details = [...state.completedRounds];
+    if (state.isHolding) {
+      details.add(
+        TableRoundDetail(
+          holdMs: _stopwatch.elapsed.inMilliseconds,
+          restMs: 0,
+          completed: false,
+        ),
+      );
+    }
+    _stopwatch.stop();
+    await _persistSession(details);
+    _lastCountdownSecond = null;
+    state = const TableSessionState();
+  }
+
+  /// Return to idle, clearing all session progress without persisting.
   void reset() {
     _stopTicker();
     _stopwatch.reset();
     _lastCountdownSecond = null;
     state = const TableSessionState();
+  }
+
+  Future<void> _persistSession(List<TableRoundDetail> details) async {
+    final type = state.type;
+    if (type == null) return;
+
+    final tableSessionsRepo = await ref.read(
+      tableSessionsRepositoryProvider.future,
+    );
+    final holdsRepo = await ref.read(holdsRepositoryProvider.future);
+    final lungVolume = await ref.read(defaultLungVolumeProvider.future);
+    final now = DateTime.now();
+
+    await tableSessionsRepo.save(
+      TableSession(
+        id: tableSessionsRepo.newId(),
+        createdAt: now,
+        updatedAt: now,
+        deviceId: '',
+        type: type,
+        basedOnMaxMs: state.basedOnMaxMs,
+        roundsTotal: state.rounds.length,
+        roundsCompleted: details.where((d) => d.completed).length,
+        roundDetails: details,
+      ),
+    );
+
+    final holdType = type == TableType.co2 ? HoldType.co2 : HoldType.o2;
+    for (final detail in details) {
+      await holdsRepo.save(
+        Hold(
+          id: holdsRepo.newId(),
+          createdAt: now,
+          updatedAt: now,
+          deviceId: '',
+          duration: Duration(milliseconds: detail.holdMs),
+          type: holdType,
+          lungVolume: lungVolume,
+          isPb: false,
+        ),
+      );
+    }
+
+    ref.invalidate(allTableSessionsProvider);
+    ref.invalidate(allHoldsProvider);
   }
 
   void _startTicker() {
@@ -121,6 +192,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       );
       ref.read(audioServiceProvider).playRoundDone();
       ref.read(hapticsServiceProvider).sessionComplete();
+      unawaited(_persistSession(details));
       return;
     }
 

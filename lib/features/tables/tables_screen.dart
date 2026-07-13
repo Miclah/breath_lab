@@ -137,9 +137,12 @@ class TablesScreen extends ConsumerWidget {
                         l10n: l10n,
                         onStart: () => ref
                             .read(tableSessionProvider.notifier)
-                            .start(selectedType, rounds),
+                            .start(selectedType, rounds, maxMs),
                         onReset: () =>
                             ref.read(tableSessionProvider.notifier).reset(),
+                        onStop: () => ref
+                            .read(tableSessionProvider.notifier)
+                            .stopSession(),
                       ),
                     ),
                     const SizedBox(height: Spacing.lg),
@@ -161,6 +164,7 @@ class _SessionActionButton extends StatelessWidget {
     required this.l10n,
     required this.onStart,
     required this.onReset,
+    required this.onStop,
   });
 
   final bool sessionActive;
@@ -168,10 +172,30 @@ class _SessionActionButton extends StatelessWidget {
   final AppLocalizations l10n;
   final VoidCallback onStart;
   final VoidCallback onReset;
+  final VoidCallback onStop;
 
   @override
   Widget build(BuildContext context) {
-    if (sessionActive && !isDone) return const SizedBox.shrink();
+    final c = context.appColors;
+
+    if (sessionActive && !isDone) {
+      return SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: c.danger,
+            foregroundColor: c.textOnDanger,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Radius.lg),
+            ),
+          ),
+          onPressed: onStop,
+          child: Text(l10n.timerStopButton),
+        ),
+      );
+    }
+
     return SizedBox(
       width: double.infinity,
       height: 48,

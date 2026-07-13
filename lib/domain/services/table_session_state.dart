@@ -7,6 +7,7 @@ class TableSessionState {
   const TableSessionState({
     this.phase = TableSessionPhase.idle,
     this.type,
+    this.basedOnMaxMs = 0,
     this.rounds = const [],
     this.currentRoundIndex = 0,
     this.elapsed = Duration.zero,
@@ -15,6 +16,9 @@ class TableSessionState {
 
   final TableSessionPhase phase;
   final TableType? type;
+
+  /// The current max (in ms) this session's rounds were calculated from.
+  final int basedOnMaxMs;
 
   /// The planned rounds for this session, from the calculator.
   final List<TableRoundPlan> rounds;
@@ -38,6 +42,7 @@ class TableSessionState {
   TableSessionState copyWith({
     TableSessionPhase? phase,
     TableType? type,
+    int? basedOnMaxMs,
     List<TableRoundPlan>? rounds,
     int? currentRoundIndex,
     Duration? elapsed,
@@ -46,6 +51,7 @@ class TableSessionState {
     return TableSessionState(
       phase: phase ?? this.phase,
       type: type ?? this.type,
+      basedOnMaxMs: basedOnMaxMs ?? this.basedOnMaxMs,
       rounds: rounds ?? this.rounds,
       currentRoundIndex: currentRoundIndex ?? this.currentRoundIndex,
       elapsed: elapsed ?? this.elapsed,
