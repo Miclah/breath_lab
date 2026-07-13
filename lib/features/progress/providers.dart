@@ -81,3 +81,67 @@ HeatmapData computeHeatmapData(
 }
 
 DateTime _dateOnly(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
+
+/// Best/average max-hold duration for a single day on the progress chart.
+class DailyHoldStat {
+  const DailyHoldStat({
+    required this.date,
+    required this.dayIndex,
+    required this.best,
+    required this.average,
+    required this.hasPb,
+  });
+
+  final DateTime date;
+
+  /// Position on the chart's fixed 0..days-1 x-axis. Days with no
+  /// qualifying holds are omitted from the series entirely, but the
+  /// surviving points keep their true index so gaps read as gaps.
+  final int dayIndex;
+  final Duration best;
+  final Duration average;
+  final bool hasPb;
+}
+
+final dailyHoldStatsProvider = Provider<List<DailyHoldStat>>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  return computeDailyHoldStats(holds);
+});
+
+/// Per-day best/average duration for max holds of [lungVolume], over the
+/// last [days] days ending today.
+List<DailyHoldStat> computeDailyHoldStats(
+  List<Hold> holds, {
+  LungVolume lungVolume = LungVolume.full,
+  int days = 30,
+  DateTime? now,
+}) {
+  final today = _dateOnly(now ?? DateTime.now());
+  final windowStart = today.subtract(Duration(days: days - 1));
+
+  final durationsByDay = <DateTime, List<Hold>>{};
+  for (final hold in holds) {
+    if (hold.type != HoldType.max || hold.lungVolume != lungVolume) continue;
+    final date = _dateOnly(hold.createdAt);
+    if (date.isBefore(windowStart) || date.isAfter(today)) continue;
+    (durationsByDay[date] ??= []).add(hold);
+  }
+
+  final stats = durationsByDay.entries.map((entry) {
+    final dayHolds = entry.value;
+    final totalMs = dayHolds.fold<int>(
+      0,
+      (sum, h) => sum + h.duration.inMilliseconds,
+    );
+    return DailyHoldStat(
+      date: entry.key,
+      dayIndex: entry.key.difference(windowStart).inDays,
+      best: dayHolds.map((h) => h.duration).reduce((a, b) => a > b ? a : b),
+      average: Duration(milliseconds: totalMs ~/ dayHolds.length),
+      hasPb: dayHolds.any((h) => h.isPb),
+    );
+  }).toList();
+
+  stats.sort((a, b) => a.dayIndex.compareTo(b.dayIndex));
+  return stats;
+}

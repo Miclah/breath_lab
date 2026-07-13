@@ -2,16 +2,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:breath_lab/domain/models/hold.dart';
 import 'package:breath_lab/features/progress/providers.dart';
 
-Hold _hold(DateTime createdAt) {
+Hold _hold(
+  DateTime createdAt, {
+  Duration duration = const Duration(minutes: 1),
+  HoldType type = HoldType.max,
+  LungVolume lungVolume = LungVolume.full,
+  bool isPb = false,
+}) {
   return Hold(
-    id: 'id-${createdAt.millisecondsSinceEpoch}',
+    id: 'id-${createdAt.millisecondsSinceEpoch}-${duration.inMilliseconds}',
     createdAt: createdAt,
     updatedAt: createdAt,
     deviceId: 'device',
-    duration: const Duration(minutes: 1),
-    type: HoldType.max,
-    lungVolume: LungVolume.full,
-    isPb: false,
+    duration: duration,
+    type: type,
+    lungVolume: lungVolume,
+    isPb: isPb,
   );
 }
 
@@ -59,6 +65,56 @@ void main() {
       expect(data.countsByDate, isEmpty);
       expect(data.totalSessions, 0);
       expect(data.bestWeekDays, 0);
+    });
+  });
+
+  group('computeDailyHoldStats', () {
+    final now = DateTime(2026, 7, 13, 12);
+
+    test('computes best and average duration per day', () {
+      final holds = [
+        _hold(now, duration: const Duration(minutes: 2)),
+        _hold(now, duration: const Duration(minutes: 4)),
+      ];
+      final stats = computeDailyHoldStats(holds, now: now);
+
+      expect(stats, hasLength(1));
+      expect(stats.single.best, const Duration(minutes: 4));
+      expect(stats.single.average, const Duration(minutes: 3));
+    });
+
+    test('ignores non-max holds and other lung volumes', () {
+      final holds = [
+        _hold(now, type: HoldType.co2),
+        _hold(now, lungVolume: LungVolume.frc),
+        _hold(now, duration: const Duration(minutes: 1, seconds: 30)),
+      ];
+      final stats = computeDailyHoldStats(holds, now: now);
+
+      expect(stats, hasLength(1));
+      expect(stats.single.best, const Duration(minutes: 1, seconds: 30));
+    });
+
+    test('excludes holds outside the day window and marks PB days', () {
+      final holds = [
+        _hold(now, isPb: true),
+        _hold(now.subtract(const Duration(days: 40))),
+      ];
+      final stats = computeDailyHoldStats(holds, days: 30, now: now);
+
+      expect(stats, hasLength(1));
+      expect(stats.single.hasPb, isTrue);
+    });
+
+    test('dayIndex reflects true position on the window, skipping gaps', () {
+      final holds = [_hold(now), _hold(now.subtract(const Duration(days: 5)))];
+      final stats = computeDailyHoldStats(holds, days: 30, now: now);
+
+      expect(stats.map((s) => s.dayIndex).toList(), [24, 29]);
+    });
+
+    test('is empty for no history', () {
+      expect(computeDailyHoldStats([], now: now), isEmpty);
     });
   });
 }
