@@ -48,7 +48,8 @@ String _tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
   _ => labelKey,
 };
 
-void _showDetail(BuildContext context, Hold hold) {
+/// Opens the hold detail bottom sheet. Shared with the heatmap drill-down.
+void showHoldDetail(BuildContext context, Hold hold) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -143,7 +144,7 @@ class HistoryScreen extends ConsumerWidget {
                         itemBuilder: (_, i) => switch (entries[i]) {
                           _HoldEntry(:final hold) => _HoldRow(
                             hold: hold,
-                            onTap: () => _showDetail(context, hold),
+                            onTap: () => showHoldDetail(context, hold),
                           ),
                           _TableSessionEntry(:final session) =>
                             _TableSessionRow(session: session),

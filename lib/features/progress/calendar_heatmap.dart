@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import 'heatmap_day_sheet.dart';
 import 'providers.dart';
 
 const _weeksShown = 12;
@@ -86,6 +87,7 @@ class CalendarHeatmap extends ConsumerWidget {
                                 0,
                             isToday: gridDates[w * _daysPerWeek + d] == today,
                             size: cellSize,
+                            onTap: showHeatmapDaySheet,
                           ),
                         ),
                     ],
@@ -142,6 +144,7 @@ class _HeatmapCell extends StatelessWidget {
     required this.count,
     required this.isToday,
     required this.size,
+    required this.onTap,
   });
 
   final DateTime date;
@@ -149,16 +152,23 @@ class _HeatmapCell extends StatelessWidget {
   final bool isToday;
   final double size;
 
+  /// Called with [date] when a cell with sessions is tapped. Cells with no
+  /// sessions are a no-op, per Design Additions §1.
+  final void Function(BuildContext, DateTime) onTap;
+
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: _cellColor(context, count),
-        borderRadius: BorderRadius.circular(Radius.xs),
-        border: isToday ? Border.all(color: c.primary, width: 1) : null,
+    return GestureDetector(
+      onTap: count > 0 ? () => onTap(context, date) : null,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: _cellColor(context, count),
+          borderRadius: BorderRadius.circular(Radius.xs),
+          border: isToday ? Border.all(color: c.primary, width: 1) : null,
+        ),
       ),
     );
   }
