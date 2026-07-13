@@ -523,6 +523,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{type} table · {completed}/{total} rounds · avg {avg}'**
   String tablesHistoryRow(String type, int completed, int total, String avg);
+
+  /// Label for the all-time personal best stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'PB'**
+  String get progressStatPb;
+
+  /// Label for the 30-day average hold stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'30d avg'**
+  String get progressStatAvg30d;
+
+  /// Label for the current streak stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get progressStatStreak;
+
+  /// Placeholder value for a stat card when there is not enough history yet
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get progressStatNoData;
 }
 
 class _AppLocalizationsDelegate

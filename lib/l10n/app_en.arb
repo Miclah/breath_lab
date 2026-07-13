@@ -324,5 +324,21 @@
         "example": "0:48"
       }
     }
+  },
+  "progressStatPb": "PB",
+  "@progressStatPb": {
+    "description": "Label for the all-time personal best stat card on the Progress screen"
+  },
+  "progressStatAvg30d": "30d avg",
+  "@progressStatAvg30d": {
+    "description": "Label for the 30-day average hold stat card on the Progress screen"
+  },
+  "progressStatStreak": "Streak",
+  "@progressStatStreak": {
+    "description": "Label for the current streak stat card on the Progress screen"
+  },
+  "progressStatNoData": "—",
+  "@progressStatNoData": {
+    "description": "Placeholder value for a stat card when there is not enough history yet"
   }
 }

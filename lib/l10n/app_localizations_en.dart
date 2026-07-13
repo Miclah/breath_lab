@@ -234,4 +234,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String tablesHistoryRow(String type, int completed, int total, String avg) {
     return '$type table · $completed/$total rounds · avg $avg';
   }
+
+  @override
+  String get progressStatPb => 'PB';
+
+  @override
+  String get progressStatAvg30d => '30d avg';
+
+  @override
+  String get progressStatStreak => 'Streak';
+
+  @override
+  String get progressStatNoData => '—';
 }

@@ -10,6 +10,7 @@ import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../progress/stat_card_row.dart';
 
 String _fmt(Duration d) {
   final m = d.inMinutes.toString().padLeft(2, '0');
@@ -92,44 +93,59 @@ class HistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProgress)),
-      body: holds == null || tableSessions == null
-          ? holdsAsync.hasError || tableSessionsAsync.hasError
-                ? const SizedBox.shrink()
-                : const Center(child: CircularProgressIndicator())
-          : Builder(
-              builder: (context) {
-                final entries = <_HistoryEntry>[
-                  for (final hold in holds)
-                    if (hold.type != HoldType.co2 && hold.type != HoldType.o2)
-                      _HoldEntry(hold),
-                  for (final session in tableSessions)
-                    _TableSessionEntry(session),
-                ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-                if (entries.isEmpty) {
-                  return Center(
-                    child: Text(
-                      l10n.historyEmpty,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  itemCount: entries.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, indent: Spacing.xl),
-                  itemBuilder: (_, i) => switch (entries[i]) {
-                    _HoldEntry(:final hold) => _HoldRow(
-                      hold: hold,
-                      onTap: () => _showDetail(context, hold),
-                    ),
-                    _TableSessionEntry(:final session) => _TableSessionRow(
-                      session: session,
-                    ),
-                  },
-                );
-              },
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
+              Spacing.xl,
+              Spacing.lg,
+              Spacing.xl,
+              Spacing.lg,
             ),
+            child: StatCardRow(),
+          ),
+          Expanded(
+            child: holds == null || tableSessions == null
+                ? holdsAsync.hasError || tableSessionsAsync.hasError
+                      ? const SizedBox.shrink()
+                      : const Center(child: CircularProgressIndicator())
+                : Builder(
+                    builder: (context) {
+                      final entries = <_HistoryEntry>[
+                        for (final hold in holds)
+                          if (hold.type != HoldType.co2 &&
+                              hold.type != HoldType.o2)
+                            _HoldEntry(hold),
+                        for (final session in tableSessions)
+                          _TableSessionEntry(session),
+                      ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+                      if (entries.isEmpty) {
+                        return Center(
+                          child: Text(
+                            l10n.historyEmpty,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        );
+                      }
+                      return ListView.separated(
+                        itemCount: entries.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 1, indent: Spacing.xl),
+                        itemBuilder: (_, i) => switch (entries[i]) {
+                          _HoldEntry(:final hold) => _HoldRow(
+                            hold: hold,
+                            onTap: () => _showDetail(context, hold),
+                          ),
+                          _TableSessionEntry(:final session) =>
+                            _TableSessionRow(session: session),
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -236,4 +236,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String tablesHistoryRow(String type, int completed, int total, String avg) {
     return '$type tabuľka · $completed/$total kôl · priemer $avg';
   }
+
+  @override
+  String get progressStatPb => 'PB';
+
+  @override
+  String get progressStatAvg30d => '30d priemer';
+
+  @override
+  String get progressStatStreak => 'Séria';
+
+  @override
+  String get progressStatNoData => '—';
 }
