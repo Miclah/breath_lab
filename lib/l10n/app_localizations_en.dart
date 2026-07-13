@@ -246,4 +246,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressStatNoData => '—';
+
+  @override
+  String get progressHeatmapTitle => 'Last 12 weeks';
+
+  @override
+  String get progressHeatmapLegendLess => 'Less';
+
+  @override
+  String get progressHeatmapLegendMore => 'More';
+
+  @override
+  String progressHeatmapStat(int sessions, int days) {
+    return '$sessions sessions · best week: $days days';
+  }
 }

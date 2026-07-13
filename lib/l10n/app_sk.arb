@@ -74,5 +74,9 @@
   "progressStatPb": "PB",
   "progressStatAvg30d": "30d priemer",
   "progressStatStreak": "Séria",
-  "progressStatNoData": "—"
+  "progressStatNoData": "—",
+  "progressHeatmapTitle": "Posledných 12 týždňov",
+  "progressHeatmapLegendLess": "Menej",
+  "progressHeatmapLegendMore": "Viac",
+  "progressHeatmapStat": "{sessions} tréningov · najlepší týždeň: {days} dní"
 }

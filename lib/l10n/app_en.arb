@@ -340,5 +340,29 @@
   "progressStatNoData": "—",
   "@progressStatNoData": {
     "description": "Placeholder value for a stat card when there is not enough history yet"
+  },
+  "progressHeatmapTitle": "Last 12 weeks",
+  "@progressHeatmapTitle": {
+    "description": "Section header above the calendar heatmap on the Progress screen"
+  },
+  "progressHeatmapLegendLess": "Less",
+  "@progressHeatmapLegendLess": {
+    "description": "Left-hand label of the heatmap color-intensity legend"
+  },
+  "progressHeatmapLegendMore": "More",
+  "@progressHeatmapLegendMore": {
+    "description": "Right-hand label of the heatmap color-intensity legend"
+  },
+  "progressHeatmapStat": "{sessions} sessions · best week: {days} days",
+  "@progressHeatmapStat": {
+    "description": "Summary stat shown to the right of the heatmap legend",
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

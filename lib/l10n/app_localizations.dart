@@ -547,6 +547,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'—'**
   String get progressStatNoData;
+
+  /// Section header above the calendar heatmap on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 weeks'**
+  String get progressHeatmapTitle;
+
+  /// Left-hand label of the heatmap color-intensity legend
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get progressHeatmapLegendLess;
+
+  /// Right-hand label of the heatmap color-intensity legend
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get progressHeatmapLegendMore;
+
+  /// Summary stat shown to the right of the heatmap legend
+  ///
+  /// In en, this message translates to:
+  /// **'{sessions} sessions · best week: {days} days'**
+  String progressHeatmapStat(int sessions, int days);
 }
 
 class _AppLocalizationsDelegate

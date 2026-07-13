@@ -248,4 +248,18 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get progressStatNoData => '—';
+
+  @override
+  String get progressHeatmapTitle => 'Posledných 12 týždňov';
+
+  @override
+  String get progressHeatmapLegendLess => 'Menej';
+
+  @override
+  String get progressHeatmapLegendMore => 'Viac';
+
+  @override
+  String progressHeatmapStat(int sessions, int days) {
+    return '$sessions tréningov · najlepší týždeň: $days dní';
+  }
 }
