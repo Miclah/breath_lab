@@ -10,6 +10,7 @@ import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../progress/calendar_heatmap.dart';
 import '../progress/stat_card_row.dart';
 
 String _fmt(Duration d) {
@@ -103,6 +104,13 @@ class HistoryScreen extends ConsumerWidget {
               Spacing.lg,
             ),
             child: StatCardRow(),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(Spacing.xl, 0, Spacing.xl, Spacing.lg),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: CalendarHeatmap(),
+            ),
           ),
           Expanded(
             child: holds == null || tableSessions == null
