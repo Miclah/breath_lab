@@ -481,6 +481,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'rest'**
   String get tablesPhaseLabelRest;
+
+  /// Title of the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete'**
+  String get tablesSummaryTitle;
+
+  /// Rounds completed stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total} rounds completed'**
+  String tablesSummaryRounds(int completed, int total);
+
+  /// Label for the total hold time stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Total hold time'**
+  String get tablesSummaryTotalHold;
+
+  /// Label for the average hold time stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Average hold'**
+  String get tablesSummaryAverageHold;
+
+  /// Comparison of average hold time to the previous same-type table session
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last session'**
+  String tablesSummaryVsPrevious(String delta);
+
+  /// Shown on the table session summary screen when there is no previous same-type session to compare against
+  ///
+  /// In en, this message translates to:
+  /// **'First session of this type — nothing to compare yet.'**
+  String get tablesSummaryNoPrevious;
 }
 
 class _AppLocalizationsDelegate

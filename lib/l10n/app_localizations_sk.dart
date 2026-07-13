@@ -208,4 +208,27 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tablesPhaseLabelRest => 'oddych';
+
+  @override
+  String get tablesSummaryTitle => 'Séria dokončená';
+
+  @override
+  String tablesSummaryRounds(int completed, int total) {
+    return '$completed z $total kôl dokončených';
+  }
+
+  @override
+  String get tablesSummaryTotalHold => 'Celkový čas zadržania';
+
+  @override
+  String get tablesSummaryAverageHold => 'Priemerné zadržanie';
+
+  @override
+  String tablesSummaryVsPrevious(String delta) {
+    return '$delta oproti minulej sérii';
+  }
+
+  @override
+  String get tablesSummaryNoPrevious =>
+      'Prvá séria tohto typu — zatiaľ niet s čím porovnávať.';
 }

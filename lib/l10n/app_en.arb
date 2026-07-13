@@ -266,5 +266,43 @@
   "tablesPhaseLabelRest": "rest",
   "@tablesPhaseLabelRest": {
     "description": "State label shown below the live timer on the active table round during rest"
+  },
+  "tablesSummaryTitle": "Session complete",
+  "@tablesSummaryTitle": {
+    "description": "Title of the table session summary screen"
+  },
+  "tablesSummaryRounds": "{completed} of {total} rounds completed",
+  "@tablesSummaryRounds": {
+    "description": "Rounds completed stat on the table session summary screen",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesSummaryTotalHold": "Total hold time",
+  "@tablesSummaryTotalHold": {
+    "description": "Label for the total hold time stat on the table session summary screen"
+  },
+  "tablesSummaryAverageHold": "Average hold",
+  "@tablesSummaryAverageHold": {
+    "description": "Label for the average hold time stat on the table session summary screen"
+  },
+  "tablesSummaryVsPrevious": "{delta} vs last session",
+  "@tablesSummaryVsPrevious": {
+    "description": "Comparison of average hold time to the previous same-type table session",
+    "placeholders": {
+      "delta": {
+        "type": "String",
+        "example": "+0:07"
+      }
+    }
+  },
+  "tablesSummaryNoPrevious": "First session of this type — nothing to compare yet.",
+  "@tablesSummaryNoPrevious": {
+    "description": "Shown on the table session summary screen when there is no previous same-type session to compare against"
   }
 }

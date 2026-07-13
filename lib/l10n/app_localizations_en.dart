@@ -206,4 +206,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tablesPhaseLabelRest => 'rest';
+
+  @override
+  String get tablesSummaryTitle => 'Session complete';
+
+  @override
+  String tablesSummaryRounds(int completed, int total) {
+    return '$completed of $total rounds completed';
+  }
+
+  @override
+  String get tablesSummaryTotalHold => 'Total hold time';
+
+  @override
+  String get tablesSummaryAverageHold => 'Average hold';
+
+  @override
+  String tablesSummaryVsPrevious(String delta) {
+    return '$delta vs last session';
+  }
+
+  @override
+  String get tablesSummaryNoPrevious =>
+      'First session of this type — nothing to compare yet.';
 }

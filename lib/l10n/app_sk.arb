@@ -63,5 +63,11 @@
   "tablesHoldLabel": "Zadržanie",
   "tablesRestLabel": "Oddych",
   "tablesPhaseLabelHold": "zadržanie",
-  "tablesPhaseLabelRest": "oddych"
+  "tablesPhaseLabelRest": "oddych",
+  "tablesSummaryTitle": "Séria dokončená",
+  "tablesSummaryRounds": "{completed} z {total} kôl dokončených",
+  "tablesSummaryTotalHold": "Celkový čas zadržania",
+  "tablesSummaryAverageHold": "Priemerné zadržanie",
+  "tablesSummaryVsPrevious": "{delta} oproti minulej sérii",
+  "tablesSummaryNoPrevious": "Prvá séria tohto typu — zatiaľ niet s čím porovnávať."
 }
