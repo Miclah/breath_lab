@@ -175,4 +175,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyLungVolLabel => 'Volume';
+
+  @override
+  String get tablesCo2Toggle => 'CO₂';
+
+  @override
+  String get tablesO2Toggle => 'O₂';
+
+  @override
+  String tablesBasedOnMax(String max) {
+    return 'Based on max $max';
+  }
+
+  @override
+  String get tablesNoMaxYet => 'Do a max hold first to generate your table.';
+
+  @override
+  String tablesRoundLabel(int number) {
+    return 'R$number';
+  }
+
+  @override
+  String get tablesHoldLabel => 'Hold';
+
+  @override
+  String get tablesRestLabel => 'Rest';
+
+  @override
+  String get tablesPhaseLabelHold => 'hold';
+
+  @override
+  String get tablesPhaseLabelRest => 'rest';
+
+  @override
+  String get tablesSummaryTitle => 'Session complete';
+
+  @override
+  String tablesSummaryRounds(int completed, int total) {
+    return '$completed of $total rounds completed';
+  }
+
+  @override
+  String get tablesSummaryTotalHold => 'Total hold time';
+
+  @override
+  String get tablesSummaryAverageHold => 'Average hold';
+
+  @override
+  String tablesSummaryVsPrevious(String delta) {
+    return '$delta vs last session';
+  }
+
+  @override
+  String get tablesSummaryNoPrevious =>
+      'First session of this type — nothing to compare yet.';
+
+  @override
+  String tablesHistoryRow(String type, int completed, int total, String avg) {
+    return '$type table · $completed/$total rounds · avg $avg';
+  }
 }

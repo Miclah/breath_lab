@@ -219,5 +219,110 @@
   "historyLungVolLabel": "Volume",
   "@historyLungVolLabel": {
     "description": "Label for the lung volume stat in the hold detail sheet"
+  },
+  "tablesCo2Toggle": "CO₂",
+  "@tablesCo2Toggle": {
+    "description": "Pill toggle segment label for the CO₂ table"
+  },
+  "tablesO2Toggle": "O₂",
+  "@tablesO2Toggle": {
+    "description": "Pill toggle segment label for the O₂ table"
+  },
+  "tablesBasedOnMax": "Based on max {max}",
+  "@tablesBasedOnMax": {
+    "description": "Info card text showing the current max hold the table is calculated from",
+    "placeholders": {
+      "max": {
+        "type": "String",
+        "example": "3:45"
+      }
+    }
+  },
+  "tablesNoMaxYet": "Do a max hold first to generate your table.",
+  "@tablesNoMaxYet": {
+    "description": "Empty state shown on the Tables screen when no current max is set yet"
+  },
+  "tablesRoundLabel": "R{number}",
+  "@tablesRoundLabel": {
+    "description": "Round number label in the table round list, e.g. R1, R2",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesHoldLabel": "Hold",
+  "@tablesHoldLabel": {
+    "description": "Label for the hold duration of a table round"
+  },
+  "tablesRestLabel": "Rest",
+  "@tablesRestLabel": {
+    "description": "Label for the rest duration of a table round"
+  },
+  "tablesPhaseLabelHold": "hold",
+  "@tablesPhaseLabelHold": {
+    "description": "State label shown below the live timer on the active table round during a hold"
+  },
+  "tablesPhaseLabelRest": "rest",
+  "@tablesPhaseLabelRest": {
+    "description": "State label shown below the live timer on the active table round during rest"
+  },
+  "tablesSummaryTitle": "Session complete",
+  "@tablesSummaryTitle": {
+    "description": "Title of the table session summary screen"
+  },
+  "tablesSummaryRounds": "{completed} of {total} rounds completed",
+  "@tablesSummaryRounds": {
+    "description": "Rounds completed stat on the table session summary screen",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesSummaryTotalHold": "Total hold time",
+  "@tablesSummaryTotalHold": {
+    "description": "Label for the total hold time stat on the table session summary screen"
+  },
+  "tablesSummaryAverageHold": "Average hold",
+  "@tablesSummaryAverageHold": {
+    "description": "Label for the average hold time stat on the table session summary screen"
+  },
+  "tablesSummaryVsPrevious": "{delta} vs last session",
+  "@tablesSummaryVsPrevious": {
+    "description": "Comparison of average hold time to the previous same-type table session",
+    "placeholders": {
+      "delta": {
+        "type": "String",
+        "example": "+0:07"
+      }
+    }
+  },
+  "tablesSummaryNoPrevious": "First session of this type — nothing to compare yet.",
+  "@tablesSummaryNoPrevious": {
+    "description": "Shown on the table session summary screen when there is no previous same-type session to compare against"
+  },
+  "tablesHistoryRow": "{type} table · {completed}/{total} rounds · avg {avg}",
+  "@tablesHistoryRow": {
+    "description": "Single history-list row summarizing a completed table session",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "example": "CO₂"
+      },
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "avg": {
+        "type": "String",
+        "example": "0:48"
+      }
+    }
   }
 }

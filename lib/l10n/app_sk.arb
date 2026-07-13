@@ -54,5 +54,21 @@
   "historyEmpty": "Zatiaľ žiadne pokusy.",
   "historyDetailClose": "Zavrieť",
   "historyPbBadge": "PB",
-  "historyLungVolLabel": "Objem"
+  "historyLungVolLabel": "Objem",
+  "tablesCo2Toggle": "CO₂",
+  "tablesO2Toggle": "O₂",
+  "tablesBasedOnMax": "Na základe maxima {max}",
+  "tablesNoMaxYet": "Najprv zadrž dych na maximum, aby sa vygenerovala tabuľka.",
+  "tablesRoundLabel": "R{number}",
+  "tablesHoldLabel": "Zadržanie",
+  "tablesRestLabel": "Oddych",
+  "tablesPhaseLabelHold": "zadržanie",
+  "tablesPhaseLabelRest": "oddych",
+  "tablesSummaryTitle": "Séria dokončená",
+  "tablesSummaryRounds": "{completed} z {total} kôl dokončených",
+  "tablesSummaryTotalHold": "Celkový čas zadržania",
+  "tablesSummaryAverageHold": "Priemerné zadržanie",
+  "tablesSummaryVsPrevious": "{delta} oproti minulej sérii",
+  "tablesSummaryNoPrevious": "Prvá séria tohto typu — zatiaľ niet s čím porovnávať.",
+  "tablesHistoryRow": "{type} tabuľka · {completed}/{total} kôl · priemer {avg}"
 }

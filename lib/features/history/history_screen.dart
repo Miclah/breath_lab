@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 
 import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/tags_repository.dart';
+import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -52,6 +54,27 @@ void _showDetail(BuildContext context, Hold hold) {
   );
 }
 
+/// A row in the merged history list: either a standalone hold or a table
+/// session (table rounds are saved as individual holds too, but those are
+/// represented by their session row instead, not shown separately).
+sealed class _HistoryEntry {
+  DateTime get createdAt;
+}
+
+class _HoldEntry extends _HistoryEntry {
+  _HoldEntry(this.hold);
+  final Hold hold;
+  @override
+  DateTime get createdAt => hold.createdAt;
+}
+
+class _TableSessionEntry extends _HistoryEntry {
+  _TableSessionEntry(this.session);
+  final TableSession session;
+  @override
+  DateTime get createdAt => session.createdAt;
+}
+
 // ---------------------------------------------------------------------------
 // History screen
 // ---------------------------------------------------------------------------
@@ -63,32 +86,50 @@ class HistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final holdsAsync = ref.watch(allHoldsProvider);
+    final tableSessionsAsync = ref.watch(allTableSessionsProvider);
+    final holds = holdsAsync.valueOrNull;
+    final tableSessions = tableSessionsAsync.valueOrNull;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProgress)),
-      body: holdsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => const SizedBox.shrink(),
-        data: (holds) {
-          if (holds.isEmpty) {
-            return Center(
-              child: Text(
-                l10n.historyEmpty,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            );
-          }
-          return ListView.separated(
-            itemCount: holds.length,
-            separatorBuilder: (context, index) =>
-                const Divider(height: 1, indent: Spacing.xl),
-            itemBuilder: (_, i) => _HoldRow(
-              hold: holds[i],
-              onTap: () => _showDetail(context, holds[i]),
+      body: holds == null || tableSessions == null
+          ? holdsAsync.hasError || tableSessionsAsync.hasError
+                ? const SizedBox.shrink()
+                : const Center(child: CircularProgressIndicator())
+          : Builder(
+              builder: (context) {
+                final entries = <_HistoryEntry>[
+                  for (final hold in holds)
+                    if (hold.type != HoldType.co2 && hold.type != HoldType.o2)
+                      _HoldEntry(hold),
+                  for (final session in tableSessions)
+                    _TableSessionEntry(session),
+                ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+                if (entries.isEmpty) {
+                  return Center(
+                    child: Text(
+                      l10n.historyEmpty,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  );
+                }
+                return ListView.separated(
+                  itemCount: entries.length,
+                  separatorBuilder: (context, index) =>
+                      const Divider(height: 1, indent: Spacing.xl),
+                  itemBuilder: (_, i) => switch (entries[i]) {
+                    _HoldEntry(:final hold) => _HoldRow(
+                      hold: hold,
+                      onTap: () => _showDetail(context, hold),
+                    ),
+                    _TableSessionEntry(:final session) => _TableSessionRow(
+                      session: session,
+                    ),
+                  },
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
@@ -183,6 +224,54 @@ class _HoldRow extends ConsumerWidget {
                 style: TextStyle(fontSize: 10, color: c.textTertiary),
               ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+class _TableSessionRow extends StatelessWidget {
+  const _TableSessionRow({required this.session});
+
+  final TableSession session;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final avgMs = session.roundDetails.isEmpty
+        ? 0
+        : session.roundDetails.fold<int>(0, (sum, d) => sum + d.holdMs) ~/
+              session.roundDetails.length;
+    final typeLabel = switch (session.type) {
+      TableType.co2 => l10n.tablesCo2Toggle,
+      TableType.o2 => l10n.tablesO2Toggle,
+    };
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: Spacing.xl,
+        vertical: Spacing.xs,
+      ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              l10n.tablesHistoryRow(
+                typeLabel,
+                session.roundsCompleted,
+                session.roundsTotal,
+                _fmt(Duration(milliseconds: avgMs)),
+              ),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Text(
+            _dateLabel(session.createdAt),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+          ),
         ],
       ),
     );

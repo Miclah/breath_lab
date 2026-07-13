@@ -427,6 +427,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Volume'**
   String get historyLungVolLabel;
+
+  /// Pill toggle segment label for the CO₂ table
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂'**
+  String get tablesCo2Toggle;
+
+  /// Pill toggle segment label for the O₂ table
+  ///
+  /// In en, this message translates to:
+  /// **'O₂'**
+  String get tablesO2Toggle;
+
+  /// Info card text showing the current max hold the table is calculated from
+  ///
+  /// In en, this message translates to:
+  /// **'Based on max {max}'**
+  String tablesBasedOnMax(String max);
+
+  /// Empty state shown on the Tables screen when no current max is set yet
+  ///
+  /// In en, this message translates to:
+  /// **'Do a max hold first to generate your table.'**
+  String get tablesNoMaxYet;
+
+  /// Round number label in the table round list, e.g. R1, R2
+  ///
+  /// In en, this message translates to:
+  /// **'R{number}'**
+  String tablesRoundLabel(int number);
+
+  /// Label for the hold duration of a table round
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get tablesHoldLabel;
+
+  /// Label for the rest duration of a table round
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get tablesRestLabel;
+
+  /// State label shown below the live timer on the active table round during a hold
+  ///
+  /// In en, this message translates to:
+  /// **'hold'**
+  String get tablesPhaseLabelHold;
+
+  /// State label shown below the live timer on the active table round during rest
+  ///
+  /// In en, this message translates to:
+  /// **'rest'**
+  String get tablesPhaseLabelRest;
+
+  /// Title of the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete'**
+  String get tablesSummaryTitle;
+
+  /// Rounds completed stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} of {total} rounds completed'**
+  String tablesSummaryRounds(int completed, int total);
+
+  /// Label for the total hold time stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Total hold time'**
+  String get tablesSummaryTotalHold;
+
+  /// Label for the average hold time stat on the table session summary screen
+  ///
+  /// In en, this message translates to:
+  /// **'Average hold'**
+  String get tablesSummaryAverageHold;
+
+  /// Comparison of average hold time to the previous same-type table session
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last session'**
+  String tablesSummaryVsPrevious(String delta);
+
+  /// Shown on the table session summary screen when there is no previous same-type session to compare against
+  ///
+  /// In en, this message translates to:
+  /// **'First session of this type — nothing to compare yet.'**
+  String get tablesSummaryNoPrevious;
+
+  /// Single history-list row summarizing a completed table session
+  ///
+  /// In en, this message translates to:
+  /// **'{type} table · {completed}/{total} rounds · avg {avg}'**
+  String tablesHistoryRow(String type, int completed, int total, String avg);
 }
 
 class _AppLocalizationsDelegate

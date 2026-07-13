@@ -176,4 +176,64 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get historyLungVolLabel => 'Objem';
+
+  @override
+  String get tablesCo2Toggle => 'CO₂';
+
+  @override
+  String get tablesO2Toggle => 'O₂';
+
+  @override
+  String tablesBasedOnMax(String max) {
+    return 'Na základe maxima $max';
+  }
+
+  @override
+  String get tablesNoMaxYet =>
+      'Najprv zadrž dych na maximum, aby sa vygenerovala tabuľka.';
+
+  @override
+  String tablesRoundLabel(int number) {
+    return 'R$number';
+  }
+
+  @override
+  String get tablesHoldLabel => 'Zadržanie';
+
+  @override
+  String get tablesRestLabel => 'Oddych';
+
+  @override
+  String get tablesPhaseLabelHold => 'zadržanie';
+
+  @override
+  String get tablesPhaseLabelRest => 'oddych';
+
+  @override
+  String get tablesSummaryTitle => 'Séria dokončená';
+
+  @override
+  String tablesSummaryRounds(int completed, int total) {
+    return '$completed z $total kôl dokončených';
+  }
+
+  @override
+  String get tablesSummaryTotalHold => 'Celkový čas zadržania';
+
+  @override
+  String get tablesSummaryAverageHold => 'Priemerné zadržanie';
+
+  @override
+  String tablesSummaryVsPrevious(String delta) {
+    return '$delta oproti minulej sérii';
+  }
+
+  @override
+  String get tablesSummaryNoPrevious =>
+      'Prvá séria tohto typu — zatiaľ niet s čím porovnávať.';
+
+  @override
+  String tablesHistoryRow(String type, int completed, int total, String avg) {
+    return '$type tabuľka · $completed/$total kôl · priemer $avg';
+  }
 }
