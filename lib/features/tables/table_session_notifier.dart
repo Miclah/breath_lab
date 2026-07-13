@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/settings_repository.dart';
@@ -13,6 +14,7 @@ import 'providers.dart';
 
 class TableSessionNotifier extends Notifier<TableSessionState> {
   final _stopwatch = Stopwatch();
+  static const _uuid = Uuid();
   Timer? _ticker;
 
   /// The rest-phase second (3, 2, or 1) the countdown tick was last played
@@ -30,6 +32,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
     state = TableSessionState(
       phase: TableSessionPhase.hold,
       type: type,
+      sessionId: _uuid.v4(),
       basedOnMaxMs: basedOnMaxMs,
       rounds: rounds,
     );
@@ -63,7 +66,11 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
     _stopwatch.stop();
     await _persistSession(details);
     _lastCountdownSecond = null;
-    state = const TableSessionState();
+    state = state.copyWith(
+      phase: TableSessionPhase.done,
+      elapsed: Duration.zero,
+      completedRounds: details,
+    );
   }
 
   /// Return to idle, clearing all session progress without persisting.
@@ -76,7 +83,8 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
 
   Future<void> _persistSession(List<TableRoundDetail> details) async {
     final type = state.type;
-    if (type == null) return;
+    final sessionId = state.sessionId;
+    if (type == null || sessionId == null) return;
 
     final tableSessionsRepo = await ref.read(
       tableSessionsRepositoryProvider.future,
@@ -87,7 +95,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
 
     await tableSessionsRepo.save(
       TableSession(
-        id: tableSessionsRepo.newId(),
+        id: sessionId,
         createdAt: now,
         updatedAt: now,
         deviceId: '',

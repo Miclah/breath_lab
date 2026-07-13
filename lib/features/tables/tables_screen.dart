@@ -11,6 +11,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
 import 'round_list_item.dart';
+import 'session_summary_view.dart';
 import 'table_session_notifier.dart';
 
 // Default table config per PRD §1 — configurable in Settings in a later phase.
@@ -40,9 +41,10 @@ List<TableRoundPlan> _computeRounds(TableType type, int maxMs) {
 
 RoundItemState _stateFor(TableSessionState session, bool active, int index) {
   if (!active) return RoundItemState.upcoming;
-  if (session.isDone) return RoundItemState.completed;
-  if (index < session.currentRoundIndex) return RoundItemState.completed;
-  if (index == session.currentRoundIndex) return RoundItemState.active;
+  if (index < session.completedRounds.length) return RoundItemState.completed;
+  if (index == session.currentRoundIndex && !session.isDone) {
+    return RoundItemState.active;
+  }
   return RoundItemState.upcoming;
 }
 
@@ -89,43 +91,47 @@ class TablesScreen extends ConsumerWidget {
                     : _computeRounds(selectedType, maxMs);
                 return Column(
                   children: [
-                    _InfoCard(maxMs: maxMs, l10n: l10n),
-                    Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Spacing.lg,
+                    if (session.isDone)
+                      Expanded(child: SessionSummaryView(session: session))
+                    else ...[
+                      _InfoCard(maxMs: maxMs, l10n: l10n),
+                      Expanded(
+                        child: ListView.separated(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Spacing.lg,
+                          ),
+                          itemCount: rounds.length,
+                          separatorBuilder: (_, _) =>
+                              const SizedBox(height: Spacing.sm),
+                          itemBuilder: (context, i) {
+                            final itemState = _stateFor(
+                              session,
+                              sessionActive,
+                              i,
+                            );
+                            final isActive = itemState == RoundItemState.active;
+                            return RoundListItem(
+                              number: i + 1,
+                              round: rounds[i],
+                              state: itemState,
+                              elapsedMs: isActive
+                                  ? session.elapsed.inMilliseconds
+                                  : null,
+                              phaseLabel: !isActive
+                                  ? null
+                                  : session.isHolding
+                                  ? l10n.tablesPhaseLabelHold
+                                  : l10n.tablesPhaseLabelRest,
+                              onStopHold: isActive && session.isHolding
+                                  ? () => ref
+                                        .read(tableSessionProvider.notifier)
+                                        .stopHoldEarly()
+                                  : null,
+                            );
+                          },
                         ),
-                        itemCount: rounds.length,
-                        separatorBuilder: (_, _) =>
-                            const SizedBox(height: Spacing.sm),
-                        itemBuilder: (context, i) {
-                          final itemState = _stateFor(
-                            session,
-                            sessionActive,
-                            i,
-                          );
-                          final isActive = itemState == RoundItemState.active;
-                          return RoundListItem(
-                            number: i + 1,
-                            round: rounds[i],
-                            state: itemState,
-                            elapsedMs: isActive
-                                ? session.elapsed.inMilliseconds
-                                : null,
-                            phaseLabel: !isActive
-                                ? null
-                                : session.isHolding
-                                ? l10n.tablesPhaseLabelHold
-                                : l10n.tablesPhaseLabelRest,
-                            onStopHold: isActive && session.isHolding
-                                ? () => ref
-                                      .read(tableSessionProvider.notifier)
-                                      .stopHoldEarly()
-                                : null,
-                          );
-                        },
                       ),
-                    ),
+                    ],
                     const SizedBox(height: Spacing.lg),
                     Padding(
                       padding: const EdgeInsets.symmetric(

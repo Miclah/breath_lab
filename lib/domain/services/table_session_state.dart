@@ -7,6 +7,7 @@ class TableSessionState {
   const TableSessionState({
     this.phase = TableSessionPhase.idle,
     this.type,
+    this.sessionId,
     this.basedOnMaxMs = 0,
     this.rounds = const [],
     this.currentRoundIndex = 0,
@@ -16,6 +17,11 @@ class TableSessionState {
 
   final TableSessionPhase phase;
   final TableType? type;
+
+  /// Id this session will be (or was) persisted under, generated at start().
+  /// Lets a finished session's summary exclude itself when looking up the
+  /// previous same-type session for comparison.
+  final String? sessionId;
 
   /// The current max (in ms) this session's rounds were calculated from.
   final int basedOnMaxMs;
