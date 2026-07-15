@@ -166,6 +166,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tagAddLabel => '+ Pridať tag';
 
   @override
+  String get historyTitle => 'História';
+
+  @override
   String get historyEmpty => 'Zatiaľ žiadne pokusy.';
 
   @override
@@ -275,4 +278,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get progressChartRange90d => '90d';
+
+  @override
+  String get progressRecentHoldsTitle => 'Nedávne pokusy';
+
+  @override
+  String get progressViewAllHistory => 'Zobraziť všetko';
 }

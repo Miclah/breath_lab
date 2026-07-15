@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'+ Add tag'**
   String get tagAddLabel;
 
+  /// Title of the full history screen, pushed from the Progress screen's recent holds section
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTitle;
+
   /// Empty state message on the history list
   ///
   /// In en, this message translates to:
@@ -595,6 +601,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'90d'**
   String get progressChartRange90d;
+
+  /// Section header above the last-10-holds list on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Recent holds'**
+  String get progressRecentHoldsTitle;
+
+  /// Link below the recent holds list that pushes the full history screen
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get progressViewAllHistory;
 }
 
 class _AppLocalizationsDelegate

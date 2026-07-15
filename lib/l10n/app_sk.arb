@@ -51,6 +51,7 @@
   "tagCold": "Studeno",
   "tagHot": "Teplo",
   "tagAddLabel": "+ Pridať tag",
+  "historyTitle": "História",
   "historyEmpty": "Zatiaľ žiadne pokusy.",
   "historyDetailClose": "Zavrieť",
   "historyPbBadge": "PB",
@@ -82,5 +83,7 @@
   "progressChartEmpty": "Zatiaľ nedostatok pokusov na zobrazenie trendu.",
   "progressChartFilterAll": "Všetky",
   "progressChartRange30d": "30d",
-  "progressChartRange90d": "90d"
+  "progressChartRange90d": "90d",
+  "progressRecentHoldsTitle": "Nedávne pokusy",
+  "progressViewAllHistory": "Zobraziť všetko"
 }

@@ -165,6 +165,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagAddLabel => '+ Add tag';
 
   @override
+  String get historyTitle => 'History';
+
+  @override
   String get historyEmpty => 'No holds saved yet.';
 
   @override
@@ -272,4 +275,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressChartRange90d => '90d';
+
+  @override
+  String get progressRecentHoldsTitle => 'Recent holds';
+
+  @override
+  String get progressViewAllHistory => 'View all';
 }
