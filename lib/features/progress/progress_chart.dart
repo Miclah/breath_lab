@@ -3,10 +3,12 @@ import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import 'lung_volume_filter_chip.dart';
 import 'providers.dart';
 
 const _defaultDays = 30;
@@ -19,9 +21,17 @@ String _fmtSeconds(double seconds) {
   return '$m:$s';
 }
 
+Color _volumeColor(BreathLabColorScheme c, LungVolume volume) =>
+    switch (volume) {
+      LungVolume.full => c.primary,
+      LungVolume.frc => c.info,
+      LungVolume.empty => c.warning,
+    };
+
 /// Line chart of max-hold trend. Per Design §"Progress Chart": daily best
-/// (solid primary, PB dots in danger color) and daily average (dashed
-/// tertiary). 30 days, Full lung volume by default.
+/// (solid, PB dots in danger color) and daily average (dashed tertiary,
+/// single-volume view only). 30 days, filtered by [LungVolumeFilterChip]
+/// (Full by default; "All" overlays one best-only line per volume).
 class ProgressChart extends ConsumerWidget {
   const ProgressChart({super.key});
 
@@ -29,33 +39,44 @@ class ProgressChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
-    final stats = ref.watch(dailyHoldStatsProvider);
+    final series = ref.watch(chartSeriesProvider);
+    final hasData = series.any((s) => s.stats.isNotEmpty);
     final isDesktop = MediaQuery.of(context).size.width >= 600;
 
-    return Container(
-      width: double.infinity,
-      height: isDesktop ? 260 : 200,
-      padding: const EdgeInsets.all(Spacing.lg),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
-      child: stats.isEmpty
-          ? Center(
-              child: Text(
-                l10n.progressChartEmpty,
-                style: BreathLabTypography.bodySm.copyWith(
-                  color: c.textTertiary,
-                ),
-              ),
-            )
-          : LineChart(_buildChartData(context, stats)),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: LungVolumeFilterChip(),
+        ),
+        const SizedBox(height: Spacing.sm),
+        Container(
+          width: double.infinity,
+          height: isDesktop ? 260 : 200,
+          padding: const EdgeInsets.all(Spacing.lg),
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: BorderRadius.circular(Radius.md),
+          ),
+          child: !hasData
+              ? Center(
+                  child: Text(
+                    l10n.progressChartEmpty,
+                    style: BreathLabTypography.bodySm.copyWith(
+                      color: c.textTertiary,
+                    ),
+                  ),
+                )
+              : LineChart(_buildChartData(context, series)),
+        ),
+      ],
     );
   }
 
   LineChartData _buildChartData(
     BuildContext context,
-    List<DailyHoldStat> stats,
+    List<ChartSeries> series,
   ) {
     final c = context.appColors;
     final today = DateTime.now();
@@ -65,6 +86,7 @@ class ProgressChart extends ConsumerWidget {
       today.day,
     ).subtract(const Duration(days: _defaultDays - 1));
     final labelInterval = (_defaultDays / _bottomLabelCount).ceil();
+    final showAverage = series.length == 1;
 
     return LineChartData(
       minX: 0,
@@ -112,37 +134,45 @@ class ProgressChart extends ConsumerWidget {
         ),
       ),
       lineBarsData: [
-        LineChartBarData(
-          spots: [
-            for (final s in stats)
-              FlSpot(s.dayIndex.toDouble(), s.average.inSeconds.toDouble()),
-          ],
-          isCurved: false,
-          color: c.textTertiary,
-          barWidth: 1,
-          dashArray: const [4, 4],
-          dotData: const FlDotData(show: false),
-        ),
-        LineChartBarData(
-          spots: [
-            for (final s in stats)
-              FlSpot(s.dayIndex.toDouble(), s.best.inSeconds.toDouble()),
-          ],
-          isCurved: false,
-          color: c.primary,
-          barWidth: 2,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (spot, percent, bar, index) {
-              final hasPb = stats[index].hasPb;
-              return FlDotCirclePainter(
-                radius: hasPb ? 6 : 4,
-                color: hasPb ? c.danger : c.primary,
-                strokeWidth: 0,
-              );
-            },
+        if (showAverage)
+          LineChartBarData(
+            spots: [
+              for (final stat in series.single.stats)
+                FlSpot(
+                  stat.dayIndex.toDouble(),
+                  stat.average.inSeconds.toDouble(),
+                ),
+            ],
+            isCurved: false,
+            color: c.textTertiary,
+            barWidth: 1,
+            dashArray: const [4, 4],
+            dotData: const FlDotData(show: false),
           ),
-        ),
+        for (final s in series)
+          LineChartBarData(
+            spots: [
+              for (final stat in s.stats)
+                FlSpot(
+                  stat.dayIndex.toDouble(),
+                  stat.best.inSeconds.toDouble(),
+                ),
+            ],
+            isCurved: false,
+            color: _volumeColor(c, s.lungVolume),
+            barWidth: 2,
+            dotData: FlDotData(
+              show: true,
+              getDotPainter: (spot, percent, bar, index) {
+                final hasPb = s.stats[index].hasPb;
+                return FlDotCirclePainter(
+                  radius: hasPb ? 6 : 4,
+                  color: hasPb ? c.danger : _volumeColor(c, s.lungVolume),
+                  strokeWidth: 0,
+                );
+              },
+            ),
+          ),
       ],
     );
   }
