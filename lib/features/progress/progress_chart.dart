@@ -10,8 +10,8 @@ import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'lung_volume_filter_chip.dart';
 import 'providers.dart';
+import 'time_range_selector.dart';
 
-const _defaultDays = 30;
 const _bottomLabelCount = 5;
 
 String _fmtSeconds(double seconds) {
@@ -40,6 +40,7 @@ class ProgressChart extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
     final series = ref.watch(chartSeriesProvider);
+    final days = ref.watch(chartWindowDaysProvider);
     final hasData = series.any((s) => s.stats.isNotEmpty);
     final isDesktop = MediaQuery.of(context).size.width >= 600;
 
@@ -68,8 +69,10 @@ class ProgressChart extends ConsumerWidget {
                     ),
                   ),
                 )
-              : LineChart(_buildChartData(context, series)),
+              : LineChart(_buildChartData(context, series, days)),
         ),
+        const SizedBox(height: Spacing.md),
+        const TimeRangeSelector(),
       ],
     );
   }
@@ -77,6 +80,7 @@ class ProgressChart extends ConsumerWidget {
   LineChartData _buildChartData(
     BuildContext context,
     List<ChartSeries> series,
+    int days,
   ) {
     final c = context.appColors;
     final today = DateTime.now();
@@ -84,13 +88,13 @@ class ProgressChart extends ConsumerWidget {
       today.year,
       today.month,
       today.day,
-    ).subtract(const Duration(days: _defaultDays - 1));
-    final labelInterval = (_defaultDays / _bottomLabelCount).ceil();
+    ).subtract(Duration(days: days - 1));
+    final labelInterval = (days / _bottomLabelCount).ceil();
     final showAverage = series.length == 1;
 
     return LineChartData(
       minX: 0,
-      maxX: (_defaultDays - 1).toDouble(),
+      maxX: (days - 1).toDouble(),
       minY: 0,
       lineTouchData: const LineTouchData(enabled: false),
       gridData: FlGridData(
