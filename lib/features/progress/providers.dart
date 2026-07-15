@@ -157,17 +157,71 @@ class ChartSeries {
   final List<DailyHoldStat> stats;
 }
 
+/// The chart's time range: a fixed window, or "All" (spans from the
+/// earliest qualifying hold to today).
+enum ChartTimeRange {
+  d30(30),
+  d90(90),
+  all(null);
+
+  const ChartTimeRange(this.fixedDays);
+
+  final int? fixedDays;
+}
+
+final chartTimeRangeProvider = StateProvider<ChartTimeRange>(
+  (ref) => ChartTimeRange.d30,
+);
+
+/// The chart's x-axis window in days, resolving [ChartTimeRange.all] to
+/// the span since the earliest qualifying hold.
+final chartWindowDaysProvider = Provider<int>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final filter = ref.watch(chartLungFilterProvider);
+  final range = ref.watch(chartTimeRangeProvider);
+  final volumes = filter == null ? LungVolume.values : [filter];
+  return resolveChartWindowDays(
+    holds,
+    volumes: volumes,
+    fixedDays: range.fixedDays,
+  );
+});
+
+/// Days between the earliest max hold of [volumes] and today, inclusive.
+/// Returns [fixedDays] directly when given, and falls back to 30 when
+/// there is no qualifying hold at all (the chart shows its empty state).
+int resolveChartWindowDays(
+  List<Hold> holds, {
+  required List<LungVolume> volumes,
+  int? fixedDays,
+  DateTime? now,
+}) {
+  if (fixedDays != null) return fixedDays;
+  final today = _dateOnly(now ?? DateTime.now());
+  DateTime? earliest;
+  for (final hold in holds) {
+    if (hold.type != HoldType.max || !volumes.contains(hold.lungVolume)) {
+      continue;
+    }
+    final date = _dateOnly(hold.createdAt);
+    if (earliest == null || date.isBefore(earliest)) earliest = date;
+  }
+  if (earliest == null) return 30;
+  return today.difference(earliest).inDays + 1;
+}
+
 /// One series for the selected lung volume filter, or one per volume
 /// when "All" is selected (overlaid on the chart).
 final chartSeriesProvider = Provider<List<ChartSeries>>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final filter = ref.watch(chartLungFilterProvider);
+  final days = ref.watch(chartWindowDaysProvider);
   final volumes = filter == null ? LungVolume.values : [filter];
   return [
     for (final volume in volumes)
       ChartSeries(
         lungVolume: volume,
-        stats: computeDailyHoldStats(holds, lungVolume: volume),
+        stats: computeDailyHoldStats(holds, lungVolume: volume, days: days),
       ),
   ];
 });

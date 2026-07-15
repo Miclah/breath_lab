@@ -117,4 +117,45 @@ void main() {
       expect(computeDailyHoldStats([], now: now), isEmpty);
     });
   });
+
+  group('resolveChartWindowDays', () {
+    final now = DateTime(2026, 7, 13, 12);
+
+    test('returns fixedDays directly when given', () {
+      final days = resolveChartWindowDays(
+        [],
+        volumes: const [LungVolume.full],
+        fixedDays: 90,
+        now: now,
+      );
+      expect(days, 90);
+    });
+
+    test('spans from the earliest qualifying hold to today when unfixed', () {
+      final holds = [
+        _hold(now),
+        _hold(now.subtract(const Duration(days: 44))),
+        // Different volume -- should not extend the window.
+        _hold(
+          now.subtract(const Duration(days: 200)),
+          lungVolume: LungVolume.frc,
+        ),
+      ];
+      final days = resolveChartWindowDays(
+        holds,
+        volumes: const [LungVolume.full],
+        now: now,
+      );
+      expect(days, 45);
+    });
+
+    test('falls back to 30 when there are no qualifying holds', () {
+      final days = resolveChartWindowDays(
+        [],
+        volumes: const [LungVolume.full],
+        now: now,
+      );
+      expect(days, 30);
+    });
+  });
 }
