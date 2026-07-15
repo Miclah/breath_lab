@@ -114,3 +114,17 @@ final holdTagCountsProvider = FutureProvider<Map<String, int>>((ref) async {
   }
   return counts;
 });
+
+/// Maps holdId → set of tagIds for all holds. Used by the history tag
+/// filter. Fetched once; invalidate after save.
+final holdTagIdsProvider = FutureProvider<Map<String, Set<String>>>((
+  ref,
+) async {
+  final database = ref.watch(databaseProvider);
+  final rows = await database.select(database.holdTags).get();
+  final tagIds = <String, Set<String>>{};
+  for (final row in rows) {
+    (tagIds[row.holdId] ??= {}).add(row.tagId);
+  }
+  return tagIds;
+});
