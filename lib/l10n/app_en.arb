@@ -220,6 +220,18 @@
   "@historyPbBadge": {
     "description": "Short badge label shown on a personal-best hold row"
   },
+  "historyFilterMax": "Max",
+  "@historyFilterMax": {
+    "description": "Type filter chip on the History screen showing standalone max holds"
+  },
+  "historyFilterTags": "Tags",
+  "@historyFilterTags": {
+    "description": "Filter chip on the History screen that opens the tag multi-select sheet"
+  },
+  "historyFilterTagsSheetTitle": "Filter by tag",
+  "@historyFilterTagsSheetTitle": {
+    "description": "Heading of the tag multi-select bottom sheet opened from the History filter bar"
+  },
   "historyLungVolLabel": "Volume",
   "@historyLungVolLabel": {
     "description": "Label for the lung volume stat in the hold detail sheet"

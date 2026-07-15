@@ -428,6 +428,24 @@ abstract class AppLocalizations {
   /// **'PB'**
   String get historyPbBadge;
 
+  /// Type filter chip on the History screen showing standalone max holds
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get historyFilterMax;
+
+  /// Filter chip on the History screen that opens the tag multi-select sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get historyFilterTags;
+
+  /// Heading of the tag multi-select bottom sheet opened from the History filter bar
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by tag'**
+  String get historyFilterTagsSheetTitle;
+
   /// Label for the lung volume stat in the hold detail sheet
   ///
   /// In en, this message translates to:

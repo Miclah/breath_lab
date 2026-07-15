@@ -177,6 +177,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyPbBadge => 'PB';
 
   @override
+  String get historyFilterMax => 'Max';
+
+  @override
+  String get historyFilterTags => 'Tags';
+
+  @override
+  String get historyFilterTagsSheetTitle => 'Filter by tag';
+
+  @override
   String get historyLungVolLabel => 'Volume';
 
   @override

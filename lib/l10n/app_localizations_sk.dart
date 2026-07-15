@@ -178,6 +178,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get historyPbBadge => 'PB';
 
   @override
+  String get historyFilterMax => 'Max';
+
+  @override
+  String get historyFilterTags => 'Tagy';
+
+  @override
+  String get historyFilterTagsSheetTitle => 'Filtrovať podľa tagu';
+
+  @override
   String get historyLungVolLabel => 'Objem';
 
   @override
