@@ -266,4 +266,7 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get progressChartEmpty =>
       'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
+
+  @override
+  String get progressChartFilterAll => 'Všetky';
 }

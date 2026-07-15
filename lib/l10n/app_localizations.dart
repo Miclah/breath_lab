@@ -577,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not enough holds yet to show a trend.'**
   String get progressChartEmpty;
+
+  /// Lung volume filter chip label showing all volumes overlaid on the progress chart
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get progressChartFilterAll;
 }
 
 class _AppLocalizationsDelegate
