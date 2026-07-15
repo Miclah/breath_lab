@@ -103,11 +103,6 @@ class DailyHoldStat {
   final bool hasPb;
 }
 
-final dailyHoldStatsProvider = Provider<List<DailyHoldStat>>((ref) {
-  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
-  return computeDailyHoldStats(holds);
-});
-
 /// Per-day best/average duration for max holds of [lungVolume], over the
 /// last [days] days ending today.
 List<DailyHoldStat> computeDailyHoldStats(
@@ -145,3 +140,34 @@ List<DailyHoldStat> computeDailyHoldStats(
   stats.sort((a, b) => a.dayIndex.compareTo(b.dayIndex));
   return stats;
 }
+
+/// The chart's lung volume filter. Null means "All" (every volume
+/// overlaid); a specific value shows only that volume. Defaults to Full,
+/// per PRD §7.3.
+final chartLungFilterProvider = StateProvider<LungVolume?>(
+  (ref) => LungVolume.full,
+);
+
+/// One line series on the progress chart: a lung volume and its per-day
+/// stats within the chart's window.
+class ChartSeries {
+  const ChartSeries({required this.lungVolume, required this.stats});
+
+  final LungVolume lungVolume;
+  final List<DailyHoldStat> stats;
+}
+
+/// One series for the selected lung volume filter, or one per volume
+/// when "All" is selected (overlaid on the chart).
+final chartSeriesProvider = Provider<List<ChartSeries>>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final filter = ref.watch(chartLungFilterProvider);
+  final volumes = filter == null ? LungVolume.values : [filter];
+  return [
+    for (final volume in volumes)
+      ChartSeries(
+        lungVolume: volume,
+        stats: computeDailyHoldStats(holds, lungVolume: volume),
+      ),
+  ];
+});
