@@ -11,6 +11,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../progress/calendar_heatmap.dart';
+import '../progress/progress_chart.dart';
 import '../progress/stat_card_row.dart';
 
 String _fmt(Duration d) {
@@ -112,6 +113,10 @@ class HistoryScreen extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               child: CalendarHeatmap(),
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(Spacing.xl, 0, Spacing.xl, Spacing.lg),
+            child: ProgressChart(),
           ),
           Expanded(
             child: holds == null || tableSessions == null
