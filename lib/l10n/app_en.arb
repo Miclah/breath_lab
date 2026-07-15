@@ -371,6 +371,14 @@
   },
   "progressChartFilterAll": "All",
   "@progressChartFilterAll": {
-    "description": "Lung volume filter chip label showing all volumes overlaid on the progress chart"
+    "description": "Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill"
+  },
+  "progressChartRange30d": "30d",
+  "@progressChartRange30d": {
+    "description": "Time range pill label for the last 30 days on the progress chart"
+  },
+  "progressChartRange90d": "90d",
+  "@progressChartRange90d": {
+    "description": "Time range pill label for the last 90 days on the progress chart"
   }
 }

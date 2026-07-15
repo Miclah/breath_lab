@@ -80,5 +80,7 @@
   "progressHeatmapLegendMore": "Viac",
   "progressHeatmapStat": "{sessions} tréningov · najlepší týždeň: {days} dní",
   "progressChartEmpty": "Zatiaľ nedostatok pokusov na zobrazenie trendu.",
-  "progressChartFilterAll": "Všetky"
+  "progressChartFilterAll": "Všetky",
+  "progressChartRange30d": "30d",
+  "progressChartRange90d": "90d"
 }

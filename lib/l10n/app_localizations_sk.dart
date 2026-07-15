@@ -269,4 +269,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get progressChartFilterAll => 'Všetky';
+
+  @override
+  String get progressChartRange30d => '30d';
+
+  @override
+  String get progressChartRange90d => '90d';
 }

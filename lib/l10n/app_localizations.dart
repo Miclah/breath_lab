@@ -578,11 +578,23 @@ abstract class AppLocalizations {
   /// **'Not enough holds yet to show a trend.'**
   String get progressChartEmpty;
 
-  /// Lung volume filter chip label showing all volumes overlaid on the progress chart
+  /// Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get progressChartFilterAll;
+
+  /// Time range pill label for the last 30 days on the progress chart
+  ///
+  /// In en, this message translates to:
+  /// **'30d'**
+  String get progressChartRange30d;
+
+  /// Time range pill label for the last 90 days on the progress chart
+  ///
+  /// In en, this message translates to:
+  /// **'90d'**
+  String get progressChartRange90d;
 }
 
 class _AppLocalizationsDelegate

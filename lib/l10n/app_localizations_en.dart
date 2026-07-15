@@ -266,4 +266,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressChartFilterAll => 'All';
+
+  @override
+  String get progressChartRange30d => '30d';
+
+  @override
+  String get progressChartRange90d => '90d';
 }
