@@ -32,7 +32,7 @@ String _lungVolLabel(LungVolume v, AppLocalizations l10n) => switch (v) {
   LungVolume.empty => l10n.lungVolEmpty,
 };
 
-String _tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
+String tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
   'tag.tired' => l10n.tagTired,
   'tag.wellRested' => l10n.tagWellRested,
   'tag.fullStomach' => l10n.tagFullStomach,
@@ -393,7 +393,7 @@ class _HoldDetailSheet extends ConsumerWidget {
                       for (final tag in tags)
                         Chip(
                           label: Text(
-                            _tagLabel(tag.labelKey, l10n),
+                            tagLabel(tag.labelKey, l10n),
                             style: const TextStyle(fontSize: 12),
                           ),
                           visualDensity: VisualDensity.compact,
