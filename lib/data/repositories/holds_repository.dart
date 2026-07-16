@@ -65,6 +65,27 @@ class HoldsRepository {
     }
   }
 
+  /// Replaces a hold's tag associations entirely, dropping any not in
+  /// [tagIds]. Used by the hold detail edit form.
+  Future<void> replaceHoldTags(String holdId, List<String> tagIds) async {
+    await (_db.delete(
+      _db.holdTags,
+    )..where((t) => t.holdId.equals(holdId))).go();
+    await saveHoldTags(holdId, tagIds);
+  }
+
+  /// Updates a hold's lung volume in place. Used by the hold detail edit
+  /// form; duration and timestamps are never editable.
+  Future<void> updateLungVolume(String id, LungVolume lungVolume) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
+      db.HoldsCompanion(
+        lungVolume: Value(lungVolume.dbValue),
+        updatedAt: Value(now),
+      ),
+    );
+  }
+
   Future<void> delete(String id) async {
     final now = DateTime.now().millisecondsSinceEpoch;
     await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
