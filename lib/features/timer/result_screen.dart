@@ -10,6 +10,8 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import '../tables/providers.dart'
+    show audioServiceProvider, hapticsServiceProvider;
 import 'providers.dart';
 import 'tag_chip_row.dart';
 
@@ -29,10 +31,14 @@ class ResultView extends ConsumerStatefulWidget {
 }
 
 class _ResultViewState extends ConsumerState<ResultView>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _pbController;
   late final Animation<double> _pbScale;
+  late final AnimationController _glowController;
+  late final Animation<double> _glowScale;
+  late final Animation<double> _glowOpacity;
   bool _saving = false;
+  bool _showGlow = false;
 
   @override
   void initState() {
@@ -57,11 +63,31 @@ class _ResultViewState extends ConsumerState<ResultView>
         weight: 50,
       ),
     ]).animate(_pbController);
+
+    // Ring glow: single expansion + fade behind the timer number.
+    _glowController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 600),
+        )..addStatusListener((status) {
+          if (status == AnimationStatus.completed && mounted) {
+            setState(() => _showGlow = false);
+          }
+        });
+    _glowScale = Tween(
+      begin: 0.8,
+      end: 1.6,
+    ).animate(CurvedAnimation(parent: _glowController, curve: Curves.easeOut));
+    _glowOpacity = Tween(
+      begin: 0.5,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: _glowController, curve: Curves.easeOut));
   }
 
   @override
   void dispose() {
     _pbController.dispose();
+    _glowController.dispose();
     super.dispose();
   }
 
@@ -121,7 +147,13 @@ class _ResultViewState extends ConsumerState<ResultView>
       if (isPb) {
         await settingsRepo.setCurrentMaxMs(durationMs);
         ref.invalidate(currentMaxMsProvider);
-        await _pbController.forward(from: 0);
+        setState(() => _showGlow = true);
+        ref.read(audioServiceProvider).playPbAchieved();
+        ref.read(hapticsServiceProvider).pbAchieved();
+        await Future.wait([
+          _pbController.forward(from: 0),
+          _glowController.forward(from: 0),
+        ]);
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -151,17 +183,45 @@ class _ResultViewState extends ConsumerState<ResultView>
         children: [
           const SizedBox(height: Spacing.xxxxl),
 
-          // Hold duration — pulses on PB
-          AnimatedBuilder(
-            animation: _pbScale,
-            builder: (_, child) =>
-                Transform.scale(scale: _pbScale.value, child: child),
-            child: Text(
-              _fmt(state.holdElapsed),
-              style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: isDesktop ? 64.0 : null,
+          // Hold duration — pulses on PB, with a glow ring behind it
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              if (_showGlow)
+                AnimatedBuilder(
+                  animation: _glowController,
+                  builder: (_, _) => Opacity(
+                    opacity: _glowOpacity.value,
+                    child: Transform.scale(
+                      scale: _glowScale.value,
+                      child: Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              c.danger.withValues(alpha: 0.5),
+                              c.danger.withValues(alpha: 0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              AnimatedBuilder(
+                animation: _pbScale,
+                builder: (_, child) =>
+                    Transform.scale(scale: _pbScale.value, child: child),
+                child: Text(
+                  _fmt(state.holdElapsed),
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                    fontSize: isDesktop ? 64.0 : null,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
 
           // Contraction + struggle phase stats

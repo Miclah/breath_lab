@@ -24,4 +24,16 @@ class HapticsService {
     await Future.delayed(const Duration(milliseconds: 120));
     HapticFeedback.heavyImpact();
   }
+
+  /// PB achieved: distinct celebratory pattern (long pulse + short
+  /// staccato), per PRD §A5.
+  Future<void> pbAchieved() async {
+    HapticFeedback.heavyImpact();
+    await Future.delayed(const Duration(milliseconds: 200));
+    HapticFeedback.lightImpact();
+    await Future.delayed(const Duration(milliseconds: 80));
+    HapticFeedback.lightImpact();
+    await Future.delayed(const Duration(milliseconds: 80));
+    HapticFeedback.lightImpact();
+  }
 }
