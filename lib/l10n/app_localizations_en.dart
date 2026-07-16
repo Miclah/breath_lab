@@ -165,6 +165,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tagAddLabel => '+ Add tag';
 
   @override
+  String get historyTitle => 'History';
+
+  @override
   String get historyEmpty => 'No holds saved yet.';
 
   @override
@@ -174,7 +177,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyPbBadge => 'PB';
 
   @override
+  String get historyFilterMax => 'Max';
+
+  @override
+  String get historyFilterTags => 'Tags';
+
+  @override
+  String get historyFilterTagsSheetTitle => 'Filter by tag';
+
+  @override
   String get historyLungVolLabel => 'Volume';
+
+  @override
+  String get historyPrepModeLabel => 'Prep';
+
+  @override
+  String get historyPrepModeNone => 'None';
+
+  @override
+  String get historyPrepMode3s => '3s countdown';
+
+  @override
+  String get historyPrepModeShort => 'Short breathing';
+
+  @override
+  String get historyPrepModeFull => 'Full breathing';
+
+  @override
+  String get historyNotesLabel => 'Notes';
+
+  @override
+  String get historyEditButton => 'Edit';
+
+  @override
+  String get historyDeleteButton => 'Delete';
+
+  @override
+  String get historyDeleteConfirmTitle => 'Delete hold?';
+
+  @override
+  String get historyDeleteConfirmMessage => 'This can\'t be undone.';
+
+  @override
+  String get historyCancelButton => 'Cancel';
 
   @override
   String get tablesCo2Toggle => 'CO₂';
@@ -234,4 +279,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String tablesHistoryRow(String type, int completed, int total, String avg) {
     return '$type table · $completed/$total rounds · avg $avg';
   }
+
+  @override
+  String get progressStatPb => 'PB';
+
+  @override
+  String get progressStatAvg30d => '30d avg';
+
+  @override
+  String get progressStatStreak => 'Streak';
+
+  @override
+  String get progressStatNoData => '—';
+
+  @override
+  String get progressHeatmapTitle => 'Last 12 weeks';
+
+  @override
+  String get progressHeatmapLegendLess => 'Less';
+
+  @override
+  String get progressHeatmapLegendMore => 'More';
+
+  @override
+  String progressHeatmapStat(int sessions, int days) {
+    return '$sessions sessions · best week: $days days';
+  }
+
+  @override
+  String get progressChartEmpty => 'Not enough holds yet to show a trend.';
+
+  @override
+  String get progressChartFilterAll => 'All';
+
+  @override
+  String get progressChartRange30d => '30d';
+
+  @override
+  String get progressChartRange90d => '90d';
+
+  @override
+  String get progressRecentHoldsTitle => 'Recent holds';
+
+  @override
+  String get progressViewAllHistory => 'View all';
 }

@@ -166,6 +166,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tagAddLabel => '+ Pridať tag';
 
   @override
+  String get historyTitle => 'História';
+
+  @override
   String get historyEmpty => 'Zatiaľ žiadne pokusy.';
 
   @override
@@ -175,7 +178,49 @@ class AppLocalizationsSk extends AppLocalizations {
   String get historyPbBadge => 'PB';
 
   @override
+  String get historyFilterMax => 'Max';
+
+  @override
+  String get historyFilterTags => 'Tagy';
+
+  @override
+  String get historyFilterTagsSheetTitle => 'Filtrovať podľa tagu';
+
+  @override
   String get historyLungVolLabel => 'Objem';
+
+  @override
+  String get historyPrepModeLabel => 'Príprava';
+
+  @override
+  String get historyPrepModeNone => 'Žiadna';
+
+  @override
+  String get historyPrepMode3s => '3s odpočítavanie';
+
+  @override
+  String get historyPrepModeShort => 'Krátke dýchanie';
+
+  @override
+  String get historyPrepModeFull => 'Plné dýchanie';
+
+  @override
+  String get historyNotesLabel => 'Poznámky';
+
+  @override
+  String get historyEditButton => 'Upraviť';
+
+  @override
+  String get historyDeleteButton => 'Vymazať';
+
+  @override
+  String get historyDeleteConfirmTitle => 'Vymazať pokus?';
+
+  @override
+  String get historyDeleteConfirmMessage => 'Túto akciu nemožno vrátiť späť.';
+
+  @override
+  String get historyCancelButton => 'Zrušiť';
 
   @override
   String get tablesCo2Toggle => 'CO₂';
@@ -236,4 +281,49 @@ class AppLocalizationsSk extends AppLocalizations {
   String tablesHistoryRow(String type, int completed, int total, String avg) {
     return '$type tabuľka · $completed/$total kôl · priemer $avg';
   }
+
+  @override
+  String get progressStatPb => 'PB';
+
+  @override
+  String get progressStatAvg30d => '30d priemer';
+
+  @override
+  String get progressStatStreak => 'Séria';
+
+  @override
+  String get progressStatNoData => '—';
+
+  @override
+  String get progressHeatmapTitle => 'Posledných 12 týždňov';
+
+  @override
+  String get progressHeatmapLegendLess => 'Menej';
+
+  @override
+  String get progressHeatmapLegendMore => 'Viac';
+
+  @override
+  String progressHeatmapStat(int sessions, int days) {
+    return '$sessions tréningov · najlepší týždeň: $days dní';
+  }
+
+  @override
+  String get progressChartEmpty =>
+      'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
+
+  @override
+  String get progressChartFilterAll => 'Všetky';
+
+  @override
+  String get progressChartRange30d => '30d';
+
+  @override
+  String get progressChartRange90d => '90d';
+
+  @override
+  String get progressRecentHoldsTitle => 'Nedávne pokusy';
+
+  @override
+  String get progressViewAllHistory => 'Zobraziť všetko';
 }

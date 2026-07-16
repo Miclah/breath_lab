@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'+ Add tag'**
   String get tagAddLabel;
 
+  /// Title of the full history screen, pushed from the Progress screen's recent holds section
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTitle;
+
   /// Empty state message on the history list
   ///
   /// In en, this message translates to:
@@ -422,11 +428,95 @@ abstract class AppLocalizations {
   /// **'PB'**
   String get historyPbBadge;
 
+  /// Type filter chip on the History screen showing standalone max holds
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get historyFilterMax;
+
+  /// Filter chip on the History screen that opens the tag multi-select sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get historyFilterTags;
+
+  /// Heading of the tag multi-select bottom sheet opened from the History filter bar
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by tag'**
+  String get historyFilterTagsSheetTitle;
+
   /// Label for the lung volume stat in the hold detail sheet
   ///
   /// In en, this message translates to:
   /// **'Volume'**
   String get historyLungVolLabel;
+
+  /// Label for the prep mode stat in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Prep'**
+  String get historyPrepModeLabel;
+
+  /// Prep mode value: no prep, hold started immediately
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get historyPrepModeNone;
+
+  /// Prep mode value: 3-second countdown
+  ///
+  /// In en, this message translates to:
+  /// **'3s countdown'**
+  String get historyPrepMode3s;
+
+  /// Prep mode value: short breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Short breathing'**
+  String get historyPrepModeShort;
+
+  /// Prep mode value: full breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Full breathing'**
+  String get historyPrepModeFull;
+
+  /// Label above the notes text in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get historyNotesLabel;
+
+  /// Icon button tooltip/label that switches the hold detail sheet into edit mode
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get historyEditButton;
+
+  /// Icon button tooltip/label that deletes the hold, after confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get historyDeleteButton;
+
+  /// Title of the confirmation dialog before deleting a hold
+  ///
+  /// In en, this message translates to:
+  /// **'Delete hold?'**
+  String get historyDeleteConfirmTitle;
+
+  /// Body text of the confirmation dialog before deleting a hold
+  ///
+  /// In en, this message translates to:
+  /// **'This can\'t be undone.'**
+  String get historyDeleteConfirmMessage;
+
+  /// Cancel button on the delete confirmation dialog and the edit form
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get historyCancelButton;
 
   /// Pill toggle segment label for the CO₂ table
   ///
@@ -523,6 +613,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{type} table · {completed}/{total} rounds · avg {avg}'**
   String tablesHistoryRow(String type, int completed, int total, String avg);
+
+  /// Label for the all-time personal best stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'PB'**
+  String get progressStatPb;
+
+  /// Label for the 30-day average hold stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'30d avg'**
+  String get progressStatAvg30d;
+
+  /// Label for the current streak stat card on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get progressStatStreak;
+
+  /// Placeholder value for a stat card when there is not enough history yet
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get progressStatNoData;
+
+  /// Section header above the calendar heatmap on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Last 12 weeks'**
+  String get progressHeatmapTitle;
+
+  /// Left-hand label of the heatmap color-intensity legend
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get progressHeatmapLegendLess;
+
+  /// Right-hand label of the heatmap color-intensity legend
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get progressHeatmapLegendMore;
+
+  /// Summary stat shown to the right of the heatmap legend
+  ///
+  /// In en, this message translates to:
+  /// **'{sessions} sessions · best week: {days} days'**
+  String progressHeatmapStat(int sessions, int days);
+
+  /// Empty state shown in place of the progress chart when there is no data in the selected range
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough holds yet to show a trend.'**
+  String get progressChartEmpty;
+
+  /// Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get progressChartFilterAll;
+
+  /// Time range pill label for the last 30 days on the progress chart
+  ///
+  /// In en, this message translates to:
+  /// **'30d'**
+  String get progressChartRange30d;
+
+  /// Time range pill label for the last 90 days on the progress chart
+  ///
+  /// In en, this message translates to:
+  /// **'90d'**
+  String get progressChartRange90d;
+
+  /// Section header above the last-10-holds list on the Progress screen
+  ///
+  /// In en, this message translates to:
+  /// **'Recent holds'**
+  String get progressRecentHoldsTitle;
+
+  /// Link below the recent holds list that pushes the full history screen
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get progressViewAllHistory;
 }
 
 class _AppLocalizationsDelegate

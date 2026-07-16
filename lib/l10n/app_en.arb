@@ -204,6 +204,10 @@
   "@tagAddLabel": {
     "description": "Chip at the end of the tag row — opens text input to add a custom tag"
   },
+  "historyTitle": "History",
+  "@historyTitle": {
+    "description": "Title of the full history screen, pushed from the Progress screen's recent holds section"
+  },
   "historyEmpty": "No holds saved yet.",
   "@historyEmpty": {
     "description": "Empty state message on the history list"
@@ -216,9 +220,65 @@
   "@historyPbBadge": {
     "description": "Short badge label shown on a personal-best hold row"
   },
+  "historyFilterMax": "Max",
+  "@historyFilterMax": {
+    "description": "Type filter chip on the History screen showing standalone max holds"
+  },
+  "historyFilterTags": "Tags",
+  "@historyFilterTags": {
+    "description": "Filter chip on the History screen that opens the tag multi-select sheet"
+  },
+  "historyFilterTagsSheetTitle": "Filter by tag",
+  "@historyFilterTagsSheetTitle": {
+    "description": "Heading of the tag multi-select bottom sheet opened from the History filter bar"
+  },
   "historyLungVolLabel": "Volume",
   "@historyLungVolLabel": {
     "description": "Label for the lung volume stat in the hold detail sheet"
+  },
+  "historyPrepModeLabel": "Prep",
+  "@historyPrepModeLabel": {
+    "description": "Label for the prep mode stat in the hold detail sheet"
+  },
+  "historyPrepModeNone": "None",
+  "@historyPrepModeNone": {
+    "description": "Prep mode value: no prep, hold started immediately"
+  },
+  "historyPrepMode3s": "3s countdown",
+  "@historyPrepMode3s": {
+    "description": "Prep mode value: 3-second countdown"
+  },
+  "historyPrepModeShort": "Short breathing",
+  "@historyPrepModeShort": {
+    "description": "Prep mode value: short breathing guide"
+  },
+  "historyPrepModeFull": "Full breathing",
+  "@historyPrepModeFull": {
+    "description": "Prep mode value: full breathing guide"
+  },
+  "historyNotesLabel": "Notes",
+  "@historyNotesLabel": {
+    "description": "Label above the notes text in the hold detail sheet"
+  },
+  "historyEditButton": "Edit",
+  "@historyEditButton": {
+    "description": "Icon button tooltip/label that switches the hold detail sheet into edit mode"
+  },
+  "historyDeleteButton": "Delete",
+  "@historyDeleteButton": {
+    "description": "Icon button tooltip/label that deletes the hold, after confirmation"
+  },
+  "historyDeleteConfirmTitle": "Delete hold?",
+  "@historyDeleteConfirmTitle": {
+    "description": "Title of the confirmation dialog before deleting a hold"
+  },
+  "historyDeleteConfirmMessage": "This can't be undone.",
+  "@historyDeleteConfirmMessage": {
+    "description": "Body text of the confirmation dialog before deleting a hold"
+  },
+  "historyCancelButton": "Cancel",
+  "@historyCancelButton": {
+    "description": "Cancel button on the delete confirmation dialog and the edit form"
   },
   "tablesCo2Toggle": "CO₂",
   "@tablesCo2Toggle": {
@@ -324,5 +384,69 @@
         "example": "0:48"
       }
     }
+  },
+  "progressStatPb": "PB",
+  "@progressStatPb": {
+    "description": "Label for the all-time personal best stat card on the Progress screen"
+  },
+  "progressStatAvg30d": "30d avg",
+  "@progressStatAvg30d": {
+    "description": "Label for the 30-day average hold stat card on the Progress screen"
+  },
+  "progressStatStreak": "Streak",
+  "@progressStatStreak": {
+    "description": "Label for the current streak stat card on the Progress screen"
+  },
+  "progressStatNoData": "—",
+  "@progressStatNoData": {
+    "description": "Placeholder value for a stat card when there is not enough history yet"
+  },
+  "progressHeatmapTitle": "Last 12 weeks",
+  "@progressHeatmapTitle": {
+    "description": "Section header above the calendar heatmap on the Progress screen"
+  },
+  "progressHeatmapLegendLess": "Less",
+  "@progressHeatmapLegendLess": {
+    "description": "Left-hand label of the heatmap color-intensity legend"
+  },
+  "progressHeatmapLegendMore": "More",
+  "@progressHeatmapLegendMore": {
+    "description": "Right-hand label of the heatmap color-intensity legend"
+  },
+  "progressHeatmapStat": "{sessions} sessions · best week: {days} days",
+  "@progressHeatmapStat": {
+    "description": "Summary stat shown to the right of the heatmap legend",
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "progressChartEmpty": "Not enough holds yet to show a trend.",
+  "@progressChartEmpty": {
+    "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
+  },
+  "progressChartFilterAll": "All",
+  "@progressChartFilterAll": {
+    "description": "Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill"
+  },
+  "progressChartRange30d": "30d",
+  "@progressChartRange30d": {
+    "description": "Time range pill label for the last 30 days on the progress chart"
+  },
+  "progressChartRange90d": "90d",
+  "@progressChartRange90d": {
+    "description": "Time range pill label for the last 90 days on the progress chart"
+  },
+  "progressRecentHoldsTitle": "Recent holds",
+  "@progressRecentHoldsTitle": {
+    "description": "Section header above the last-10-holds list on the Progress screen"
+  },
+  "progressViewAllHistory": "View all",
+  "@progressViewAllHistory": {
+    "description": "Link below the recent holds list that pushes the full history screen"
   }
 }

@@ -10,6 +10,7 @@ class AudioService {
   Future<void> playRestStart() => _play('rest_start.wav');
   Future<void> playCountdownTick() => _play('countdown_tick.wav');
   Future<void> playRoundDone() => _play('round_done.wav');
+  Future<void> playPbAchieved() => _play('pb_achieved.wav');
 
   Future<void> _play(String fileName) async {
     await _player.stop();
