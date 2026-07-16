@@ -33,6 +33,13 @@ String _lungVolLabel(LungVolume v, AppLocalizations l10n) => switch (v) {
   LungVolume.empty => l10n.lungVolEmpty,
 };
 
+String _prepModeLabel(PrepMode mode, AppLocalizations l10n) => switch (mode) {
+  PrepMode.none => l10n.historyPrepModeNone,
+  PrepMode.threeSeconds => l10n.historyPrepMode3s,
+  PrepMode.short => l10n.historyPrepModeShort,
+  PrepMode.full => l10n.historyPrepModeFull,
+};
+
 String tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
   'tag.tired' => l10n.tagTired,
   'tag.wellRested' => l10n.tagWellRested,
@@ -332,16 +339,89 @@ class _PbBadge extends StatelessWidget {
 // Detail sheet
 // ---------------------------------------------------------------------------
 
-class _HoldDetailSheet extends ConsumerWidget {
+class _HoldDetailSheet extends ConsumerStatefulWidget {
   const _HoldDetailSheet({required this.hold});
 
   final Hold hold;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_HoldDetailSheet> createState() => _HoldDetailSheetState();
+}
+
+class _HoldDetailSheetState extends ConsumerState<_HoldDetailSheet> {
+  bool _editing = false;
+  bool _saving = false;
+  LungVolume? _editLungVolume;
+  Set<String>? _editTagIds;
+
+  Hold get _hold => widget.hold;
+
+  void _startEdit(Set<String> currentTagIds) {
+    setState(() {
+      _editing = true;
+      _editLungVolume = _hold.lungVolume;
+      _editTagIds = Set.of(currentTagIds);
+    });
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _editing = false;
+      _editLungVolume = null;
+      _editTagIds = null;
+    });
+  }
+
+  Future<void> _saveEdit() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    final holdsRepo = await ref.read(holdsRepositoryProvider.future);
+    await holdsRepo.updateLungVolume(_hold.id, _editLungVolume!);
+    await holdsRepo.replaceHoldTags(_hold.id, _editTagIds!.toList());
+    ref.invalidate(allHoldsProvider);
+    ref.invalidate(holdTagCountsProvider);
+    ref.invalidate(holdTagIdsProvider);
+    ref.invalidate(holdTagsProvider(_hold.id));
+    if (!mounted) return;
+    setState(() {
+      _editing = false;
+      _saving = false;
+    });
+  }
+
+  Future<void> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.historyDeleteConfirmTitle),
+        content: Text(l10n.historyDeleteConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.historyCancelButton),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.historyDeleteButton),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    final holdsRepo = await ref.read(holdsRepositoryProvider.future);
+    await holdsRepo.delete(_hold.id);
+    ref.invalidate(allHoldsProvider);
+    ref.invalidate(holdTagCountsProvider);
+    ref.invalidate(holdTagIdsProvider);
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
-    final tagsAsync = ref.watch(holdTagsProvider(hold.id));
+    final tagsAsync = ref.watch(holdTagsProvider(_hold.id));
 
     return SafeArea(
       child: Padding(
@@ -350,63 +430,105 @@ class _HoldDetailSheet extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Duration + PB
+            // Duration + PB + edit/delete actions
             Row(
               children: [
                 Text(
-                  _fmt(hold.duration),
+                  _fmt(_hold.duration),
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
-                if (hold.isPb) ...[
+                if (_hold.isPb) ...[
                   const SizedBox(width: Spacing.sm),
                   _PbBadge(label: l10n.historyPbBadge),
+                ],
+                const Spacer(),
+                if (!_editing) ...[
+                  IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    tooltip: l10n.historyEditButton,
+                    onPressed: () => _startEdit(
+                      tagsAsync.valueOrNull?.map((t) => t.id).toSet() ??
+                          const {},
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete_outline, color: c.danger),
+                    tooltip: l10n.historyDeleteButton,
+                    onPressed: _confirmDelete,
+                  ),
                 ],
               ],
             ),
             const SizedBox(height: Spacing.xs),
             Text(
-              DateFormat('d MMM yyyy, HH:mm').format(hold.createdAt),
+              DateFormat('d MMM yyyy, HH:mm').format(_hold.createdAt),
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
             ),
             const SizedBox(height: Spacing.lg),
 
-            // Lung volume + contraction + struggle
+            // Lung volume + contraction + struggle + prep mode
             Wrap(
               spacing: Spacing.xl,
               runSpacing: Spacing.sm,
               children: [
                 _DetailStat(
                   label: l10n.historyLungVolLabel,
-                  value: _lungVolLabel(hold.lungVolume, l10n),
+                  value: _lungVolLabel(_hold.lungVolume, l10n),
                   c: c,
                 ),
-                if (hold.contractionTime != null)
+                if (_hold.contractionTime != null)
                   _DetailStat(
                     label: l10n.resultContraction,
-                    value: _fmt(hold.contractionTime!),
+                    value: _fmt(_hold.contractionTime!),
                     c: c,
                   ),
-                if (hold.contractionTime != null &&
-                    hold.duration > hold.contractionTime!)
+                if (_hold.contractionTime != null &&
+                    _hold.duration > _hold.contractionTime!)
                   _DetailStat(
                     label: l10n.resultStruggle,
-                    value: _fmt(hold.duration - hold.contractionTime!),
+                    value: _fmt(_hold.duration - _hold.contractionTime!),
+                    c: c,
+                  ),
+                if (_hold.prepMode != null)
+                  _DetailStat(
+                    label: l10n.historyPrepModeLabel,
+                    value: _prepModeLabel(_hold.prepMode!, l10n),
                     c: c,
                   ),
               ],
             ),
 
-            // Tags
-            tagsAsync.when(
-              loading: () => const SizedBox.shrink(),
-              error: (error, stack) => const SizedBox.shrink(),
-              data: (tags) {
-                if (tags.isEmpty) return const SizedBox.shrink();
-                return Padding(
-                  padding: const EdgeInsets.only(top: Spacing.lg),
-                  child: Wrap(
+            if (_hold.notes != null && _hold.notes!.isNotEmpty) ...[
+              const SizedBox(height: Spacing.lg),
+              Text(
+                l10n.historyNotesLabel,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelSmall?.copyWith(color: c.textTertiary),
+              ),
+              const SizedBox(height: Spacing.xxs),
+              Text(_hold.notes!, style: Theme.of(context).textTheme.bodyMedium),
+            ],
+
+            const SizedBox(height: Spacing.lg),
+            if (_editing)
+              _EditForm(
+                selectedLungVolume: _editLungVolume!,
+                selectedTagIds: _editTagIds!,
+                onLungVolumeChanged: (v) => setState(() => _editLungVolume = v),
+                onTagToggled: (id, selected) => setState(() {
+                  selected ? _editTagIds!.add(id) : _editTagIds!.remove(id);
+                }),
+              )
+            else
+              tagsAsync.when(
+                loading: () => const SizedBox.shrink(),
+                error: (error, stack) => const SizedBox.shrink(),
+                data: (tags) {
+                  if (tags.isEmpty) return const SizedBox.shrink();
+                  return Wrap(
                     spacing: Spacing.xs,
                     runSpacing: Spacing.xs,
                     children: [
@@ -419,22 +541,115 @@ class _HoldDetailSheet extends ConsumerWidget {
                           visualDensity: VisualDensity.compact,
                         ),
                     ],
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
 
             const SizedBox(height: Spacing.lg),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.historyDetailClose),
+            if (_editing)
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _saving ? null : _cancelEdit,
+                      child: Text(l10n.historyCancelButton),
+                    ),
+                  ),
+                  const SizedBox(width: Spacing.sm),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _saving ? null : _saveEdit,
+                      child: _saving
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(l10n.resultSaveButton),
+                    ),
+                  ),
+                ],
+              )
+            else
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.historyDetailClose),
+                ),
               ),
-            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EditForm extends ConsumerWidget {
+  const _EditForm({
+    required this.selectedLungVolume,
+    required this.selectedTagIds,
+    required this.onLungVolumeChanged,
+    required this.onTagToggled,
+  });
+
+  final LungVolume selectedLungVolume;
+  final Set<String> selectedTagIds;
+  final ValueChanged<LungVolume> onLungVolumeChanged;
+  final void Function(String tagId, bool selected) onTagToggled;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final tagsAsync = ref.watch(builtInTagsProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.historyLungVolLabel,
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: c.textTertiary),
+        ),
+        const SizedBox(height: Spacing.xs),
+        Wrap(
+          spacing: Spacing.sm,
+          children: [
+            for (final volume in LungVolume.values)
+              ChoiceChip(
+                label: Text(_lungVolLabel(volume, l10n)),
+                selected: selectedLungVolume == volume,
+                onSelected: (_) => onLungVolumeChanged(volume),
+              ),
+          ],
+        ),
+        const SizedBox(height: Spacing.lg),
+        Text(
+          l10n.historyFilterTags,
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: c.textTertiary),
+        ),
+        const SizedBox(height: Spacing.xs),
+        tagsAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => const SizedBox.shrink(),
+          data: (tags) => Wrap(
+            spacing: Spacing.sm,
+            runSpacing: Spacing.sm,
+            children: [
+              for (final tag in tags)
+                FilterChip(
+                  label: Text(tagLabel(tag.labelKey, l10n)),
+                  selected: selectedTagIds.contains(tag.id),
+                  onSelected: (selected) => onTagToggled(tag.id, selected),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
