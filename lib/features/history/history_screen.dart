@@ -10,6 +10,7 @@ import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import 'history_filters.dart';
 
 String _fmt(Duration d) {
   final m = d.inMinutes.toString().padLeft(2, '0');
@@ -90,47 +91,66 @@ class HistoryScreen extends ConsumerWidget {
     final tableSessionsAsync = ref.watch(allTableSessionsProvider);
     final holds = holdsAsync.valueOrNull;
     final tableSessions = tableSessionsAsync.valueOrNull;
+    final holdTagIds = ref.watch(holdTagIdsProvider).valueOrNull ?? const {};
+    final types = ref.watch(historyTypeFilterProvider);
+    final lungVolumes = ref.watch(historyLungVolumeFilterProvider);
+    final tagFilter = ref.watch(historyTagFilterProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.historyTitle)),
-      body: holds == null || tableSessions == null
-          ? holdsAsync.hasError || tableSessionsAsync.hasError
-                ? const SizedBox.shrink()
-                : const Center(child: CircularProgressIndicator())
-          : Builder(
-              builder: (context) {
-                final entries = <_HistoryEntry>[
-                  for (final hold in holds)
-                    if (hold.type != HoldType.co2 && hold.type != HoldType.o2)
-                      _HoldEntry(hold),
-                  for (final session in tableSessions)
-                    _TableSessionEntry(session),
-                ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      body: Column(
+        children: [
+          const HistoryFilterBar(),
+          Expanded(
+            child: holds == null || tableSessions == null
+                ? holdsAsync.hasError || tableSessionsAsync.hasError
+                      ? const SizedBox.shrink()
+                      : const Center(child: CircularProgressIndicator())
+                : Builder(
+                    builder: (context) {
+                      final entries = <_HistoryEntry>[
+                        for (final hold in holds)
+                          if (hold.type != HoldType.co2 &&
+                              hold.type != HoldType.o2 &&
+                              holdMatchesHistoryFilters(
+                                hold,
+                                types: types,
+                                lungVolumes: lungVolumes,
+                                tagFilter: tagFilter,
+                                holdTagIds: holdTagIds[hold.id] ?? const {},
+                              ))
+                            _HoldEntry(hold),
+                        for (final session in tableSessions)
+                          if (tableSessionMatchesHistoryFilters(session, types))
+                            _TableSessionEntry(session),
+                      ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-                if (entries.isEmpty) {
-                  return Center(
-                    child: Text(
-                      l10n.historyEmpty,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  itemCount: entries.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, indent: Spacing.xl),
-                  itemBuilder: (_, i) => switch (entries[i]) {
-                    _HoldEntry(:final hold) => HoldRow(
-                      hold: hold,
-                      onTap: () => showHoldDetail(context, hold),
-                    ),
-                    _TableSessionEntry(:final session) => _TableSessionRow(
-                      session: session,
-                    ),
-                  },
-                );
-              },
-            ),
+                      if (entries.isEmpty) {
+                        return Center(
+                          child: Text(
+                            l10n.historyEmpty,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        );
+                      }
+                      return ListView.separated(
+                        itemCount: entries.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 1, indent: Spacing.xl),
+                        itemBuilder: (_, i) => switch (entries[i]) {
+                          _HoldEntry(:final hold) => HoldRow(
+                            hold: hold,
+                            onTap: () => showHoldDetail(context, hold),
+                          ),
+                          _TableSessionEntry(:final session) =>
+                            _TableSessionRow(session: session),
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
