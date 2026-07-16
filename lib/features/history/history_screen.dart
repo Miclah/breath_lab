@@ -8,30 +8,10 @@ import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'history_filters.dart';
-
-String _fmt(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
-
-String _dateLabel(DateTime dt) {
-  final now = DateTime.now();
-  final isToday =
-      dt.year == now.year && dt.month == now.month && dt.day == now.day;
-  return isToday
-      ? DateFormat('HH:mm').format(dt)
-      : DateFormat('d MMM').format(dt);
-}
-
-String _lungVolLabel(LungVolume v, AppLocalizations l10n) => switch (v) {
-  LungVolume.full => l10n.lungVolFull,
-  LungVolume.frc => l10n.lungVolFrc,
-  LungVolume.empty => l10n.lungVolEmpty,
-};
 
 String _prepModeLabel(PrepMode mode, AppLocalizations l10n) => switch (mode) {
   PrepMode.none => l10n.historyPrepModeNone,
@@ -145,7 +125,7 @@ class HistoryScreen extends ConsumerWidget {
                         separatorBuilder: (context, index) =>
                             const Divider(height: 1, indent: Spacing.xl),
                         itemBuilder: (_, i) => switch (entries[i]) {
-                          _HoldEntry(:final hold) => HoldRow(
+                          _HoldEntry(:final hold) => HoldListItem(
                             hold: hold,
                             onTap: () => showHoldDetail(context, hold),
                           ),
@@ -165,101 +145,6 @@ class HistoryScreen extends ConsumerWidget {
 // ---------------------------------------------------------------------------
 // List row
 // ---------------------------------------------------------------------------
-
-/// Single hold row: duration, PB badge, lung volume, contraction dot, tag
-/// dots. Shared by the history list and the Progress screen's recent
-/// holds section.
-class HoldRow extends ConsumerWidget {
-  const HoldRow({super.key, required this.hold, required this.onTap});
-
-  final Hold hold;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final c = context.appColors;
-    final tagCount =
-        ref.watch(holdTagCountsProvider).valueOrNull?[hold.id] ?? 0;
-
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: Spacing.xl,
-        vertical: Spacing.xs,
-      ),
-      title: Row(
-        children: [
-          Text(
-            _fmt(hold.duration),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          if (hold.isPb) ...[
-            const SizedBox(width: Spacing.xs),
-            _PbBadge(label: l10n.historyPbBadge),
-          ],
-          const Spacer(),
-          Text(
-            _dateLabel(hold.createdAt),
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-          ),
-        ],
-      ),
-      subtitle: Row(
-        children: [
-          Text(
-            _lungVolLabel(hold.lungVolume, l10n),
-            style: TextStyle(fontSize: 12, color: c.textTertiary),
-          ),
-          if (hold.contractionTime != null) ...[
-            Text(
-              '  ·  ',
-              style: TextStyle(fontSize: 12, color: c.textTertiary),
-            ),
-            Container(
-              width: 5,
-              height: 5,
-              margin: const EdgeInsets.only(right: Spacing.xxs),
-              decoration: BoxDecoration(
-                color: c.primary,
-                shape: BoxShape.circle,
-              ),
-            ),
-            Text(
-              _fmt(hold.contractionTime!),
-              style: TextStyle(fontSize: 12, color: c.textSecondary),
-            ),
-          ],
-          if (tagCount > 0) ...[
-            Text(
-              '  ·  ',
-              style: TextStyle(fontSize: 12, color: c.textTertiary),
-            ),
-            for (var i = 0; i < tagCount.clamp(0, 4); i++)
-              Padding(
-                padding: const EdgeInsets.only(right: 3),
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: c.primary,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            if (tagCount > 4)
-              Text(
-                '+${tagCount - 4}',
-                style: TextStyle(fontSize: 10, color: c.textTertiary),
-              ),
-          ],
-        ],
-      ),
-    );
-  }
-}
 
 class _TableSessionRow extends StatelessWidget {
   const _TableSessionRow({required this.session});
@@ -292,44 +177,18 @@ class _TableSessionRow extends StatelessWidget {
                 typeLabel,
                 session.roundsCompleted,
                 session.roundsTotal,
-                _fmt(Duration(milliseconds: avgMs)),
+                fmtHoldDuration(Duration(milliseconds: avgMs)),
               ),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           Text(
-            _dateLabel(session.createdAt),
+            holdDateLabel(session.createdAt),
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PbBadge extends StatelessWidget {
-  const _PbBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.appColors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: c.primarySurface,
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          color: c.primaryText,
-        ),
       ),
     );
   }
@@ -434,12 +293,12 @@ class _HoldDetailSheetState extends ConsumerState<_HoldDetailSheet> {
             Row(
               children: [
                 Text(
-                  _fmt(_hold.duration),
+                  fmtHoldDuration(_hold.duration),
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 if (_hold.isPb) ...[
                   const SizedBox(width: Spacing.sm),
-                  _PbBadge(label: l10n.historyPbBadge),
+                  PbBadge(label: l10n.historyPbBadge),
                 ],
                 const Spacer(),
                 if (!_editing) ...[
@@ -475,20 +334,22 @@ class _HoldDetailSheetState extends ConsumerState<_HoldDetailSheet> {
               children: [
                 _DetailStat(
                   label: l10n.historyLungVolLabel,
-                  value: _lungVolLabel(_hold.lungVolume, l10n),
+                  value: lungVolumeLabel(_hold.lungVolume, l10n),
                   c: c,
                 ),
                 if (_hold.contractionTime != null)
                   _DetailStat(
                     label: l10n.resultContraction,
-                    value: _fmt(_hold.contractionTime!),
+                    value: fmtHoldDuration(_hold.contractionTime!),
                     c: c,
                   ),
                 if (_hold.contractionTime != null &&
                     _hold.duration > _hold.contractionTime!)
                   _DetailStat(
                     label: l10n.resultStruggle,
-                    value: _fmt(_hold.duration - _hold.contractionTime!),
+                    value: fmtHoldDuration(
+                      _hold.duration - _hold.contractionTime!,
+                    ),
                     c: c,
                   ),
                 if (_hold.prepMode != null)
@@ -619,7 +480,7 @@ class _EditForm extends ConsumerWidget {
           children: [
             for (final volume in LungVolume.values)
               ChoiceChip(
-                label: Text(_lungVolLabel(volume, l10n)),
+                label: Text(lungVolumeLabel(volume, l10n)),
                 selected: selectedLungVolume == volume,
                 onSelected: (_) => onLungVolumeChanged(volume),
               ),
