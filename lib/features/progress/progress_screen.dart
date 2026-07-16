@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/holds_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -58,7 +59,10 @@ class ProgressScreen extends ConsumerWidget {
             )
           else
             for (final hold in recentHolds)
-              HoldRow(hold: hold, onTap: () => showHoldDetail(context, hold)),
+              HoldListItem(
+                hold: hold,
+                onTap: () => showHoldDetail(context, hold),
+              ),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(

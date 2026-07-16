@@ -7,15 +7,10 @@ import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../history/history_screen.dart';
-
-String _fmt(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
 
 bool _isSameDay(DateTime a, DateTime b) =>
     a.year == b.year && a.month == b.month && a.day == b.day;
@@ -65,24 +60,20 @@ class HeatmapDaySheet extends ConsumerWidget {
             ),
             const SizedBox(height: Spacing.md),
             for (final hold in holds)
-              _DayEntryTile(
-                time: DateFormat('HH:mm').format(hold.createdAt),
-                label: _fmt(hold.duration),
-                isPb: hold.isPb,
+              HoldListItem(
+                hold: hold,
                 onTap: () {
                   Navigator.of(context).pop();
                   showHoldDetail(context, hold);
                 },
               ),
             for (final session in tables)
-              _DayEntryTile(
+              _DayTableTile(
                 time: DateFormat('HH:mm').format(session.createdAt),
                 label: switch (session.type) {
                   TableType.co2 => l10n.tablesCo2Toggle,
                   TableType.o2 => l10n.tablesO2Toggle,
                 },
-                isPb: false,
-                onTap: null,
               ),
             const SizedBox(height: Spacing.lg),
             SizedBox(
@@ -99,48 +90,20 @@ class HeatmapDaySheet extends ConsumerWidget {
   }
 }
 
-class _DayEntryTile extends StatelessWidget {
-  const _DayEntryTile({
-    required this.time,
-    required this.label,
-    required this.isPb,
-    required this.onTap,
-  });
+/// Display-only row for a table session, matching the history list's
+/// current behavior (table sessions aren't tappable there either).
+class _DayTableTile extends StatelessWidget {
+  const _DayTableTile({required this.time, required this.label});
 
   final String time;
   final String label;
-  final bool isPb;
-  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
     return ListTile(
-      onTap: onTap,
       contentPadding: EdgeInsets.zero,
-      title: Row(
-        children: [
-          Text(label, style: Theme.of(context).textTheme.titleMedium),
-          if (isPb) ...[
-            const SizedBox(width: Spacing.xs),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: c.primarySurface,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.historyPbBadge,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: c.primaryText,
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
+      title: Text(label, style: Theme.of(context).textTheme.titleMedium),
       trailing: Text(
         time,
         style: Theme.of(
