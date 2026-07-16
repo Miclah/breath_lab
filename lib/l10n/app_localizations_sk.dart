@@ -190,6 +190,39 @@ class AppLocalizationsSk extends AppLocalizations {
   String get historyLungVolLabel => 'Objem';
 
   @override
+  String get historyPrepModeLabel => 'Príprava';
+
+  @override
+  String get historyPrepModeNone => 'Žiadna';
+
+  @override
+  String get historyPrepMode3s => '3s odpočítavanie';
+
+  @override
+  String get historyPrepModeShort => 'Krátke dýchanie';
+
+  @override
+  String get historyPrepModeFull => 'Plné dýchanie';
+
+  @override
+  String get historyNotesLabel => 'Poznámky';
+
+  @override
+  String get historyEditButton => 'Upraviť';
+
+  @override
+  String get historyDeleteButton => 'Vymazať';
+
+  @override
+  String get historyDeleteConfirmTitle => 'Vymazať pokus?';
+
+  @override
+  String get historyDeleteConfirmMessage => 'Túto akciu nemožno vrátiť späť.';
+
+  @override
+  String get historyCancelButton => 'Zrušiť';
+
+  @override
   String get tablesCo2Toggle => 'CO₂';
 
   @override

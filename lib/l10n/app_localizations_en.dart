@@ -189,6 +189,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyLungVolLabel => 'Volume';
 
   @override
+  String get historyPrepModeLabel => 'Prep';
+
+  @override
+  String get historyPrepModeNone => 'None';
+
+  @override
+  String get historyPrepMode3s => '3s countdown';
+
+  @override
+  String get historyPrepModeShort => 'Short breathing';
+
+  @override
+  String get historyPrepModeFull => 'Full breathing';
+
+  @override
+  String get historyNotesLabel => 'Notes';
+
+  @override
+  String get historyEditButton => 'Edit';
+
+  @override
+  String get historyDeleteButton => 'Delete';
+
+  @override
+  String get historyDeleteConfirmTitle => 'Delete hold?';
+
+  @override
+  String get historyDeleteConfirmMessage => 'This can\'t be undone.';
+
+  @override
+  String get historyCancelButton => 'Cancel';
+
+  @override
   String get tablesCo2Toggle => 'CO₂';
 
   @override

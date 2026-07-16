@@ -452,6 +452,72 @@ abstract class AppLocalizations {
   /// **'Volume'**
   String get historyLungVolLabel;
 
+  /// Label for the prep mode stat in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Prep'**
+  String get historyPrepModeLabel;
+
+  /// Prep mode value: no prep, hold started immediately
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get historyPrepModeNone;
+
+  /// Prep mode value: 3-second countdown
+  ///
+  /// In en, this message translates to:
+  /// **'3s countdown'**
+  String get historyPrepMode3s;
+
+  /// Prep mode value: short breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Short breathing'**
+  String get historyPrepModeShort;
+
+  /// Prep mode value: full breathing guide
+  ///
+  /// In en, this message translates to:
+  /// **'Full breathing'**
+  String get historyPrepModeFull;
+
+  /// Label above the notes text in the hold detail sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get historyNotesLabel;
+
+  /// Icon button tooltip/label that switches the hold detail sheet into edit mode
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get historyEditButton;
+
+  /// Icon button tooltip/label that deletes the hold, after confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get historyDeleteButton;
+
+  /// Title of the confirmation dialog before deleting a hold
+  ///
+  /// In en, this message translates to:
+  /// **'Delete hold?'**
+  String get historyDeleteConfirmTitle;
+
+  /// Body text of the confirmation dialog before deleting a hold
+  ///
+  /// In en, this message translates to:
+  /// **'This can\'t be undone.'**
+  String get historyDeleteConfirmMessage;
+
+  /// Cancel button on the delete confirmation dialog and the edit form
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get historyCancelButton;
+
   /// Pill toggle segment label for the CO₂ table
   ///
   /// In en, this message translates to:

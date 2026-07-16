@@ -236,6 +236,50 @@
   "@historyLungVolLabel": {
     "description": "Label for the lung volume stat in the hold detail sheet"
   },
+  "historyPrepModeLabel": "Prep",
+  "@historyPrepModeLabel": {
+    "description": "Label for the prep mode stat in the hold detail sheet"
+  },
+  "historyPrepModeNone": "None",
+  "@historyPrepModeNone": {
+    "description": "Prep mode value: no prep, hold started immediately"
+  },
+  "historyPrepMode3s": "3s countdown",
+  "@historyPrepMode3s": {
+    "description": "Prep mode value: 3-second countdown"
+  },
+  "historyPrepModeShort": "Short breathing",
+  "@historyPrepModeShort": {
+    "description": "Prep mode value: short breathing guide"
+  },
+  "historyPrepModeFull": "Full breathing",
+  "@historyPrepModeFull": {
+    "description": "Prep mode value: full breathing guide"
+  },
+  "historyNotesLabel": "Notes",
+  "@historyNotesLabel": {
+    "description": "Label above the notes text in the hold detail sheet"
+  },
+  "historyEditButton": "Edit",
+  "@historyEditButton": {
+    "description": "Icon button tooltip/label that switches the hold detail sheet into edit mode"
+  },
+  "historyDeleteButton": "Delete",
+  "@historyDeleteButton": {
+    "description": "Icon button tooltip/label that deletes the hold, after confirmation"
+  },
+  "historyDeleteConfirmTitle": "Delete hold?",
+  "@historyDeleteConfirmTitle": {
+    "description": "Title of the confirmation dialog before deleting a hold"
+  },
+  "historyDeleteConfirmMessage": "This can't be undone.",
+  "@historyDeleteConfirmMessage": {
+    "description": "Body text of the confirmation dialog before deleting a hold"
+  },
+  "historyCancelButton": "Cancel",
+  "@historyCancelButton": {
+    "description": "Cancel button on the delete confirmation dialog and the edit form"
+  },
   "tablesCo2Toggle": "CO₂",
   "@tablesCo2Toggle": {
     "description": "Pill toggle segment label for the CO₂ table"
