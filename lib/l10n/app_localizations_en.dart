@@ -44,6 +44,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safetyAcknowledge => 'I understand';
 
   @override
+  String get settingsTrainingSection => 'Training';
+
+  @override
+  String get settingsCurrentMaxLabel => 'Current max';
+
+  @override
+  String get settingsCurrentMaxInvalid => 'Enter a valid time (mm:ss)';
+
+  @override
+  String get settingsDefaultPrepModeLabel => 'Default prep mode';
+
+  @override
+  String get settingsDefaultLungVolumeLabel => 'Default lung volume';
+
+  @override
   String get settingsAppearanceSection => 'Appearance';
 
   @override

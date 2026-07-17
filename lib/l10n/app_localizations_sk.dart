@@ -44,6 +44,21 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyAcknowledge => 'Rozumiem';
 
   @override
+  String get settingsTrainingSection => 'Tréning';
+
+  @override
+  String get settingsCurrentMaxLabel => 'Aktuálne maximum';
+
+  @override
+  String get settingsCurrentMaxInvalid => 'Zadaj platný čas (mm:ss)';
+
+  @override
+  String get settingsDefaultPrepModeLabel => 'Predvolený režim prípravy';
+
+  @override
+  String get settingsDefaultLungVolumeLabel => 'Predvolený objem pľúc';
+
+  @override
   String get settingsAppearanceSection => 'Vzhľad';
 
   @override

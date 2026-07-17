@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
 import 'theme_mode_provider.dart';
+import 'training_section.dart';
 
 // TODO(phase-1e): add safety re-acknowledgement option here
 class SettingsScreen extends ConsumerWidget {
@@ -19,6 +20,8 @@ class SettingsScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.navSettings)),
       body: ListView(
         children: [
+          _SectionHeader(title: l10n.settingsTrainingSection),
+          const TrainingSection(),
           _SectionHeader(title: l10n.settingsAppearanceSection),
           Padding(
             padding: const EdgeInsets.symmetric(

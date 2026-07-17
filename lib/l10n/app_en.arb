@@ -44,6 +44,26 @@
   "@safetyAcknowledge": {
     "description": "Acknowledge button on the safety screen"
   },
+  "settingsTrainingSection": "Training",
+  "@settingsTrainingSection": {
+    "description": "Settings section header for training defaults"
+  },
+  "settingsCurrentMaxLabel": "Current max",
+  "@settingsCurrentMaxLabel": {
+    "description": "Label for the editable current max hold field in Settings"
+  },
+  "settingsCurrentMaxInvalid": "Enter a valid time (mm:ss)",
+  "@settingsCurrentMaxInvalid": {
+    "description": "Validation error shown below the current max field when the entered time can't be parsed"
+  },
+  "settingsDefaultPrepModeLabel": "Default prep mode",
+  "@settingsDefaultPrepModeLabel": {
+    "description": "Label for the default prep mode selector in Settings"
+  },
+  "settingsDefaultLungVolumeLabel": "Default lung volume",
+  "@settingsDefaultLungVolumeLabel": {
+    "description": "Label for the default lung volume selector in Settings"
+  },
   "settingsAppearanceSection": "Appearance",
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"

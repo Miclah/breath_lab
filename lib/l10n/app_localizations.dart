@@ -164,6 +164,36 @@ abstract class AppLocalizations {
   /// **'I understand'**
   String get safetyAcknowledge;
 
+  /// Settings section header for training defaults
+  ///
+  /// In en, this message translates to:
+  /// **'Training'**
+  String get settingsTrainingSection;
+
+  /// Label for the editable current max hold field in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Current max'**
+  String get settingsCurrentMaxLabel;
+
+  /// Validation error shown below the current max field when the entered time can't be parsed
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid time (mm:ss)'**
+  String get settingsCurrentMaxInvalid;
+
+  /// Label for the default prep mode selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Default prep mode'**
+  String get settingsDefaultPrepModeLabel;
+
+  /// Label for the default lung volume selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Default lung volume'**
+  String get settingsDefaultLungVolumeLabel;
+
   /// Settings section header for appearance options
   ///
   /// In en, this message translates to:
