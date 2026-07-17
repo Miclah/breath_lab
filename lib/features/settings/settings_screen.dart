@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
 import 'section_header.dart';
 import 'theme_mode_provider.dart';
+import 'timer_section.dart';
 import 'training_section.dart';
 
 // TODO(phase-1e): add safety re-acknowledgement option here
@@ -23,6 +24,7 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           SectionHeader(title: l10n.settingsTrainingSection),
           const TrainingSection(),
+          const TimerSection(),
           SectionHeader(title: l10n.settingsAppearanceSection),
           Padding(
             padding: const EdgeInsets.symmetric(
