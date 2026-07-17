@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
 import 'co2_table_section.dart';
+import 'o2_table_section.dart';
 import 'section_header.dart';
 import 'theme_mode_provider.dart';
 import 'timer_section.dart';
@@ -27,6 +28,7 @@ class SettingsScreen extends ConsumerWidget {
           const TrainingSection(),
           const TimerSection(),
           const Co2TableSection(),
+          const O2TableSection(),
           SectionHeader(title: l10n.settingsAppearanceSection),
           Padding(
             padding: const EdgeInsets.symmetric(
