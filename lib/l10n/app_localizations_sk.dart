@@ -77,6 +77,30 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Výdych';
 
   @override
+  String get settingsCo2Section => 'CO₂ tabuľka';
+
+  @override
+  String get settingsO2Section => 'O₂ tabuľka';
+
+  @override
+  String get settingsRoundsLabel => 'Kolá';
+
+  @override
+  String get settingsCo2HoldPercentLabel => '% zadržania z maxima';
+
+  @override
+  String get settingsCo2RestDecrementLabel => 'Skrátenie oddychu';
+
+  @override
+  String get settingsO2MaxHoldPercentLabel => 'Max % zadržania z maxima';
+
+  @override
+  String get settingsO2FixedRestLabel => 'Pevný oddych';
+
+  @override
+  String get settingsTablePreviewTitle => 'Náhľad';
+
+  @override
   String get settingsAppearanceSection => 'Vzhľad';
 
   @override

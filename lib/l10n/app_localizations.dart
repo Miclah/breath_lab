@@ -230,6 +230,54 @@ abstract class AppLocalizations {
   /// **'Exhale'**
   String get settingsBreathingRatioExhaleLabel;
 
+  /// Settings section header for CO₂ table configuration
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ table'**
+  String get settingsCo2Section;
+
+  /// Settings section header for O₂ table configuration
+  ///
+  /// In en, this message translates to:
+  /// **'O₂ table'**
+  String get settingsO2Section;
+
+  /// Label for the rounds stepper in a table settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds'**
+  String get settingsRoundsLabel;
+
+  /// Label for the CO₂ table hold-percentage slider
+  ///
+  /// In en, this message translates to:
+  /// **'Hold % of max'**
+  String get settingsCo2HoldPercentLabel;
+
+  /// Label for the CO₂ table rest-decrement-per-round stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Rest decrement'**
+  String get settingsCo2RestDecrementLabel;
+
+  /// Label for the O₂ table max-hold-percentage slider
+  ///
+  /// In en, this message translates to:
+  /// **'Max hold % of max'**
+  String get settingsO2MaxHoldPercentLabel;
+
+  /// Label for the O₂ table fixed-rest stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed rest'**
+  String get settingsO2FixedRestLabel;
+
+  /// Heading above the live-computed round preview at the bottom of a table settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get settingsTablePreviewTitle;
+
   /// Settings section header for appearance options
   ///
   /// In en, this message translates to:

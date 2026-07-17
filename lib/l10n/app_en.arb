@@ -88,6 +88,38 @@
   "@settingsBreathingRatioExhaleLabel": {
     "description": "Label for the custom exhale-duration stepper"
   },
+  "settingsCo2Section": "CO₂ table",
+  "@settingsCo2Section": {
+    "description": "Settings section header for CO₂ table configuration"
+  },
+  "settingsO2Section": "O₂ table",
+  "@settingsO2Section": {
+    "description": "Settings section header for O₂ table configuration"
+  },
+  "settingsRoundsLabel": "Rounds",
+  "@settingsRoundsLabel": {
+    "description": "Label for the rounds stepper in a table settings section"
+  },
+  "settingsCo2HoldPercentLabel": "Hold % of max",
+  "@settingsCo2HoldPercentLabel": {
+    "description": "Label for the CO₂ table hold-percentage slider"
+  },
+  "settingsCo2RestDecrementLabel": "Rest decrement",
+  "@settingsCo2RestDecrementLabel": {
+    "description": "Label for the CO₂ table rest-decrement-per-round stepper"
+  },
+  "settingsO2MaxHoldPercentLabel": "Max hold % of max",
+  "@settingsO2MaxHoldPercentLabel": {
+    "description": "Label for the O₂ table max-hold-percentage slider"
+  },
+  "settingsO2FixedRestLabel": "Fixed rest",
+  "@settingsO2FixedRestLabel": {
+    "description": "Label for the O₂ table fixed-rest stepper"
+  },
+  "settingsTablePreviewTitle": "Preview",
+  "@settingsTablePreviewTitle": {
+    "description": "Heading above the live-computed round preview at the bottom of a table settings section"
+  },
   "settingsAppearanceSection": "Appearance",
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"

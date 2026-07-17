@@ -77,6 +77,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Exhale';
 
   @override
+  String get settingsCo2Section => 'CO₂ table';
+
+  @override
+  String get settingsO2Section => 'O₂ table';
+
+  @override
+  String get settingsRoundsLabel => 'Rounds';
+
+  @override
+  String get settingsCo2HoldPercentLabel => 'Hold % of max';
+
+  @override
+  String get settingsCo2RestDecrementLabel => 'Rest decrement';
+
+  @override
+  String get settingsO2MaxHoldPercentLabel => 'Max hold % of max';
+
+  @override
+  String get settingsO2FixedRestLabel => 'Fixed rest';
+
+  @override
+  String get settingsTablePreviewTitle => 'Preview';
+
+  @override
   String get settingsAppearanceSection => 'Appearance';
 
   @override

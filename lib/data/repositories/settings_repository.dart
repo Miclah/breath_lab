@@ -79,6 +79,49 @@ class SettingsRepository {
     await _set('breathing_ratio_inhale_s', inhaleSeconds.toString());
     await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
   }
+
+  /// CO₂ table config as (rounds, holdPercent 0-100, restDecrementSeconds).
+  /// Defaults per PRD: 7 rounds, 50% hold, 15s rest decrement.
+  Future<(int, int, int)> getCo2TableConfig() async {
+    final rounds = await _get('co2_rounds');
+    final holdPercent = await _get('co2_hold_percent');
+    final restDecrementS = await _get('co2_rest_decrement_s');
+    return (
+      rounds == null ? 7 : int.parse(rounds),
+      holdPercent == null ? 50 : int.parse(holdPercent),
+      restDecrementS == null ? 15 : int.parse(restDecrementS),
+    );
+  }
+
+  Future<void> setCo2Rounds(int rounds) =>
+      _set('co2_rounds', rounds.toString());
+
+  Future<void> setCo2HoldPercent(int percent) =>
+      _set('co2_hold_percent', percent.toString());
+
+  Future<void> setCo2RestDecrementSeconds(int seconds) =>
+      _set('co2_rest_decrement_s', seconds.toString());
+
+  /// O₂ table config as (rounds, maxHoldPercent 0-100, fixedRestSeconds).
+  /// Defaults per PRD: 8 rounds, 80% max hold, 120s fixed rest.
+  Future<(int, int, int)> getO2TableConfig() async {
+    final rounds = await _get('o2_rounds');
+    final maxHoldPercent = await _get('o2_max_hold_percent');
+    final restS = await _get('o2_rest_s');
+    return (
+      rounds == null ? 8 : int.parse(rounds),
+      maxHoldPercent == null ? 80 : int.parse(maxHoldPercent),
+      restS == null ? 120 : int.parse(restS),
+    );
+  }
+
+  Future<void> setO2Rounds(int rounds) => _set('o2_rounds', rounds.toString());
+
+  Future<void> setO2MaxHoldPercent(int percent) =>
+      _set('o2_max_hold_percent', percent.toString());
+
+  Future<void> setO2RestSeconds(int seconds) =>
+      _set('o2_rest_s', seconds.toString());
 }
 
 // ---------------------------------------------------------------------------
@@ -116,4 +159,16 @@ final prepBreathingDurationSecondsProvider = FutureProvider<int>((ref) async {
 /// writing to refresh.
 final breathingRatioProvider = FutureProvider<(int, int)>((ref) {
   return ref.watch(settingsRepositoryProvider).getBreathingRatio();
+});
+
+/// CO₂ table config as (rounds, holdPercent, restDecrementSeconds).
+/// Invalidate after writing to refresh.
+final co2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getCo2TableConfig();
+});
+
+/// O₂ table config as (rounds, maxHoldPercent, fixedRestSeconds).
+/// Invalidate after writing to refresh.
+final o2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getO2TableConfig();
 });
