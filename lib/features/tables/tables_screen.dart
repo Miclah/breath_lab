@@ -14,27 +14,24 @@ import 'round_list_item.dart';
 import 'session_summary_view.dart';
 import 'table_session_notifier.dart';
 
-// Default table config per PRD §1 — configurable in Settings in a later phase.
-const _co2Rounds = 7;
-const _co2HoldPercent = 0.5;
-const _co2RestDecrementS = 15;
-const _o2Rounds = 8;
-const _o2MaxHoldPercent = 0.8;
-const _o2RestS = 120;
-
-List<TableRoundPlan> _computeRounds(TableType type, int maxMs) {
+List<TableRoundPlan> _computeRounds(
+  TableType type,
+  int maxMs, {
+  required (int, int, int) co2Config,
+  required (int, int, int) o2Config,
+}) {
   return switch (type) {
     TableType.co2 => CO2TableCalculator.compute(
       maxMs: maxMs,
-      rounds: _co2Rounds,
-      holdPercent: _co2HoldPercent,
-      restDecrementS: _co2RestDecrementS,
+      rounds: co2Config.$1,
+      holdPercent: co2Config.$2 / 100,
+      restDecrementS: co2Config.$3,
     ),
     TableType.o2 => O2TableCalculator.compute(
       maxMs: maxMs,
-      rounds: _o2Rounds,
-      maxHoldPercent: _o2MaxHoldPercent,
-      restS: _o2RestS,
+      rounds: o2Config.$1,
+      maxHoldPercent: o2Config.$2 / 100,
+      restS: o2Config.$3,
     ),
   };
 }
@@ -56,6 +53,10 @@ class TablesScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final selectedType = ref.watch(selectedTableTypeProvider);
     final maxMsAsync = ref.watch(currentMaxMsProvider);
+    final co2Config =
+        ref.watch(co2TableConfigProvider).valueOrNull ?? (7, 50, 15);
+    final o2Config =
+        ref.watch(o2TableConfigProvider).valueOrNull ?? (8, 80, 120);
     final session = ref.watch(tableSessionProvider);
     final sessionActive = !session.isIdle;
 
@@ -88,7 +89,12 @@ class TablesScreen extends ConsumerWidget {
                 }
                 final rounds = sessionActive
                     ? session.rounds
-                    : _computeRounds(selectedType, maxMs);
+                    : _computeRounds(
+                        selectedType,
+                        maxMs,
+                        co2Config: co2Config,
+                        o2Config: o2Config,
+                      );
                 return Column(
                   children: [
                     if (session.isDone)
