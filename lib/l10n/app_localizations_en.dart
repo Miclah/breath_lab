@@ -101,6 +101,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Preview';
 
   @override
+  String get settingsSoundHapticsSection => 'Sound & haptics';
+
+  @override
+  String get settingsSoundEnabledLabel => 'Sound';
+
+  @override
+  String get settingsSoundVolumeLabel => 'Volume';
+
+  @override
+  String get settingsHapticIntensityLabel => 'Haptic intensity';
+
+  @override
+  String get settingsHapticOff => 'Off';
+
+  @override
+  String get settingsHapticLight => 'Light';
+
+  @override
+  String get settingsHapticMedium => 'Medium';
+
+  @override
+  String get settingsHapticStrong => 'Strong';
+
+  @override
+  String get settingsTestSoundButton => 'Test sound';
+
+  @override
+  String get settingsTestHapticButton => 'Test haptic';
+
+  @override
   String get settingsAppearanceSection => 'Appearance';
 
   @override

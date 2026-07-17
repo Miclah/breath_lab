@@ -120,6 +120,46 @@
   "@settingsTablePreviewTitle": {
     "description": "Heading above the live-computed round preview at the bottom of a table settings section"
   },
+  "settingsSoundHapticsSection": "Sound & haptics",
+  "@settingsSoundHapticsSection": {
+    "description": "Settings section header for sound and haptics options"
+  },
+  "settingsSoundEnabledLabel": "Sound",
+  "@settingsSoundEnabledLabel": {
+    "description": "Label for the sound on/off toggle in Settings"
+  },
+  "settingsSoundVolumeLabel": "Volume",
+  "@settingsSoundVolumeLabel": {
+    "description": "Label for the sound volume slider in Settings"
+  },
+  "settingsHapticIntensityLabel": "Haptic intensity",
+  "@settingsHapticIntensityLabel": {
+    "description": "Label for the haptic intensity selector in Settings"
+  },
+  "settingsHapticOff": "Off",
+  "@settingsHapticOff": {
+    "description": "Haptic intensity option: disabled"
+  },
+  "settingsHapticLight": "Light",
+  "@settingsHapticLight": {
+    "description": "Haptic intensity option: light"
+  },
+  "settingsHapticMedium": "Medium",
+  "@settingsHapticMedium": {
+    "description": "Haptic intensity option: medium"
+  },
+  "settingsHapticStrong": "Strong",
+  "@settingsHapticStrong": {
+    "description": "Haptic intensity option: strong"
+  },
+  "settingsTestSoundButton": "Test sound",
+  "@settingsTestSoundButton": {
+    "description": "Button that plays a sample audio cue at the current volume"
+  },
+  "settingsTestHapticButton": "Test haptic",
+  "@settingsTestHapticButton": {
+    "description": "Button that plays a sample vibration at the current haptic intensity"
+  },
   "settingsAppearanceSection": "Appearance",
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"

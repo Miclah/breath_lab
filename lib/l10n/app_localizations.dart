@@ -278,6 +278,66 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get settingsTablePreviewTitle;
 
+  /// Settings section header for sound and haptics options
+  ///
+  /// In en, this message translates to:
+  /// **'Sound & haptics'**
+  String get settingsSoundHapticsSection;
+
+  /// Label for the sound on/off toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get settingsSoundEnabledLabel;
+
+  /// Label for the sound volume slider in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get settingsSoundVolumeLabel;
+
+  /// Label for the haptic intensity selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Haptic intensity'**
+  String get settingsHapticIntensityLabel;
+
+  /// Haptic intensity option: disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsHapticOff;
+
+  /// Haptic intensity option: light
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settingsHapticLight;
+
+  /// Haptic intensity option: medium
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get settingsHapticMedium;
+
+  /// Haptic intensity option: strong
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get settingsHapticStrong;
+
+  /// Button that plays a sample audio cue at the current volume
+  ///
+  /// In en, this message translates to:
+  /// **'Test sound'**
+  String get settingsTestSoundButton;
+
+  /// Button that plays a sample vibration at the current haptic intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Test haptic'**
+  String get settingsTestHapticButton;
+
   /// Settings section header for appearance options
   ///
   /// In en, this message translates to:

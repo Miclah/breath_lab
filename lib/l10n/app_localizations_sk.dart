@@ -101,6 +101,36 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Náhľad';
 
   @override
+  String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
+
+  @override
+  String get settingsSoundEnabledLabel => 'Zvuk';
+
+  @override
+  String get settingsSoundVolumeLabel => 'Hlasitosť';
+
+  @override
+  String get settingsHapticIntensityLabel => 'Intenzita vibrácií';
+
+  @override
+  String get settingsHapticOff => 'Vypnuté';
+
+  @override
+  String get settingsHapticLight => 'Jemné';
+
+  @override
+  String get settingsHapticMedium => 'Stredné';
+
+  @override
+  String get settingsHapticStrong => 'Silné';
+
+  @override
+  String get settingsTestSoundButton => 'Vyskúšať zvuk';
+
+  @override
+  String get settingsTestHapticButton => 'Vyskúšať vibráciu';
+
+  @override
   String get settingsAppearanceSection => 'Vzhľad';
 
   @override

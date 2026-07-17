@@ -5,6 +5,27 @@ import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
 
+enum HapticIntensity {
+  off,
+  light,
+  medium,
+  strong;
+
+  String get dbValue => switch (this) {
+    HapticIntensity.off => 'off',
+    HapticIntensity.light => 'light',
+    HapticIntensity.medium => 'medium',
+    HapticIntensity.strong => 'strong',
+  };
+
+  static HapticIntensity fromDb(String? value) => switch (value) {
+    'off' => HapticIntensity.off,
+    'light' => HapticIntensity.light,
+    'strong' => HapticIntensity.strong,
+    _ => HapticIntensity.medium,
+  };
+}
+
 class SettingsRepository {
   SettingsRepository(this._db);
 
@@ -122,6 +143,33 @@ class SettingsRepository {
 
   Future<void> setO2RestSeconds(int seconds) =>
       _set('o2_rest_s', seconds.toString());
+
+  /// Whether sound cues are enabled. Defaults to on.
+  Future<bool> getSoundEnabled() async {
+    final value = await _get('sound_enabled');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setSoundEnabled(bool enabled) =>
+      _set('sound_enabled', enabled ? '1' : '0');
+
+  /// Sound volume as a percentage 0-100. Defaults to 100.
+  Future<int> getSoundVolume() async {
+    final value = await _get('sound_volume');
+    return value == null ? 100 : int.parse(value);
+  }
+
+  Future<void> setSoundVolume(int percent) =>
+      _set('sound_volume', percent.toString());
+
+  /// Haptic intensity. Defaults to medium.
+  Future<HapticIntensity> getHapticIntensity() async {
+    final value = await _get('haptic_intensity');
+    return HapticIntensity.fromDb(value);
+  }
+
+  Future<void> setHapticIntensity(HapticIntensity intensity) =>
+      _set('haptic_intensity', intensity.dbValue);
 }
 
 // ---------------------------------------------------------------------------
@@ -171,4 +219,19 @@ final co2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
 /// Invalidate after writing to refresh.
 final o2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
   return ref.watch(settingsRepositoryProvider).getO2TableConfig();
+});
+
+/// Whether sound cues are enabled. Invalidate after writing to refresh.
+final soundEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSoundEnabled();
+});
+
+/// Sound volume as a percentage 0-100. Invalidate after writing to refresh.
+final soundVolumeProvider = FutureProvider<int>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSoundVolume();
+});
+
+/// Haptic intensity. Invalidate after writing to refresh.
+final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
+  return ref.watch(settingsRepositoryProvider).getHapticIntensity();
 });
