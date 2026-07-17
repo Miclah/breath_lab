@@ -59,6 +59,24 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsDefaultLungVolumeLabel => 'Predvolený objem pľúc';
 
   @override
+  String get settingsTimerSection => 'Časovač';
+
+  @override
+  String get settingsPrepDurationLabel => 'Dĺžka dychovej prípravy';
+
+  @override
+  String get settingsBreathingRatioLabel => 'Pomer dýchania';
+
+  @override
+  String get settingsBreathingRatioCustom => 'Vlastný';
+
+  @override
+  String get settingsBreathingRatioInhaleLabel => 'Nádych';
+
+  @override
+  String get settingsBreathingRatioExhaleLabel => 'Výdych';
+
+  @override
   String get settingsAppearanceSection => 'Vzhľad';
 
   @override

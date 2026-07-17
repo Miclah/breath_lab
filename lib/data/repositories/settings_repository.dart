@@ -52,6 +52,33 @@ class SettingsRepository {
   }
 
   Future<void> setCurrentMaxMs(int ms) => _set('current_max_ms', ms.toString());
+
+  /// Prep breathing duration in seconds. Falls back to a mode-appropriate
+  /// default (30s for Short, 120s for Full) until the user overrides it —
+  /// switching between Short and Full re-suggests that default.
+  Future<int> getPrepBreathingDurationSeconds(PrepMode mode) async {
+    final stored = await _get('prep_breathing_duration_s');
+    if (stored != null) return int.parse(stored);
+    return mode == PrepMode.short ? 30 : 120;
+  }
+
+  Future<void> setPrepBreathingDurationSeconds(int seconds) =>
+      _set('prep_breathing_duration_s', seconds.toString());
+
+  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6.
+  Future<(int, int)> getBreathingRatio() async {
+    final inhale = await _get('breathing_ratio_inhale_s');
+    final exhale = await _get('breathing_ratio_exhale_s');
+    return (
+      inhale == null ? 4 : int.parse(inhale),
+      exhale == null ? 6 : int.parse(exhale),
+    );
+  }
+
+  Future<void> setBreathingRatio(int inhaleSeconds, int exhaleSeconds) async {
+    await _set('breathing_ratio_inhale_s', inhaleSeconds.toString());
+    await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -75,4 +102,18 @@ final defaultLungVolumeProvider = FutureProvider<LungVolume>((ref) {
 /// All-time PB in milliseconds, null if no hold saved yet.
 final currentMaxMsProvider = FutureProvider<int?>((ref) {
   return ref.watch(settingsRepositoryProvider).getCurrentMaxMs();
+});
+
+/// Prep breathing duration in seconds. Invalidate after writing to refresh.
+final prepBreathingDurationSecondsProvider = FutureProvider<int>((ref) async {
+  final mode = await ref.watch(defaultPrepModeProvider.future);
+  return ref
+      .watch(settingsRepositoryProvider)
+      .getPrepBreathingDurationSeconds(mode);
+});
+
+/// Breathing ratio as (inhaleSeconds, exhaleSeconds). Invalidate after
+/// writing to refresh.
+final breathingRatioProvider = FutureProvider<(int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getBreathingRatio();
 });

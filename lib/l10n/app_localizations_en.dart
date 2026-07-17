@@ -59,6 +59,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDefaultLungVolumeLabel => 'Default lung volume';
 
   @override
+  String get settingsTimerSection => 'Timer';
+
+  @override
+  String get settingsPrepDurationLabel => 'Prep breathing duration';
+
+  @override
+  String get settingsBreathingRatioLabel => 'Breathing ratio';
+
+  @override
+  String get settingsBreathingRatioCustom => 'Custom';
+
+  @override
+  String get settingsBreathingRatioInhaleLabel => 'Inhale';
+
+  @override
+  String get settingsBreathingRatioExhaleLabel => 'Exhale';
+
+  @override
   String get settingsAppearanceSection => 'Appearance';
 
   @override

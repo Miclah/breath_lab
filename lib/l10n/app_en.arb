@@ -64,6 +64,30 @@
   "@settingsDefaultLungVolumeLabel": {
     "description": "Label for the default lung volume selector in Settings"
   },
+  "settingsTimerSection": "Timer",
+  "@settingsTimerSection": {
+    "description": "Settings section header for prep breathing duration and ratio, shown only when default prep mode is Short or Full"
+  },
+  "settingsPrepDurationLabel": "Prep breathing duration",
+  "@settingsPrepDurationLabel": {
+    "description": "Label for the prep breathing duration stepper in Settings"
+  },
+  "settingsBreathingRatioLabel": "Breathing ratio",
+  "@settingsBreathingRatioLabel": {
+    "description": "Label for the breathing ratio preset selector in Settings"
+  },
+  "settingsBreathingRatioCustom": "Custom",
+  "@settingsBreathingRatioCustom": {
+    "description": "Segment label that reveals custom inhale/exhale steppers for the breathing ratio"
+  },
+  "settingsBreathingRatioInhaleLabel": "Inhale",
+  "@settingsBreathingRatioInhaleLabel": {
+    "description": "Label for the custom inhale-duration stepper"
+  },
+  "settingsBreathingRatioExhaleLabel": "Exhale",
+  "@settingsBreathingRatioExhaleLabel": {
+    "description": "Label for the custom exhale-duration stepper"
+  },
   "settingsAppearanceSection": "Appearance",
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"

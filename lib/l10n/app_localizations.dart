@@ -194,6 +194,42 @@ abstract class AppLocalizations {
   /// **'Default lung volume'**
   String get settingsDefaultLungVolumeLabel;
 
+  /// Settings section header for prep breathing duration and ratio, shown only when default prep mode is Short or Full
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get settingsTimerSection;
+
+  /// Label for the prep breathing duration stepper in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Prep breathing duration'**
+  String get settingsPrepDurationLabel;
+
+  /// Label for the breathing ratio preset selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing ratio'**
+  String get settingsBreathingRatioLabel;
+
+  /// Segment label that reveals custom inhale/exhale steppers for the breathing ratio
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settingsBreathingRatioCustom;
+
+  /// Label for the custom inhale-duration stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Inhale'**
+  String get settingsBreathingRatioInhaleLabel;
+
+  /// Label for the custom exhale-duration stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Exhale'**
+  String get settingsBreathingRatioExhaleLabel;
+
   /// Settings section header for appearance options
   ///
   /// In en, this message translates to:
