@@ -26,6 +26,30 @@ enum HapticIntensity {
   };
 }
 
+enum SpokenCalloutsMode {
+  off,
+  milestones,
+  every30s,
+  every15s,
+  dense;
+
+  String get dbValue => switch (this) {
+    SpokenCalloutsMode.off => 'off',
+    SpokenCalloutsMode.milestones => 'milestones',
+    SpokenCalloutsMode.every30s => '30s',
+    SpokenCalloutsMode.every15s => '15s',
+    SpokenCalloutsMode.dense => 'dense',
+  };
+
+  static SpokenCalloutsMode fromDb(String? value) => switch (value) {
+    'off' => SpokenCalloutsMode.off,
+    '30s' => SpokenCalloutsMode.every30s,
+    '15s' => SpokenCalloutsMode.every15s,
+    'dense' => SpokenCalloutsMode.dense,
+    _ => SpokenCalloutsMode.milestones,
+  };
+}
+
 class SettingsRepository {
   SettingsRepository(this._db);
 
@@ -181,6 +205,22 @@ class SettingsRepository {
 
   Future<void> setAppLanguage(String? code) =>
       code == null ? _delete('app_language') : _set('app_language', code);
+
+  /// Spoken callouts mode. Defaults to milestones.
+  Future<SpokenCalloutsMode> getSpokenCalloutsMode() async {
+    final value = await _get('spoken_callouts');
+    return SpokenCalloutsMode.fromDb(value);
+  }
+
+  Future<void> setSpokenCalloutsMode(SpokenCalloutsMode mode) =>
+      _set('spoken_callouts', mode.dbValue);
+
+  /// TTS voice language code ('sk' | 'en'), or null to follow the app UI
+  /// language. Defaults to null.
+  Future<String?> getTtsLanguage() => _get('tts_language');
+
+  Future<void> setTtsLanguage(String? code) =>
+      code == null ? _delete('tts_language') : _set('tts_language', code);
 }
 
 // ---------------------------------------------------------------------------
@@ -251,4 +291,24 @@ final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
 /// Invalidate after writing to refresh.
 final appLanguageProvider = FutureProvider<String?>((ref) {
   return ref.watch(settingsRepositoryProvider).getAppLanguage();
+});
+
+/// Spoken callouts mode. Invalidate after writing to refresh.
+final spokenCalloutsModeProvider = FutureProvider<SpokenCalloutsMode>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSpokenCalloutsMode();
+});
+
+/// TTS voice language code ('sk' | 'en'), or null to follow the app UI
+/// language. Invalidate after writing to refresh.
+final ttsLanguageProvider = FutureProvider<String?>((ref) {
+  return ref.watch(settingsRepositoryProvider).getTtsLanguage();
+});
+
+/// Effective TTS voice language: the explicit override if set, else the
+/// app UI language, else English.
+final effectiveTtsLanguageProvider = FutureProvider<String>((ref) async {
+  final explicit = await ref.watch(ttsLanguageProvider.future);
+  if (explicit != null) return explicit;
+  final appLanguage = await ref.watch(appLanguageProvider.future);
+  return appLanguage ?? 'en';
 });

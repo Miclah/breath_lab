@@ -101,6 +101,37 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Náhľad';
 
   @override
+  String get settingsAmbientSection => 'Ambientný režim';
+
+  @override
+  String get settingsAmbientIntro =>
+      'BreathLab je navrhnutý tak, aby fungoval na pozadí, kým robíš niečo iné. Tieto nastavenia ti umožňujú prispôsobiť, ako sa ti aplikácia ozve počas zadržania.';
+
+  @override
+  String get settingsSpokenCalloutsLabel => 'Hlasové oznámenia';
+
+  @override
+  String get settingsCalloutsOff => 'Vypnuté';
+
+  @override
+  String get settingsCalloutsMilestones => 'Míľniky';
+
+  @override
+  String get settingsCallouts30s => '30s';
+
+  @override
+  String get settingsCallouts15s => '15s';
+
+  @override
+  String get settingsCalloutsDense => 'Husté';
+
+  @override
+  String get settingsTtsLanguageLabel => 'Jazyk hlasu';
+
+  @override
+  String get settingsTtsLanguageFollowApp => 'Podľa jazyka aplikácie';
+
+  @override
   String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
 
   @override

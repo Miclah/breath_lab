@@ -278,6 +278,66 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get settingsTablePreviewTitle;
 
+  /// Settings section header for ambient-mode options
+  ///
+  /// In en, this message translates to:
+  /// **'Ambient mode'**
+  String get settingsAmbientSection;
+
+  /// Intro paragraph shown above the ambient mode toggles
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab is designed to work in the background while you do something else. These settings let you tune how the app reaches you during a hold.'**
+  String get settingsAmbientIntro;
+
+  /// Label for the spoken callouts mode selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Spoken callouts'**
+  String get settingsSpokenCalloutsLabel;
+
+  /// Spoken callouts mode: disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsCalloutsOff;
+
+  /// Spoken callouts mode: milestones only
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones'**
+  String get settingsCalloutsMilestones;
+
+  /// Spoken callouts mode: every 30 seconds
+  ///
+  /// In en, this message translates to:
+  /// **'30s'**
+  String get settingsCallouts30s;
+
+  /// Spoken callouts mode: every 15 seconds
+  ///
+  /// In en, this message translates to:
+  /// **'15s'**
+  String get settingsCallouts15s;
+
+  /// Spoken callouts mode: dense (15s, then every 5s past 90% of PB)
+  ///
+  /// In en, this message translates to:
+  /// **'Dense'**
+  String get settingsCalloutsDense;
+
+  /// Label for the TTS voice language selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'TTS voice language'**
+  String get settingsTtsLanguageLabel;
+
+  /// TTS voice language option: use whatever language the app UI is currently in
+  ///
+  /// In en, this message translates to:
+  /// **'Follow app language'**
+  String get settingsTtsLanguageFollowApp;
+
   /// Settings section header for sound and haptics options
   ///
   /// In en, this message translates to:

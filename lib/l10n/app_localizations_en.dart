@@ -101,6 +101,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Preview';
 
   @override
+  String get settingsAmbientSection => 'Ambient mode';
+
+  @override
+  String get settingsAmbientIntro =>
+      'BreathLab is designed to work in the background while you do something else. These settings let you tune how the app reaches you during a hold.';
+
+  @override
+  String get settingsSpokenCalloutsLabel => 'Spoken callouts';
+
+  @override
+  String get settingsCalloutsOff => 'Off';
+
+  @override
+  String get settingsCalloutsMilestones => 'Milestones';
+
+  @override
+  String get settingsCallouts30s => '30s';
+
+  @override
+  String get settingsCallouts15s => '15s';
+
+  @override
+  String get settingsCalloutsDense => 'Dense';
+
+  @override
+  String get settingsTtsLanguageLabel => 'TTS voice language';
+
+  @override
+  String get settingsTtsLanguageFollowApp => 'Follow app language';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override

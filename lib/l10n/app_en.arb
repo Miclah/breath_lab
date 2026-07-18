@@ -120,6 +120,46 @@
   "@settingsTablePreviewTitle": {
     "description": "Heading above the live-computed round preview at the bottom of a table settings section"
   },
+  "settingsAmbientSection": "Ambient mode",
+  "@settingsAmbientSection": {
+    "description": "Settings section header for ambient-mode options"
+  },
+  "settingsAmbientIntro": "BreathLab is designed to work in the background while you do something else. These settings let you tune how the app reaches you during a hold.",
+  "@settingsAmbientIntro": {
+    "description": "Intro paragraph shown above the ambient mode toggles"
+  },
+  "settingsSpokenCalloutsLabel": "Spoken callouts",
+  "@settingsSpokenCalloutsLabel": {
+    "description": "Label for the spoken callouts mode selector in Settings"
+  },
+  "settingsCalloutsOff": "Off",
+  "@settingsCalloutsOff": {
+    "description": "Spoken callouts mode: disabled"
+  },
+  "settingsCalloutsMilestones": "Milestones",
+  "@settingsCalloutsMilestones": {
+    "description": "Spoken callouts mode: milestones only"
+  },
+  "settingsCallouts30s": "30s",
+  "@settingsCallouts30s": {
+    "description": "Spoken callouts mode: every 30 seconds"
+  },
+  "settingsCallouts15s": "15s",
+  "@settingsCallouts15s": {
+    "description": "Spoken callouts mode: every 15 seconds"
+  },
+  "settingsCalloutsDense": "Dense",
+  "@settingsCalloutsDense": {
+    "description": "Spoken callouts mode: dense (15s, then every 5s past 90% of PB)"
+  },
+  "settingsTtsLanguageLabel": "TTS voice language",
+  "@settingsTtsLanguageLabel": {
+    "description": "Label for the TTS voice language selector in Settings"
+  },
+  "settingsTtsLanguageFollowApp": "Follow app language",
+  "@settingsTtsLanguageFollowApp": {
+    "description": "TTS voice language option: use whatever language the app UI is currently in"
+  },
   "settingsSoundHapticsSection": "Sound & haptics",
   "@settingsSoundHapticsSection": {
     "description": "Settings section header for sound and haptics options"
