@@ -4,6 +4,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/audio_service.dart';
 import '../../domain/services/haptics_service.dart';
+import '../../domain/services/tts_service.dart';
 
 /// Which table (CO₂ or O₂) is currently shown on the Tables screen.
 final selectedTableTypeProvider = StateProvider<TableType>(
@@ -27,3 +28,14 @@ final audioServiceProvider = Provider<AudioService>((ref) {
 final hapticsServiceProvider = Provider<HapticsService>(
   (ref) => HapticsService(),
 );
+
+final ttsServiceProvider = Provider<TtsService>((ref) {
+  final service = TtsService();
+  ref.onDispose(service.dispose);
+
+  ref.listen(effectiveTtsLanguageProvider, (_, next) {
+    next.whenData(service.setLanguage);
+  }, fireImmediately: true);
+
+  return service;
+});
