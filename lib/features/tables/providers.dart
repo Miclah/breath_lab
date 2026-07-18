@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/audio_service.dart';
 import '../../domain/services/haptics_service.dart';
@@ -12,6 +13,14 @@ final selectedTableTypeProvider = StateProvider<TableType>(
 final audioServiceProvider = Provider<AudioService>((ref) {
   final service = AudioService();
   ref.onDispose(service.dispose);
+
+  ref.listen(soundEnabledProvider, (_, next) {
+    next.whenData((enabled) => service.enabled = enabled);
+  }, fireImmediately: true);
+  ref.listen(soundVolumeProvider, (_, next) {
+    next.whenData((percent) => service.volume = percent / 100);
+  }, fireImmediately: true);
+
   return service;
 });
 
