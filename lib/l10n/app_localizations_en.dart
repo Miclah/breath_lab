@@ -146,6 +146,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeSystem => 'System';
 
   @override
+  String get settingsAppLanguageLabel => 'App language';
+
+  @override
+  String get settingsLanguageSlovak => 'Slovak';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
   String get presetQuickMax => 'Quick max';
 
   @override

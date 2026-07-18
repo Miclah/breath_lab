@@ -368,6 +368,24 @@ abstract class AppLocalizations {
   /// **'System'**
   String get themeSystem;
 
+  /// Label for the app UI language selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get settingsAppLanguageLabel;
+
+  /// App language option: Slovak
+  ///
+  /// In en, this message translates to:
+  /// **'Slovak'**
+  String get settingsLanguageSlovak;
+
+  /// App language option: English
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
   /// Quick preset chip label — no prep, hold immediately
   ///
   /// In en, this message translates to:

@@ -180,6 +180,18 @@
   "@themeSystem": {
     "description": "System (follow OS) theme option label"
   },
+  "settingsAppLanguageLabel": "App language",
+  "@settingsAppLanguageLabel": {
+    "description": "Label for the app UI language selector in Settings"
+  },
+  "settingsLanguageSlovak": "Slovak",
+  "@settingsLanguageSlovak": {
+    "description": "App language option: Slovak"
+  },
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {
+    "description": "App language option: English"
+  },
   "presetQuickMax": "Quick max",
   "@presetQuickMax": {
     "description": "Quick preset chip label — no prep, hold immediately"

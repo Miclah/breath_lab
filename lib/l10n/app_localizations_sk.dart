@@ -146,6 +146,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get themeSystem => 'Systém';
 
   @override
+  String get settingsAppLanguageLabel => 'Jazyk aplikácie';
+
+  @override
+  String get settingsLanguageSlovak => 'Slovenčina';
+
+  @override
+  String get settingsLanguageEnglish => 'Angličtina';
+
+  @override
   String get presetQuickMax => 'Rýchly max';
 
   @override

@@ -51,6 +51,10 @@ class SettingsRepository {
         );
   }
 
+  Future<void> _delete(String key) async {
+    await (_db.delete(_db.settings)..where((t) => t.key.equals(key))).go();
+  }
+
   Future<PrepMode> getDefaultPrepMode() async {
     final value = await _get('default_prep_mode');
     return PrepMode.fromDb(value) ?? PrepMode.threeSeconds;
@@ -170,6 +174,13 @@ class SettingsRepository {
 
   Future<void> setHapticIntensity(HapticIntensity intensity) =>
       _set('haptic_intensity', intensity.dbValue);
+
+  /// App UI language code ('sk' | 'en'), or null to follow the system
+  /// locale. Defaults to null.
+  Future<String?> getAppLanguage() => _get('app_language');
+
+  Future<void> setAppLanguage(String? code) =>
+      code == null ? _delete('app_language') : _set('app_language', code);
 }
 
 // ---------------------------------------------------------------------------
@@ -234,4 +245,10 @@ final soundVolumeProvider = FutureProvider<int>((ref) {
 /// Haptic intensity. Invalidate after writing to refresh.
 final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
   return ref.watch(settingsRepositoryProvider).getHapticIntensity();
+});
+
+/// App UI language code ('sk' | 'en'), or null to follow the system locale.
+/// Invalidate after writing to refresh.
+final appLanguageProvider = FutureProvider<String?>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAppLanguage();
 });
