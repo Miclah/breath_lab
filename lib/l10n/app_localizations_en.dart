@@ -134,6 +134,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAppearanceSection => 'Appearance';
 
   @override
+  String get settingsAboutSection => 'About';
+
+  @override
+  String get settingsSafetyInfoLink => 'Safety information';
+
+  @override
+  String get settingsVersionLabel => 'Version';
+
+  @override
+  String get settingsResetLabel => 'Reset all data';
+
+  @override
+  String get settingsResetConfirmTitle => 'Reset all data?';
+
+  @override
+  String get settingsResetConfirmMessage =>
+      'This deletes every hold, table session, tag, and setting on this device. This can\'t be undone.';
+
+  @override
+  String get settingsResetButton => 'Reset';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

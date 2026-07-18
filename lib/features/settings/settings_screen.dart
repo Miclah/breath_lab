@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import 'about_section.dart';
 import 'appearance_section.dart';
 import 'co2_table_section.dart';
 import 'o2_table_section.dart';
@@ -10,7 +11,6 @@ import 'sound_haptics_section.dart';
 import 'timer_section.dart';
 import 'training_section.dart';
 
-// TODO(phase-1e): add safety re-acknowledgement option here
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -30,6 +30,8 @@ class SettingsScreen extends ConsumerWidget {
           const SoundHapticsSection(),
           SectionHeader(title: l10n.settingsAppearanceSection),
           const AppearanceSection(),
+          SectionHeader(title: l10n.settingsAboutSection),
+          const AboutSection(),
         ],
       ),
     );

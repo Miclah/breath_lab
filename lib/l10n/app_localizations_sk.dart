@@ -134,6 +134,28 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsAppearanceSection => 'Vzhľad';
 
   @override
+  String get settingsAboutSection => 'O aplikácii';
+
+  @override
+  String get settingsSafetyInfoLink => 'Bezpečnostné informácie';
+
+  @override
+  String get settingsVersionLabel => 'Verzia';
+
+  @override
+  String get settingsResetLabel => 'Vymazať všetky dáta';
+
+  @override
+  String get settingsResetConfirmTitle => 'Vymazať všetky dáta?';
+
+  @override
+  String get settingsResetConfirmMessage =>
+      'Týmto sa vymažú všetky pokusy, tabuľkové série, tagy a nastavenia v tomto zariadení. Túto akciu nemožno vrátiť späť.';
+
+  @override
+  String get settingsResetButton => 'Vymazať';
+
+  @override
   String get settingsThemeLabel => 'Téma';
 
   @override

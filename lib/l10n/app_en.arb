@@ -164,6 +164,34 @@
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"
   },
+  "settingsAboutSection": "About",
+  "@settingsAboutSection": {
+    "description": "Settings section header for safety info, version, and reset"
+  },
+  "settingsSafetyInfoLink": "Safety information",
+  "@settingsSafetyInfoLink": {
+    "description": "Row that opens the safety screen from Settings"
+  },
+  "settingsVersionLabel": "Version",
+  "@settingsVersionLabel": {
+    "description": "Row showing the app version and build number"
+  },
+  "settingsResetLabel": "Reset all data",
+  "@settingsResetLabel": {
+    "description": "Row that opens the reset-all-data confirmation dialog"
+  },
+  "settingsResetConfirmTitle": "Reset all data?",
+  "@settingsResetConfirmTitle": {
+    "description": "Title of the reset-all-data confirmation dialog"
+  },
+  "settingsResetConfirmMessage": "This deletes every hold, table session, tag, and setting on this device. This can't be undone.",
+  "@settingsResetConfirmMessage": {
+    "description": "Body text of the reset-all-data confirmation dialog"
+  },
+  "settingsResetButton": "Reset",
+  "@settingsResetButton": {
+    "description": "Confirm button in the reset-all-data confirmation dialog"
+  },
   "settingsThemeLabel": "Theme",
   "@settingsThemeLabel": {
     "description": "Label for the theme selector in Settings"

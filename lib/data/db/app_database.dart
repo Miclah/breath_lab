@@ -113,6 +113,19 @@ class AppDatabase extends _$AppDatabase {
     },
   );
 
+  /// Wipes all locally stored data (holds, tags, table sessions, settings)
+  /// and re-seeds the built-in tags, as if the app were freshly installed.
+  Future<void> resetAllData() async {
+    await transaction(() async {
+      await delete(holdTags).go();
+      await delete(holds).go();
+      await delete(tableSessions).go();
+      await delete(tags).go();
+      await delete(settings).go();
+      await _seedBuiltInTags();
+    });
+  }
+
   Future<void> _seedBuiltInTags() async {
     const uuid = Uuid();
     final now = DateTime.now().millisecondsSinceEpoch;

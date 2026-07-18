@@ -344,6 +344,48 @@ abstract class AppLocalizations {
   /// **'Appearance'**
   String get settingsAppearanceSection;
 
+  /// Settings section header for safety info, version, and reset
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAboutSection;
+
+  /// Row that opens the safety screen from Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Safety information'**
+  String get settingsSafetyInfoLink;
+
+  /// Row showing the app version and build number
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settingsVersionLabel;
+
+  /// Row that opens the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all data'**
+  String get settingsResetLabel;
+
+  /// Title of the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all data?'**
+  String get settingsResetConfirmTitle;
+
+  /// Body text of the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every hold, table session, tag, and setting on this device. This can\'t be undone.'**
+  String get settingsResetConfirmMessage;
+
+  /// Confirm button in the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get settingsResetButton;
+
   /// Label for the theme selector in Settings
   ///
   /// In en, this message translates to:
