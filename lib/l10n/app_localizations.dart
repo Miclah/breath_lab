@@ -626,6 +626,18 @@ abstract class AppLocalizations {
   /// **'Stop'**
   String get timerStopButton;
 
+  /// Body text of the persistent hold notification (Android)
+  ///
+  /// In en, this message translates to:
+  /// **'Max hold'**
+  String get notificationMaxHoldBody;
+
+  /// Action button label on the persistent hold notification (Android)
+  ///
+  /// In en, this message translates to:
+  /// **'Mark contraction'**
+  String get notificationMarkContractionAction;
+
   /// Action button label in the done state before the result screen is available
   ///
   /// In en, this message translates to:

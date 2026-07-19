@@ -279,6 +279,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get timerStopButton => 'Stop';
 
   @override
+  String get notificationMaxHoldBody => 'Max zadržanie';
+
+  @override
+  String get notificationMarkContractionAction => 'Označiť kontrakciu';
+
+  @override
   String get timerResetButton => 'Resetovať';
 
   @override

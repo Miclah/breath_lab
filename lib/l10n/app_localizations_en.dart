@@ -278,6 +278,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timerStopButton => 'Stop';
 
   @override
+  String get notificationMaxHoldBody => 'Max hold';
+
+  @override
+  String get notificationMarkContractionAction => 'Mark contraction';
+
+  @override
   String get timerResetButton => 'Reset';
 
   @override

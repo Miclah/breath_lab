@@ -352,6 +352,14 @@
   "@timerStopButton": {
     "description": "Action button label during an active hold"
   },
+  "notificationMaxHoldBody": "Max hold",
+  "@notificationMaxHoldBody": {
+    "description": "Body text of the persistent hold notification (Android)"
+  },
+  "notificationMarkContractionAction": "Mark contraction",
+  "@notificationMarkContractionAction": {
+    "description": "Action button label on the persistent hold notification (Android)"
+  },
   "timerResetButton": "Reset",
   "@timerResetButton": {
     "description": "Action button label in the done state before the result screen is available"

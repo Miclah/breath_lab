@@ -88,6 +88,8 @@
   "prepSkip": "Preskočiť →",
   "timerStartButton": "Štart",
   "timerStopButton": "Stop",
+  "notificationMaxHoldBody": "Max zadržanie",
+  "notificationMarkContractionAction": "Označiť kontrakciu",
   "timerResetButton": "Resetovať",
   "timerStateLabelHold": "drž",
   "timerStateLabelDone": "hotovo",
