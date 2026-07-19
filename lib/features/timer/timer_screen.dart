@@ -8,6 +8,7 @@ import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import 'callout_listener.dart';
 import 'preset_chip_row.dart';
 import 'prep_phase_widget.dart';
 import 'providers.dart';
@@ -98,6 +99,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   padding: EdgeInsets.symmetric(horizontal: hPad),
                   child: Column(
                     children: [
+                      const CalloutListener(),
                       const SizedBox(height: Spacing.lg),
                       if (state.isIdle) const PresetChipRow(),
                       Expanded(
