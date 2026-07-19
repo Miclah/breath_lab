@@ -101,6 +101,39 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Náhľad';
 
   @override
+  String get ttsMilestoneOneMinute => 'Jedna minúta';
+
+  @override
+  String get ttsMilestoneOneThirty => 'Jedna tridsať';
+
+  @override
+  String get ttsMilestoneTwoMinutes => 'Dve minúty';
+
+  @override
+  String get ttsMilestoneTwoThirty => 'Dve tridsať';
+
+  @override
+  String get ttsMilestoneThreeMinutes => 'Tri minúty';
+
+  @override
+  String get ttsMilestoneThreeThirty => 'Tri tridsať';
+
+  @override
+  String get ttsMilestoneFourMinutes => 'Štyri minúty';
+
+  @override
+  String get ttsHalfwayToPb => 'Polovica k najlepšiemu času';
+
+  @override
+  String get ttsThirtySecondsToPb => 'Tridsať sekúnd k najlepšiemu času';
+
+  @override
+  String get ttsAtPb => 'Osobný rekord';
+
+  @override
+  String get ttsPastPb => 'Nový osobný rekord';
+
+  @override
   String get settingsAmbientSection => 'Ambientný režim';
 
   @override

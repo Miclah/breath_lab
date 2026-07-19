@@ -101,6 +101,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Preview';
 
   @override
+  String get ttsMilestoneOneMinute => 'One minute';
+
+  @override
+  String get ttsMilestoneOneThirty => 'One thirty';
+
+  @override
+  String get ttsMilestoneTwoMinutes => 'Two minutes';
+
+  @override
+  String get ttsMilestoneTwoThirty => 'Two thirty';
+
+  @override
+  String get ttsMilestoneThreeMinutes => 'Three minutes';
+
+  @override
+  String get ttsMilestoneThreeThirty => 'Three thirty';
+
+  @override
+  String get ttsMilestoneFourMinutes => 'Four minutes';
+
+  @override
+  String get ttsHalfwayToPb => 'Halfway to your best';
+
+  @override
+  String get ttsThirtySecondsToPb => 'Thirty seconds to your best';
+
+  @override
+  String get ttsAtPb => 'Personal best';
+
+  @override
+  String get ttsPastPb => 'New personal best';
+
+  @override
   String get settingsAmbientSection => 'Ambient mode';
 
   @override

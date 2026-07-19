@@ -120,6 +120,50 @@
   "@settingsTablePreviewTitle": {
     "description": "Heading above the live-computed round preview at the bottom of a table settings section"
   },
+  "ttsMilestoneOneMinute": "One minute",
+  "@ttsMilestoneOneMinute": {
+    "description": "Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language."
+  },
+  "ttsMilestoneOneThirty": "One thirty",
+  "@ttsMilestoneOneThirty": {
+    "description": "Spoken TTS callout at 1:30 elapsed."
+  },
+  "ttsMilestoneTwoMinutes": "Two minutes",
+  "@ttsMilestoneTwoMinutes": {
+    "description": "Spoken TTS callout at 2:00 elapsed."
+  },
+  "ttsMilestoneTwoThirty": "Two thirty",
+  "@ttsMilestoneTwoThirty": {
+    "description": "Spoken TTS callout at 2:30 elapsed."
+  },
+  "ttsMilestoneThreeMinutes": "Three minutes",
+  "@ttsMilestoneThreeMinutes": {
+    "description": "Spoken TTS callout at 3:00 elapsed."
+  },
+  "ttsMilestoneThreeThirty": "Three thirty",
+  "@ttsMilestoneThreeThirty": {
+    "description": "Spoken TTS callout at 3:30 elapsed."
+  },
+  "ttsMilestoneFourMinutes": "Four minutes",
+  "@ttsMilestoneFourMinutes": {
+    "description": "Spoken TTS callout at 4:00 elapsed."
+  },
+  "ttsHalfwayToPb": "Halfway to your best",
+  "@ttsHalfwayToPb": {
+    "description": "Spoken TTS callout at half the current personal best."
+  },
+  "ttsThirtySecondsToPb": "Thirty seconds to your best",
+  "@ttsThirtySecondsToPb": {
+    "description": "Spoken TTS callout 30 seconds before the current personal best."
+  },
+  "ttsAtPb": "Personal best",
+  "@ttsAtPb": {
+    "description": "Spoken TTS callout at the current personal best."
+  },
+  "ttsPastPb": "New personal best",
+  "@ttsPastPb": {
+    "description": "Spoken TTS callout just past the current personal best."
+  },
   "settingsAmbientSection": "Ambient mode",
   "@settingsAmbientSection": {
     "description": "Settings section header for ambient-mode options"

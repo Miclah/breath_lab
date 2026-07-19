@@ -278,6 +278,72 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get settingsTablePreviewTitle;
 
+  /// Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute'**
+  String get ttsMilestoneOneMinute;
+
+  /// Spoken TTS callout at 1:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'One thirty'**
+  String get ttsMilestoneOneThirty;
+
+  /// Spoken TTS callout at 2:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Two minutes'**
+  String get ttsMilestoneTwoMinutes;
+
+  /// Spoken TTS callout at 2:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Two thirty'**
+  String get ttsMilestoneTwoThirty;
+
+  /// Spoken TTS callout at 3:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Three minutes'**
+  String get ttsMilestoneThreeMinutes;
+
+  /// Spoken TTS callout at 3:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Three thirty'**
+  String get ttsMilestoneThreeThirty;
+
+  /// Spoken TTS callout at 4:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Four minutes'**
+  String get ttsMilestoneFourMinutes;
+
+  /// Spoken TTS callout at half the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfway to your best'**
+  String get ttsHalfwayToPb;
+
+  /// Spoken TTS callout 30 seconds before the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Thirty seconds to your best'**
+  String get ttsThirtySecondsToPb;
+
+  /// Spoken TTS callout at the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal best'**
+  String get ttsAtPb;
+
+  /// Spoken TTS callout just past the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'New personal best'**
+  String get ttsPastPb;
+
   /// Settings section header for ambient-mode options
   ///
   /// In en, this message translates to:
