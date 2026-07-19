@@ -1,4 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Persistent notification with a live timer during an active hold
+         (PRD §A2). "specialUse" is the correct foreground service type here
+         — "health" was tried first but Android requires a companion sensor
+         permission (BODY_SENSORS/ACTIVITY_RECOGNITION/etc.) that has
+         nothing to do with a breath-hold timer. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="breath_lab"
         android:name="${applicationName}"
@@ -30,6 +38,23 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Backing service for flutter_local_notifications' foreground
+             service API (startForegroundService/stopForegroundService). -->
+        <service
+            android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
+            android:exported="false"
+            android:stopWithTask="true"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="breath_hold_training_timer" />
+        </service>
+        <!-- Receives Stop/Mark contraction notification action taps. The
+             plugin's own manifest doesn't declare this — it must be added
+             by the app, same as the foreground service above. -->
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+            android:exported="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
