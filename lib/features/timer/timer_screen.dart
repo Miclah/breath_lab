@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'callout_listener.dart';
+import 'hold_notification_listener.dart';
 import 'preset_chip_row.dart';
 import 'prep_phase_widget.dart';
 import 'providers.dart';
@@ -93,32 +94,42 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         autofocus: true,
         onKeyEvent: (_, event) => _onKey(event),
         child: SafeArea(
-          child: state.isDone
-              ? const ResultView()
-              : Padding(
-                  padding: EdgeInsets.symmetric(horizontal: hPad),
-                  child: Column(
-                    children: [
-                      const CalloutListener(),
-                      const SizedBox(height: Spacing.lg),
-                      if (state.isIdle) const PresetChipRow(),
-                      Expanded(
-                        child: state.isPrep
-                            ? const PrepPhaseWidget()
-                            : _buildRing(
-                                context,
-                                state,
-                                l10n,
-                                c,
-                                isDesktop,
-                                ringValue,
-                              ),
+          // CalloutListener/HoldNotificationListener are mounted
+          // unconditionally (outside the isDone branch below) so they stay
+          // alive across the holding→done transition and can react to it —
+          // e.g. HoldNotificationListener must still be mounted to dismiss
+          // the persistent notification once the hold ends.
+          child: Stack(
+            children: [
+              state.isDone
+                  ? const ResultView()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(horizontal: hPad),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: Spacing.lg),
+                          if (state.isIdle) const PresetChipRow(),
+                          Expanded(
+                            child: state.isPrep
+                                ? const PrepPhaseWidget()
+                                : _buildRing(
+                                    context,
+                                    state,
+                                    l10n,
+                                    c,
+                                    isDesktop,
+                                    ringValue,
+                                  ),
+                          ),
+                          _buildButton(context, state, l10n, c),
+                          const SizedBox(height: Spacing.xl),
+                        ],
                       ),
-                      _buildButton(context, state, l10n, c),
-                      const SizedBox(height: Spacing.xl),
-                    ],
-                  ),
-                ),
+                    ),
+              const CalloutListener(),
+              const HoldNotificationListener(),
+            ],
+          ),
         ),
       ),
     );
