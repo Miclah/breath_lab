@@ -221,6 +221,26 @@ class SettingsRepository {
 
   Future<void> setTtsLanguage(String? code) =>
       code == null ? _delete('tts_language') : _set('tts_language', code);
+
+  /// Whether the persistent live-timer notification shows during a hold
+  /// (Android only). Defaults to on.
+  Future<bool> getAmbientPersistentNotifEnabled() async {
+    final value = await _get('ambient_persistent_notif');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setAmbientPersistentNotifEnabled(bool enabled) =>
+      _set('ambient_persistent_notif', enabled ? '1' : '0');
+
+  /// Whether picture-in-picture is entered automatically when the user
+  /// leaves the app during a hold (Android only). Defaults to on.
+  Future<bool> getAmbientPipEnabled() async {
+    final value = await _get('ambient_pip');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setAmbientPipEnabled(bool enabled) =>
+      _set('ambient_pip', enabled ? '1' : '0');
 }
 
 // ---------------------------------------------------------------------------
@@ -311,4 +331,17 @@ final effectiveTtsLanguageProvider = FutureProvider<String>((ref) async {
   if (explicit != null) return explicit;
   final appLanguage = await ref.watch(appLanguageProvider.future);
   return appLanguage ?? 'en';
+});
+
+/// Whether the persistent hold notification is enabled. Invalidate after
+/// writing to refresh.
+final ambientPersistentNotifEnabledProvider = FutureProvider<bool>((ref) {
+  return ref
+      .watch(settingsRepositoryProvider)
+      .getAmbientPersistentNotifEnabled();
+});
+
+/// Whether ambient PiP is enabled. Invalidate after writing to refresh.
+final ambientPipEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAmbientPipEnabled();
 });

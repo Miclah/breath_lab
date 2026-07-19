@@ -404,6 +404,30 @@ abstract class AppLocalizations {
   /// **'Follow app language'**
   String get settingsTtsLanguageFollowApp;
 
+  /// Label for the persistent hold notification toggle in Settings (Android only)
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent notification'**
+  String get settingsAmbientPersistentNotifLabel;
+
+  /// Subtitle explaining the persistent hold notification toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Live timer in a notification during a hold'**
+  String get settingsAmbientPersistentNotifSubtitle;
+
+  /// Label for the PiP toggle in Settings (Android only)
+  ///
+  /// In en, this message translates to:
+  /// **'Picture-in-picture'**
+  String get settingsAmbientPipLabel;
+
+  /// Subtitle explaining the PiP toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Floating timer when you switch apps during a hold'**
+  String get settingsAmbientPipSubtitle;
+
   /// Settings section header for sound and haptics options
   ///
   /// In en, this message translates to:

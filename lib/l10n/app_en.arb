@@ -204,6 +204,22 @@
   "@settingsTtsLanguageFollowApp": {
     "description": "TTS voice language option: use whatever language the app UI is currently in"
   },
+  "settingsAmbientPersistentNotifLabel": "Persistent notification",
+  "@settingsAmbientPersistentNotifLabel": {
+    "description": "Label for the persistent hold notification toggle in Settings (Android only)"
+  },
+  "settingsAmbientPersistentNotifSubtitle": "Live timer in a notification during a hold",
+  "@settingsAmbientPersistentNotifSubtitle": {
+    "description": "Subtitle explaining the persistent hold notification toggle"
+  },
+  "settingsAmbientPipLabel": "Picture-in-picture",
+  "@settingsAmbientPipLabel": {
+    "description": "Label for the PiP toggle in Settings (Android only)"
+  },
+  "settingsAmbientPipSubtitle": "Floating timer when you switch apps during a hold",
+  "@settingsAmbientPipSubtitle": {
+    "description": "Subtitle explaining the PiP toggle"
+  },
   "settingsSoundHapticsSection": "Sound & haptics",
   "@settingsSoundHapticsSection": {
     "description": "Settings section header for sound and haptics options"

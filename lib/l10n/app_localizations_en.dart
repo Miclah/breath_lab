@@ -165,6 +165,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTtsLanguageFollowApp => 'Follow app language';
 
   @override
+  String get settingsAmbientPersistentNotifLabel => 'Persistent notification';
+
+  @override
+  String get settingsAmbientPersistentNotifSubtitle =>
+      'Live timer in a notification during a hold';
+
+  @override
+  String get settingsAmbientPipLabel => 'Picture-in-picture';
+
+  @override
+  String get settingsAmbientPipSubtitle =>
+      'Floating timer when you switch apps during a hold';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override

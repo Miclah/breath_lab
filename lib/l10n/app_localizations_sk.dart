@@ -165,6 +165,20 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTtsLanguageFollowApp => 'Podľa jazyka aplikácie';
 
   @override
+  String get settingsAmbientPersistentNotifLabel => 'Trvalá notifikácia';
+
+  @override
+  String get settingsAmbientPersistentNotifSubtitle =>
+      'Živý časovač v notifikácii počas zadržania';
+
+  @override
+  String get settingsAmbientPipLabel => 'Obraz v obraze';
+
+  @override
+  String get settingsAmbientPipSubtitle =>
+      'Plávajúci časovač pri prepnutí do inej aplikácie počas zadržania';
+
+  @override
   String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
 
   @override
