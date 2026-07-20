@@ -8,8 +8,8 @@ import '../../theme/tokens.dart';
 import 'section_header.dart';
 
 /// Settings → Ambient mode section. Spoken callouts, TTS voice language,
-/// persistent notification, and PiP toggles; more ambient toggles (OLED
-/// hold, lock taps, focus mode, ...) land in later commits.
+/// persistent notification, PiP, and OLED hold screen toggles; more ambient
+/// toggles (lock taps, focus mode, ...) land in later commits.
 class AmbientSection extends ConsumerWidget {
   const AmbientSection({super.key});
 
@@ -24,6 +24,11 @@ class AmbientSection extends ConsumerWidget {
     final persistentNotifEnabled =
         ref.watch(ambientPersistentNotifEnabledProvider).valueOrNull ?? true;
     final pipEnabled = ref.watch(ambientPipEnabledProvider).valueOrNull ?? true;
+    final oledHoldEnabled =
+        ref.watch(ambientOledHoldEnabledProvider).valueOrNull ?? false;
+    final brightnessOverride =
+        ref.watch(ambientBrightnessOverrideProvider).valueOrNull ??
+        BrightnessOverride.current;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +141,60 @@ class AmbientSection extends ConsumerWidget {
             ref.invalidate(ambientPipEnabledProvider);
           },
         ),
+        _AmbientToggleRow(
+          icon: Icons.brightness_1_outlined,
+          label: l10n.settingsAmbientOledHoldLabel,
+          subtitle: l10n.settingsAmbientOledHoldSubtitle,
+          value: oledHoldEnabled,
+          onChanged: (v) async {
+            await ref
+                .read(settingsRepositoryProvider)
+                .setAmbientOledHoldEnabled(v);
+            ref.invalidate(ambientOledHoldEnabledProvider);
+          },
+        ),
+        if (oledHoldEnabled)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              Spacing.lg,
+              Spacing.md,
+              Spacing.lg,
+              Spacing.sm,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsBrightnessOverrideLabel,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const SizedBox(height: Spacing.sm),
+                SegmentedButton<BrightnessOverride>(
+                  segments: [
+                    ButtonSegment(
+                      value: BrightnessOverride.low,
+                      label: Text(l10n.settingsBrightnessOverrideLow),
+                    ),
+                    ButtonSegment(
+                      value: BrightnessOverride.current,
+                      label: Text(l10n.settingsBrightnessOverrideCurrent),
+                    ),
+                    ButtonSegment(
+                      value: BrightnessOverride.off,
+                      label: Text(l10n.settingsBrightnessOverrideOff),
+                    ),
+                  ],
+                  selected: {brightnessOverride},
+                  onSelectionChanged: (value) async {
+                    await ref
+                        .read(settingsRepositoryProvider)
+                        .setAmbientBrightnessOverride(value.first);
+                    ref.invalidate(ambientBrightnessOverrideProvider);
+                  },
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
