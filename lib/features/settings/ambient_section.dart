@@ -7,9 +7,9 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'section_header.dart';
 
-/// Settings → Ambient mode section. Starts with spoken callouts mode and
-/// TTS voice language; more ambient toggles (persistent notification, PiP,
-/// OLED hold, focus mode, ...) land in later commits.
+/// Settings → Ambient mode section. Spoken callouts, TTS voice language,
+/// persistent notification, and PiP toggles; more ambient toggles (OLED
+/// hold, lock taps, focus mode, ...) land in later commits.
 class AmbientSection extends ConsumerWidget {
   const AmbientSection({super.key});
 
@@ -21,6 +21,9 @@ class AmbientSection extends ConsumerWidget {
         ref.watch(spokenCalloutsModeProvider).valueOrNull ??
         SpokenCalloutsMode.milestones;
     final ttsLanguage = ref.watch(ttsLanguageProvider).valueOrNull;
+    final persistentNotifEnabled =
+        ref.watch(ambientPersistentNotifEnabledProvider).valueOrNull ?? true;
+    final pipEnabled = ref.watch(ambientPipEnabledProvider).valueOrNull ?? true;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +110,86 @@ class AmbientSection extends ConsumerWidget {
                   ref.invalidate(ttsLanguageProvider);
                 },
               ),
+              const SizedBox(height: Spacing.md),
             ],
           ),
         ),
+        _AmbientToggleRow(
+          icon: Icons.notifications_active_outlined,
+          label: l10n.settingsAmbientPersistentNotifLabel,
+          subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
+          value: persistentNotifEnabled,
+          onChanged: (v) async {
+            await ref
+                .read(settingsRepositoryProvider)
+                .setAmbientPersistentNotifEnabled(v);
+            ref.invalidate(ambientPersistentNotifEnabledProvider);
+          },
+        ),
+        _AmbientToggleRow(
+          icon: Icons.picture_in_picture_alt_outlined,
+          label: l10n.settingsAmbientPipLabel,
+          subtitle: l10n.settingsAmbientPipSubtitle,
+          value: pipEnabled,
+          onChanged: (v) async {
+            await ref.read(settingsRepositoryProvider).setAmbientPipEnabled(v);
+            ref.invalidate(ambientPipEnabledProvider);
+          },
+        ),
       ],
+    );
+  }
+}
+
+/// Single ambient-mode toggle row: icon, label + subtitle, switch. Per
+/// Design Additions §7 toggle group visual.
+class _AmbientToggleRow extends StatelessWidget {
+  const _AmbientToggleRow({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+
+    return Container(
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: c.border, width: 0.5)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 24, color: c.textSecondary),
+          const SizedBox(width: Spacing.md),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: Theme.of(context).textTheme.bodyMedium),
+                Text(
+                  subtitle,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          Switch(value: value, onChanged: onChanged),
+        ],
+      ),
     );
   }
 }
