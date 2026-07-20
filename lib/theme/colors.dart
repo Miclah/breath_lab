@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// Pure OLED black, used for PiP and the OLED hold screen — intentionally
+/// the same in both light and dark theme, not a themed token.
+const oledBlack = Color(0xFF000000);
+
 extension BreathLabTheme on BuildContext {
   BreathLabColorScheme get appColors =>
       Theme.of(this).brightness == Brightness.dark

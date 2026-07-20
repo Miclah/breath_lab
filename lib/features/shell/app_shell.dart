@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../theme/colors.dart';
 import '../progress/progress_screen.dart';
 import '../settings/settings_screen.dart';
+import '../tables/providers.dart' show isInPipModeProvider;
 import '../tables/tables_screen.dart';
+import '../timer/pip_content.dart';
+import '../timer/pip_controller.dart';
 import '../timer/timer_screen.dart';
 import 'nav_provider.dart';
 
@@ -15,6 +19,18 @@ class AppShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(navIndexProvider);
     final l10n = AppLocalizations.of(context)!;
+    final isInPip = ref.watch(isInPipModeProvider);
+
+    // PipController must stay mounted regardless of which tab is selected
+    // or whether we're currently in PiP — a hold can be running in the
+    // background while another tab is open, and it must keep telling
+    // native whether entering/staying in PiP is allowed.
+    if (isInPip) {
+      return const Scaffold(
+        backgroundColor: oledBlack,
+        body: Stack(children: [PipContent(), PipController()]),
+      );
+    }
 
     const bodies = <Widget>[
       TimerScreen(),
@@ -24,7 +40,7 @@ class AppShell extends ConsumerWidget {
     ];
 
     return Scaffold(
-      body: bodies[selectedIndex],
+      body: Stack(children: [bodies[selectedIndex], const PipController()]),
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) =>
