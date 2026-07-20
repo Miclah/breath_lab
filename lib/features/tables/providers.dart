@@ -5,6 +5,7 @@ import '../../domain/models/table_session.dart';
 import '../../domain/services/audio_service.dart';
 import '../../domain/services/haptics_service.dart';
 import '../../domain/services/notification_service.dart';
+import '../../domain/services/pip_service.dart';
 import '../../domain/services/tts_service.dart';
 
 /// Which table (CO₂ or O₂) is currently shown on the Tables screen.
@@ -46,3 +47,10 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   service.initialize();
   return service;
 });
+
+final pipServiceProvider = Provider<PipService>((ref) => PipService());
+
+/// Whether the app is currently displayed in PiP mode (Android). Written by
+/// whichever widget wires up [PipService.onModeChanged]; consumers can
+/// watch this to swap to a PiP-friendly layout.
+final isInPipModeProvider = StateProvider<bool>((ref) => false);
