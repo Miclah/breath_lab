@@ -50,6 +50,28 @@ enum SpokenCalloutsMode {
   };
 }
 
+/// Screen brightness behavior during the OLED hold screen. `current` and
+/// `off` are both no-ops (design intentionally keeps them as separate
+/// choices — "off" means the override feature is disabled, "current" means
+/// explicitly leave brightness alone); only `low` actually dims.
+enum BrightnessOverride {
+  low,
+  current,
+  off;
+
+  String get dbValue => switch (this) {
+    BrightnessOverride.low => 'low',
+    BrightnessOverride.current => 'current',
+    BrightnessOverride.off => 'off',
+  };
+
+  static BrightnessOverride fromDb(String? value) => switch (value) {
+    'low' => BrightnessOverride.low,
+    'off' => BrightnessOverride.off,
+    _ => BrightnessOverride.current,
+  };
+}
+
 class SettingsRepository {
   SettingsRepository(this._db);
 
@@ -241,6 +263,27 @@ class SettingsRepository {
 
   Future<void> setAmbientPipEnabled(bool enabled) =>
       _set('ambient_pip', enabled ? '1' : '0');
+
+  /// Whether the OLED-friendly hold screen is enabled. Defaults to off —
+  /// unlike the notification/PiP toggles, this changes the base visual
+  /// significantly, so it's opt-in.
+  Future<bool> getAmbientOledHoldEnabled() async {
+    final value = await _get('ambient_oled_hold');
+    return value == '1';
+  }
+
+  Future<void> setAmbientOledHoldEnabled(bool enabled) =>
+      _set('ambient_oled_hold', enabled ? '1' : '0');
+
+  /// Brightness override during the OLED hold screen. Defaults to current
+  /// (don't touch brightness).
+  Future<BrightnessOverride> getAmbientBrightnessOverride() async {
+    final value = await _get('ambient_brightness_override');
+    return BrightnessOverride.fromDb(value);
+  }
+
+  Future<void> setAmbientBrightnessOverride(BrightnessOverride value) =>
+      _set('ambient_brightness_override', value.dbValue);
 }
 
 // ---------------------------------------------------------------------------
@@ -344,4 +387,18 @@ final ambientPersistentNotifEnabledProvider = FutureProvider<bool>((ref) {
 /// Whether ambient PiP is enabled. Invalidate after writing to refresh.
 final ambientPipEnabledProvider = FutureProvider<bool>((ref) {
   return ref.watch(settingsRepositoryProvider).getAmbientPipEnabled();
+});
+
+/// Whether the OLED-friendly hold screen is enabled. Invalidate after
+/// writing to refresh.
+final ambientOledHoldEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAmbientOledHoldEnabled();
+});
+
+/// Brightness override during the OLED hold screen. Invalidate after
+/// writing to refresh.
+final ambientBrightnessOverrideProvider = FutureProvider<BrightnessOverride>((
+  ref,
+) {
+  return ref.watch(settingsRepositoryProvider).getAmbientBrightnessOverride();
 });

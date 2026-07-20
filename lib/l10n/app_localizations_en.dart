@@ -179,6 +179,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Floating timer when you switch apps during a hold';
 
   @override
+  String get settingsAmbientOledHoldLabel => 'OLED hold screen';
+
+  @override
+  String get settingsAmbientOledHoldSubtitle =>
+      'Pure black, minimal screen during a hold';
+
+  @override
+  String get settingsBrightnessOverrideLabel => 'Brightness override';
+
+  @override
+  String get settingsBrightnessOverrideLow => 'Low';
+
+  @override
+  String get settingsBrightnessOverrideCurrent => 'Current';
+
+  @override
+  String get settingsBrightnessOverrideOff => 'Off';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override

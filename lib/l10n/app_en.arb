@@ -220,6 +220,30 @@
   "@settingsAmbientPipSubtitle": {
     "description": "Subtitle explaining the PiP toggle"
   },
+  "settingsAmbientOledHoldLabel": "OLED hold screen",
+  "@settingsAmbientOledHoldLabel": {
+    "description": "Label for the OLED-friendly hold screen toggle in Settings"
+  },
+  "settingsAmbientOledHoldSubtitle": "Pure black, minimal screen during a hold",
+  "@settingsAmbientOledHoldSubtitle": {
+    "description": "Subtitle explaining the OLED hold screen toggle"
+  },
+  "settingsBrightnessOverrideLabel": "Brightness override",
+  "@settingsBrightnessOverrideLabel": {
+    "description": "Label for the brightness override selector in Settings, applies during the OLED hold screen"
+  },
+  "settingsBrightnessOverrideLow": "Low",
+  "@settingsBrightnessOverrideLow": {
+    "description": "Brightness override option: dim the screen during the hold"
+  },
+  "settingsBrightnessOverrideCurrent": "Current",
+  "@settingsBrightnessOverrideCurrent": {
+    "description": "Brightness override option: leave brightness as-is"
+  },
+  "settingsBrightnessOverrideOff": "Off",
+  "@settingsBrightnessOverrideOff": {
+    "description": "Brightness override option: feature disabled"
+  },
   "settingsSoundHapticsSection": "Sound & haptics",
   "@settingsSoundHapticsSection": {
     "description": "Settings section header for sound and haptics options"

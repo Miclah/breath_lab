@@ -428,6 +428,42 @@ abstract class AppLocalizations {
   /// **'Floating timer when you switch apps during a hold'**
   String get settingsAmbientPipSubtitle;
 
+  /// Label for the OLED-friendly hold screen toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'OLED hold screen'**
+  String get settingsAmbientOledHoldLabel;
+
+  /// Subtitle explaining the OLED hold screen toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Pure black, minimal screen during a hold'**
+  String get settingsAmbientOledHoldSubtitle;
+
+  /// Label for the brightness override selector in Settings, applies during the OLED hold screen
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness override'**
+  String get settingsBrightnessOverrideLabel;
+
+  /// Brightness override option: dim the screen during the hold
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get settingsBrightnessOverrideLow;
+
+  /// Brightness override option: leave brightness as-is
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get settingsBrightnessOverrideCurrent;
+
+  /// Brightness override option: feature disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsBrightnessOverrideOff;
+
   /// Settings section header for sound and haptics options
   ///
   /// In en, this message translates to:

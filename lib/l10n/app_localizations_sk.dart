@@ -179,6 +179,25 @@ class AppLocalizationsSk extends AppLocalizations {
       'Plávajúci časovač pri prepnutí do inej aplikácie počas zadržania';
 
   @override
+  String get settingsAmbientOledHoldLabel => 'OLED obrazovka zadržania';
+
+  @override
+  String get settingsAmbientOledHoldSubtitle =>
+      'Čisto čierna, minimalistická obrazovka počas zadržania';
+
+  @override
+  String get settingsBrightnessOverrideLabel => 'Prepísanie jasu';
+
+  @override
+  String get settingsBrightnessOverrideLow => 'Nízky';
+
+  @override
+  String get settingsBrightnessOverrideCurrent => 'Aktuálny';
+
+  @override
+  String get settingsBrightnessOverrideOff => 'Vypnuté';
+
+  @override
   String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
 
   @override
