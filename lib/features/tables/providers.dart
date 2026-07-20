@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/audio_service.dart';
+import '../../domain/services/brightness_service.dart';
 import '../../domain/services/haptics_service.dart';
 import '../../domain/services/notification_service.dart';
 import '../../domain/services/pip_service.dart';
@@ -54,3 +55,7 @@ final pipServiceProvider = Provider<PipService>((ref) => PipService());
 /// whichever widget wires up [PipService.onModeChanged]; consumers can
 /// watch this to swap to a PiP-friendly layout.
 final isInPipModeProvider = StateProvider<bool>((ref) => false);
+
+final brightnessServiceProvider = Provider<BrightnessService>(
+  (ref) => BrightnessService(),
+);
