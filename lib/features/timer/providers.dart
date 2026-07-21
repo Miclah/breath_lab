@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
+import '../tables/providers.dart' show hapticsServiceProvider;
 
 class TimerNotifier extends Notifier<TimerState> {
   final _holdStopwatch = Stopwatch();
@@ -31,6 +31,7 @@ class TimerNotifier extends Notifier<TimerState> {
       ..reset()
       ..start();
     state = state.copyWith(phase: TimerPhase.hold, holdElapsed: Duration.zero);
+    ref.read(hapticsServiceProvider).holdStart();
   }
 
   /// Stop the hold and move to done state.
@@ -41,6 +42,7 @@ class TimerNotifier extends Notifier<TimerState> {
       phase: TimerPhase.done,
       holdElapsed: _holdStopwatch.elapsed,
     );
+    ref.read(hapticsServiceProvider).holdStop();
   }
 
   /// Record first contraction timestamp relative to hold start.
@@ -48,7 +50,7 @@ class TimerNotifier extends Notifier<TimerState> {
   void markContraction() {
     if (!state.isHolding) return;
     if (state.contractionTime != null) return;
-    HapticFeedback.lightImpact();
+    ref.read(hapticsServiceProvider).contraction();
     state = state.copyWith(contractionTime: _holdStopwatch.elapsed);
   }
 
