@@ -28,9 +28,15 @@ final audioServiceProvider = Provider<AudioService>((ref) {
   return service;
 });
 
-final hapticsServiceProvider = Provider<HapticsService>(
-  (ref) => HapticsService(),
-);
+final hapticsServiceProvider = Provider<HapticsService>((ref) {
+  final service = HapticsService();
+
+  ref.listen(hapticIntensityProvider, (_, next) {
+    next.whenData((intensity) => service.intensity = intensity);
+  }, fireImmediately: true);
+
+  return service;
+});
 
 final ttsServiceProvider = Provider<TtsService>((ref) {
   final service = TtsService();

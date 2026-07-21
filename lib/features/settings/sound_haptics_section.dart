@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
-import '../tables/providers.dart' show audioServiceProvider;
+import '../tables/providers.dart'
+    show audioServiceProvider, hapticsServiceProvider;
 import 'section_header.dart';
-
-void _testHaptic(HapticIntensity intensity) {
-  switch (intensity) {
-    case HapticIntensity.off:
-      break;
-    case HapticIntensity.light:
-      HapticFeedback.lightImpact();
-    case HapticIntensity.medium:
-      HapticFeedback.mediumImpact();
-    case HapticIntensity.strong:
-      HapticFeedback.heavyImpact();
-  }
-}
 
 /// Settings → Sound & haptics section: sound toggle, volume slider, haptic
 /// intensity selector, and test buttons that preview each.
@@ -129,7 +116,7 @@ class SoundHapticsSection extends ConsumerWidget {
               OutlinedButton(
                 onPressed: intensity == HapticIntensity.off
                     ? null
-                    : () => _testHaptic(intensity),
+                    : () => ref.read(hapticsServiceProvider).contraction(),
                 child: Text(l10n.settingsTestHapticButton),
               ),
             ],
