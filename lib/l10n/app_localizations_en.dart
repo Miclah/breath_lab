@@ -198,6 +198,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBrightnessOverrideOff => 'Off';
 
   @override
+  String get settingsFocusModeLabel => 'Focus mode';
+
+  @override
+  String get settingsFocusModeExplanation =>
+      'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override

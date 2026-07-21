@@ -8,8 +8,7 @@ import '../../theme/tokens.dart';
 import 'section_header.dart';
 
 /// Settings → Ambient mode section. Spoken callouts, TTS voice language,
-/// persistent notification, PiP, and OLED hold screen toggles; more ambient
-/// toggles (lock taps, focus mode, ...) land in later commits.
+/// persistent notification, PiP, OLED hold screen, and focus mode toggles.
 class AmbientSection extends ConsumerWidget {
   const AmbientSection({super.key});
 
@@ -29,6 +28,8 @@ class AmbientSection extends ConsumerWidget {
     final brightnessOverride =
         ref.watch(ambientBrightnessOverrideProvider).valueOrNull ??
         BrightnessOverride.current;
+    final focusModeEnabled =
+        ref.watch(focusModeEnabledProvider).valueOrNull ?? true;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,6 +196,30 @@ class AmbientSection extends ConsumerWidget {
               ],
             ),
           ),
+        _AmbientToggleRow(
+          icon: Icons.notifications_off_outlined,
+          label: l10n.settingsFocusModeLabel,
+          subtitle: '',
+          value: focusModeEnabled,
+          onChanged: (v) async {
+            await ref.read(settingsRepositoryProvider).setFocusModeEnabled(v);
+            ref.invalidate(focusModeEnabledProvider);
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Spacing.lg,
+            Spacing.sm,
+            Spacing.lg,
+            Spacing.md,
+          ),
+          child: Text(
+            l10n.settingsFocusModeExplanation,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+          ),
+        ),
       ],
     );
   }
@@ -237,12 +262,13 @@ class _AmbientToggleRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label, style: Theme.of(context).textTheme.bodyMedium),
-                Text(
-                  subtitle,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
-                ),
+                if (subtitle.isNotEmpty)
+                  Text(
+                    subtitle,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
+                  ),
               ],
             ),
           ),

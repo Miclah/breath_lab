@@ -284,6 +284,19 @@ class SettingsRepository {
 
   Future<void> setAmbientBrightnessOverride(BrightnessOverride value) =>
       _set('ambient_brightness_override', value.dbValue);
+
+  /// Whether focus mode (suppressing BreathLab's own non-critical
+  /// notifications during a session) is enabled. Defaults to on — unlike
+  /// OLED hold, this has no visible effect on its own today (there are no
+  /// non-critical notifications yet to suppress), so there's no visual
+  /// disruption to opt into.
+  Future<bool> getFocusModeEnabled() async {
+    final value = await _get('focus_mode_enabled');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setFocusModeEnabled(bool enabled) =>
+      _set('focus_mode_enabled', enabled ? '1' : '0');
 }
 
 // ---------------------------------------------------------------------------
@@ -401,4 +414,9 @@ final ambientBrightnessOverrideProvider = FutureProvider<BrightnessOverride>((
   ref,
 ) {
   return ref.watch(settingsRepositoryProvider).getAmbientBrightnessOverride();
+});
+
+/// Whether focus mode is enabled. Invalidate after writing to refresh.
+final focusModeEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getFocusModeEnabled();
 });

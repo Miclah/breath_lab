@@ -464,6 +464,18 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get settingsBrightnessOverrideOff;
 
+  /// Label for the focus mode toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Focus mode'**
+  String get settingsFocusModeLabel;
+
+  /// Longer explanatory body shown below the focus mode toggle, per Design Additions §7
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.'**
+  String get settingsFocusModeExplanation;
+
   /// Settings section header for sound and haptics options
   ///
   /// In en, this message translates to:
