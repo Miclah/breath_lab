@@ -9,9 +9,9 @@ import '../progress/progress_screen.dart';
 import '../settings/settings_screen.dart';
 import '../tables/providers.dart' show isInPipModeProvider;
 import '../tables/tables_screen.dart';
+import '../timer/ambient_controllers.dart';
 import '../timer/oled_hold_view.dart';
 import '../timer/pip_content.dart';
-import '../timer/pip_controller.dart';
 import '../timer/providers.dart' show timerProvider;
 import '../timer/timer_screen.dart';
 import 'nav_provider.dart';
@@ -29,18 +29,16 @@ class AppShell extends ConsumerWidget {
         ref.watch(ambientOledHoldEnabledProvider).valueOrNull ?? false;
     final oledHoldActive = isHolding && oledHoldEnabled;
 
-    // PipController/OledBrightnessController must stay mounted regardless
-    // of which tab is selected or which of these modes is currently active
-    // — a hold can be running in the background while another tab is
-    // open, and both need to keep reacting to the holding→done transition
-    // (dismiss PiP eligibility, restore brightness) even after their own
-    // visual overlay unmounts.
+    // AmbientControllers must stay mounted regardless of which tab is
+    // selected or which of these modes is currently active — a hold can be
+    // running in the background while another tab is open, or while the
+    // OLED screen (which replaces this whole tab) or PiP overlay is shown,
+    // and all of them need to keep reacting to the holding→done transition
+    // even after their own visual overlay unmounts.
     if (isInPip) {
       return const Scaffold(
         backgroundColor: oledBlack,
-        body: Stack(
-          children: [PipContent(), PipController(), OledBrightnessController()],
-        ),
+        body: Stack(children: [PipContent(), AmbientControllers()]),
       );
     }
 
@@ -90,8 +88,7 @@ class AppShell extends ConsumerWidget {
     return Stack(
       children: [
         AnimatedSwitcher(duration: Durations.normal, child: mainContent),
-        const PipController(),
-        const OledBrightnessController(),
+        const AmbientControllers(),
       ],
     );
   }
