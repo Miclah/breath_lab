@@ -7,6 +7,7 @@ import 'features/safety/safety_screen.dart';
 import 'features/settings/theme_mode_provider.dart';
 import 'features/shell/app_shell.dart';
 import 'l10n/app_localizations.dart';
+import 'shared/global_messenger.dart';
 import 'theme/theme_data.dart';
 
 class BreathLabApp extends ConsumerWidget {
@@ -20,6 +21,7 @@ class BreathLabApp extends ConsumerWidget {
     final appLanguage = ref.watch(appLanguageProvider).valueOrNull;
 
     return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

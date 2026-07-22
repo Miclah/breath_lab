@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'callout_listener.dart';
 import 'hold_notification_listener.dart';
+import 'notification_permission_banner_controller.dart';
 import 'oled_hold_view.dart';
 import 'past_pb_warning_controller.dart';
 import 'pip_controller.dart';
@@ -21,6 +22,7 @@ class AmbientControllers extends StatelessWidget {
       children: [
         CalloutListener(),
         HoldNotificationListener(),
+        NotificationPermissionBannerController(),
         PastPbWarningController(),
         PipController(),
         OledBrightnessController(),

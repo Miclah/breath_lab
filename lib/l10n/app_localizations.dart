@@ -716,6 +716,18 @@ abstract class AppLocalizations {
   /// **'Mark contraction'**
   String get notificationMarkContractionAction;
 
+  /// Banner shown during a hold when the Android notification permission was denied
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications in system settings for live-timer overlay during holds.'**
+  String get notificationPermissionDeniedBanner;
+
+  /// Action label to dismiss an in-app MaterialBanner
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get bannerDismissAction;
+
   /// Action button label in the done state before the result screen is available
   ///
   /// In en, this message translates to:

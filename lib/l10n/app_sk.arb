@@ -103,6 +103,8 @@
   "timerStopButton": "Stop",
   "notificationMaxHoldBody": "Max zadržanie",
   "notificationMarkContractionAction": "Označiť kontrakciu",
+  "notificationPermissionDeniedBanner": "Povoľ notifikácie v nastaveniach systému, aby sa počas zadržania zobrazoval živý časovač.",
+  "bannerDismissAction": "Zavrieť",
   "timerResetButton": "Resetovať",
   "timerStateLabelHold": "drž",
   "timerStateLabelDone": "hotovo",

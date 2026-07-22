@@ -328,6 +328,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationMarkContractionAction => 'Mark contraction';
 
   @override
+  String get notificationPermissionDeniedBanner =>
+      'Enable notifications in system settings for live-timer overlay during holds.';
+
+  @override
+  String get bannerDismissAction => 'Dismiss';
+
+  @override
   String get timerResetButton => 'Reset';
 
   @override

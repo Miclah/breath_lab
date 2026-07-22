@@ -412,6 +412,14 @@
   "@notificationMarkContractionAction": {
     "description": "Action button label on the persistent hold notification (Android)"
   },
+  "notificationPermissionDeniedBanner": "Enable notifications in system settings for live-timer overlay during holds.",
+  "@notificationPermissionDeniedBanner": {
+    "description": "Banner shown during a hold when the Android notification permission was denied"
+  },
+  "bannerDismissAction": "Dismiss",
+  "@bannerDismissAction": {
+    "description": "Action label to dismiss an in-app MaterialBanner"
+  },
   "timerResetButton": "Reset",
   "@timerResetButton": {
     "description": "Action button label in the done state before the result screen is available"

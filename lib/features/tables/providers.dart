@@ -56,6 +56,12 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   return service;
 });
 
+/// Whether the Android POST_NOTIFICATIONS permission was denied the last
+/// time it was requested. Drives the in-app banner during a hold.
+final notificationPermissionDeniedProvider = StateProvider<bool>(
+  (ref) => false,
+);
+
 final pipServiceProvider = Provider<PipService>((ref) => PipService());
 
 /// Whether the app is currently displayed in PiP mode (Android). Written by

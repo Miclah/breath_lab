@@ -329,6 +329,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get notificationMarkContractionAction => 'Označiť kontrakciu';
 
   @override
+  String get notificationPermissionDeniedBanner =>
+      'Povoľ notifikácie v nastaveniach systému, aby sa počas zadržania zobrazoval živý časovač.';
+
+  @override
+  String get bannerDismissAction => 'Zavrieť';
+
+  @override
   String get timerResetButton => 'Resetovať';
 
   @override

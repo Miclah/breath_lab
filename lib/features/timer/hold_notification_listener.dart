@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/services/notification_service.dart';
 import '../../l10n/app_localizations.dart';
-import '../tables/providers.dart' show notificationServiceProvider;
+import '../tables/providers.dart'
+    show notificationPermissionDeniedProvider, notificationServiceProvider;
 import 'providers.dart';
 
 String _fmt(Duration d) {
@@ -60,7 +61,11 @@ class _HoldNotificationListenerState
 
     if (!_wasHolding) {
       _wasHolding = true;
-      service.requestPermission();
+      service.requestPermission().then((granted) {
+        if (!mounted) return;
+        ref.read(notificationPermissionDeniedProvider.notifier).state =
+            !granted;
+      });
     }
 
     final second = state.holdElapsed.inSeconds;
