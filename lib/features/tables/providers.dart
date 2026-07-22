@@ -8,6 +8,7 @@ import '../../domain/services/haptics_service.dart';
 import '../../domain/services/notification_service.dart';
 import '../../domain/services/pip_service.dart';
 import '../../domain/services/tts_service.dart';
+import '../../domain/services/wakelock_service.dart';
 
 /// Which table (CO₂ or O₂) is currently shown on the Tables screen.
 final selectedTableTypeProvider = StateProvider<TableType>(
@@ -64,4 +65,8 @@ final isInPipModeProvider = StateProvider<bool>((ref) => false);
 
 final brightnessServiceProvider = Provider<BrightnessService>(
   (ref) => BrightnessService(),
+);
+
+final wakelockServiceProvider = Provider<WakelockService>(
+  (ref) => WakelockService(),
 );
