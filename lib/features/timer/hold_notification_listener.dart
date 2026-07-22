@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/services/notification_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../tables/providers.dart'
-    show notificationPermissionDeniedProvider, notificationServiceProvider;
+    show
+        foregroundServiceDisabledProvider,
+        notificationPermissionDeniedProvider,
+        notificationServiceProvider;
 import 'providers.dart';
 
 String _fmt(Duration d) {
@@ -74,14 +77,20 @@ class _HoldNotificationListenerState
       final hasContraction = state.contractionTime != null;
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        service.show(
-          title: _fmt(state.holdElapsed),
-          body: l10n.notificationMaxHoldBody,
-          stopLabel: l10n.timerStopButton,
-          markContractionLabel: hasContraction
-              ? null
-              : l10n.notificationMarkContractionAction,
-        );
+        service
+            .show(
+              title: _fmt(state.holdElapsed),
+              body: l10n.notificationMaxHoldBody,
+              stopLabel: l10n.timerStopButton,
+              markContractionLabel: hasContraction
+                  ? null
+                  : l10n.notificationMarkContractionAction,
+            )
+            .then((started) {
+              if (!mounted) return;
+              ref.read(foregroundServiceDisabledProvider.notifier).state =
+                  !started;
+            });
       });
     }
 

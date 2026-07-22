@@ -416,6 +416,10 @@
   "@notificationPermissionDeniedBanner": {
     "description": "Banner shown during a hold when the Android notification permission was denied"
   },
+  "foregroundServiceDisabledBanner": "Check battery optimization settings for BreathLab to enable the live-timer notification and picture-in-picture during holds.",
+  "@foregroundServiceDisabledBanner": {
+    "description": "Banner shown during a hold when the OS refused to start the foreground service, e.g. due to battery optimization"
+  },
   "bannerDismissAction": "Dismiss",
   "@bannerDismissAction": {
     "description": "Action label to dismiss an in-app MaterialBanner"

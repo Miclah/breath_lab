@@ -332,6 +332,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enable notifications in system settings for live-timer overlay during holds.';
 
   @override
+  String get foregroundServiceDisabledBanner =>
+      'Check battery optimization settings for BreathLab to enable the live-timer notification and picture-in-picture during holds.';
+
+  @override
   String get bannerDismissAction => 'Dismiss';
 
   @override

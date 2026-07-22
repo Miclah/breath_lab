@@ -56,49 +56,58 @@ class NotificationService {
   /// Shows or updates the live-timer notification. Safe to call
   /// repeatedly — flutter_local_notifications updates the same
   /// foreground-service notification in place.
-  Future<void> show({
+  ///
+  /// Returns false if the OS refused to start the foreground service (e.g.
+  /// battery optimization restrictions), so the caller can surface that to
+  /// the user per PRD §11 instead of failing silently.
+  Future<bool> show({
     required String title,
     required String body,
     required String stopLabel,
     String? markContractionLabel,
   }) async {
-    if (!Platform.isAndroid) return;
-    await _android?.startForegroundService(
-      _notificationId,
-      title,
-      body,
-      notificationDetails: AndroidNotificationDetails(
-        _channelId,
-        _channelName,
-        ongoing: true,
-        onlyAlertOnce: true,
-        category: AndroidNotificationCategory.stopwatch,
-        priority: Priority.low,
-        importance: Importance.low,
-        actions: [
-          // showsUserInterface: true routes the tap through the foreground
-          // onDidReceiveNotificationResponse callback (bringing the app to
-          // front). Without it, Android always dispatches through a
-          // background isolate instead, even while the app is foregrounded.
-          AndroidNotificationAction(
-            'stop',
-            stopLabel,
-            showsUserInterface: true,
-            cancelNotification: false,
-          ),
-          if (markContractionLabel != null)
+    if (!Platform.isAndroid) return true;
+    try {
+      await _android?.startForegroundService(
+        _notificationId,
+        title,
+        body,
+        notificationDetails: AndroidNotificationDetails(
+          _channelId,
+          _channelName,
+          ongoing: true,
+          onlyAlertOnce: true,
+          category: AndroidNotificationCategory.stopwatch,
+          priority: Priority.low,
+          importance: Importance.low,
+          actions: [
+            // showsUserInterface: true routes the tap through the foreground
+            // onDidReceiveNotificationResponse callback (bringing the app to
+            // front). Without it, Android always dispatches through a
+            // background isolate instead, even while the app is foregrounded.
             AndroidNotificationAction(
-              'mark_contraction',
-              markContractionLabel,
+              'stop',
+              stopLabel,
               showsUserInterface: true,
               cancelNotification: false,
             ),
-        ],
-      ),
-      foregroundServiceTypes: const {
-        AndroidServiceForegroundType.foregroundServiceTypeSpecialUse,
-      },
-    );
+            if (markContractionLabel != null)
+              AndroidNotificationAction(
+                'mark_contraction',
+                markContractionLabel,
+                showsUserInterface: true,
+                cancelNotification: false,
+              ),
+          ],
+        ),
+        foregroundServiceTypes: const {
+          AndroidServiceForegroundType.foregroundServiceTypeSpecialUse,
+        },
+      );
+      return true;
+    } on Object {
+      return false;
+    }
   }
 
   /// Dismisses the notification and stops the foreground service.

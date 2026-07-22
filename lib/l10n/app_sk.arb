@@ -104,6 +104,7 @@
   "notificationMaxHoldBody": "Max zadržanie",
   "notificationMarkContractionAction": "Označiť kontrakciu",
   "notificationPermissionDeniedBanner": "Povoľ notifikácie v nastaveniach systému, aby sa počas zadržania zobrazoval živý časovač.",
+  "foregroundServiceDisabledBanner": "Skontroluj nastavenia optimalizácie batérie pre BreathLab, aby fungovala živá notifikácia a obraz v obraze počas zadržania.",
   "bannerDismissAction": "Zavrieť",
   "timerResetButton": "Resetovať",
   "timerStateLabelHold": "drž",

@@ -62,6 +62,11 @@ final notificationPermissionDeniedProvider = StateProvider<bool>(
   (ref) => false,
 );
 
+/// Whether the OS refused to start the persistent-notification foreground
+/// service the last time it was attempted (e.g. battery optimization).
+/// Drives the in-app banner during a hold.
+final foregroundServiceDisabledProvider = StateProvider<bool>((ref) => false);
+
 final pipServiceProvider = Provider<PipService>((ref) => PipService());
 
 /// Whether the app is currently displayed in PiP mode (Android). Written by

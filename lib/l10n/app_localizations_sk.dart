@@ -333,6 +333,10 @@ class AppLocalizationsSk extends AppLocalizations {
       'Povoľ notifikácie v nastaveniach systému, aby sa počas zadržania zobrazoval živý časovač.';
 
   @override
+  String get foregroundServiceDisabledBanner =>
+      'Skontroluj nastavenia optimalizácie batérie pre BreathLab, aby fungovala živá notifikácia a obraz v obraze počas zadržania.';
+
+  @override
   String get bannerDismissAction => 'Zavrieť';
 
   @override

@@ -722,6 +722,12 @@ abstract class AppLocalizations {
   /// **'Enable notifications in system settings for live-timer overlay during holds.'**
   String get notificationPermissionDeniedBanner;
 
+  /// Banner shown during a hold when the OS refused to start the foreground service, e.g. due to battery optimization
+  ///
+  /// In en, this message translates to:
+  /// **'Check battery optimization settings for BreathLab to enable the live-timer notification and picture-in-picture during holds.'**
+  String get foregroundServiceDisabledBanner;
+
   /// Action label to dismiss an in-app MaterialBanner
   ///
   /// In en, this message translates to:
