@@ -5,6 +5,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../tables/providers.dart' show ttsServiceProvider;
 import 'section_header.dart';
 
 /// Settings → Ambient mode section. Spoken callouts, TTS voice language,
@@ -114,6 +115,15 @@ class AmbientSection extends ConsumerWidget {
                       .read(settingsRepositoryProvider)
                       .setTtsLanguage(value.first);
                   ref.invalidate(ttsLanguageProvider);
+                  if (value.first == 'sk' &&
+                      !await ref
+                          .read(ttsServiceProvider)
+                          .isLanguageAvailable('sk-SK')) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.settingsTtsVoiceMissing)),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: Spacing.md),

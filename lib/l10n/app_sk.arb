@@ -51,6 +51,7 @@
   "settingsCalloutsDense": "Husté",
   "settingsTtsLanguageLabel": "Jazyk hlasu",
   "settingsTtsLanguageFollowApp": "Podľa jazyka aplikácie",
+  "settingsTtsVoiceMissing": "Slovenský hlas sa na tomto zariadení nenašiel. Kým ho nenainštaluješ v nastaveniach systému, oznámenia budú v angličtine.",
   "settingsAmbientPersistentNotifLabel": "Trvalá notifikácia",
   "settingsAmbientPersistentNotifSubtitle": "Živý časovač v notifikácii počas zadržania",
   "settingsAmbientPipLabel": "Obraz v obraze",

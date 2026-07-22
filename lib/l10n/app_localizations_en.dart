@@ -165,6 +165,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTtsLanguageFollowApp => 'Follow app language';
 
   @override
+  String get settingsTtsVoiceMissing =>
+      'Slovak voice not found on this device. Callouts will use English until you install it in system settings.';
+
+  @override
   String get settingsAmbientPersistentNotifLabel => 'Persistent notification';
 
   @override

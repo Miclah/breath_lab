@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Follow app language'**
   String get settingsTtsLanguageFollowApp;
 
+  /// Shown when the user picks Slovak TTS callouts but no Slovak voice is installed
+  ///
+  /// In en, this message translates to:
+  /// **'Slovak voice not found on this device. Callouts will use English until you install it in system settings.'**
+  String get settingsTtsVoiceMissing;
+
   /// Label for the persistent hold notification toggle in Settings (Android only)
   ///
   /// In en, this message translates to:

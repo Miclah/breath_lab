@@ -165,6 +165,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTtsLanguageFollowApp => 'Podľa jazyka aplikácie';
 
   @override
+  String get settingsTtsVoiceMissing =>
+      'Slovenský hlas sa na tomto zariadení nenašiel. Kým ho nenainštaluješ v nastaveniach systému, oznámenia budú v angličtine.';
+
+  @override
   String get settingsAmbientPersistentNotifLabel => 'Trvalá notifikácia';
 
   @override

@@ -204,6 +204,10 @@
   "@settingsTtsLanguageFollowApp": {
     "description": "TTS voice language option: use whatever language the app UI is currently in"
   },
+  "settingsTtsVoiceMissing": "Slovak voice not found on this device. Callouts will use English until you install it in system settings.",
+  "@settingsTtsVoiceMissing": {
+    "description": "Shown when the user picks Slovak TTS callouts but no Slovak voice is installed"
+  },
   "settingsAmbientPersistentNotifLabel": "Persistent notification",
   "@settingsAmbientPersistentNotifLabel": {
     "description": "Label for the persistent hold notification toggle in Settings (Android only)"
