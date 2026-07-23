@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/segment_label.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart' show ttsServiceProvider;
@@ -60,23 +61,23 @@ class AmbientSection extends ConsumerWidget {
                 segments: [
                   ButtonSegment(
                     value: SpokenCalloutsMode.off,
-                    label: Text(l10n.settingsCalloutsOff),
+                    label: SegmentLabel(l10n.settingsCalloutsOff),
                   ),
                   ButtonSegment(
                     value: SpokenCalloutsMode.milestones,
-                    label: Text(l10n.settingsCalloutsMilestones),
+                    label: SegmentLabel(l10n.settingsCalloutsMilestones),
                   ),
                   ButtonSegment(
                     value: SpokenCalloutsMode.every30s,
-                    label: Text(l10n.settingsCallouts30s),
+                    label: SegmentLabel(l10n.settingsCallouts30s),
                   ),
                   ButtonSegment(
                     value: SpokenCalloutsMode.every15s,
-                    label: Text(l10n.settingsCallouts15s),
+                    label: SegmentLabel(l10n.settingsCallouts15s),
                   ),
                   ButtonSegment(
                     value: SpokenCalloutsMode.dense,
-                    label: Text(l10n.settingsCalloutsDense),
+                    label: SegmentLabel(l10n.settingsCalloutsDense),
                   ),
                 ],
                 selected: {calloutsMode},
@@ -98,15 +99,15 @@ class AmbientSection extends ConsumerWidget {
                 segments: [
                   ButtonSegment(
                     value: 'sk',
-                    label: Text(l10n.settingsLanguageSlovak),
+                    label: SegmentLabel(l10n.settingsLanguageSlovak),
                   ),
                   ButtonSegment(
                     value: 'en',
-                    label: Text(l10n.settingsLanguageEnglish),
+                    label: SegmentLabel(l10n.settingsLanguageEnglish),
                   ),
                   ButtonSegment(
                     value: null,
-                    label: Text(l10n.settingsTtsLanguageFollowApp),
+                    label: SegmentLabel(l10n.settingsTtsLanguageFollowApp),
                   ),
                 ],
                 selected: {ttsLanguage},
@@ -184,15 +185,17 @@ class AmbientSection extends ConsumerWidget {
                   segments: [
                     ButtonSegment(
                       value: BrightnessOverride.low,
-                      label: Text(l10n.settingsBrightnessOverrideLow),
+                      label: SegmentLabel(l10n.settingsBrightnessOverrideLow),
                     ),
                     ButtonSegment(
                       value: BrightnessOverride.current,
-                      label: Text(l10n.settingsBrightnessOverrideCurrent),
+                      label: SegmentLabel(
+                        l10n.settingsBrightnessOverrideCurrent,
+                      ),
                     ),
                     ButtonSegment(
                       value: BrightnessOverride.off,
-                      label: Text(l10n.settingsBrightnessOverrideOff),
+                      label: SegmentLabel(l10n.settingsBrightnessOverrideOff),
                     ),
                   ],
                   selected: {brightnessOverride},

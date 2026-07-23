@@ -48,8 +48,16 @@ class SafetyScreen extends ConsumerWidget {
               _SafetyRule(text: l10n.safetyRule3),
               const Spacer(),
               FilledButton(
-                onPressed: () =>
-                    ref.read(safetyAcknowledgedProvider.notifier).acknowledge(),
+                onPressed: () {
+                  // Pushed from Settings (already acknowledged) — just go
+                  // back. Otherwise this is the first-launch gate, where
+                  // acknowledging is what dismisses it.
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  } else {
+                    ref.read(safetyAcknowledgedProvider.notifier).acknowledge();
+                  }
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
                   child: Text(l10n.safetyAcknowledge),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/segment_label.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
@@ -89,19 +90,19 @@ class SoundHapticsSection extends ConsumerWidget {
                 segments: [
                   ButtonSegment(
                     value: HapticIntensity.off,
-                    label: Text(l10n.settingsHapticOff),
+                    label: SegmentLabel(l10n.settingsHapticOff),
                   ),
                   ButtonSegment(
                     value: HapticIntensity.light,
-                    label: Text(l10n.settingsHapticLight),
+                    label: SegmentLabel(l10n.settingsHapticLight),
                   ),
                   ButtonSegment(
                     value: HapticIntensity.medium,
-                    label: Text(l10n.settingsHapticMedium),
+                    label: SegmentLabel(l10n.settingsHapticMedium),
                   ),
                   ButtonSegment(
                     value: HapticIntensity.strong,
-                    label: Text(l10n.settingsHapticStrong),
+                    label: SegmentLabel(l10n.settingsHapticStrong),
                   ),
                 ],
                 selected: {intensity},

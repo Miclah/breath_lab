@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/segment_label.dart';
 import '../../theme/tokens.dart';
 
 /// Settings → Training section: current max, default prep mode, default
@@ -146,19 +147,19 @@ class _DefaultPrepModeSelector extends ConsumerWidget {
       segments: [
         ButtonSegment(
           value: PrepMode.none,
-          label: Text(l10n.historyPrepModeNone),
+          label: SegmentLabel(l10n.historyPrepModeNone),
         ),
         ButtonSegment(
           value: PrepMode.threeSeconds,
-          label: Text(l10n.historyPrepMode3s),
+          label: SegmentLabel(l10n.historyPrepMode3s),
         ),
         ButtonSegment(
           value: PrepMode.short,
-          label: Text(l10n.historyPrepModeShort),
+          label: SegmentLabel(l10n.historyPrepModeShort),
         ),
         ButtonSegment(
           value: PrepMode.full,
-          label: Text(l10n.historyPrepModeFull),
+          label: SegmentLabel(l10n.historyPrepModeFull),
         ),
       ],
       selected: {selected},
@@ -187,9 +188,18 @@ class _DefaultLungVolumeSelector extends ConsumerWidget {
 
     return SegmentedButton<LungVolume>(
       segments: [
-        ButtonSegment(value: LungVolume.full, label: Text(l10n.lungVolFull)),
-        ButtonSegment(value: LungVolume.frc, label: Text(l10n.lungVolFrc)),
-        ButtonSegment(value: LungVolume.empty, label: Text(l10n.lungVolEmpty)),
+        ButtonSegment(
+          value: LungVolume.full,
+          label: SegmentLabel(l10n.lungVolFull),
+        ),
+        ButtonSegment(
+          value: LungVolume.frc,
+          label: SegmentLabel(l10n.lungVolFrc),
+        ),
+        ButtonSegment(
+          value: LungVolume.empty,
+          label: SegmentLabel(l10n.lungVolEmpty),
+        ),
       ],
       selected: {selected},
       onSelectionChanged: (value) async {
