@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:breath_lab/domain/services/co2_table_calculator.dart';
 import 'package:breath_lab/domain/services/o2_table_calculator.dart';
 
 void main() {
@@ -46,6 +47,17 @@ void main() {
       );
 
       expect(rounds.single.holdMs, 80000);
+    });
+
+    test('clamps an impossible near-zero first-round hold up to minHoldMs', () {
+      final rounds = O2TableCalculator.compute(
+        maxMs: 100000,
+        rounds: 20,
+        maxHoldPercent: 0.1,
+        restS: 120,
+      );
+
+      expect(rounds.first.holdMs, CO2TableCalculator.minHoldMs);
     });
   });
 }

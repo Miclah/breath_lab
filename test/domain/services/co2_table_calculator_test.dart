@@ -47,5 +47,16 @@ void main() {
       expect(rounds, hasLength(1));
       expect(rounds.single.restMs, 0);
     });
+
+    test('clamps an impossible near-zero hold up to minHoldMs', () {
+      final rounds = CO2TableCalculator.compute(
+        maxMs: 500,
+        rounds: 1,
+        holdPercent: 0.5,
+        restDecrementS: 15,
+      );
+
+      expect(rounds.single.holdMs, CO2TableCalculator.minHoldMs);
+    });
   });
 }
