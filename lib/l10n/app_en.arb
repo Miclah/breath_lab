@@ -44,9 +44,289 @@
   "@safetyAcknowledge": {
     "description": "Acknowledge button on the safety screen"
   },
+  "settingsTrainingSection": "Training",
+  "@settingsTrainingSection": {
+    "description": "Settings section header for training defaults"
+  },
+  "settingsCurrentMaxLabel": "Current max",
+  "@settingsCurrentMaxLabel": {
+    "description": "Label for the editable current max hold field in Settings"
+  },
+  "settingsCurrentMaxInvalid": "Enter a valid time (mm:ss)",
+  "@settingsCurrentMaxInvalid": {
+    "description": "Validation error shown below the current max field when the entered time can't be parsed"
+  },
+  "settingsDefaultPrepModeLabel": "Default prep mode",
+  "@settingsDefaultPrepModeLabel": {
+    "description": "Label for the default prep mode selector in Settings"
+  },
+  "settingsDefaultLungVolumeLabel": "Default lung volume",
+  "@settingsDefaultLungVolumeLabel": {
+    "description": "Label for the default lung volume selector in Settings"
+  },
+  "settingsTimerSection": "Timer",
+  "@settingsTimerSection": {
+    "description": "Settings section header for prep breathing duration and ratio, shown only when default prep mode is Short or Full"
+  },
+  "settingsPrepDurationLabel": "Prep breathing duration",
+  "@settingsPrepDurationLabel": {
+    "description": "Label for the prep breathing duration stepper in Settings"
+  },
+  "settingsBreathingRatioLabel": "Breathing ratio",
+  "@settingsBreathingRatioLabel": {
+    "description": "Label for the breathing ratio preset selector in Settings"
+  },
+  "settingsBreathingRatioCustom": "Custom",
+  "@settingsBreathingRatioCustom": {
+    "description": "Segment label that reveals custom inhale/exhale steppers for the breathing ratio"
+  },
+  "settingsBreathingRatioInhaleLabel": "Inhale",
+  "@settingsBreathingRatioInhaleLabel": {
+    "description": "Label for the custom inhale-duration stepper"
+  },
+  "settingsBreathingRatioExhaleLabel": "Exhale",
+  "@settingsBreathingRatioExhaleLabel": {
+    "description": "Label for the custom exhale-duration stepper"
+  },
+  "settingsCo2Section": "CO₂ table",
+  "@settingsCo2Section": {
+    "description": "Settings section header for CO₂ table configuration"
+  },
+  "settingsO2Section": "O₂ table",
+  "@settingsO2Section": {
+    "description": "Settings section header for O₂ table configuration"
+  },
+  "settingsRoundsLabel": "Rounds",
+  "@settingsRoundsLabel": {
+    "description": "Label for the rounds stepper in a table settings section"
+  },
+  "settingsCo2HoldPercentLabel": "Hold % of max",
+  "@settingsCo2HoldPercentLabel": {
+    "description": "Label for the CO₂ table hold-percentage slider"
+  },
+  "settingsCo2RestDecrementLabel": "Rest decrement",
+  "@settingsCo2RestDecrementLabel": {
+    "description": "Label for the CO₂ table rest-decrement-per-round stepper"
+  },
+  "settingsO2MaxHoldPercentLabel": "Max hold % of max",
+  "@settingsO2MaxHoldPercentLabel": {
+    "description": "Label for the O₂ table max-hold-percentage slider"
+  },
+  "settingsO2FixedRestLabel": "Fixed rest",
+  "@settingsO2FixedRestLabel": {
+    "description": "Label for the O₂ table fixed-rest stepper"
+  },
+  "settingsTablePreviewTitle": "Preview",
+  "@settingsTablePreviewTitle": {
+    "description": "Heading above the live-computed round preview at the bottom of a table settings section"
+  },
+  "ttsMilestoneOneMinute": "One minute",
+  "@ttsMilestoneOneMinute": {
+    "description": "Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language."
+  },
+  "ttsMilestoneOneThirty": "One thirty",
+  "@ttsMilestoneOneThirty": {
+    "description": "Spoken TTS callout at 1:30 elapsed."
+  },
+  "ttsMilestoneTwoMinutes": "Two minutes",
+  "@ttsMilestoneTwoMinutes": {
+    "description": "Spoken TTS callout at 2:00 elapsed."
+  },
+  "ttsMilestoneTwoThirty": "Two thirty",
+  "@ttsMilestoneTwoThirty": {
+    "description": "Spoken TTS callout at 2:30 elapsed."
+  },
+  "ttsMilestoneThreeMinutes": "Three minutes",
+  "@ttsMilestoneThreeMinutes": {
+    "description": "Spoken TTS callout at 3:00 elapsed."
+  },
+  "ttsMilestoneThreeThirty": "Three thirty",
+  "@ttsMilestoneThreeThirty": {
+    "description": "Spoken TTS callout at 3:30 elapsed."
+  },
+  "ttsMilestoneFourMinutes": "Four minutes",
+  "@ttsMilestoneFourMinutes": {
+    "description": "Spoken TTS callout at 4:00 elapsed."
+  },
+  "ttsHalfwayToPb": "Halfway to your best",
+  "@ttsHalfwayToPb": {
+    "description": "Spoken TTS callout at half the current personal best."
+  },
+  "ttsThirtySecondsToPb": "Thirty seconds to your best",
+  "@ttsThirtySecondsToPb": {
+    "description": "Spoken TTS callout 30 seconds before the current personal best."
+  },
+  "ttsAtPb": "Personal best",
+  "@ttsAtPb": {
+    "description": "Spoken TTS callout at the current personal best."
+  },
+  "ttsPastPb": "New personal best",
+  "@ttsPastPb": {
+    "description": "Spoken TTS callout just past the current personal best."
+  },
+  "settingsAmbientSection": "Ambient mode",
+  "@settingsAmbientSection": {
+    "description": "Settings section header for ambient-mode options"
+  },
+  "settingsAmbientIntro": "BreathLab is designed to work in the background while you do something else. These settings let you tune how the app reaches you during a hold.",
+  "@settingsAmbientIntro": {
+    "description": "Intro paragraph shown above the ambient mode toggles"
+  },
+  "settingsSpokenCalloutsLabel": "Spoken callouts",
+  "@settingsSpokenCalloutsLabel": {
+    "description": "Label for the spoken callouts mode selector in Settings"
+  },
+  "settingsCalloutsOff": "Off",
+  "@settingsCalloutsOff": {
+    "description": "Spoken callouts mode: disabled"
+  },
+  "settingsCalloutsMilestones": "Milestones",
+  "@settingsCalloutsMilestones": {
+    "description": "Spoken callouts mode: milestones only"
+  },
+  "settingsCallouts30s": "30s",
+  "@settingsCallouts30s": {
+    "description": "Spoken callouts mode: every 30 seconds"
+  },
+  "settingsCallouts15s": "15s",
+  "@settingsCallouts15s": {
+    "description": "Spoken callouts mode: every 15 seconds"
+  },
+  "settingsCalloutsDense": "Dense",
+  "@settingsCalloutsDense": {
+    "description": "Spoken callouts mode: dense (15s, then every 5s past 90% of PB)"
+  },
+  "settingsTtsLanguageLabel": "TTS voice language",
+  "@settingsTtsLanguageLabel": {
+    "description": "Label for the TTS voice language selector in Settings"
+  },
+  "settingsTtsLanguageFollowApp": "Follow app language",
+  "@settingsTtsLanguageFollowApp": {
+    "description": "TTS voice language option: use whatever language the app UI is currently in"
+  },
+  "settingsTtsVoiceMissing": "Slovak voice not found on this device. Callouts will use English until you install it in system settings.",
+  "@settingsTtsVoiceMissing": {
+    "description": "Shown when the user picks Slovak TTS callouts but no Slovak voice is installed"
+  },
+  "settingsAmbientPersistentNotifLabel": "Persistent notification",
+  "@settingsAmbientPersistentNotifLabel": {
+    "description": "Label for the persistent hold notification toggle in Settings (Android only)"
+  },
+  "settingsAmbientPersistentNotifSubtitle": "Live timer in a notification during a hold",
+  "@settingsAmbientPersistentNotifSubtitle": {
+    "description": "Subtitle explaining the persistent hold notification toggle"
+  },
+  "settingsAmbientPipLabel": "Picture-in-picture",
+  "@settingsAmbientPipLabel": {
+    "description": "Label for the PiP toggle in Settings (Android only)"
+  },
+  "settingsAmbientPipSubtitle": "Floating timer when you switch apps during a hold",
+  "@settingsAmbientPipSubtitle": {
+    "description": "Subtitle explaining the PiP toggle"
+  },
+  "settingsAmbientOledHoldLabel": "OLED hold screen",
+  "@settingsAmbientOledHoldLabel": {
+    "description": "Label for the OLED-friendly hold screen toggle in Settings"
+  },
+  "settingsAmbientOledHoldSubtitle": "Pure black, minimal screen during a hold",
+  "@settingsAmbientOledHoldSubtitle": {
+    "description": "Subtitle explaining the OLED hold screen toggle"
+  },
+  "settingsBrightnessOverrideLabel": "Brightness override",
+  "@settingsBrightnessOverrideLabel": {
+    "description": "Label for the brightness override selector in Settings, applies during the OLED hold screen"
+  },
+  "settingsBrightnessOverrideLow": "Low",
+  "@settingsBrightnessOverrideLow": {
+    "description": "Brightness override option: dim the screen during the hold"
+  },
+  "settingsBrightnessOverrideCurrent": "Current",
+  "@settingsBrightnessOverrideCurrent": {
+    "description": "Brightness override option: leave brightness as-is"
+  },
+  "settingsBrightnessOverrideOff": "Off",
+  "@settingsBrightnessOverrideOff": {
+    "description": "Brightness override option: feature disabled"
+  },
+  "settingsFocusModeLabel": "Focus mode",
+  "@settingsFocusModeLabel": {
+    "description": "Label for the focus mode toggle in Settings"
+  },
+  "settingsFocusModeExplanation": "BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.",
+  "@settingsFocusModeExplanation": {
+    "description": "Longer explanatory body shown below the focus mode toggle, per Design Additions §7"
+  },
+  "settingsSoundHapticsSection": "Sound & haptics",
+  "@settingsSoundHapticsSection": {
+    "description": "Settings section header for sound and haptics options"
+  },
+  "settingsSoundEnabledLabel": "Sound",
+  "@settingsSoundEnabledLabel": {
+    "description": "Label for the sound on/off toggle in Settings"
+  },
+  "settingsSoundVolumeLabel": "Volume",
+  "@settingsSoundVolumeLabel": {
+    "description": "Label for the sound volume slider in Settings"
+  },
+  "settingsHapticIntensityLabel": "Haptic intensity",
+  "@settingsHapticIntensityLabel": {
+    "description": "Label for the haptic intensity selector in Settings"
+  },
+  "settingsHapticOff": "Off",
+  "@settingsHapticOff": {
+    "description": "Haptic intensity option: disabled"
+  },
+  "settingsHapticLight": "Light",
+  "@settingsHapticLight": {
+    "description": "Haptic intensity option: light"
+  },
+  "settingsHapticMedium": "Medium",
+  "@settingsHapticMedium": {
+    "description": "Haptic intensity option: medium"
+  },
+  "settingsHapticStrong": "Strong",
+  "@settingsHapticStrong": {
+    "description": "Haptic intensity option: strong"
+  },
+  "settingsTestSoundButton": "Test sound",
+  "@settingsTestSoundButton": {
+    "description": "Button that plays a sample audio cue at the current volume"
+  },
+  "settingsTestHapticButton": "Test haptic",
+  "@settingsTestHapticButton": {
+    "description": "Button that plays a sample vibration at the current haptic intensity"
+  },
   "settingsAppearanceSection": "Appearance",
   "@settingsAppearanceSection": {
     "description": "Settings section header for appearance options"
+  },
+  "settingsAboutSection": "About",
+  "@settingsAboutSection": {
+    "description": "Settings section header for safety info, version, and reset"
+  },
+  "settingsSafetyInfoLink": "Safety information",
+  "@settingsSafetyInfoLink": {
+    "description": "Row that opens the safety screen from Settings"
+  },
+  "settingsVersionLabel": "Version",
+  "@settingsVersionLabel": {
+    "description": "Row showing the app version and build number"
+  },
+  "settingsResetLabel": "Reset all data",
+  "@settingsResetLabel": {
+    "description": "Row that opens the reset-all-data confirmation dialog"
+  },
+  "settingsResetConfirmTitle": "Reset all data?",
+  "@settingsResetConfirmTitle": {
+    "description": "Title of the reset-all-data confirmation dialog"
+  },
+  "settingsResetConfirmMessage": "This deletes every hold, table session, tag, and setting on this device. This can't be undone.",
+  "@settingsResetConfirmMessage": {
+    "description": "Body text of the reset-all-data confirmation dialog"
+  },
+  "settingsResetButton": "Reset",
+  "@settingsResetButton": {
+    "description": "Confirm button in the reset-all-data confirmation dialog"
   },
   "settingsThemeLabel": "Theme",
   "@settingsThemeLabel": {
@@ -63,6 +343,18 @@
   "themeSystem": "System",
   "@themeSystem": {
     "description": "System (follow OS) theme option label"
+  },
+  "settingsAppLanguageLabel": "App language",
+  "@settingsAppLanguageLabel": {
+    "description": "Label for the app UI language selector in Settings"
+  },
+  "settingsLanguageSlovak": "Slovak",
+  "@settingsLanguageSlovak": {
+    "description": "App language option: Slovak"
+  },
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {
+    "description": "App language option: English"
   },
   "presetQuickMax": "Quick max",
   "@presetQuickMax": {
@@ -111,6 +403,26 @@
   "timerStopButton": "Stop",
   "@timerStopButton": {
     "description": "Action button label during an active hold"
+  },
+  "notificationMaxHoldBody": "Max hold",
+  "@notificationMaxHoldBody": {
+    "description": "Body text of the persistent hold notification (Android)"
+  },
+  "notificationMarkContractionAction": "Mark contraction",
+  "@notificationMarkContractionAction": {
+    "description": "Action button label on the persistent hold notification (Android)"
+  },
+  "notificationPermissionDeniedBanner": "Enable notifications in system settings for live-timer overlay during holds.",
+  "@notificationPermissionDeniedBanner": {
+    "description": "Banner shown during a hold when the Android notification permission was denied"
+  },
+  "foregroundServiceDisabledBanner": "Check battery optimization settings for BreathLab to enable the live-timer notification and picture-in-picture during holds.",
+  "@foregroundServiceDisabledBanner": {
+    "description": "Banner shown during a hold when the OS refused to start the foreground service, e.g. due to battery optimization"
+  },
+  "bannerDismissAction": "Dismiss",
+  "@bannerDismissAction": {
+    "description": "Action label to dismiss an in-app MaterialBanner"
   },
   "timerResetButton": "Reset",
   "@timerResetButton": {

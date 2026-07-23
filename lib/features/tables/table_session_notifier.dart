@@ -38,7 +38,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
     );
     _startTicker();
     ref.read(audioServiceProvider).playHoldStart();
-    ref.read(hapticsServiceProvider).holdStart();
+    ref.read(hapticsServiceProvider).tableRoundStart();
   }
 
   /// End the current hold before its planned duration. The actual (shorter)
@@ -148,7 +148,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
         if (remainingS <= 3 && remainingS != _lastCountdownSecond) {
           _lastCountdownSecond = remainingS;
           ref.read(audioServiceProvider).playCountdownTick();
-          ref.read(hapticsServiceProvider).countdownTick();
+          ref.read(hapticsServiceProvider).tableRestCountdown();
         }
       }
       state = state.copyWith(elapsed: _stopwatch.elapsed);
@@ -199,7 +199,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
         completedRounds: details,
       );
       ref.read(audioServiceProvider).playRoundDone();
-      ref.read(hapticsServiceProvider).sessionComplete();
+      ref.read(hapticsServiceProvider).tableComplete();
       unawaited(_persistSession(details));
       return;
     }
@@ -214,7 +214,7 @@ class TableSessionNotifier extends Notifier<TableSessionState> {
       completedRounds: details,
     );
     ref.read(audioServiceProvider).playHoldStart();
-    ref.read(hapticsServiceProvider).holdStart();
+    ref.read(hapticsServiceProvider).tableRoundStart();
   }
 
   void _stopTicker() {

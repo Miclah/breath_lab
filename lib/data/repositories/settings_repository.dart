@@ -5,6 +5,73 @@ import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
 
+enum HapticIntensity {
+  off,
+  light,
+  medium,
+  strong;
+
+  String get dbValue => switch (this) {
+    HapticIntensity.off => 'off',
+    HapticIntensity.light => 'light',
+    HapticIntensity.medium => 'medium',
+    HapticIntensity.strong => 'strong',
+  };
+
+  static HapticIntensity fromDb(String? value) => switch (value) {
+    'off' => HapticIntensity.off,
+    'light' => HapticIntensity.light,
+    'strong' => HapticIntensity.strong,
+    _ => HapticIntensity.medium,
+  };
+}
+
+enum SpokenCalloutsMode {
+  off,
+  milestones,
+  every30s,
+  every15s,
+  dense;
+
+  String get dbValue => switch (this) {
+    SpokenCalloutsMode.off => 'off',
+    SpokenCalloutsMode.milestones => 'milestones',
+    SpokenCalloutsMode.every30s => '30s',
+    SpokenCalloutsMode.every15s => '15s',
+    SpokenCalloutsMode.dense => 'dense',
+  };
+
+  static SpokenCalloutsMode fromDb(String? value) => switch (value) {
+    'off' => SpokenCalloutsMode.off,
+    '30s' => SpokenCalloutsMode.every30s,
+    '15s' => SpokenCalloutsMode.every15s,
+    'dense' => SpokenCalloutsMode.dense,
+    _ => SpokenCalloutsMode.milestones,
+  };
+}
+
+/// Screen brightness behavior during the OLED hold screen. `current` and
+/// `off` are both no-ops (design intentionally keeps them as separate
+/// choices — "off" means the override feature is disabled, "current" means
+/// explicitly leave brightness alone); only `low` actually dims.
+enum BrightnessOverride {
+  low,
+  current,
+  off;
+
+  String get dbValue => switch (this) {
+    BrightnessOverride.low => 'low',
+    BrightnessOverride.current => 'current',
+    BrightnessOverride.off => 'off',
+  };
+
+  static BrightnessOverride fromDb(String? value) => switch (value) {
+    'low' => BrightnessOverride.low,
+    'off' => BrightnessOverride.off,
+    _ => BrightnessOverride.current,
+  };
+}
+
 class SettingsRepository {
   SettingsRepository(this._db);
 
@@ -30,6 +97,10 @@ class SettingsRepository {
         );
   }
 
+  Future<void> _delete(String key) async {
+    await (_db.delete(_db.settings)..where((t) => t.key.equals(key))).go();
+  }
+
   Future<PrepMode> getDefaultPrepMode() async {
     final value = await _get('default_prep_mode');
     return PrepMode.fromDb(value) ?? PrepMode.threeSeconds;
@@ -52,6 +123,180 @@ class SettingsRepository {
   }
 
   Future<void> setCurrentMaxMs(int ms) => _set('current_max_ms', ms.toString());
+
+  /// Prep breathing duration in seconds. Falls back to a mode-appropriate
+  /// default (30s for Short, 120s for Full) until the user overrides it —
+  /// switching between Short and Full re-suggests that default.
+  Future<int> getPrepBreathingDurationSeconds(PrepMode mode) async {
+    final stored = await _get('prep_breathing_duration_s');
+    if (stored != null) return int.parse(stored);
+    return mode == PrepMode.short ? 30 : 120;
+  }
+
+  Future<void> setPrepBreathingDurationSeconds(int seconds) =>
+      _set('prep_breathing_duration_s', seconds.toString());
+
+  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6.
+  Future<(int, int)> getBreathingRatio() async {
+    final inhale = await _get('breathing_ratio_inhale_s');
+    final exhale = await _get('breathing_ratio_exhale_s');
+    return (
+      inhale == null ? 4 : int.parse(inhale),
+      exhale == null ? 6 : int.parse(exhale),
+    );
+  }
+
+  Future<void> setBreathingRatio(int inhaleSeconds, int exhaleSeconds) async {
+    await _set('breathing_ratio_inhale_s', inhaleSeconds.toString());
+    await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
+  }
+
+  /// CO₂ table config as (rounds, holdPercent 0-100, restDecrementSeconds).
+  /// Defaults per PRD: 7 rounds, 50% hold, 15s rest decrement.
+  Future<(int, int, int)> getCo2TableConfig() async {
+    final rounds = await _get('co2_rounds');
+    final holdPercent = await _get('co2_hold_percent');
+    final restDecrementS = await _get('co2_rest_decrement_s');
+    return (
+      rounds == null ? 7 : int.parse(rounds),
+      holdPercent == null ? 50 : int.parse(holdPercent),
+      restDecrementS == null ? 15 : int.parse(restDecrementS),
+    );
+  }
+
+  Future<void> setCo2Rounds(int rounds) =>
+      _set('co2_rounds', rounds.toString());
+
+  Future<void> setCo2HoldPercent(int percent) =>
+      _set('co2_hold_percent', percent.toString());
+
+  Future<void> setCo2RestDecrementSeconds(int seconds) =>
+      _set('co2_rest_decrement_s', seconds.toString());
+
+  /// O₂ table config as (rounds, maxHoldPercent 0-100, fixedRestSeconds).
+  /// Defaults per PRD: 8 rounds, 80% max hold, 120s fixed rest.
+  Future<(int, int, int)> getO2TableConfig() async {
+    final rounds = await _get('o2_rounds');
+    final maxHoldPercent = await _get('o2_max_hold_percent');
+    final restS = await _get('o2_rest_s');
+    return (
+      rounds == null ? 8 : int.parse(rounds),
+      maxHoldPercent == null ? 80 : int.parse(maxHoldPercent),
+      restS == null ? 120 : int.parse(restS),
+    );
+  }
+
+  Future<void> setO2Rounds(int rounds) => _set('o2_rounds', rounds.toString());
+
+  Future<void> setO2MaxHoldPercent(int percent) =>
+      _set('o2_max_hold_percent', percent.toString());
+
+  Future<void> setO2RestSeconds(int seconds) =>
+      _set('o2_rest_s', seconds.toString());
+
+  /// Whether sound cues are enabled. Defaults to on.
+  Future<bool> getSoundEnabled() async {
+    final value = await _get('sound_enabled');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setSoundEnabled(bool enabled) =>
+      _set('sound_enabled', enabled ? '1' : '0');
+
+  /// Sound volume as a percentage 0-100. Defaults to 100.
+  Future<int> getSoundVolume() async {
+    final value = await _get('sound_volume');
+    return value == null ? 100 : int.parse(value);
+  }
+
+  Future<void> setSoundVolume(int percent) =>
+      _set('sound_volume', percent.toString());
+
+  /// Haptic intensity. Defaults to medium.
+  Future<HapticIntensity> getHapticIntensity() async {
+    final value = await _get('haptic_intensity');
+    return HapticIntensity.fromDb(value);
+  }
+
+  Future<void> setHapticIntensity(HapticIntensity intensity) =>
+      _set('haptic_intensity', intensity.dbValue);
+
+  /// App UI language code ('sk' | 'en'), or null to follow the system
+  /// locale. Defaults to null.
+  Future<String?> getAppLanguage() => _get('app_language');
+
+  Future<void> setAppLanguage(String? code) =>
+      code == null ? _delete('app_language') : _set('app_language', code);
+
+  /// Spoken callouts mode. Defaults to milestones.
+  Future<SpokenCalloutsMode> getSpokenCalloutsMode() async {
+    final value = await _get('spoken_callouts');
+    return SpokenCalloutsMode.fromDb(value);
+  }
+
+  Future<void> setSpokenCalloutsMode(SpokenCalloutsMode mode) =>
+      _set('spoken_callouts', mode.dbValue);
+
+  /// TTS voice language code ('sk' | 'en'), or null to follow the app UI
+  /// language. Defaults to null.
+  Future<String?> getTtsLanguage() => _get('tts_language');
+
+  Future<void> setTtsLanguage(String? code) =>
+      code == null ? _delete('tts_language') : _set('tts_language', code);
+
+  /// Whether the persistent live-timer notification shows during a hold
+  /// (Android only). Defaults to on.
+  Future<bool> getAmbientPersistentNotifEnabled() async {
+    final value = await _get('ambient_persistent_notif');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setAmbientPersistentNotifEnabled(bool enabled) =>
+      _set('ambient_persistent_notif', enabled ? '1' : '0');
+
+  /// Whether picture-in-picture is entered automatically when the user
+  /// leaves the app during a hold (Android only). Defaults to on.
+  Future<bool> getAmbientPipEnabled() async {
+    final value = await _get('ambient_pip');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setAmbientPipEnabled(bool enabled) =>
+      _set('ambient_pip', enabled ? '1' : '0');
+
+  /// Whether the OLED-friendly hold screen is enabled. Defaults to off —
+  /// unlike the notification/PiP toggles, this changes the base visual
+  /// significantly, so it's opt-in.
+  Future<bool> getAmbientOledHoldEnabled() async {
+    final value = await _get('ambient_oled_hold');
+    return value == '1';
+  }
+
+  Future<void> setAmbientOledHoldEnabled(bool enabled) =>
+      _set('ambient_oled_hold', enabled ? '1' : '0');
+
+  /// Brightness override during the OLED hold screen. Defaults to current
+  /// (don't touch brightness).
+  Future<BrightnessOverride> getAmbientBrightnessOverride() async {
+    final value = await _get('ambient_brightness_override');
+    return BrightnessOverride.fromDb(value);
+  }
+
+  Future<void> setAmbientBrightnessOverride(BrightnessOverride value) =>
+      _set('ambient_brightness_override', value.dbValue);
+
+  /// Whether focus mode (suppressing BreathLab's own non-critical
+  /// notifications during a session) is enabled. Defaults to on — unlike
+  /// OLED hold, this has no visible effect on its own today (there are no
+  /// non-critical notifications yet to suppress), so there's no visual
+  /// disruption to opt into.
+  Future<bool> getFocusModeEnabled() async {
+    final value = await _get('focus_mode_enabled');
+    return value == null ? true : value == '1';
+  }
+
+  Future<void> setFocusModeEnabled(bool enabled) =>
+      _set('focus_mode_enabled', enabled ? '1' : '0');
 }
 
 // ---------------------------------------------------------------------------
@@ -75,4 +320,103 @@ final defaultLungVolumeProvider = FutureProvider<LungVolume>((ref) {
 /// All-time PB in milliseconds, null if no hold saved yet.
 final currentMaxMsProvider = FutureProvider<int?>((ref) {
   return ref.watch(settingsRepositoryProvider).getCurrentMaxMs();
+});
+
+/// Prep breathing duration in seconds. Invalidate after writing to refresh.
+final prepBreathingDurationSecondsProvider = FutureProvider<int>((ref) async {
+  final mode = await ref.watch(defaultPrepModeProvider.future);
+  return ref
+      .watch(settingsRepositoryProvider)
+      .getPrepBreathingDurationSeconds(mode);
+});
+
+/// Breathing ratio as (inhaleSeconds, exhaleSeconds). Invalidate after
+/// writing to refresh.
+final breathingRatioProvider = FutureProvider<(int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getBreathingRatio();
+});
+
+/// CO₂ table config as (rounds, holdPercent, restDecrementSeconds).
+/// Invalidate after writing to refresh.
+final co2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getCo2TableConfig();
+});
+
+/// O₂ table config as (rounds, maxHoldPercent, fixedRestSeconds).
+/// Invalidate after writing to refresh.
+final o2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
+  return ref.watch(settingsRepositoryProvider).getO2TableConfig();
+});
+
+/// Whether sound cues are enabled. Invalidate after writing to refresh.
+final soundEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSoundEnabled();
+});
+
+/// Sound volume as a percentage 0-100. Invalidate after writing to refresh.
+final soundVolumeProvider = FutureProvider<int>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSoundVolume();
+});
+
+/// Haptic intensity. Invalidate after writing to refresh.
+final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
+  return ref.watch(settingsRepositoryProvider).getHapticIntensity();
+});
+
+/// App UI language code ('sk' | 'en'), or null to follow the system locale.
+/// Invalidate after writing to refresh.
+final appLanguageProvider = FutureProvider<String?>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAppLanguage();
+});
+
+/// Spoken callouts mode. Invalidate after writing to refresh.
+final spokenCalloutsModeProvider = FutureProvider<SpokenCalloutsMode>((ref) {
+  return ref.watch(settingsRepositoryProvider).getSpokenCalloutsMode();
+});
+
+/// TTS voice language code ('sk' | 'en'), or null to follow the app UI
+/// language. Invalidate after writing to refresh.
+final ttsLanguageProvider = FutureProvider<String?>((ref) {
+  return ref.watch(settingsRepositoryProvider).getTtsLanguage();
+});
+
+/// Effective TTS voice language: the explicit override if set, else the
+/// app UI language, else English.
+final effectiveTtsLanguageProvider = FutureProvider<String>((ref) async {
+  final explicit = await ref.watch(ttsLanguageProvider.future);
+  if (explicit != null) return explicit;
+  final appLanguage = await ref.watch(appLanguageProvider.future);
+  return appLanguage ?? 'en';
+});
+
+/// Whether the persistent hold notification is enabled. Invalidate after
+/// writing to refresh.
+final ambientPersistentNotifEnabledProvider = FutureProvider<bool>((ref) {
+  return ref
+      .watch(settingsRepositoryProvider)
+      .getAmbientPersistentNotifEnabled();
+});
+
+/// Whether ambient PiP is enabled. Invalidate after writing to refresh.
+final ambientPipEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAmbientPipEnabled();
+});
+
+/// Whether the OLED-friendly hold screen is enabled. Invalidate after
+/// writing to refresh.
+final ambientOledHoldEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getAmbientOledHoldEnabled();
+});
+
+/// Brightness override during the OLED hold screen. Invalidate after
+/// writing to refresh.
+final ambientBrightnessOverrideProvider = FutureProvider<BrightnessOverride>((
+  ref,
+) {
+  return ref.watch(settingsRepositoryProvider).getAmbientBrightnessOverride();
+});
+
+/// Whether focus mode is enabled. Invalidate after writing to refresh.
+final focusModeEnabledProvider = FutureProvider<bool>((ref) {
+  return ref.watch(settingsRepositoryProvider).getFocusModeEnabled();
 });

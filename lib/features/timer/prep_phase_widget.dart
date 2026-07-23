@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
@@ -20,13 +21,16 @@ class PrepPhaseWidget extends ConsumerWidget {
     final state = ref.watch(timerProvider);
     if (!state.isPrep) return const SizedBox.shrink();
 
+    final prepSeconds =
+        ref.watch(prepBreathingDurationSecondsProvider).valueOrNull ?? 120;
+    final ratio = ref.watch(breathingRatioProvider).valueOrNull ?? (4, 6);
+
     return switch (state.prepMode) {
       PrepMode.threeSeconds => const _ThreeSecondCountdown(),
-      PrepMode.short => const _BreathingGuide(
-        totalDuration: Duration(seconds: 30),
-      ),
-      PrepMode.full => const _BreathingGuide(
-        totalDuration: Duration(minutes: 2),
+      PrepMode.short || PrepMode.full => _BreathingGuide(
+        totalDuration: Duration(seconds: prepSeconds),
+        inhaleSeconds: ratio.$1,
+        exhaleSeconds: ratio.$2,
       ),
       _ => const SizedBox.shrink(),
     };
@@ -99,9 +103,15 @@ class _ThreeSecondCountdownState extends ConsumerState<_ThreeSecondCountdown> {
 // ---------------------------------------------------------------------------
 
 class _BreathingGuide extends ConsumerStatefulWidget {
-  const _BreathingGuide({required this.totalDuration});
+  const _BreathingGuide({
+    required this.totalDuration,
+    required this.inhaleSeconds,
+    required this.exhaleSeconds,
+  });
 
   final Duration totalDuration;
+  final int inhaleSeconds;
+  final int exhaleSeconds;
 
   @override
   ConsumerState<_BreathingGuide> createState() => _BreathingGuideState();
@@ -111,20 +121,18 @@ class _BreathingGuideState extends ConsumerState<_BreathingGuide>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _scale;
+  late final double _inhaleFraction;
   bool _prevIsInhale = true;
-
-  // Default ratio 4s in / 6s out
-  static const _inhaleSec = 4;
-  static const _totalSec = 10; // 4 + 6
-  static const _inhaleFraction = _inhaleSec / _totalSec; // 0.4
 
   @override
   void initState() {
     super.initState();
+    final totalSec = widget.inhaleSeconds + widget.exhaleSeconds;
+    _inhaleFraction = widget.inhaleSeconds / totalSec;
     _ctrl =
         AnimationController(
             vsync: this,
-            duration: const Duration(seconds: _totalSec),
+            duration: Duration(seconds: totalSec),
           )
           ..addListener(_onTick)
           ..repeat();

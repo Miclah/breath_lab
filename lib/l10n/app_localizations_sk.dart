@@ -44,7 +44,224 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyAcknowledge => 'Rozumiem';
 
   @override
+  String get settingsTrainingSection => 'Tréning';
+
+  @override
+  String get settingsCurrentMaxLabel => 'Aktuálne maximum';
+
+  @override
+  String get settingsCurrentMaxInvalid => 'Zadaj platný čas (mm:ss)';
+
+  @override
+  String get settingsDefaultPrepModeLabel => 'Predvolený režim prípravy';
+
+  @override
+  String get settingsDefaultLungVolumeLabel => 'Predvolený objem pľúc';
+
+  @override
+  String get settingsTimerSection => 'Časovač';
+
+  @override
+  String get settingsPrepDurationLabel => 'Dĺžka dychovej prípravy';
+
+  @override
+  String get settingsBreathingRatioLabel => 'Pomer dýchania';
+
+  @override
+  String get settingsBreathingRatioCustom => 'Vlastný';
+
+  @override
+  String get settingsBreathingRatioInhaleLabel => 'Nádych';
+
+  @override
+  String get settingsBreathingRatioExhaleLabel => 'Výdych';
+
+  @override
+  String get settingsCo2Section => 'CO₂ tabuľka';
+
+  @override
+  String get settingsO2Section => 'O₂ tabuľka';
+
+  @override
+  String get settingsRoundsLabel => 'Kolá';
+
+  @override
+  String get settingsCo2HoldPercentLabel => '% zadržania z maxima';
+
+  @override
+  String get settingsCo2RestDecrementLabel => 'Skrátenie oddychu';
+
+  @override
+  String get settingsO2MaxHoldPercentLabel => 'Max % zadržania z maxima';
+
+  @override
+  String get settingsO2FixedRestLabel => 'Pevný oddych';
+
+  @override
+  String get settingsTablePreviewTitle => 'Náhľad';
+
+  @override
+  String get ttsMilestoneOneMinute => 'Jedna minúta';
+
+  @override
+  String get ttsMilestoneOneThirty => 'Jedna tridsať';
+
+  @override
+  String get ttsMilestoneTwoMinutes => 'Dve minúty';
+
+  @override
+  String get ttsMilestoneTwoThirty => 'Dve tridsať';
+
+  @override
+  String get ttsMilestoneThreeMinutes => 'Tri minúty';
+
+  @override
+  String get ttsMilestoneThreeThirty => 'Tri tridsať';
+
+  @override
+  String get ttsMilestoneFourMinutes => 'Štyri minúty';
+
+  @override
+  String get ttsHalfwayToPb => 'Polovica k najlepšiemu času';
+
+  @override
+  String get ttsThirtySecondsToPb => 'Tridsať sekúnd k najlepšiemu času';
+
+  @override
+  String get ttsAtPb => 'Osobný rekord';
+
+  @override
+  String get ttsPastPb => 'Nový osobný rekord';
+
+  @override
+  String get settingsAmbientSection => 'Ambientný režim';
+
+  @override
+  String get settingsAmbientIntro =>
+      'BreathLab je navrhnutý tak, aby fungoval na pozadí, kým robíš niečo iné. Tieto nastavenia ti umožňujú prispôsobiť, ako sa ti aplikácia ozve počas zadržania.';
+
+  @override
+  String get settingsSpokenCalloutsLabel => 'Hlasové oznámenia';
+
+  @override
+  String get settingsCalloutsOff => 'Vypnuté';
+
+  @override
+  String get settingsCalloutsMilestones => 'Míľniky';
+
+  @override
+  String get settingsCallouts30s => '30s';
+
+  @override
+  String get settingsCallouts15s => '15s';
+
+  @override
+  String get settingsCalloutsDense => 'Husté';
+
+  @override
+  String get settingsTtsLanguageLabel => 'Jazyk hlasu';
+
+  @override
+  String get settingsTtsLanguageFollowApp => 'Podľa jazyka aplikácie';
+
+  @override
+  String get settingsTtsVoiceMissing =>
+      'Slovenský hlas sa na tomto zariadení nenašiel. Kým ho nenainštaluješ v nastaveniach systému, oznámenia budú v angličtine.';
+
+  @override
+  String get settingsAmbientPersistentNotifLabel => 'Trvalá notifikácia';
+
+  @override
+  String get settingsAmbientPersistentNotifSubtitle =>
+      'Živý časovač v notifikácii počas zadržania';
+
+  @override
+  String get settingsAmbientPipLabel => 'Obraz v obraze';
+
+  @override
+  String get settingsAmbientPipSubtitle =>
+      'Plávajúci časovač pri prepnutí do inej aplikácie počas zadržania';
+
+  @override
+  String get settingsAmbientOledHoldLabel => 'OLED obrazovka zadržania';
+
+  @override
+  String get settingsAmbientOledHoldSubtitle =>
+      'Čisto čierna, minimalistická obrazovka počas zadržania';
+
+  @override
+  String get settingsBrightnessOverrideLabel => 'Prepísanie jasu';
+
+  @override
+  String get settingsBrightnessOverrideLow => 'Nízky';
+
+  @override
+  String get settingsBrightnessOverrideCurrent => 'Aktuálny';
+
+  @override
+  String get settingsBrightnessOverrideOff => 'Vypnuté';
+
+  @override
+  String get settingsFocusModeLabel => 'Režim zamerania';
+
+  @override
+  String get settingsFocusModeExplanation =>
+      'BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie. Ak chceš úplne tichý tréning, môžeš si v nastaveniach Androidu sám zapnúť režim priority — BreathLab nikdy nezasiahne do tvojho systémového nerušiť.';
+
+  @override
+  String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
+
+  @override
+  String get settingsSoundEnabledLabel => 'Zvuk';
+
+  @override
+  String get settingsSoundVolumeLabel => 'Hlasitosť';
+
+  @override
+  String get settingsHapticIntensityLabel => 'Intenzita vibrácií';
+
+  @override
+  String get settingsHapticOff => 'Vypnuté';
+
+  @override
+  String get settingsHapticLight => 'Jemné';
+
+  @override
+  String get settingsHapticMedium => 'Stredné';
+
+  @override
+  String get settingsHapticStrong => 'Silné';
+
+  @override
+  String get settingsTestSoundButton => 'Vyskúšať zvuk';
+
+  @override
+  String get settingsTestHapticButton => 'Vyskúšať vibráciu';
+
+  @override
   String get settingsAppearanceSection => 'Vzhľad';
+
+  @override
+  String get settingsAboutSection => 'O aplikácii';
+
+  @override
+  String get settingsSafetyInfoLink => 'Bezpečnostné informácie';
+
+  @override
+  String get settingsVersionLabel => 'Verzia';
+
+  @override
+  String get settingsResetLabel => 'Vymazať všetky dáta';
+
+  @override
+  String get settingsResetConfirmTitle => 'Vymazať všetky dáta?';
+
+  @override
+  String get settingsResetConfirmMessage =>
+      'Týmto sa vymažú všetky pokusy, tabuľkové série, tagy a nastavenia v tomto zariadení. Túto akciu nemožno vrátiť späť.';
+
+  @override
+  String get settingsResetButton => 'Vymazať';
 
   @override
   String get settingsThemeLabel => 'Téma';
@@ -57,6 +274,15 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get themeSystem => 'Systém';
+
+  @override
+  String get settingsAppLanguageLabel => 'Jazyk aplikácie';
+
+  @override
+  String get settingsLanguageSlovak => 'Slovenčina';
+
+  @override
+  String get settingsLanguageEnglish => 'Angličtina';
 
   @override
   String get presetQuickMax => 'Rýchly max';
@@ -95,6 +321,23 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get timerStopButton => 'Stop';
+
+  @override
+  String get notificationMaxHoldBody => 'Max zadržanie';
+
+  @override
+  String get notificationMarkContractionAction => 'Označiť kontrakciu';
+
+  @override
+  String get notificationPermissionDeniedBanner =>
+      'Povoľ notifikácie v nastaveniach systému, aby sa počas zadržania zobrazoval živý časovač.';
+
+  @override
+  String get foregroundServiceDisabledBanner =>
+      'Skontroluj nastavenia optimalizácie batérie pre BreathLab, aby fungovala živá notifikácia a obraz v obraze počas zadržania.';
+
+  @override
+  String get bannerDismissAction => 'Zavrieť';
 
   @override
   String get timerResetButton => 'Resetovať';

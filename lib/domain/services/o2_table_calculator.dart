@@ -13,7 +13,10 @@ class O2TableCalculator {
     final restMs = restS * 1000;
     return List.generate(rounds, (i) {
       final holdPercent = maxHoldPercent * (i + 1) / rounds;
-      final holdMs = (maxMs * holdPercent).round();
+      final rawHoldMs = (maxMs * holdPercent).round();
+      final holdMs = rawHoldMs < CO2TableCalculator.minHoldMs
+          ? CO2TableCalculator.minHoldMs
+          : rawHoldMs;
       return TableRoundPlan(holdMs: holdMs, restMs: restMs);
     });
   }

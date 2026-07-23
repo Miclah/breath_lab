@@ -164,11 +164,431 @@ abstract class AppLocalizations {
   /// **'I understand'**
   String get safetyAcknowledge;
 
+  /// Settings section header for training defaults
+  ///
+  /// In en, this message translates to:
+  /// **'Training'**
+  String get settingsTrainingSection;
+
+  /// Label for the editable current max hold field in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Current max'**
+  String get settingsCurrentMaxLabel;
+
+  /// Validation error shown below the current max field when the entered time can't be parsed
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid time (mm:ss)'**
+  String get settingsCurrentMaxInvalid;
+
+  /// Label for the default prep mode selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Default prep mode'**
+  String get settingsDefaultPrepModeLabel;
+
+  /// Label for the default lung volume selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Default lung volume'**
+  String get settingsDefaultLungVolumeLabel;
+
+  /// Settings section header for prep breathing duration and ratio, shown only when default prep mode is Short or Full
+  ///
+  /// In en, this message translates to:
+  /// **'Timer'**
+  String get settingsTimerSection;
+
+  /// Label for the prep breathing duration stepper in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Prep breathing duration'**
+  String get settingsPrepDurationLabel;
+
+  /// Label for the breathing ratio preset selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing ratio'**
+  String get settingsBreathingRatioLabel;
+
+  /// Segment label that reveals custom inhale/exhale steppers for the breathing ratio
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get settingsBreathingRatioCustom;
+
+  /// Label for the custom inhale-duration stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Inhale'**
+  String get settingsBreathingRatioInhaleLabel;
+
+  /// Label for the custom exhale-duration stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Exhale'**
+  String get settingsBreathingRatioExhaleLabel;
+
+  /// Settings section header for CO₂ table configuration
+  ///
+  /// In en, this message translates to:
+  /// **'CO₂ table'**
+  String get settingsCo2Section;
+
+  /// Settings section header for O₂ table configuration
+  ///
+  /// In en, this message translates to:
+  /// **'O₂ table'**
+  String get settingsO2Section;
+
+  /// Label for the rounds stepper in a table settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds'**
+  String get settingsRoundsLabel;
+
+  /// Label for the CO₂ table hold-percentage slider
+  ///
+  /// In en, this message translates to:
+  /// **'Hold % of max'**
+  String get settingsCo2HoldPercentLabel;
+
+  /// Label for the CO₂ table rest-decrement-per-round stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Rest decrement'**
+  String get settingsCo2RestDecrementLabel;
+
+  /// Label for the O₂ table max-hold-percentage slider
+  ///
+  /// In en, this message translates to:
+  /// **'Max hold % of max'**
+  String get settingsO2MaxHoldPercentLabel;
+
+  /// Label for the O₂ table fixed-rest stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed rest'**
+  String get settingsO2FixedRestLabel;
+
+  /// Heading above the live-computed round preview at the bottom of a table settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get settingsTablePreviewTitle;
+
+  /// Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language.
+  ///
+  /// In en, this message translates to:
+  /// **'One minute'**
+  String get ttsMilestoneOneMinute;
+
+  /// Spoken TTS callout at 1:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'One thirty'**
+  String get ttsMilestoneOneThirty;
+
+  /// Spoken TTS callout at 2:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Two minutes'**
+  String get ttsMilestoneTwoMinutes;
+
+  /// Spoken TTS callout at 2:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Two thirty'**
+  String get ttsMilestoneTwoThirty;
+
+  /// Spoken TTS callout at 3:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Three minutes'**
+  String get ttsMilestoneThreeMinutes;
+
+  /// Spoken TTS callout at 3:30 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Three thirty'**
+  String get ttsMilestoneThreeThirty;
+
+  /// Spoken TTS callout at 4:00 elapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Four minutes'**
+  String get ttsMilestoneFourMinutes;
+
+  /// Spoken TTS callout at half the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfway to your best'**
+  String get ttsHalfwayToPb;
+
+  /// Spoken TTS callout 30 seconds before the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Thirty seconds to your best'**
+  String get ttsThirtySecondsToPb;
+
+  /// Spoken TTS callout at the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal best'**
+  String get ttsAtPb;
+
+  /// Spoken TTS callout just past the current personal best.
+  ///
+  /// In en, this message translates to:
+  /// **'New personal best'**
+  String get ttsPastPb;
+
+  /// Settings section header for ambient-mode options
+  ///
+  /// In en, this message translates to:
+  /// **'Ambient mode'**
+  String get settingsAmbientSection;
+
+  /// Intro paragraph shown above the ambient mode toggles
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab is designed to work in the background while you do something else. These settings let you tune how the app reaches you during a hold.'**
+  String get settingsAmbientIntro;
+
+  /// Label for the spoken callouts mode selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Spoken callouts'**
+  String get settingsSpokenCalloutsLabel;
+
+  /// Spoken callouts mode: disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsCalloutsOff;
+
+  /// Spoken callouts mode: milestones only
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones'**
+  String get settingsCalloutsMilestones;
+
+  /// Spoken callouts mode: every 30 seconds
+  ///
+  /// In en, this message translates to:
+  /// **'30s'**
+  String get settingsCallouts30s;
+
+  /// Spoken callouts mode: every 15 seconds
+  ///
+  /// In en, this message translates to:
+  /// **'15s'**
+  String get settingsCallouts15s;
+
+  /// Spoken callouts mode: dense (15s, then every 5s past 90% of PB)
+  ///
+  /// In en, this message translates to:
+  /// **'Dense'**
+  String get settingsCalloutsDense;
+
+  /// Label for the TTS voice language selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'TTS voice language'**
+  String get settingsTtsLanguageLabel;
+
+  /// TTS voice language option: use whatever language the app UI is currently in
+  ///
+  /// In en, this message translates to:
+  /// **'Follow app language'**
+  String get settingsTtsLanguageFollowApp;
+
+  /// Shown when the user picks Slovak TTS callouts but no Slovak voice is installed
+  ///
+  /// In en, this message translates to:
+  /// **'Slovak voice not found on this device. Callouts will use English until you install it in system settings.'**
+  String get settingsTtsVoiceMissing;
+
+  /// Label for the persistent hold notification toggle in Settings (Android only)
+  ///
+  /// In en, this message translates to:
+  /// **'Persistent notification'**
+  String get settingsAmbientPersistentNotifLabel;
+
+  /// Subtitle explaining the persistent hold notification toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Live timer in a notification during a hold'**
+  String get settingsAmbientPersistentNotifSubtitle;
+
+  /// Label for the PiP toggle in Settings (Android only)
+  ///
+  /// In en, this message translates to:
+  /// **'Picture-in-picture'**
+  String get settingsAmbientPipLabel;
+
+  /// Subtitle explaining the PiP toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Floating timer when you switch apps during a hold'**
+  String get settingsAmbientPipSubtitle;
+
+  /// Label for the OLED-friendly hold screen toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'OLED hold screen'**
+  String get settingsAmbientOledHoldLabel;
+
+  /// Subtitle explaining the OLED hold screen toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Pure black, minimal screen during a hold'**
+  String get settingsAmbientOledHoldSubtitle;
+
+  /// Label for the brightness override selector in Settings, applies during the OLED hold screen
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness override'**
+  String get settingsBrightnessOverrideLabel;
+
+  /// Brightness override option: dim the screen during the hold
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get settingsBrightnessOverrideLow;
+
+  /// Brightness override option: leave brightness as-is
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get settingsBrightnessOverrideCurrent;
+
+  /// Brightness override option: feature disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsBrightnessOverrideOff;
+
+  /// Label for the focus mode toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Focus mode'**
+  String get settingsFocusModeLabel;
+
+  /// Longer explanatory body shown below the focus mode toggle, per Design Additions §7
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.'**
+  String get settingsFocusModeExplanation;
+
+  /// Settings section header for sound and haptics options
+  ///
+  /// In en, this message translates to:
+  /// **'Sound & haptics'**
+  String get settingsSoundHapticsSection;
+
+  /// Label for the sound on/off toggle in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get settingsSoundEnabledLabel;
+
+  /// Label for the sound volume slider in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get settingsSoundVolumeLabel;
+
+  /// Label for the haptic intensity selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Haptic intensity'**
+  String get settingsHapticIntensityLabel;
+
+  /// Haptic intensity option: disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsHapticOff;
+
+  /// Haptic intensity option: light
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settingsHapticLight;
+
+  /// Haptic intensity option: medium
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get settingsHapticMedium;
+
+  /// Haptic intensity option: strong
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get settingsHapticStrong;
+
+  /// Button that plays a sample audio cue at the current volume
+  ///
+  /// In en, this message translates to:
+  /// **'Test sound'**
+  String get settingsTestSoundButton;
+
+  /// Button that plays a sample vibration at the current haptic intensity
+  ///
+  /// In en, this message translates to:
+  /// **'Test haptic'**
+  String get settingsTestHapticButton;
+
   /// Settings section header for appearance options
   ///
   /// In en, this message translates to:
   /// **'Appearance'**
   String get settingsAppearanceSection;
+
+  /// Settings section header for safety info, version, and reset
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAboutSection;
+
+  /// Row that opens the safety screen from Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Safety information'**
+  String get settingsSafetyInfoLink;
+
+  /// Row showing the app version and build number
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settingsVersionLabel;
+
+  /// Row that opens the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all data'**
+  String get settingsResetLabel;
+
+  /// Title of the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all data?'**
+  String get settingsResetConfirmTitle;
+
+  /// Body text of the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every hold, table session, tag, and setting on this device. This can\'t be undone.'**
+  String get settingsResetConfirmMessage;
+
+  /// Confirm button in the reset-all-data confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get settingsResetButton;
 
   /// Label for the theme selector in Settings
   ///
@@ -193,6 +613,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get themeSystem;
+
+  /// Label for the app UI language selector in Settings
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get settingsAppLanguageLabel;
+
+  /// App language option: Slovak
+  ///
+  /// In en, this message translates to:
+  /// **'Slovak'**
+  String get settingsLanguageSlovak;
+
+  /// App language option: English
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
 
   /// Quick preset chip label — no prep, hold immediately
   ///
@@ -265,6 +703,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop'**
   String get timerStopButton;
+
+  /// Body text of the persistent hold notification (Android)
+  ///
+  /// In en, this message translates to:
+  /// **'Max hold'**
+  String get notificationMaxHoldBody;
+
+  /// Action button label on the persistent hold notification (Android)
+  ///
+  /// In en, this message translates to:
+  /// **'Mark contraction'**
+  String get notificationMarkContractionAction;
+
+  /// Banner shown during a hold when the Android notification permission was denied
+  ///
+  /// In en, this message translates to:
+  /// **'Enable notifications in system settings for live-timer overlay during holds.'**
+  String get notificationPermissionDeniedBanner;
+
+  /// Banner shown during a hold when the OS refused to start the foreground service, e.g. due to battery optimization
+  ///
+  /// In en, this message translates to:
+  /// **'Check battery optimization settings for BreathLab to enable the live-timer notification and picture-in-picture during holds.'**
+  String get foregroundServiceDisabledBanner;
+
+  /// Action label to dismiss an in-app MaterialBanner
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get bannerDismissAction;
 
   /// Action button label in the done state before the result screen is available
   ///
