@@ -27,10 +27,9 @@ class _PastPbWarningControllerState
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(timerProvider);
-    final maxMs = ref.watch(currentMaxMsProvider).valueOrNull;
+  void _sync() {
+    final state = ref.read(timerProvider);
+    final maxMs = ref.read(currentMaxMsProvider).valueOrNull;
 
     final shouldWarn =
         state.isHolding &&
@@ -38,15 +37,23 @@ class _PastPbWarningControllerState
         maxMs > 0 &&
         state.holdElapsed.inMilliseconds > maxMs;
 
-    if (shouldWarn != _isWarning) {
-      _isWarning = shouldWarn;
-      final service = ref.read(hapticsServiceProvider);
-      if (shouldWarn) {
-        service.pastPbWarningStart();
-      } else {
-        service.pastPbWarningStop();
-      }
+    if (shouldWarn == _isWarning) return;
+    _isWarning = shouldWarn;
+    final service = ref.read(hapticsServiceProvider);
+    if (shouldWarn) {
+      service.pastPbWarningStart();
+    } else {
+      service.pastPbWarningStop();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Listened to rather than watched: starting and stopping the haptic
+    // is a side effect, and firing it from inside build runs it during the
+    // build phase on every 50ms tick.
+    ref.listen(timerProvider, (_, _) => _sync());
+    ref.listen(currentMaxMsProvider, (_, _) => _sync());
 
     return const SizedBox.shrink();
   }
