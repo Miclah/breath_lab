@@ -100,8 +100,7 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
     final ms = (minutes * 60 + seconds) * 1000;
 
     setState(() => _error = null);
-    await ref.read(settingsRepositoryProvider).setCurrentMaxMs(ms);
-    ref.invalidate(currentMaxMsProvider);
+    await ref.read(currentMaxMsProvider.notifier).set(ms);
   }
 
   @override
@@ -163,12 +162,8 @@ class _DefaultPrepModeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
-      onSelectionChanged: (value) async {
-        await ref
-            .read(settingsRepositoryProvider)
-            .setDefaultPrepMode(value.first);
-        ref.invalidate(defaultPrepModeProvider);
-      },
+      onSelectionChanged: (value) =>
+          ref.read(defaultPrepModeProvider.notifier).set(value.first),
     );
   }
 }
@@ -202,12 +197,8 @@ class _DefaultLungVolumeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
-      onSelectionChanged: (value) async {
-        await ref
-            .read(settingsRepositoryProvider)
-            .setDefaultLungVolume(value.first);
-        ref.invalidate(defaultLungVolumeProvider);
-      },
+      onSelectionChanged: (value) =>
+          ref.read(defaultLungVolumeProvider.notifier).set(value.first),
     );
   }
 }

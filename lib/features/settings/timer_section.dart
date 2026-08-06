@@ -79,12 +79,8 @@ class _PrepDurationStepper extends ConsumerWidget {
     return '$m:${s.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _update(WidgetRef ref, int seconds) async {
-    await ref
-        .read(settingsRepositoryProvider)
-        .setPrepBreathingDurationSeconds(seconds);
-    ref.invalidate(prepBreathingDurationSecondsProvider);
-  }
+  Future<void> _update(WidgetRef ref, int seconds) =>
+      ref.read(prepBreathingDurationSecondsProvider.notifier).set(seconds);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -158,14 +154,10 @@ class _BreathingRatioSelector extends ConsumerWidget {
             ),
           ],
           selected: {preset},
-          onSelectionChanged: (value) async {
-            final selected = value.first;
-            final presetValue = _ratioPresetValues[selected];
+          onSelectionChanged: (value) {
+            final presetValue = _ratioPresetValues[value.first];
             if (presetValue == null) return;
-            await ref
-                .read(settingsRepositoryProvider)
-                .setBreathingRatio(presetValue.$1, presetValue.$2);
-            ref.invalidate(breathingRatioProvider);
+            ref.read(breathingRatioProvider.notifier).set(presetValue);
           },
         ),
         if (preset == _RatioPreset.custom) ...[
@@ -193,12 +185,8 @@ class _CustomRatioInputs extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
 
-    Future<void> update(int inhale, int exhale) async {
-      await ref
-          .read(settingsRepositoryProvider)
-          .setBreathingRatio(inhale, exhale);
-      ref.invalidate(breathingRatioProvider);
-    }
+    Future<void> update(int inhale, int exhale) =>
+        ref.read(breathingRatioProvider.notifier).set((inhale, exhale));
 
     return Row(
       children: [
