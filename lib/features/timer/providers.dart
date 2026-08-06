@@ -45,6 +45,10 @@ class TimerNotifier extends Notifier<TimerState> {
       holdElapsed: _holdStopwatch.elapsed,
     );
     ref.read(hapticsServiceProvider).holdStop();
+    // The hold is over, so nothing needs the screen kept awake any more.
+    // Waiting for reset() would hold the wakelock for as long as the result
+    // screen sits unanswered.
+    ref.read(wakelockServiceProvider).disable();
   }
 
   /// Record first contraction timestamp relative to hold start.
