@@ -310,7 +310,17 @@ final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
 
 /// Convenience base binding a [SettingNotifier] to [SettingsRepository].
 abstract class _RepoSetting<T> extends SettingNotifier<T> {
+  /// Read, not watched — [write] runs outside the build phase.
   SettingsRepository get repo => ref.read(settingsRepositoryProvider);
+
+  @override
+  Future<T> build() {
+    // Depend on the repository so that invalidating it — which is how a
+    // full data reset announces that the stored values are gone — makes
+    // every setting re-read instead of keeping its now-stale cached value.
+    ref.watch(settingsRepositoryProvider);
+    return super.build();
+  }
 }
 
 /// Current default prep mode.
