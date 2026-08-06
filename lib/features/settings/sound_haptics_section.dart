@@ -8,6 +8,7 @@ import '../../theme/tokens.dart';
 import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
 import 'section_header.dart';
+import 'settings_slider.dart';
 
 /// Settings → Sound & haptics section: sound toggle, volume slider, haptic
 /// intensity selector, and test buttons that preview each.
@@ -45,12 +46,7 @@ class SoundHapticsSection extends ConsumerWidget {
                   ),
                   Switch(
                     value: soundEnabled,
-                    onChanged: (v) async {
-                      await ref
-                          .read(settingsRepositoryProvider)
-                          .setSoundEnabled(v);
-                      ref.invalidate(soundEnabledProvider);
-                    },
+                    onChanged: ref.read(soundEnabledProvider.notifier).set,
                   ),
                 ],
               ),
@@ -59,20 +55,14 @@ class SoundHapticsSection extends ConsumerWidget {
                 l10n.settingsSoundVolumeLabel,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
-              Slider(
-                value: volume.toDouble(),
+              SettingsSlider(
+                value: volume,
                 min: 0,
                 max: 100,
                 divisions: 20,
-                label: '$volume%',
-                onChanged: !soundEnabled
-                    ? null
-                    : (v) async {
-                        await ref
-                            .read(settingsRepositoryProvider)
-                            .setSoundVolume(v.round());
-                        ref.invalidate(soundVolumeProvider);
-                      },
+                labelBuilder: (v) => '$v%',
+                enabled: soundEnabled,
+                onCommit: ref.read(soundVolumeProvider.notifier).set,
               ),
               OutlinedButton(
                 onPressed: !soundEnabled
@@ -106,12 +96,8 @@ class SoundHapticsSection extends ConsumerWidget {
                   ),
                 ],
                 selected: {intensity},
-                onSelectionChanged: (value) async {
-                  await ref
-                      .read(settingsRepositoryProvider)
-                      .setHapticIntensity(value.first);
-                  ref.invalidate(hapticIntensityProvider);
-                },
+                onSelectionChanged: (value) =>
+                    ref.read(hapticIntensityProvider.notifier).set(value.first),
               ),
               const SizedBox(height: Spacing.sm),
               OutlinedButton(

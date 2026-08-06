@@ -82,12 +82,9 @@ class AmbientSection extends ConsumerWidget {
                 ],
                 selected: {calloutsMode},
                 showSelectedIcon: false,
-                onSelectionChanged: (value) async {
-                  await ref
-                      .read(settingsRepositoryProvider)
-                      .setSpokenCalloutsMode(value.first);
-                  ref.invalidate(spokenCalloutsModeProvider);
-                },
+                onSelectionChanged: (value) => ref
+                    .read(spokenCalloutsModeProvider.notifier)
+                    .set(value.first),
               ),
               const SizedBox(height: Spacing.xl),
               Text(
@@ -112,10 +109,7 @@ class AmbientSection extends ConsumerWidget {
                 ],
                 selected: {ttsLanguage},
                 onSelectionChanged: (value) async {
-                  await ref
-                      .read(settingsRepositoryProvider)
-                      .setTtsLanguage(value.first);
-                  ref.invalidate(ttsLanguageProvider);
+                  await ref.read(ttsLanguageProvider.notifier).set(value.first);
                   if (value.first == 'sk' &&
                       !await ref
                           .read(ttsServiceProvider)
@@ -136,34 +130,23 @@ class AmbientSection extends ConsumerWidget {
           label: l10n.settingsAmbientPersistentNotifLabel,
           subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
           value: persistentNotifEnabled,
-          onChanged: (v) async {
-            await ref
-                .read(settingsRepositoryProvider)
-                .setAmbientPersistentNotifEnabled(v);
-            ref.invalidate(ambientPersistentNotifEnabledProvider);
-          },
+          onChanged: ref
+              .read(ambientPersistentNotifEnabledProvider.notifier)
+              .set,
         ),
         _AmbientToggleRow(
           icon: Icons.picture_in_picture_alt_outlined,
           label: l10n.settingsAmbientPipLabel,
           subtitle: l10n.settingsAmbientPipSubtitle,
           value: pipEnabled,
-          onChanged: (v) async {
-            await ref.read(settingsRepositoryProvider).setAmbientPipEnabled(v);
-            ref.invalidate(ambientPipEnabledProvider);
-          },
+          onChanged: ref.read(ambientPipEnabledProvider.notifier).set,
         ),
         _AmbientToggleRow(
           icon: Icons.brightness_1_outlined,
           label: l10n.settingsAmbientOledHoldLabel,
           subtitle: l10n.settingsAmbientOledHoldSubtitle,
           value: oledHoldEnabled,
-          onChanged: (v) async {
-            await ref
-                .read(settingsRepositoryProvider)
-                .setAmbientOledHoldEnabled(v);
-            ref.invalidate(ambientOledHoldEnabledProvider);
-          },
+          onChanged: ref.read(ambientOledHoldEnabledProvider.notifier).set,
         ),
         if (oledHoldEnabled)
           Padding(
@@ -199,12 +182,9 @@ class AmbientSection extends ConsumerWidget {
                     ),
                   ],
                   selected: {brightnessOverride},
-                  onSelectionChanged: (value) async {
-                    await ref
-                        .read(settingsRepositoryProvider)
-                        .setAmbientBrightnessOverride(value.first);
-                    ref.invalidate(ambientBrightnessOverrideProvider);
-                  },
+                  onSelectionChanged: (value) => ref
+                      .read(ambientBrightnessOverrideProvider.notifier)
+                      .set(value.first),
                 ),
               ],
             ),
@@ -214,10 +194,7 @@ class AmbientSection extends ConsumerWidget {
           label: l10n.settingsFocusModeLabel,
           subtitle: '',
           value: focusModeEnabled,
-          onChanged: (v) async {
-            await ref.read(settingsRepositoryProvider).setFocusModeEnabled(v);
-            ref.invalidate(focusModeEnabledProvider);
-          },
+          onChanged: ref.read(focusModeEnabledProvider.notifier).set,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(

@@ -71,12 +71,8 @@ class AppearanceSection extends ConsumerWidget {
               ButtonSegment(value: null, label: Text(l10n.themeSystem)),
             ],
             selected: {appLanguage},
-            onSelectionChanged: (selected) async {
-              await ref
-                  .read(settingsRepositoryProvider)
-                  .setAppLanguage(selected.first);
-              ref.invalidate(appLanguageProvider);
-            },
+            onSelectionChanged: (selected) =>
+                ref.read(appLanguageProvider.notifier).set(selected.first),
           ),
         ],
       ),
