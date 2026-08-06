@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
+import 'setting_notifier.dart';
 
 enum HapticIntensity {
   off,
@@ -307,46 +308,146 @@ final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(ref.watch(databaseProvider));
 });
 
-/// Current default prep mode. Invalidate after writing to refresh.
-final defaultPrepModeProvider = FutureProvider<PrepMode>((ref) {
-  return ref.watch(settingsRepositoryProvider).getDefaultPrepMode();
-});
+/// Convenience base binding a [SettingNotifier] to [SettingsRepository].
+abstract class _RepoSetting<T> extends SettingNotifier<T> {
+  SettingsRepository get repo => ref.read(settingsRepositoryProvider);
+}
 
-/// Current default lung volume. Invalidate after writing to refresh.
-final defaultLungVolumeProvider = FutureProvider<LungVolume>((ref) {
-  return ref.watch(settingsRepositoryProvider).getDefaultLungVolume();
-});
+/// Current default prep mode.
+class DefaultPrepModeNotifier extends _RepoSetting<PrepMode> {
+  @override
+  Future<PrepMode> read() => repo.getDefaultPrepMode();
+
+  @override
+  Future<void> write(PrepMode value) => repo.setDefaultPrepMode(value);
+}
+
+final defaultPrepModeProvider =
+    AsyncNotifierProvider<DefaultPrepModeNotifier, PrepMode>(
+      DefaultPrepModeNotifier.new,
+    );
+
+/// Current default lung volume.
+class DefaultLungVolumeNotifier extends _RepoSetting<LungVolume> {
+  @override
+  Future<LungVolume> read() => repo.getDefaultLungVolume();
+
+  @override
+  Future<void> write(LungVolume value) => repo.setDefaultLungVolume(value);
+}
+
+final defaultLungVolumeProvider =
+    AsyncNotifierProvider<DefaultLungVolumeNotifier, LungVolume>(
+      DefaultLungVolumeNotifier.new,
+    );
 
 /// All-time PB in milliseconds, null if no hold saved yet.
-final currentMaxMsProvider = FutureProvider<int?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getCurrentMaxMs();
-});
+class CurrentMaxMsNotifier extends _RepoSetting<int?> {
+  @override
+  Future<int?> read() => repo.getCurrentMaxMs();
 
-/// Prep breathing duration in seconds. Invalidate after writing to refresh.
-final prepBreathingDurationSecondsProvider = FutureProvider<int>((ref) async {
-  final mode = await ref.watch(defaultPrepModeProvider.future);
-  return ref
-      .watch(settingsRepositoryProvider)
-      .getPrepBreathingDurationSeconds(mode);
-});
+  @override
+  Future<void> write(int? value) async {
+    if (value != null) await repo.setCurrentMaxMs(value);
+  }
+}
 
-/// Breathing ratio as (inhaleSeconds, exhaleSeconds). Invalidate after
-/// writing to refresh.
-final breathingRatioProvider = FutureProvider<(int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getBreathingRatio();
-});
+final currentMaxMsProvider = AsyncNotifierProvider<CurrentMaxMsNotifier, int?>(
+  CurrentMaxMsNotifier.new,
+);
+
+/// Prep breathing duration in seconds. Rebuilds when the default prep mode
+/// changes so the mode-appropriate default is re-suggested.
+class PrepBreathingDurationNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() async {
+    final mode = await ref.watch(defaultPrepModeProvider.future);
+    return repo.getPrepBreathingDurationSeconds(mode);
+  }
+
+  @override
+  Future<void> write(int value) => repo.setPrepBreathingDurationSeconds(value);
+}
+
+final prepBreathingDurationSecondsProvider =
+    AsyncNotifierProvider<PrepBreathingDurationNotifier, int>(
+      PrepBreathingDurationNotifier.new,
+    );
+
+/// Breathing ratio as (inhaleSeconds, exhaleSeconds).
+class BreathingRatioNotifier extends _RepoSetting<(int, int)> {
+  @override
+  Future<(int, int)> read() => repo.getBreathingRatio();
+
+  @override
+  Future<void> write((int, int) value) =>
+      repo.setBreathingRatio(value.$1, value.$2);
+}
+
+final breathingRatioProvider =
+    AsyncNotifierProvider<BreathingRatioNotifier, (int, int)>(
+      BreathingRatioNotifier.new,
+    );
 
 /// CO₂ table config as (rounds, holdPercent, restDecrementSeconds).
-/// Invalidate after writing to refresh.
-final co2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getCo2TableConfig();
-});
+class Co2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
+  @override
+  Future<(int, int, int)> read() => repo.getCo2TableConfig();
+
+  @override
+  Future<void> write((int, int, int) value) async {
+    await repo.setCo2Rounds(value.$1);
+    await repo.setCo2HoldPercent(value.$2);
+    await repo.setCo2RestDecrementSeconds(value.$3);
+  }
+
+  Future<void> setRounds(int rounds) => _update(rounds: rounds);
+
+  Future<void> setHoldPercent(int percent) => _update(holdPercent: percent);
+
+  Future<void> setRestDecrementSeconds(int seconds) =>
+      _update(restDecrementS: seconds);
+
+  Future<void> _update({int? rounds, int? holdPercent, int? restDecrementS}) {
+    final (r, h, d) = state.valueOrNull ?? (7, 50, 15);
+    return set((rounds ?? r, holdPercent ?? h, restDecrementS ?? d));
+  }
+}
+
+final co2TableConfigProvider =
+    AsyncNotifierProvider<Co2TableConfigNotifier, (int, int, int)>(
+      Co2TableConfigNotifier.new,
+    );
 
 /// O₂ table config as (rounds, maxHoldPercent, fixedRestSeconds).
-/// Invalidate after writing to refresh.
-final o2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getO2TableConfig();
-});
+class O2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
+  @override
+  Future<(int, int, int)> read() => repo.getO2TableConfig();
+
+  @override
+  Future<void> write((int, int, int) value) async {
+    await repo.setO2Rounds(value.$1);
+    await repo.setO2MaxHoldPercent(value.$2);
+    await repo.setO2RestSeconds(value.$3);
+  }
+
+  Future<void> setRounds(int rounds) => _update(rounds: rounds);
+
+  Future<void> setMaxHoldPercent(int percent) =>
+      _update(maxHoldPercent: percent);
+
+  Future<void> setRestSeconds(int seconds) => _update(restS: seconds);
+
+  Future<void> _update({int? rounds, int? maxHoldPercent, int? restS}) {
+    final (r, h, s) = state.valueOrNull ?? (8, 80, 120);
+    return set((rounds ?? r, maxHoldPercent ?? h, restS ?? s));
+  }
+}
+
+final o2TableConfigProvider =
+    AsyncNotifierProvider<O2TableConfigNotifier, (int, int, int)>(
+      O2TableConfigNotifier.new,
+    );
 
 /// Whether sound cues are enabled. Invalidate after writing to refresh.
 final soundEnabledProvider = FutureProvider<bool>((ref) {
