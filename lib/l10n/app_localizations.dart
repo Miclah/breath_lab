@@ -590,6 +590,18 @@ abstract class AppLocalizations {
   /// **'Reset'**
   String get settingsResetButton;
 
+  /// Confirm button in the add-custom-tag dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get tagAddConfirm;
+
+  /// Cancel button in the add-custom-tag dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get tagAddCancel;
+
   /// Snackbar shown when persisting a setting change fails and the control reverts
   ///
   /// In en, this message translates to:

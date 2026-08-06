@@ -264,6 +264,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsResetButton => 'Vymazať';
 
   @override
+  String get tagAddConfirm => 'Pridať';
+
+  @override
+  String get tagAddCancel => 'Zrušiť';
+
+  @override
   String get settingsSaveFailed => 'Nastavenie sa nepodarilo uložiť.';
 
   @override

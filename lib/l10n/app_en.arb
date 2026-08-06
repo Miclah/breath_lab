@@ -328,6 +328,14 @@
   "@settingsResetButton": {
     "description": "Confirm button in the reset-all-data confirmation dialog"
   },
+  "tagAddConfirm": "Add",
+  "@tagAddConfirm": {
+    "description": "Confirm button in the add-custom-tag dialog"
+  },
+  "tagAddCancel": "Cancel",
+  "@tagAddCancel": {
+    "description": "Cancel button in the add-custom-tag dialog"
+  },
   "settingsSaveFailed": "Couldn't save that setting.",
   "@settingsSaveFailed": {
     "description": "Snackbar shown when persisting a setting change fails and the control reverts"

@@ -81,6 +81,8 @@
   "settingsResetConfirmTitle": "Vymazať všetky dáta?",
   "settingsResetConfirmMessage": "Týmto sa vymažú všetky pokusy, tabuľkové série, tagy a nastavenia v tomto zariadení. Túto akciu nemožno vrátiť späť.",
   "settingsResetButton": "Vymazať",
+  "tagAddConfirm": "Pridať",
+  "tagAddCancel": "Zrušiť",
   "settingsSaveFailed": "Nastavenie sa nepodarilo uložiť.",
   "settingsAppearanceSection": "Vzhľad",
   "settingsThemeLabel": "Téma",

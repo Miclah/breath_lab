@@ -264,6 +264,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetButton => 'Reset';
 
   @override
+  String get tagAddConfirm => 'Add';
+
+  @override
+  String get tagAddCancel => 'Cancel';
+
+  @override
   String get settingsSaveFailed => 'Couldn\'t save that setting.';
 
   @override
