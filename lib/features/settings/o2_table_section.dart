@@ -6,6 +6,7 @@ import '../../domain/services/o2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
 import 'section_header.dart';
+import 'settings_slider.dart';
 import 'settings_stepper.dart';
 import 'table_preview.dart';
 
@@ -37,15 +38,7 @@ class O2TableSection extends ConsumerWidget {
             restS: restS,
           );
 
-    Future<void> update({int? rounds, int? maxHoldPercent, int? restS}) async {
-      final repo = ref.read(settingsRepositoryProvider);
-      if (rounds != null) await repo.setO2Rounds(rounds);
-      if (maxHoldPercent != null) {
-        await repo.setO2MaxHoldPercent(maxHoldPercent);
-      }
-      if (restS != null) await repo.setO2RestSeconds(restS);
-      ref.invalidate(o2TableConfigProvider);
-    }
+    final config = ref.read(o2TableConfigProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,20 +63,20 @@ class O2TableSection extends ConsumerWidget {
                 max: _maxRounds,
                 step: 1,
                 format: (v) => '$v',
-                onChanged: (v) => update(rounds: v),
+                onChanged: config.setRounds,
               ),
               const SizedBox(height: Spacing.xl),
               Text(
                 l10n.settingsO2MaxHoldPercentLabel,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
-              Slider(
-                value: maxHoldPercent.toDouble(),
-                min: _minMaxHoldPercent.toDouble(),
-                max: _maxMaxHoldPercent.toDouble(),
+              SettingsSlider(
+                value: maxHoldPercent,
+                min: _minMaxHoldPercent,
+                max: _maxMaxHoldPercent,
                 divisions: (_maxMaxHoldPercent - _minMaxHoldPercent) ~/ 5,
-                label: '$maxHoldPercent%',
-                onChanged: (v) => update(maxHoldPercent: v.round()),
+                labelBuilder: (v) => '$v%',
+                onCommit: config.setMaxHoldPercent,
               ),
               const SizedBox(height: Spacing.md),
               Text(
@@ -97,7 +90,7 @@ class O2TableSection extends ConsumerWidget {
                 max: _maxRestS,
                 step: 15,
                 format: (v) => '${v}s',
-                onChanged: (v) => update(restS: v),
+                onChanged: config.setRestSeconds,
               ),
               const SizedBox(height: Spacing.xl),
               if (preview != null)
