@@ -4,6 +4,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/db/database_provider.dart';
+import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/settings_repository.dart';
+import '../../data/repositories/table_sessions_repository.dart';
+import '../../data/repositories/tags_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -88,7 +92,19 @@ class AboutSection extends ConsumerWidget {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
-    ref.invalidate(databaseProvider);
+    // Deliberately *not* invalidating databaseProvider: that disposes the
+    // AppDatabase and immediately builds a second one over the same file
+    // while the first connection is still closing, which drift warns about
+    // ("database was opened a second time") and which can leave the new
+    // connection stale or locked. resetAllData() already emptied and
+    // re-seeded every table, so the existing connection is correct — only
+    // the things that cached its contents need to re-read.
+    ref.invalidate(settingsRepositoryProvider);
+    ref.invalidate(allHoldsProvider);
+    ref.invalidate(allTableSessionsProvider);
+    ref.invalidate(holdTagIdsProvider);
+    ref.invalidate(holdTagCountsProvider);
+    ref.invalidate(builtInTagsProvider);
     ref.invalidate(themeModeProvider);
     ref.invalidate(safetyAcknowledgedProvider);
   }
