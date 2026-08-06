@@ -729,7 +729,7 @@
   "@progressHeatmapLegendMore": {
     "description": "Right-hand label of the heatmap color-intensity legend"
   },
-  "progressHeatmapStat": "{sessions} sessions · best week: {days} days",
+  "progressHeatmapStat": "{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}",
   "@progressHeatmapStat": {
     "description": "Summary stat shown to the right of the heatmap legend",
     "placeholders": {

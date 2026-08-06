@@ -549,7 +549,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String progressHeatmapStat(int sessions, int days) {
-    return '$sessions sessions · best week: $days days';
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions sessions',
+      one: '1 session',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return '$_temp0 · best week: $_temp1';
   }
 
   @override

@@ -551,7 +551,21 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String progressHeatmapStat(int sessions, int days) {
-    return '$sessions tréningov · najlepší týždeň: $days dní';
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions tréningov',
+      few: '$sessions tréningy',
+      one: '1 tréning',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days dní',
+      few: '$days dni',
+      one: '1 deň',
+    );
+    return '$_temp0 · najlepší týždeň: $_temp1';
   }
 
   @override

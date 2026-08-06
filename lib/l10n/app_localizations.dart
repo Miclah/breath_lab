@@ -1133,7 +1133,7 @@ abstract class AppLocalizations {
   /// Summary stat shown to the right of the heatmap legend
   ///
   /// In en, this message translates to:
-  /// **'{sessions} sessions · best week: {days} days'**
+  /// **'{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}'**
   String progressHeatmapStat(int sessions, int days);
 
   /// Empty state shown in place of the progress chart when there is no data in the selected range
