@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,43 +37,64 @@ class TagChipRow extends ConsumerWidget {
 
     final tags = tagsAsync.valueOrNull ?? [];
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (final tag in tags) ...[
-            _TagChip(
-              label: _tagLabel(tag.labelKey, l10n),
-              selected: selectedIds.contains(tag.id),
-              onTap: () {
-                final current = ref.read(selectedTagIdsProvider);
-                final next = Set<String>.from(current);
-                if (current.contains(tag.id)) {
-                  next.remove(tag.id);
-                } else {
-                  next.add(tag.id);
-                }
-                ref.read(selectedTagIdsProvider.notifier).state = next;
+    // Flutter's default dragDevices omit the mouse, so on desktop this row
+    // could not be scrolled at all and any tag past the right edge was
+    // unreachable.
+    return ScrollConfiguration(
+      behavior: const _DragScrollBehavior(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final tag in tags) ...[
+              _TagChip(
+                label: _tagLabel(tag.labelKey, l10n),
+                selected: selectedIds.contains(tag.id),
+                onTap: () {
+                  final current = ref.read(selectedTagIdsProvider);
+                  final next = Set<String>.from(current);
+                  if (current.contains(tag.id)) {
+                    next.remove(tag.id);
+                  } else {
+                    next.add(tag.id);
+                  }
+                  ref.read(selectedTagIdsProvider.notifier).state = next;
+                },
+              ),
+              const SizedBox(width: Spacing.xs),
+            ],
+            for (final text in pending) ...[
+              _TagChip(label: text, selected: true, onTap: null),
+              const SizedBox(width: Spacing.xs),
+            ],
+            _AddTagChip(
+              onAdd: (text) {
+                ref.read(pendingCustomTagsProvider.notifier).state = [
+                  ...ref.read(pendingCustomTagsProvider),
+                  text,
+                ];
               },
             ),
-            const SizedBox(width: Spacing.xs),
           ],
-          for (final text in pending) ...[
-            _TagChip(label: text, selected: true, onTap: null),
-            const SizedBox(width: Spacing.xs),
-          ],
-          _AddTagChip(
-            onAdd: (text) {
-              ref.read(pendingCustomTagsProvider.notifier).state = [
-                ...ref.read(pendingCustomTagsProvider),
-                text,
-              ];
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// Scroll behavior that also accepts mouse and trackpad drags, for
+/// horizontal strips that have no other way to be scrolled on desktop.
+class _DragScrollBehavior extends MaterialScrollBehavior {
+  const _DragScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.invertedStylus,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.mouse,
+  };
 }
 
 // ---------------------------------------------------------------------------
