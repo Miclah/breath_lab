@@ -449,37 +449,87 @@ final o2TableConfigProvider =
       O2TableConfigNotifier.new,
     );
 
-/// Whether sound cues are enabled. Invalidate after writing to refresh.
-final soundEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSoundEnabled();
-});
+/// Whether sound cues are enabled.
+class SoundEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getSoundEnabled();
 
-/// Sound volume as a percentage 0-100. Invalidate after writing to refresh.
-final soundVolumeProvider = FutureProvider<int>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSoundVolume();
-});
+  @override
+  Future<void> write(bool value) => repo.setSoundEnabled(value);
+}
 
-/// Haptic intensity. Invalidate after writing to refresh.
-final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
-  return ref.watch(settingsRepositoryProvider).getHapticIntensity();
-});
+final soundEnabledProvider = AsyncNotifierProvider<SoundEnabledNotifier, bool>(
+  SoundEnabledNotifier.new,
+);
+
+/// Sound volume as a percentage 0-100.
+class SoundVolumeNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getSoundVolume();
+
+  @override
+  Future<void> write(int value) => repo.setSoundVolume(value);
+}
+
+final soundVolumeProvider = AsyncNotifierProvider<SoundVolumeNotifier, int>(
+  SoundVolumeNotifier.new,
+);
+
+/// Haptic intensity.
+class HapticIntensityNotifier extends _RepoSetting<HapticIntensity> {
+  @override
+  Future<HapticIntensity> read() => repo.getHapticIntensity();
+
+  @override
+  Future<void> write(HapticIntensity value) => repo.setHapticIntensity(value);
+}
+
+final hapticIntensityProvider =
+    AsyncNotifierProvider<HapticIntensityNotifier, HapticIntensity>(
+      HapticIntensityNotifier.new,
+    );
 
 /// App UI language code ('sk' | 'en'), or null to follow the system locale.
-/// Invalidate after writing to refresh.
-final appLanguageProvider = FutureProvider<String?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAppLanguage();
-});
+class AppLanguageNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getAppLanguage();
 
-/// Spoken callouts mode. Invalidate after writing to refresh.
-final spokenCalloutsModeProvider = FutureProvider<SpokenCalloutsMode>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSpokenCalloutsMode();
-});
+  @override
+  Future<void> write(String? value) => repo.setAppLanguage(value);
+}
+
+final appLanguageProvider = AsyncNotifierProvider<AppLanguageNotifier, String?>(
+  AppLanguageNotifier.new,
+);
+
+/// Spoken callouts mode.
+class SpokenCalloutsModeNotifier extends _RepoSetting<SpokenCalloutsMode> {
+  @override
+  Future<SpokenCalloutsMode> read() => repo.getSpokenCalloutsMode();
+
+  @override
+  Future<void> write(SpokenCalloutsMode value) =>
+      repo.setSpokenCalloutsMode(value);
+}
+
+final spokenCalloutsModeProvider =
+    AsyncNotifierProvider<SpokenCalloutsModeNotifier, SpokenCalloutsMode>(
+      SpokenCalloutsModeNotifier.new,
+    );
 
 /// TTS voice language code ('sk' | 'en'), or null to follow the app UI
-/// language. Invalidate after writing to refresh.
-final ttsLanguageProvider = FutureProvider<String?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getTtsLanguage();
-});
+/// language.
+class TtsLanguageNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getTtsLanguage();
+
+  @override
+  Future<void> write(String? value) => repo.setTtsLanguage(value);
+}
+
+final ttsLanguageProvider = AsyncNotifierProvider<TtsLanguageNotifier, String?>(
+  TtsLanguageNotifier.new,
+);
 
 /// Effective TTS voice language: the explicit override if set, else the
 /// app UI language, else English.
@@ -490,34 +540,76 @@ final effectiveTtsLanguageProvider = FutureProvider<String>((ref) async {
   return appLanguage ?? 'en';
 });
 
-/// Whether the persistent hold notification is enabled. Invalidate after
-/// writing to refresh.
-final ambientPersistentNotifEnabledProvider = FutureProvider<bool>((ref) {
-  return ref
-      .watch(settingsRepositoryProvider)
-      .getAmbientPersistentNotifEnabled();
-});
+/// Whether the persistent hold notification is enabled.
+class AmbientPersistentNotifNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientPersistentNotifEnabled();
 
-/// Whether ambient PiP is enabled. Invalidate after writing to refresh.
-final ambientPipEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAmbientPipEnabled();
-});
+  @override
+  Future<void> write(bool value) =>
+      repo.setAmbientPersistentNotifEnabled(value);
+}
 
-/// Whether the OLED-friendly hold screen is enabled. Invalidate after
-/// writing to refresh.
-final ambientOledHoldEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAmbientOledHoldEnabled();
-});
+final ambientPersistentNotifEnabledProvider =
+    AsyncNotifierProvider<AmbientPersistentNotifNotifier, bool>(
+      AmbientPersistentNotifNotifier.new,
+    );
 
-/// Brightness override during the OLED hold screen. Invalidate after
-/// writing to refresh.
-final ambientBrightnessOverrideProvider = FutureProvider<BrightnessOverride>((
-  ref,
-) {
-  return ref.watch(settingsRepositoryProvider).getAmbientBrightnessOverride();
-});
+/// Whether ambient PiP is enabled.
+class AmbientPipEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientPipEnabled();
 
-/// Whether focus mode is enabled. Invalidate after writing to refresh.
-final focusModeEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getFocusModeEnabled();
-});
+  @override
+  Future<void> write(bool value) => repo.setAmbientPipEnabled(value);
+}
+
+final ambientPipEnabledProvider =
+    AsyncNotifierProvider<AmbientPipEnabledNotifier, bool>(
+      AmbientPipEnabledNotifier.new,
+    );
+
+/// Whether the OLED-friendly hold screen is enabled.
+class AmbientOledHoldEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientOledHoldEnabled();
+
+  @override
+  Future<void> write(bool value) => repo.setAmbientOledHoldEnabled(value);
+}
+
+final ambientOledHoldEnabledProvider =
+    AsyncNotifierProvider<AmbientOledHoldEnabledNotifier, bool>(
+      AmbientOledHoldEnabledNotifier.new,
+    );
+
+/// Brightness override during the OLED hold screen.
+class AmbientBrightnessOverrideNotifier
+    extends _RepoSetting<BrightnessOverride> {
+  @override
+  Future<BrightnessOverride> read() => repo.getAmbientBrightnessOverride();
+
+  @override
+  Future<void> write(BrightnessOverride value) =>
+      repo.setAmbientBrightnessOverride(value);
+}
+
+final ambientBrightnessOverrideProvider =
+    AsyncNotifierProvider<
+      AmbientBrightnessOverrideNotifier,
+      BrightnessOverride
+    >(AmbientBrightnessOverrideNotifier.new);
+
+/// Whether focus mode is enabled.
+class FocusModeEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getFocusModeEnabled();
+
+  @override
+  Future<void> write(bool value) => repo.setFocusModeEnabled(value);
+}
+
+final focusModeEnabledProvider =
+    AsyncNotifierProvider<FocusModeEnabledNotifier, bool>(
+      FocusModeEnabledNotifier.new,
+    );
