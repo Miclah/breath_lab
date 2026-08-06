@@ -113,7 +113,6 @@ class _ResultViewState extends ConsumerState<ResultView>
       final deviceId = await ref.read(deviceIdProvider.future);
       final holdsRepo = await ref.read(holdsRepositoryProvider.future);
       final tagsRepo = ref.read(tagsRepositoryProvider);
-      final settingsRepo = ref.read(settingsRepositoryProvider);
 
       final holdId = holdsRepo.newId();
       final now = DateTime.now();
@@ -145,8 +144,7 @@ class _ResultViewState extends ConsumerState<ResultView>
       ref.invalidate(holdTagCountsProvider);
 
       if (isPb) {
-        await settingsRepo.setCurrentMaxMs(durationMs);
-        ref.invalidate(currentMaxMsProvider);
+        await ref.read(currentMaxMsProvider.notifier).set(durationMs);
         setState(() => _showGlow = true);
         ref.read(audioServiceProvider).playPbAchieved();
         ref.read(hapticsServiceProvider).pbAchieved();
