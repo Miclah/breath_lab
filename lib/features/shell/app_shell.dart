@@ -55,7 +55,23 @@ class AppShell extends ConsumerWidget {
         ? const OledHoldView(key: ValueKey('oled'))
         : Scaffold(
             key: const ValueKey('normal'),
-            body: bodies[selectedIndex],
+            // IndexedStack rather than bodies[selectedIndex]: the latter
+            // tears the outgoing tab down, so scroll position, history
+            // filters and chart range were all lost on every tab switch.
+            // Inactive tabs stay mounted, so they must be muted: without
+            // ExcludeFocus the Timer tab's autofocus Focus would keep
+            // swallowing keystrokes meant for Settings' text field, and
+            // without TickerMode their animations would keep running.
+            body: IndexedStack(
+              index: selectedIndex,
+              children: [
+                for (final (i, body) in bodies.indexed)
+                  ExcludeFocus(
+                    excluding: i != selectedIndex,
+                    child: TickerMode(enabled: i == selectedIndex, child: body),
+                  ),
+              ],
+            ),
             bottomNavigationBar: NavigationBar(
               selectedIndex: selectedIndex,
               onDestinationSelected: (index) =>
