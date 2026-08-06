@@ -264,6 +264,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetButton => 'Reset';
 
   @override
+  String get settingsSaveFailed => 'Couldn\'t save that setting.';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

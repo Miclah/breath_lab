@@ -328,6 +328,10 @@
   "@settingsResetButton": {
     "description": "Confirm button in the reset-all-data confirmation dialog"
   },
+  "settingsSaveFailed": "Couldn't save that setting.",
+  "@settingsSaveFailed": {
+    "description": "Snackbar shown when persisting a setting change fails and the control reverts"
+  },
   "settingsThemeLabel": "Theme",
   "@settingsThemeLabel": {
     "description": "Label for the theme selector in Settings"

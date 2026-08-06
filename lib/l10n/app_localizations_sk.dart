@@ -264,6 +264,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsResetButton => 'Vymazať';
 
   @override
+  String get settingsSaveFailed => 'Nastavenie sa nepodarilo uložiť.';
+
+  @override
   String get settingsThemeLabel => 'Téma';
 
   @override

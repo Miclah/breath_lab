@@ -590,6 +590,12 @@ abstract class AppLocalizations {
   /// **'Reset'**
   String get settingsResetButton;
 
+  /// Snackbar shown when persisting a setting change fails and the control reverts
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that setting.'**
+  String get settingsSaveFailed;
+
   /// Label for the theme selector in Settings
   ///
   /// In en, this message translates to:
