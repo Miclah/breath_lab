@@ -49,6 +49,7 @@ class AppearanceSection extends ConsumerWidget {
               ),
             ],
             selected: {themeMode},
+            showSelectedIcon: false,
             onSelectionChanged: (selected) =>
                 ref.read(themeModeProvider.notifier).setMode(selected.first),
           ),
@@ -71,6 +72,7 @@ class AppearanceSection extends ConsumerWidget {
               ButtonSegment(value: null, label: Text(l10n.themeSystem)),
             ],
             selected: {appLanguage},
+            showSelectedIcon: false,
             onSelectionChanged: (selected) =>
                 ref.read(appLanguageProvider.notifier).set(selected.first),
           ),

@@ -154,6 +154,7 @@ class _BreathingRatioSelector extends ConsumerWidget {
             ),
           ],
           selected: {preset},
+          showSelectedIcon: false,
           onSelectionChanged: (value) {
             final presetValue = _ratioPresetValues[value.first];
             if (presetValue == null) return;

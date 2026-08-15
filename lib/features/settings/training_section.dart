@@ -162,6 +162,7 @@ class _DefaultPrepModeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
+      showSelectedIcon: false,
       onSelectionChanged: (value) =>
           ref.read(defaultPrepModeProvider.notifier).set(value.first),
     );
@@ -197,6 +198,7 @@ class _DefaultLungVolumeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
+      showSelectedIcon: false,
       onSelectionChanged: (value) =>
           ref.read(defaultLungVolumeProvider.notifier).set(value.first),
     );

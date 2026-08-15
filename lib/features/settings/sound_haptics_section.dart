@@ -96,6 +96,7 @@ class SoundHapticsSection extends ConsumerWidget {
                   ),
                 ],
                 selected: {intensity},
+                showSelectedIcon: false,
                 onSelectionChanged: (value) =>
                     ref.read(hapticIntensityProvider.notifier).set(value.first),
               ),

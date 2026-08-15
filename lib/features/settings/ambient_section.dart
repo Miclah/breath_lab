@@ -108,6 +108,7 @@ class AmbientSection extends ConsumerWidget {
                   ),
                 ],
                 selected: {ttsLanguage},
+                showSelectedIcon: false,
                 onSelectionChanged: (value) async {
                   await ref.read(ttsLanguageProvider.notifier).set(value.first);
                   if (value.first == 'sk' &&
@@ -182,6 +183,7 @@ class AmbientSection extends ConsumerWidget {
                     ),
                   ],
                   selected: {brightnessOverride},
+                  showSelectedIcon: false,
                   onSelectionChanged: (value) => ref
                       .read(ambientBrightnessOverrideProvider.notifier)
                       .set(value.first),
