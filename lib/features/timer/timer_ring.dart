@@ -41,7 +41,10 @@ class TimerRing extends StatelessWidget {
         painter: _RingPainter(
           value: value,
           ringColor: _ringColor(value, c),
-          trackColor: c.border.withAlpha(76),
+          // Idle track: visible enough to read as the screen's focal shape
+          // at a glance — the original 30% alpha on a near-black canvas
+          // composited to almost nothing.
+          trackColor: c.border.withValues(alpha: 0.55),
         ),
         child: Center(child: child),
       ),
@@ -60,7 +63,7 @@ class _RingPainter extends CustomPainter {
   final Color ringColor;
   final Color trackColor;
 
-  static const _strokeWidth = 3.0;
+  static const _strokeWidth = 4.0;
 
   @override
   void paint(Canvas canvas, Size size) {
