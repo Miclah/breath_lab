@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -126,22 +128,27 @@ class AmbientSection extends ConsumerWidget {
             ],
           ),
         ),
-        _AmbientToggleRow(
-          icon: Icons.notifications_active_outlined,
-          label: l10n.settingsAmbientPersistentNotifLabel,
-          subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
-          value: persistentNotifEnabled,
-          onChanged: ref
-              .read(ambientPersistentNotifEnabledProvider.notifier)
-              .set,
-        ),
-        _AmbientToggleRow(
-          icon: Icons.picture_in_picture_alt_outlined,
-          label: l10n.settingsAmbientPipLabel,
-          subtitle: l10n.settingsAmbientPipSubtitle,
-          value: pipEnabled,
-          onChanged: ref.read(ambientPipEnabledProvider.notifier).set,
-        ),
+        // Persistent notification and PiP are backed by Android-only
+        // services (NotificationService, PipService — both no-op off
+        // Android), so on Windows these toggles would control nothing.
+        if (Platform.isAndroid) ...[
+          _AmbientToggleRow(
+            icon: Icons.notifications_active_outlined,
+            label: l10n.settingsAmbientPersistentNotifLabel,
+            subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
+            value: persistentNotifEnabled,
+            onChanged: ref
+                .read(ambientPersistentNotifEnabledProvider.notifier)
+                .set,
+          ),
+          _AmbientToggleRow(
+            icon: Icons.picture_in_picture_alt_outlined,
+            label: l10n.settingsAmbientPipLabel,
+            subtitle: l10n.settingsAmbientPipSubtitle,
+            value: pipEnabled,
+            onChanged: ref.read(ambientPipEnabledProvider.notifier).set,
+          ),
+        ],
         _AmbientToggleRow(
           icon: Icons.brightness_1_outlined,
           label: l10n.settingsAmbientOledHoldLabel,
