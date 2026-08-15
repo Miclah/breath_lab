@@ -174,123 +174,127 @@ class _ResultViewState extends ConsumerState<ResultView>
     final isDesktop = MediaQuery.of(context).size.width >= 600;
     final hPad = isDesktop ? Spacing.xxxl : Spacing.xl;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: hPad),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: Spacing.xxxxl),
-
-          // Hold duration — pulses on PB, with a glow ring behind it
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              if (_showGlow)
-                AnimatedBuilder(
-                  animation: _glowController,
-                  builder: (_, _) => Opacity(
-                    opacity: _glowOpacity.value,
-                    child: Transform.scale(
-                      scale: _glowScale.value,
-                      child: Container(
-                        width: 140,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              c.danger.withValues(alpha: 0.5),
-                              c.danger.withValues(alpha: 0),
-                            ],
+    // Centered as one cohesive block instead of top-anchored content with a
+    // flex Spacer pushing the button group to the physical bottom edge —
+    // that left a large empty gap on most screens. SingleChildScrollView
+    // guards against overflow on short windows now that nothing here is
+    // Expanded/flexible.
+    return Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: hPad, vertical: Spacing.xxl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Hold duration — pulses on PB, with a glow ring behind it
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                if (_showGlow)
+                  AnimatedBuilder(
+                    animation: _glowController,
+                    builder: (_, _) => Opacity(
+                      opacity: _glowOpacity.value,
+                      child: Transform.scale(
+                        scale: _glowScale.value,
+                        child: Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                c.danger.withValues(alpha: 0.5),
+                                c.danger.withValues(alpha: 0),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              AnimatedBuilder(
-                animation: _pbScale,
-                builder: (_, child) =>
-                    Transform.scale(scale: _pbScale.value, child: child),
-                child: Text(
-                  _fmt(state.holdElapsed),
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    fontSize: isDesktop ? 64.0 : null,
+                AnimatedBuilder(
+                  animation: _pbScale,
+                  builder: (_, child) =>
+                      Transform.scale(scale: _pbScale.value, child: child),
+                  child: Text(
+                    _fmt(state.holdElapsed),
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      fontSize: isDesktop ? 64.0 : null,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-
-          // Contraction + struggle phase stats
-          if (state.contractionTime != null) ...[
-            const SizedBox(height: Spacing.lg),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _StatChip(
-                  label: l10n.resultContraction,
-                  value: _fmt(state.contractionTime!),
-                  c: c,
-                ),
-                if (state.strugglePhase != null) ...[
-                  const SizedBox(width: Spacing.xl),
-                  _StatChip(
-                    label: l10n.resultStruggle,
-                    value: _fmt(state.strugglePhase!),
-                    c: c,
-                  ),
-                ],
               ],
             ),
-          ],
 
-          const SizedBox(height: Spacing.lg),
-
-          // Tag chips
-          const TagChipRow(),
-
-          const Spacer(),
-
-          // Lung volume selector
-          const _LungVolumeSelector(),
-
-          const SizedBox(height: Spacing.xxl),
-
-          // Save button
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Radius.lg),
-                ),
+            // Contraction + struggle phase stats
+            if (state.contractionTime != null) ...[
+              const SizedBox(height: Spacing.lg),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _StatChip(
+                    label: l10n.resultContraction,
+                    value: _fmt(state.contractionTime!),
+                    c: c,
+                  ),
+                  if (state.strugglePhase != null) ...[
+                    const SizedBox(width: Spacing.xl),
+                    _StatChip(
+                      label: l10n.resultStruggle,
+                      value: _fmt(state.strugglePhase!),
+                      c: c,
+                    ),
+                  ],
+                ],
               ),
-              onPressed: _saving ? null : _save,
-              child: _saving
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(l10n.resultSaveButton),
-            ),
-          ),
+            ],
 
-          // Discard button
-          TextButton(
-            onPressed: _saving ? null : _discard,
-            child: Text(
-              l10n.resultDiscardButton,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: c.textSecondary),
-            ),
-          ),
+            const SizedBox(height: Spacing.lg),
 
-          const SizedBox(height: Spacing.xl),
-        ],
+            // Tag chips
+            const TagChipRow(),
+
+            const SizedBox(height: Spacing.xxxl),
+
+            // Lung volume selector
+            const _LungVolumeSelector(),
+
+            const SizedBox(height: Spacing.xxl),
+
+            // Save button
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Radius.lg),
+                  ),
+                ),
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.resultSaveButton),
+              ),
+            ),
+
+            // Discard button
+            TextButton(
+              onPressed: _saving ? null : _discard,
+              child: Text(
+                l10n.resultDiscardButton,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: c.textSecondary),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
