@@ -122,8 +122,11 @@ class HistoryScreen extends ConsumerWidget {
                       }
                       return ListView.separated(
                         itemCount: entries.length,
-                        separatorBuilder: (context, index) =>
-                            const Divider(height: 1, indent: Spacing.xl),
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 1,
+                          indent: Spacing.xl,
+                          endIndent: Spacing.xl,
+                        ),
                         itemBuilder: (_, i) => switch (entries[i]) {
                           _HoldEntry(:final hold) => HoldListItem(
                             hold: hold,

@@ -62,11 +62,18 @@ class ProgressScreen extends ConsumerWidget {
                 ),
               )
             else
-              for (final hold in recentHolds)
+              for (final (i, hold) in recentHolds.indexed) ...[
+                if (i > 0)
+                  const Divider(
+                    height: 1,
+                    indent: Spacing.xl,
+                    endIndent: Spacing.xl,
+                  ),
                 HoldListItem(
                   hold: hold,
                   onTap: () => showHoldDetail(context, hold),
                 ),
+              ],
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
