@@ -84,11 +84,16 @@ class _PresetChip extends StatelessWidget {
         child: AnimatedContainer(
           duration: Durations.fast,
           height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
           decoration: BoxDecoration(
-            color: isSelected ? c.primarySurface : c.surfaceElevated,
+            // Matches the selected/unselected pattern _TagChip already
+            // uses — surfaceElevated read as more prominent than the
+            // primary-tinted fill, so the selected chip looked weaker
+            // than the other two instead of standing out.
+            color: isSelected ? c.primarySurface : Colors.transparent,
             borderRadius: BorderRadius.circular(Radius.lg),
             border: Border.all(
-              color: isSelected ? c.primary : Colors.transparent,
+              color: isSelected ? c.primary : c.border,
               width: 0.5,
             ),
           ),
