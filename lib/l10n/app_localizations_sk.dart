@@ -324,6 +324,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get prepGoLabel => 'Štart!';
 
   @override
+  String get prepGetReadyLabel => 'Priprav sa';
+
+  @override
+  String get prepCancel => 'Zrušiť';
+
+  @override
   String get prepBreatheIn => 'Nádych...';
 
   @override

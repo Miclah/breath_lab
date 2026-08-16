@@ -404,6 +404,14 @@
   "@prepGoLabel": {
     "description": "Label shown at the end of the 3-second prep countdown before the hold begins"
   },
+  "prepGetReadyLabel": "Get ready",
+  "@prepGetReadyLabel": {
+    "description": "Label shown above the number during the 3-second prep countdown"
+  },
+  "prepCancel": "Cancel",
+  "@prepCancel": {
+    "description": "Button that aborts the 3-second prep countdown and returns to idle"
+  },
   "prepBreatheIn": "Breathe in...",
   "@prepBreatheIn": {
     "description": "Text shown inside the breathing circle during the inhale phase"

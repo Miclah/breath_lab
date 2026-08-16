@@ -704,6 +704,18 @@ abstract class AppLocalizations {
   /// **'Go!'**
   String get prepGoLabel;
 
+  /// Label shown above the number during the 3-second prep countdown
+  ///
+  /// In en, this message translates to:
+  /// **'Get ready'**
+  String get prepGetReadyLabel;
+
+  /// Button that aborts the 3-second prep countdown and returns to idle
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get prepCancel;
+
   /// Text shown inside the breathing circle during the inhale phase
   ///
   /// In en, this message translates to:

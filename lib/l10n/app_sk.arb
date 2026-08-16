@@ -101,6 +101,8 @@
   "presetStandardTooltip": "3-sekundové odpočítavanie, potom zadrž dych",
   "presetFullSessionTooltip": "2-minútová príprava s dychovým sprievodcom, potom zadrž dych",
   "prepGoLabel": "Štart!",
+  "prepGetReadyLabel": "Priprav sa",
+  "prepCancel": "Zrušiť",
   "prepBreatheIn": "Nádych...",
   "prepBreatheOut": "Výdych...",
   "prepSkip": "Preskočiť →",

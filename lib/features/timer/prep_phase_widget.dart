@@ -73,6 +73,10 @@ class _ThreeSecondCountdownState extends ConsumerState<_ThreeSecondCountdown> {
       }
     });
 
+    final c = context.appColors;
+    final isDesktop = MediaQuery.of(context).size.width >= 600;
+    final ringSize = isDesktop ? 280.0 : 220.0;
+
     final elapsed = ref.watch(timerProvider).prepElapsed;
     final countdown = _remaining(elapsed);
     if (_prevCountdown == -1) _prevCountdown = countdown;
@@ -81,18 +85,53 @@ class _ThreeSecondCountdownState extends ConsumerState<_ThreeSecondCountdown> {
     final label = isDone ? l10n.prepGoLabel : '$countdown';
 
     return Center(
-      child: AnimatedSwitcher(
-        duration: Durations.fast,
-        transitionBuilder: (child, animation) =>
-            ScaleTransition(scale: animation, child: child),
-        child: Text(
-          label,
-          key: ValueKey(label),
-          style: Theme.of(
-            context,
-          ).textTheme.displayLarge?.copyWith(fontSize: 96),
-          textAlign: TextAlign.center,
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            l10n.prepGetReadyLabel,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
+          ),
+          const SizedBox(height: Spacing.md),
+          SizedBox(
+            width: ringSize,
+            height: ringSize,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CustomPaint(
+                  size: Size(ringSize, ringSize),
+                  painter: _BreathCirclePainter(color: c.info),
+                ),
+                AnimatedSwitcher(
+                  duration: Durations.fast,
+                  transitionBuilder: (child, animation) =>
+                      ScaleTransition(scale: animation, child: child),
+                  child: Text(
+                    label,
+                    key: ValueKey(label),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.displayLarge?.copyWith(fontSize: 96),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: Spacing.md),
+          TextButton(
+            onPressed: () => ref.read(timerProvider.notifier).reset(),
+            child: Text(
+              l10n.prepCancel,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+            ),
+          ),
+        ],
       ),
     );
   }
