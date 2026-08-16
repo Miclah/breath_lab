@@ -83,6 +83,11 @@ ThemeData _buildTheme(BreathLabColorScheme c, Brightness brightness) {
       foregroundColor: c.textPrimary,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
+      // A flat 0-elevation bar with the same background as the body behind
+      // it has nothing to visually separate it from scrolled content —
+      // this border is the boundary instead of relying on scroll-triggered
+      // elevation.
+      shape: Border(bottom: BorderSide(color: c.border, width: 0.5)),
       titleTextStyle: BreathLabTypography.headingMd.copyWith(
         color: c.textPrimary,
       ),

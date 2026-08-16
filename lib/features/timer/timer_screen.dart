@@ -88,6 +88,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 1.5);
 
     return Scaffold(
+      appBar: AppBar(title: Text(l10n.navTimer)),
       body: Focus(
         focusNode: _focusNode,
         autofocus: true,
