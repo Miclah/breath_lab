@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/content_max_width.dart';
 import '../../theme/tokens.dart';
 import 'safety_provider.dart';
 
@@ -17,53 +18,57 @@ class SafetyScreen extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Spacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              Icon(
-                Icons.warning_amber_rounded,
-                size: 56,
-                color: theme.colorScheme.error,
-              ),
-              const SizedBox(height: Spacing.md),
-              Text(
-                l10n.safetyTitle,
-                style: theme.textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: Spacing.sm),
-              Text(
-                l10n.safetyDescription,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+          child: ContentMaxWidth(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Spacer(),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 56,
+                  color: theme.colorScheme.error,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: Spacing.xl),
-              _SafetyRule(text: l10n.safetyRule1),
-              const SizedBox(height: Spacing.md),
-              _SafetyRule(text: l10n.safetyRule2),
-              const SizedBox(height: Spacing.md),
-              _SafetyRule(text: l10n.safetyRule3),
-              const Spacer(),
-              FilledButton(
-                onPressed: () {
-                  // Pushed from Settings (already acknowledged) — just go
-                  // back. Otherwise this is the first-launch gate, where
-                  // acknowledging is what dismisses it.
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  } else {
-                    ref.read(safetyAcknowledgedProvider.notifier).acknowledge();
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
-                  child: Text(l10n.safetyAcknowledge),
+                const SizedBox(height: Spacing.md),
+                Text(
+                  l10n.safetyTitle,
+                  style: theme.textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                const SizedBox(height: Spacing.sm),
+                Text(
+                  l10n.safetyDescription,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: Spacing.xl),
+                _SafetyRule(text: l10n.safetyRule1),
+                const SizedBox(height: Spacing.md),
+                _SafetyRule(text: l10n.safetyRule2),
+                const SizedBox(height: Spacing.md),
+                _SafetyRule(text: l10n.safetyRule3),
+                const Spacer(),
+                FilledButton(
+                  onPressed: () {
+                    // Pushed from Settings (already acknowledged) — just go
+                    // back. Otherwise this is the first-launch gate, where
+                    // acknowledging is what dismisses it.
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    } else {
+                      ref
+                          .read(safetyAcknowledgedProvider.notifier)
+                          .acknowledge();
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
+                    child: Text(l10n.safetyAcknowledge),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
