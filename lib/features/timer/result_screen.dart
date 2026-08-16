@@ -326,7 +326,7 @@ class _LungVolumeSelector extends ConsumerWidget {
 
     final hint = segments.firstWhere((e) => e.$1 == selected).$3;
 
-    Widget selector = Row(
+    final selector = Row(
       children: [
         for (final (i, seg) in segments.indexed) ...[
           if (i > 0) Container(width: 0.5, height: 44, color: c.border),
@@ -337,23 +337,25 @@ class _LungVolumeSelector extends ConsumerWidget {
       ],
     );
 
+    Widget frame = ClipRRect(
+      borderRadius: BorderRadius.circular(Radius.sm),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: c.border, width: 0.5),
+          borderRadius: BorderRadius.circular(Radius.sm),
+        ),
+        height: 44,
+        child: selector,
+      ),
+    );
+
     if (isDesktop) {
-      selector = Center(child: SizedBox(width: 320, child: selector));
+      frame = Center(child: SizedBox(width: 320, child: frame));
     }
 
     return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Radius.sm),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: c.border, width: 0.5),
-              borderRadius: BorderRadius.circular(Radius.sm),
-            ),
-            height: 44,
-            child: selector,
-          ),
-        ),
+        frame,
         const SizedBox(height: Spacing.xs),
         Text(
           hint,
