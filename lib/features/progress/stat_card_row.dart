@@ -30,7 +30,7 @@ class StatCardRow extends ConsumerWidget {
         StatCard(
           label: l10n.progressStatPb,
           value: pb == null ? l10n.progressStatNoData : _fmt(pb),
-          valueColor: c.dangerText,
+          valueColor: c.recordText,
         ),
         const SizedBox(width: Spacing.md),
         StatCard(

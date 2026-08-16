@@ -29,7 +29,7 @@ Color _volumeColor(BreathLabColorScheme c, LungVolume volume) =>
     };
 
 /// Line chart of max-hold trend. Per Design §"Progress Chart": daily best
-/// (solid, PB dots in danger color) and daily average (dashed tertiary,
+/// (solid, PB dots in record color) and daily average (dashed tertiary,
 /// single-volume view only). 30 days, filtered by [LungVolumeFilterChip]
 /// (Full by default; "All" overlays one best-only line per volume).
 class ProgressChart extends ConsumerWidget {
@@ -171,7 +171,7 @@ class ProgressChart extends ConsumerWidget {
                 final hasPb = s.stats[index].hasPb;
                 return FlDotCirclePainter(
                   radius: hasPb ? 6 : 4,
-                  color: hasPb ? c.danger : _volumeColor(c, s.lungVolume),
+                  color: hasPb ? c.recordText : _volumeColor(c, s.lungVolume),
                   strokeWidth: 0,
                 );
               },

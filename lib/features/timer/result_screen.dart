@@ -220,8 +220,8 @@ class _ResultViewState extends ConsumerState<ResultView>
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
                               colors: [
-                                c.danger.withValues(alpha: 0.5),
-                                c.danger.withValues(alpha: 0),
+                                c.recordText.withValues(alpha: 0.5),
+                                c.recordText.withValues(alpha: 0),
                               ],
                             ),
                           ),
