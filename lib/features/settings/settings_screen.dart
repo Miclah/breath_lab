@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/content_max_width.dart';
 import 'about_section.dart';
 import 'ambient_section.dart';
 import 'appearance_section.dart';
@@ -21,20 +22,22 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navSettings)),
-      body: ListView(
-        children: [
-          SectionHeader(title: l10n.settingsTrainingSection),
-          const TrainingSection(),
-          const TimerSection(),
-          const Co2TableSection(),
-          const O2TableSection(),
-          const AmbientSection(),
-          const SoundHapticsSection(),
-          SectionHeader(title: l10n.settingsAppearanceSection),
-          const AppearanceSection(),
-          SectionHeader(title: l10n.settingsAboutSection),
-          const AboutSection(),
-        ],
+      body: ContentMaxWidth(
+        child: ListView(
+          children: [
+            SectionHeader(title: l10n.settingsTrainingSection),
+            const TrainingSection(),
+            const TimerSection(),
+            const Co2TableSection(),
+            const O2TableSection(),
+            const AmbientSection(),
+            const SoundHapticsSection(),
+            SectionHeader(title: l10n.settingsAppearanceSection),
+            const AppearanceSection(),
+            SectionHeader(title: l10n.settingsAboutSection),
+            const AboutSection(),
+          ],
+        ),
       ),
     );
   }

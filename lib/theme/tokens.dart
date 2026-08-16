@@ -30,3 +30,12 @@ class Durations {
   static const Duration normal = Duration(milliseconds: 200);
   static const Duration slow = Duration(milliseconds: 300);
 }
+
+class Layout {
+  const Layout._();
+
+  /// Cap on tab content width. Unconstrained, full-width buttons and
+  /// settings rows that read fine on a phone stretch edge-to-edge on a
+  /// desktop window and become unreadable.
+  static const double contentMaxWidth = 600;
+}

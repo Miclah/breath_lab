@@ -7,6 +7,7 @@ import '../../domain/services/co2_table_calculator.dart';
 import '../../domain/services/o2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/content_max_width.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
@@ -62,108 +63,111 @@ class TablesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navTables)),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(Spacing.lg),
-            child: _TablePillToggle(enabled: !sessionActive),
-          ),
-          Expanded(
-            child: maxMsAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => const SizedBox.shrink(),
-              data: (maxMs) {
-                if (maxMs == null) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.xxl,
-                      ),
-                      child: Text(
-                        l10n.tablesNoMaxYet,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                  );
-                }
-                final rounds = sessionActive
-                    ? session.rounds
-                    : _computeRounds(
-                        selectedType,
-                        maxMs,
-                        co2Config: co2Config,
-                        o2Config: o2Config,
-                      );
-                return Column(
-                  children: [
-                    if (session.isDone)
-                      Expanded(child: SessionSummaryView(session: session))
-                    else ...[
-                      _InfoCard(maxMs: maxMs, l10n: l10n),
-                      Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Spacing.lg,
-                          ),
-                          itemCount: rounds.length,
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: Spacing.sm),
-                          itemBuilder: (context, i) {
-                            final itemState = _stateFor(
-                              session,
-                              sessionActive,
-                              i,
-                            );
-                            final isActive = itemState == RoundItemState.active;
-                            return RoundListItem(
-                              number: i + 1,
-                              round: rounds[i],
-                              state: itemState,
-                              elapsedMs: isActive
-                                  ? session.elapsed.inMilliseconds
-                                  : null,
-                              phaseLabel: !isActive
-                                  ? null
-                                  : session.isHolding
-                                  ? l10n.tablesPhaseLabelHold
-                                  : l10n.tablesPhaseLabelRest,
-                              onStopHold: isActive && session.isHolding
-                                  ? () => ref
-                                        .read(tableSessionProvider.notifier)
-                                        .stopHoldEarly()
-                                  : null,
-                            );
-                          },
+      body: ContentMaxWidth(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(Spacing.lg),
+              child: _TablePillToggle(enabled: !sessionActive),
+            ),
+            Expanded(
+              child: maxMsAsync.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => const SizedBox.shrink(),
+                data: (maxMs) {
+                  if (maxMs == null) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Spacing.xxl,
+                        ),
+                        child: Text(
+                          l10n.tablesNoMaxYet,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
+                    );
+                  }
+                  final rounds = sessionActive
+                      ? session.rounds
+                      : _computeRounds(
+                          selectedType,
+                          maxMs,
+                          co2Config: co2Config,
+                          o2Config: o2Config,
+                        );
+                  return Column(
+                    children: [
+                      if (session.isDone)
+                        Expanded(child: SessionSummaryView(session: session))
+                      else ...[
+                        _InfoCard(maxMs: maxMs, l10n: l10n),
+                        Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Spacing.lg,
+                            ),
+                            itemCount: rounds.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: Spacing.sm),
+                            itemBuilder: (context, i) {
+                              final itemState = _stateFor(
+                                session,
+                                sessionActive,
+                                i,
+                              );
+                              final isActive =
+                                  itemState == RoundItemState.active;
+                              return RoundListItem(
+                                number: i + 1,
+                                round: rounds[i],
+                                state: itemState,
+                                elapsedMs: isActive
+                                    ? session.elapsed.inMilliseconds
+                                    : null,
+                                phaseLabel: !isActive
+                                    ? null
+                                    : session.isHolding
+                                    ? l10n.tablesPhaseLabelHold
+                                    : l10n.tablesPhaseLabelRest,
+                                onStopHold: isActive && session.isHolding
+                                    ? () => ref
+                                          .read(tableSessionProvider.notifier)
+                                          .stopHoldEarly()
+                                    : null,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: Spacing.lg),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Spacing.lg,
+                        ),
+                        child: _SessionActionButton(
+                          sessionActive: sessionActive,
+                          isDone: session.isDone,
+                          l10n: l10n,
+                          onStart: () => ref
+                              .read(tableSessionProvider.notifier)
+                              .start(selectedType, rounds, maxMs),
+                          onReset: () =>
+                              ref.read(tableSessionProvider.notifier).reset(),
+                          onStop: () => ref
+                              .read(tableSessionProvider.notifier)
+                              .stopSession(),
+                        ),
+                      ),
+                      const SizedBox(height: Spacing.lg),
                     ],
-                    const SizedBox(height: Spacing.lg),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.lg,
-                      ),
-                      child: _SessionActionButton(
-                        sessionActive: sessionActive,
-                        isDone: session.isDone,
-                        l10n: l10n,
-                        onStart: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .start(selectedType, rounds, maxMs),
-                        onReset: () =>
-                            ref.read(tableSessionProvider.notifier).reset(),
-                        onStop: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .stopSession(),
-                      ),
-                    ),
-                    const SizedBox(height: Spacing.lg),
-                  ],
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

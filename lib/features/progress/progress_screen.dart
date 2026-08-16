@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/holds_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/content_max_width.dart';
 import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -33,46 +34,50 @@ class ProgressScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProgress)),
-      body: ListView(
-        padding: const EdgeInsets.all(Spacing.xl),
-        children: [
-          const StatCardRow(),
-          const SizedBox(height: Spacing.lg),
-          const CalendarHeatmap(),
-          const SizedBox(height: Spacing.lg),
-          const ProgressChart(),
-          const SizedBox(height: Spacing.xxl),
-          Text(
-            l10n.progressRecentHoldsTitle,
-            style: BreathLabTypography.headingSm.copyWith(color: c.textPrimary),
-          ),
-          const SizedBox(height: Spacing.sm),
-          if (recentHolds.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
-              child: Text(
-                l10n.historyEmpty,
-                style: BreathLabTypography.bodySm.copyWith(
-                  color: c.textTertiary,
-                ),
+      body: ContentMaxWidth(
+        child: ListView(
+          padding: const EdgeInsets.all(Spacing.xl),
+          children: [
+            const StatCardRow(),
+            const SizedBox(height: Spacing.lg),
+            const CalendarHeatmap(),
+            const SizedBox(height: Spacing.lg),
+            const ProgressChart(),
+            const SizedBox(height: Spacing.xxl),
+            Text(
+              l10n.progressRecentHoldsTitle,
+              style: BreathLabTypography.headingSm.copyWith(
+                color: c.textPrimary,
               ),
-            )
-          else
-            for (final hold in recentHolds)
-              HoldListItem(
-                hold: hold,
-                onTap: () => showHoldDetail(context, hold),
-              ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () => Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => const HistoryScreen())),
-              child: Text(l10n.progressViewAllHistory),
             ),
-          ),
-        ],
+            const SizedBox(height: Spacing.sm),
+            if (recentHolds.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
+                child: Text(
+                  l10n.historyEmpty,
+                  style: BreathLabTypography.bodySm.copyWith(
+                    color: c.textTertiary,
+                  ),
+                ),
+              )
+            else
+              for (final hold in recentHolds)
+                HoldListItem(
+                  hold: hold,
+                  onTap: () => showHoldDetail(context, hold),
+                ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const HistoryScreen()),
+                ),
+                child: Text(l10n.progressViewAllHistory),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

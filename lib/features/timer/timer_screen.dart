@@ -6,6 +6,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/content_max_width.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'preset_chip_row.dart';
@@ -94,27 +95,29 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         child: SafeArea(
           child: state.isDone
               ? const ResultView()
-              : Padding(
-                  padding: EdgeInsets.symmetric(horizontal: hPad),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: Spacing.lg),
-                      if (state.isIdle) const PresetChipRow(),
-                      Expanded(
-                        child: state.isPrep
-                            ? const PrepPhaseWidget()
-                            : _buildRing(
-                                context,
-                                state,
-                                l10n,
-                                c,
-                                isDesktop,
-                                ringValue,
-                              ),
-                      ),
-                      _buildButton(context, state, l10n, c),
-                      const SizedBox(height: Spacing.xl),
-                    ],
+              : ContentMaxWidth(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: hPad),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: Spacing.lg),
+                        if (state.isIdle) const PresetChipRow(),
+                        Expanded(
+                          child: state.isPrep
+                              ? const PrepPhaseWidget()
+                              : _buildRing(
+                                  context,
+                                  state,
+                                  l10n,
+                                  c,
+                                  isDesktop,
+                                  ringValue,
+                                ),
+                        ),
+                        _buildButton(context, state, l10n, c),
+                        const SizedBox(height: Spacing.xl),
+                      ],
+                    ),
                   ),
                 ),
         ),
