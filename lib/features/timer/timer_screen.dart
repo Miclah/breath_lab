@@ -6,6 +6,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../shared/widgets/content_max_width.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -14,12 +15,6 @@ import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'result_screen.dart';
 import 'timer_ring.dart';
-
-String _fmtDuration(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
 
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
@@ -154,7 +149,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_fmtDuration(elapsed), style: timerStyle),
+                Text(formatMmSs(elapsed), style: timerStyle),
                 if (stateLabel != null) ...[
                   const SizedBox(height: Spacing.xs),
                   Text(
@@ -238,7 +233,7 @@ class _ContractionBadge extends StatelessWidget {
         ),
         const SizedBox(width: Spacing.xs),
         Text(
-          _fmtDuration(time),
+          formatMmSs(time),
           style: Theme.of(
             context,
           ).textTheme.labelSmall?.copyWith(color: c.textSecondary),

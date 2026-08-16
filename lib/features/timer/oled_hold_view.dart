@@ -4,16 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart' show brightnessServiceProvider;
 import 'providers.dart';
-
-String _fmtDuration(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
 
 /// OLED-friendly hold screen, per Design Additions §4: pure black, enlarged
 /// mono timer, no ring decoration, borderless Stop. Uses the dark color
@@ -57,7 +52,7 @@ class _OledHoldViewState extends ConsumerState<OledHoldView> {
               flex: 2,
               child: Center(
                 child: Text(
-                  _fmtDuration(elapsed),
+                  formatMmSs(elapsed),
                   style: TextStyle(
                     fontFamily: 'JetBrainsMono',
                     fontSize: isDesktop ? 128 : 96,

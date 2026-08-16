@@ -2,18 +2,14 @@ import 'package:flutter/material.dart' hide Durations;
 
 import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 
 enum RoundItemState { upcoming, active, completed }
 
-String formatRoundMs(int ms) {
-  final d = Duration(milliseconds: ms);
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
+String formatRoundMs(int ms) => formatMmSs(Duration(milliseconds: ms));
 
 /// A single round row in a CO₂/O₂ table, shared by both table types.
 class RoundListItem extends StatelessWidget {

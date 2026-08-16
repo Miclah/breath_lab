@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../shared/widgets/segment_label.dart';
 import '../../theme/tokens.dart';
 
@@ -80,12 +81,7 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
     super.dispose();
   }
 
-  String _format(int ms) {
-    final d = Duration(milliseconds: ms);
-    final m = d.inMinutes;
-    final s = d.inSeconds % 60;
-    return '$m:${s.toString().padLeft(2, '0')}';
-  }
+  String _format(int ms) => formatMmSs(Duration(milliseconds: ms));
 
   Future<void> _submit() async {
     final match = _pattern.firstMatch(_controller.text.trim());

@@ -7,6 +7,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../shared/global_messenger.dart';
 import '../../shared/widgets/content_max_width.dart';
 import '../../theme/colors.dart';
@@ -16,12 +17,6 @@ import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
 import 'providers.dart';
 import 'tag_chip_row.dart';
-
-String _fmt(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
 /// and Save / Discard buttons. Replaces the timer ring area entirely.
@@ -235,7 +230,7 @@ class _ResultViewState extends ConsumerState<ResultView>
                   builder: (_, child) =>
                       Transform.scale(scale: _pbScale.value, child: child),
                   child: Text(
-                    _fmt(state.holdElapsed),
+                    formatMmSs(state.holdElapsed),
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       fontSize: isDesktop ? 64.0 : null,
                     ),
@@ -252,14 +247,14 @@ class _ResultViewState extends ConsumerState<ResultView>
                 children: [
                   _StatChip(
                     label: l10n.resultContraction,
-                    value: _fmt(state.contractionTime!),
+                    value: formatMmSs(state.contractionTime!),
                     c: c,
                   ),
                   if (state.strugglePhase != null) ...[
                     const SizedBox(width: Spacing.xl),
                     _StatChip(
                       label: l10n.resultStruggle,
-                      value: _fmt(state.strugglePhase!),
+                      value: formatMmSs(state.strugglePhase!),
                       c: c,
                     ),
                   ],
