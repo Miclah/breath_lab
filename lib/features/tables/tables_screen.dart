@@ -212,7 +212,7 @@ class _SessionActionButton extends StatelessWidget {
             ),
           ),
           onPressed: onStop,
-          child: Text(l10n.timerStopButton),
+          child: Text(l10n.tablesEndSessionButton),
         ),
       );
     }

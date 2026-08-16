@@ -161,6 +161,8 @@
   "tablesRestLabel": "Oddych",
   "tablesPhaseLabelHold": "zadržanie",
   "tablesPhaseLabelRest": "oddych",
+  "tablesSkipRoundButton": "Preskočiť kolo",
+  "tablesEndSessionButton": "Ukončiť session",
   "tablesSummaryTitle": "Séria dokončená",
   "tablesSummaryRounds": "{completed} z {total} kôl dokončených",
   "tablesSummaryTotalHold": "Celkový čas zadržania",

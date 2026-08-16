@@ -508,6 +508,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tablesPhaseLabelRest => 'rest';
 
   @override
+  String get tablesSkipRoundButton => 'Skip round';
+
+  @override
+  String get tablesEndSessionButton => 'End session';
+
+  @override
   String get tablesSummaryTitle => 'Session complete';
 
   @override

@@ -655,6 +655,14 @@
   "@tablesPhaseLabelRest": {
     "description": "State label shown below the live timer on the active table round during rest"
   },
+  "tablesSkipRoundButton": "Skip round",
+  "@tablesSkipRoundButton": {
+    "description": "Button on the active round card that ends its current hold/rest phase early and moves to the next round"
+  },
+  "tablesEndSessionButton": "End session",
+  "@tablesEndSessionButton": {
+    "description": "Full-width button that ends the entire table session, as opposed to skipping just the current round"
+  },
   "tablesSummaryTitle": "Session complete",
   "@tablesSummaryTitle": {
     "description": "Title of the table session summary screen"

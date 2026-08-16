@@ -1064,6 +1064,18 @@ abstract class AppLocalizations {
   /// **'rest'**
   String get tablesPhaseLabelRest;
 
+  /// Button on the active round card that ends its current hold/rest phase early and moves to the next round
+  ///
+  /// In en, this message translates to:
+  /// **'Skip round'**
+  String get tablesSkipRoundButton;
+
+  /// Full-width button that ends the entire table session, as opposed to skipping just the current round
+  ///
+  /// In en, this message translates to:
+  /// **'End session'**
+  String get tablesEndSessionButton;
+
   /// Title of the table session summary screen
   ///
   /// In en, this message translates to:

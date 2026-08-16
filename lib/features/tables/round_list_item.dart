@@ -53,9 +53,9 @@ class RoundListItem extends StatelessWidget {
         vertical: Spacing.md,
       ),
       decoration: BoxDecoration(
-        color: state == RoundItemState.active ? c.warningSurface : c.surface,
+        color: state == RoundItemState.active ? c.primarySurface : c.surface,
         border: Border.all(
-          color: state == RoundItemState.active ? c.warning : c.border,
+          color: state == RoundItemState.active ? c.primary : c.border,
         ),
         borderRadius: BorderRadius.circular(Radius.md),
       ),
@@ -76,14 +76,14 @@ class RoundListItem extends StatelessWidget {
                 label: l10n.tablesHoldLabel,
                 value: formatRoundMs(round.holdMs),
                 c: c,
-                dimmed: state == RoundItemState.upcoming,
+                dimmed: state != RoundItemState.completed,
               ),
               const SizedBox(width: Spacing.xl),
               _RoundStat(
                 label: l10n.tablesRestLabel,
                 value: formatRoundMs(round.restMs),
                 c: c,
-                dimmed: state == RoundItemState.upcoming,
+                dimmed: state != RoundItemState.completed,
               ),
               const SizedBox(width: Spacing.md),
               _StatusIndicator(state: state, c: c),
@@ -97,7 +97,7 @@ class RoundListItem extends StatelessWidget {
                   Text(
                     elapsedMs == null ? '--:--' : formatRoundMs(elapsedMs!),
                     style: BreathLabTypography.timerDisplay.copyWith(
-                      color: c.warningText,
+                      color: c.primaryText,
                     ),
                   ),
                   if (phaseLabel != null) ...[
@@ -105,7 +105,7 @@ class RoundListItem extends StatelessWidget {
                     Text(
                       phaseLabel!,
                       style: BreathLabTypography.bodySm.copyWith(
-                        color: c.warningText,
+                        color: c.primaryText,
                       ),
                     ),
                   ],
@@ -117,7 +117,7 @@ class RoundListItem extends StatelessWidget {
               Center(
                 child: OutlinedButton(
                   onPressed: onStopHold,
-                  child: Text(l10n.timerStopButton),
+                  child: Text(l10n.tablesSkipRoundButton),
                 ),
               ),
             ],
@@ -129,7 +129,7 @@ class RoundListItem extends StatelessWidget {
 
   Color _labelColor(BreathLabColorScheme c) => switch (state) {
     RoundItemState.upcoming => c.textTertiary,
-    RoundItemState.active => c.warningText,
+    RoundItemState.active => c.primaryText,
     RoundItemState.completed => c.primaryText,
   };
 }
@@ -183,7 +183,7 @@ class _StatusIndicator extends StatelessWidget {
       ),
       RoundItemState.active => Icon(
         Icons.arrow_forward,
-        color: c.warning,
+        color: c.primary,
         size: 20,
       ),
       RoundItemState.upcoming => const SizedBox(width: 20),

@@ -510,6 +510,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tablesPhaseLabelRest => 'oddych';
 
   @override
+  String get tablesSkipRoundButton => 'Preskočiť kolo';
+
+  @override
+  String get tablesEndSessionButton => 'Ukončiť session';
+
+  @override
   String get tablesSummaryTitle => 'Séria dokončená';
 
   @override
