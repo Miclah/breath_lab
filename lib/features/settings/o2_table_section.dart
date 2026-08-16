@@ -52,12 +52,8 @@ class O2TableSection extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.settingsRoundsLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsRoundsLabel,
                 value: rounds,
                 min: _minRounds,
                 max: _maxRounds,
@@ -79,12 +75,8 @@ class O2TableSection extends ConsumerWidget {
                 onCommit: config.setMaxHoldPercent,
               ),
               const SizedBox(height: Spacing.md),
-              Text(
-                l10n.settingsO2FixedRestLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsO2FixedRestLabel,
                 value: restS,
                 min: _minRestS,
                 max: _maxRestS,

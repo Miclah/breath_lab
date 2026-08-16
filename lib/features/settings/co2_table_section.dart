@@ -52,12 +52,8 @@ class Co2TableSection extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.settingsRoundsLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsRoundsLabel,
                 value: rounds,
                 min: _minRounds,
                 max: _maxRounds,
@@ -79,12 +75,8 @@ class Co2TableSection extends ConsumerWidget {
                 onCommit: config.setHoldPercent,
               ),
               const SizedBox(height: Spacing.md),
-              Text(
-                l10n.settingsCo2RestDecrementLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsCo2RestDecrementLabel,
                 value: restDecrementS,
                 min: _minRestDecrementS,
                 max: _maxRestDecrementS,
