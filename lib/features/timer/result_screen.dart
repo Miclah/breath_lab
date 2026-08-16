@@ -198,33 +198,39 @@ class _ResultViewState extends ConsumerState<ResultView>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Hold duration — pulses on PB, with a glow ring behind it
+            // Hold duration — pulses on PB, with a glow ring behind it. The
+            // glow's 140x140 footprint is reserved unconditionally so
+            // everything below doesn't jump down the instant _showGlow
+            // flips true.
             Stack(
               alignment: Alignment.center,
               children: [
-                if (_showGlow)
-                  AnimatedBuilder(
-                    animation: _glowController,
-                    builder: (_, _) => Opacity(
-                      opacity: _glowOpacity.value,
-                      child: Transform.scale(
-                        scale: _glowScale.value,
-                        child: Container(
-                          width: 140,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                c.recordText.withValues(alpha: 0.5),
-                                c.recordText.withValues(alpha: 0),
-                              ],
+                SizedBox(
+                  width: 140,
+                  height: 140,
+                  child: !_showGlow
+                      ? null
+                      : AnimatedBuilder(
+                          animation: _glowController,
+                          builder: (_, _) => Opacity(
+                            opacity: _glowOpacity.value,
+                            child: Transform.scale(
+                              scale: _glowScale.value,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: RadialGradient(
+                                    colors: [
+                                      c.recordText.withValues(alpha: 0.5),
+                                      c.recordText.withValues(alpha: 0),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
+                ),
                 AnimatedBuilder(
                   animation: _pbScale,
                   builder: (_, child) =>
@@ -295,15 +301,19 @@ class _ResultViewState extends ConsumerState<ResultView>
               ),
             ),
 
-            // Discard button
-            TextButton(
+            // Discard button — outlined so the only way to throw away a
+            // hold doesn't read as bare, borderless text next to a fully
+            // filled Save button.
+            OutlinedButton(
               onPressed: _saving ? null : _discard,
-              child: Text(
-                l10n.resultDiscardButton,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: c.textSecondary),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: c.textSecondary,
+                side: BorderSide(color: c.border),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Radius.lg),
+                ),
               ),
+              child: Text(l10n.resultDiscardButton),
             ),
           ],
         ),
