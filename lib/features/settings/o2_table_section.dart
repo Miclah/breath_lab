@@ -62,11 +62,8 @@ class O2TableSection extends ConsumerWidget {
                 onChanged: config.setRounds,
               ),
               const SizedBox(height: Spacing.xl),
-              Text(
-                l10n.settingsO2MaxHoldPercentLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
               SettingsSlider(
+                label: l10n.settingsO2MaxHoldPercentLabel,
                 value: maxHoldPercent,
                 min: _minMaxHoldPercent,
                 max: _maxMaxHoldPercent,

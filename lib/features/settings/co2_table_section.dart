@@ -62,11 +62,8 @@ class Co2TableSection extends ConsumerWidget {
                 onChanged: config.setRounds,
               ),
               const SizedBox(height: Spacing.xl),
-              Text(
-                l10n.settingsCo2HoldPercentLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
               SettingsSlider(
+                label: l10n.settingsCo2HoldPercentLabel,
                 value: holdPercent,
                 min: _minHoldPercent,
                 max: _maxHoldPercent,

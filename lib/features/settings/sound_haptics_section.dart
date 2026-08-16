@@ -51,11 +51,8 @@ class SoundHapticsSection extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: Spacing.sm),
-              Text(
-                l10n.settingsSoundVolumeLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
               SettingsSlider(
+                label: l10n.settingsSoundVolumeLabel,
                 value: volume,
                 min: 0,
                 max: 100,

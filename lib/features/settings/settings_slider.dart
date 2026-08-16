@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/colors.dart';
+import '../../theme/typography.dart';
+
 /// Slider for a persisted setting.
 ///
 /// The thumb follows the finger from local state and only persists on
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 class SettingsSlider extends StatefulWidget {
   const SettingsSlider({
     super.key,
+    required this.label,
     required this.value,
     required this.min,
     required this.max,
@@ -18,6 +22,8 @@ class SettingsSlider extends StatefulWidget {
     required this.onCommit,
     this.enabled = true,
   });
+
+  final String label;
 
   /// The persisted value, shown whenever a drag isn't in progress.
   final int value;
@@ -44,25 +50,45 @@ class _SettingsSliderState extends State<SettingsSlider> {
   @override
   Widget build(BuildContext context) {
     final displayed = _dragValue ?? widget.value;
+    final c = context.appColors;
 
-    return Slider(
-      value: displayed.toDouble().clamp(
-        widget.min.toDouble(),
-        widget.max.toDouble(),
-      ),
-      min: widget.min.toDouble(),
-      max: widget.max.toDouble(),
-      divisions: widget.divisions,
-      label: widget.labelBuilder(displayed),
-      onChanged: !widget.enabled
-          ? null
-          : (v) => setState(() => _dragValue = v.round()),
-      onChangeEnd: !widget.enabled
-          ? null
-          : (v) {
-              setState(() => _dragValue = null);
-              widget.onCommit(v.round());
-            },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.label,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            Text(
+              widget.labelBuilder(displayed),
+              style: BreathLabTypography.statMd.copyWith(color: c.textPrimary),
+            ),
+          ],
+        ),
+        Slider(
+          value: displayed.toDouble().clamp(
+            widget.min.toDouble(),
+            widget.max.toDouble(),
+          ),
+          min: widget.min.toDouble(),
+          max: widget.max.toDouble(),
+          divisions: widget.divisions,
+          label: widget.labelBuilder(displayed),
+          onChanged: !widget.enabled
+              ? null
+              : (v) => setState(() => _dragValue = v.round()),
+          onChangeEnd: !widget.enabled
+              ? null
+              : (v) {
+                  setState(() => _dragValue = null);
+                  widget.onCommit(v.round());
+                },
+        ),
+      ],
     );
   }
 }
