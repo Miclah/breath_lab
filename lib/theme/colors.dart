@@ -27,6 +27,7 @@ class BreathLabColorScheme {
     required this.primary,
     required this.primarySurface,
     required this.primaryText,
+    required this.recordText,
     required this.warning,
     required this.warningSurface,
     required this.warningText,
@@ -53,6 +54,12 @@ class BreathLabColorScheme {
   final Color primary;
   final Color primarySurface;
   final Color primaryText;
+
+  /// Personal-best highlight — an achievement, not a warning. Deliberately
+  /// its own token rather than reusing [danger]/[dangerText], which is
+  /// reserved for Stop and real warnings.
+  final Color recordText;
+
   final Color warning;
   final Color warningSurface;
   final Color warningText;
@@ -78,11 +85,12 @@ class BreathLabColors {
     textPrimary: Color(0xFFE8ECF1),
     textSecondary: Color(0xFF8B95A5),
     textTertiary: Color(0xFF5A6474),
-    textOnPrimary: Color(0xFF04342C),
-    textOnDanger: Color(0xFF501313),
+    textOnPrimary: Color(0xFFEAFBF3),
+    textOnDanger: Color(0xFFFDEEEE),
     primary: Color(0xFF1D9E75),
     primarySurface: Color(0xFF0D3D2E),
     primaryText: Color(0xFF5DCAA5),
+    recordText: Color(0xFF5DCAA5),
     warning: Color(0xFFEF9F27),
     warningSurface: Color(0xFF3D2A08),
     warningText: Color(0xFFFAC775),
@@ -110,6 +118,7 @@ class BreathLabColors {
     primary: Color(0xFF0F6E56),
     primarySurface: Color(0xFFE1F5EE),
     primaryText: Color(0xFF085041),
+    recordText: Color(0xFF085041),
     warning: Color(0xFFBA7517),
     warningSurface: Color(0xFFFAEEDA),
     warningText: Color(0xFF633806),
