@@ -944,6 +944,12 @@ abstract class AppLocalizations {
   /// **'Max'**
   String get historyFilterMax;
 
+  /// Tag count shown on a hold row in place of unlabeled dots, e.g. '2 tags'
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 tag} other{{count} tags}}'**
+  String historyTagCount(int count);
+
   /// Filter chip on the History screen that opens the tag multi-select sheet
   ///
   /// In en, this message translates to:

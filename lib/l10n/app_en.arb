@@ -564,6 +564,15 @@
   "@historyFilterMax": {
     "description": "Type filter chip on the History screen showing standalone max holds"
   },
+  "historyTagCount": "{count, plural, =1{1 tag} other{{count} tags}}",
+  "@historyTagCount": {
+    "description": "Tag count shown on a hold row in place of unlabeled dots, e.g. '2 tags'",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "historyFilterTags": "Tags",
   "@historyFilterTags": {
     "description": "Filter chip on the History screen that opens the tag multi-select sheet"

@@ -446,6 +446,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get historyFilterMax => 'Max';
 
   @override
+  String historyTagCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tagov',
+      few: '$count tagy',
+      one: '1 tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get historyFilterTags => 'Tagy';
 
   @override

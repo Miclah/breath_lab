@@ -127,23 +127,10 @@ class HoldListItem extends ConsumerWidget {
               '  ·  ',
               style: TextStyle(fontSize: 12, color: c.textTertiary),
             ),
-            for (var i = 0; i < tagCount.clamp(0, 4); i++)
-              Padding(
-                padding: const EdgeInsets.only(right: 3),
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: c.primary,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            if (tagCount > 4)
-              Text(
-                '+${tagCount - 4}',
-                style: TextStyle(fontSize: 10, color: c.textTertiary),
-              ),
+            Text(
+              l10n.historyTagCount(tagCount),
+              style: TextStyle(fontSize: 12, color: c.textSecondary),
+            ),
           ],
         ],
       ),

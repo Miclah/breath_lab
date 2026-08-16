@@ -141,6 +141,7 @@
   "historyDetailClose": "Zavrieť",
   "historyPbBadge": "PB",
   "historyFilterMax": "Max",
+  "historyTagCount": "{count, plural, =1{1 tag} few{{count} tagy} other{{count} tagov}}",
   "historyFilterTags": "Tagy",
   "historyFilterTagsSheetTitle": "Filtrovať podľa tagu",
   "historyLungVolLabel": "Objem",
