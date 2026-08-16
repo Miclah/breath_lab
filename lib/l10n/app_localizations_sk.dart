@@ -273,6 +273,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsSaveFailed => 'Nastavenie sa nepodarilo uložiť.';
 
   @override
+  String get resultSaveFailed => 'Hold sa nepodarilo uložiť. Skús to znova.';
+
+  @override
   String get settingsThemeLabel => 'Téma';
 
   @override

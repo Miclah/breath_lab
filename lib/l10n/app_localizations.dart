@@ -608,6 +608,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save that setting.'**
   String get settingsSaveFailed;
 
+  /// Snackbar shown when saving a completed hold to the database fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that hold. Try again.'**
+  String get resultSaveFailed;
+
   /// Label for the theme selector in Settings
   ///
   /// In en, this message translates to:

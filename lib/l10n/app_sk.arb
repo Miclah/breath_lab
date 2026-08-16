@@ -84,6 +84,7 @@
   "tagAddConfirm": "Pridať",
   "tagAddCancel": "Zrušiť",
   "settingsSaveFailed": "Nastavenie sa nepodarilo uložiť.",
+  "resultSaveFailed": "Hold sa nepodarilo uložiť. Skús to znova.",
   "settingsAppearanceSection": "Vzhľad",
   "settingsThemeLabel": "Téma",
   "themeDark": "Tmavá",

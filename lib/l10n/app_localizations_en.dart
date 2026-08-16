@@ -273,6 +273,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSaveFailed => 'Couldn\'t save that setting.';
 
   @override
+  String get resultSaveFailed => 'Couldn\'t save that hold. Try again.';
+
+  @override
   String get settingsThemeLabel => 'Theme';
 
   @override

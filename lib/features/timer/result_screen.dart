@@ -7,6 +7,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/global_messenger.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -153,12 +154,27 @@ class _ResultViewState extends ConsumerState<ResultView>
           _glowController.forward(from: 0),
         ]);
       }
+    } catch (error, stackTrace) {
+      debugPrint('Failed to save hold: $error\n$stackTrace');
+      _reportSaveFailure();
+      return;
     } finally {
       if (mounted) setState(() => _saving = false);
     }
     if (!mounted) return;
     _resetSessionState();
     ref.read(timerProvider.notifier).reset();
+  }
+
+  void _reportSaveFailure() {
+    final messenger = scaffoldMessengerKey.currentState;
+    final context = messenger?.context;
+    if (messenger == null || context == null) return;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(content: Text(l10n.resultSaveFailed)));
   }
 
   void _discard() {

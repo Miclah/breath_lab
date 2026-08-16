@@ -340,6 +340,10 @@
   "@settingsSaveFailed": {
     "description": "Snackbar shown when persisting a setting change fails and the control reverts"
   },
+  "resultSaveFailed": "Couldn't save that hold. Try again.",
+  "@resultSaveFailed": {
+    "description": "Snackbar shown when saving a completed hold to the database fails"
+  },
   "settingsThemeLabel": "Theme",
   "@settingsThemeLabel": {
     "description": "Label for the theme selector in Settings"
