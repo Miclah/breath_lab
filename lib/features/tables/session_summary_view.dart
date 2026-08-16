@@ -48,51 +48,83 @@ class SessionSummaryView extends ConsumerWidget {
         : previousDetails.fold<int>(0, (sum, d) => sum + d.holdMs) ~/
               previousDetails.length;
 
+    final wasStoppedEarly = completed < total;
+
     return ListView(
       padding: const EdgeInsets.all(Spacing.lg),
       children: [
-        Text(
-          l10n.tablesSummaryTitle,
-          style: Theme.of(context).textTheme.headlineSmall,
-          textAlign: TextAlign.center,
+        Container(
+          padding: const EdgeInsets.all(Spacing.lg),
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: BorderRadius.circular(Radius.md),
+          ),
+          child: Column(
+            children: [
+              Text(
+                wasStoppedEarly
+                    ? l10n.tablesSummaryStoppedTitle
+                    : l10n.tablesSummaryTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: Spacing.xl),
+              Text(
+                l10n.tablesSummaryRounds(completed, total),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: Spacing.xl),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _SummaryStat(
+                    label: l10n.tablesSummaryTotalHold,
+                    value: formatRoundMs(totalHoldMs),
+                    c: c,
+                  ),
+                  const SizedBox(width: Spacing.xxl),
+                  _SummaryStat(
+                    label: l10n.tablesSummaryAverageHold,
+                    value: formatRoundMs(avgHoldMs),
+                    c: c,
+                  ),
+                ],
+              ),
+              const SizedBox(height: Spacing.xl),
+              Text(
+                previousAvgHoldMs == null
+                    ? l10n.tablesSummaryNoPrevious
+                    : l10n.tablesSummaryVsPrevious(
+                        _formatDelta(avgHoldMs - previousAvgHoldMs),
+                      ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: Spacing.xl),
-        Text(
-          l10n.tablesSummaryRounds(completed, total),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: Spacing.xl),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _SummaryStat(
-              label: l10n.tablesSummaryTotalHold,
-              value: formatRoundMs(totalHoldMs),
-              c: c,
+        // A session stopped partway through still has rounds worth
+        // reviewing — without this there was no way to see which ones
+        // were actually done before the summary bounces you to Start.
+        if (wasStoppedEarly) ...[
+          const SizedBox(height: Spacing.xl),
+          for (final (i, round) in session.rounds.indexed)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Spacing.sm),
+              child: RoundListItem(
+                number: i + 1,
+                round: round,
+                state: i < session.completedRounds.length
+                    ? RoundItemState.completed
+                    : RoundItemState.upcoming,
+              ),
             ),
-            const SizedBox(width: Spacing.xxl),
-            _SummaryStat(
-              label: l10n.tablesSummaryAverageHold,
-              value: formatRoundMs(avgHoldMs),
-              c: c,
-            ),
-          ],
-        ),
-        const SizedBox(height: Spacing.xl),
-        Text(
-          previousAvgHoldMs == null
-              ? l10n.tablesSummaryNoPrevious
-              : l10n.tablesSummaryVsPrevious(
-                  _formatDelta(avgHoldMs - previousAvgHoldMs),
-                ),
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-          textAlign: TextAlign.center,
-        ),
+        ],
       ],
     );
   }

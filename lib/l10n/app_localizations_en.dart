@@ -538,6 +538,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tablesSummaryTitle => 'Session complete';
 
   @override
+  String get tablesSummaryStoppedTitle => 'Session stopped';
+
+  @override
   String tablesSummaryRounds(int completed, int total) {
     return '$completed of $total rounds completed';
   }

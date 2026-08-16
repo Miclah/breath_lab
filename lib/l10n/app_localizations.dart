@@ -1100,11 +1100,17 @@ abstract class AppLocalizations {
   /// **'End session'**
   String get tablesEndSessionButton;
 
-  /// Title of the table session summary screen
+  /// Title of the table session summary screen when every planned round was completed
   ///
   /// In en, this message translates to:
   /// **'Session complete'**
   String get tablesSummaryTitle;
+
+  /// Title of the table session summary screen when it ended early, with rounds still remaining
+  ///
+  /// In en, this message translates to:
+  /// **'Session stopped'**
+  String get tablesSummaryStoppedTitle;
 
   /// Rounds completed stat on the table session summary screen
   ///

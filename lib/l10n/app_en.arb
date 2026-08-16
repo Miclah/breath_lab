@@ -686,7 +686,11 @@
   },
   "tablesSummaryTitle": "Session complete",
   "@tablesSummaryTitle": {
-    "description": "Title of the table session summary screen"
+    "description": "Title of the table session summary screen when every planned round was completed"
+  },
+  "tablesSummaryStoppedTitle": "Session stopped",
+  "@tablesSummaryStoppedTitle": {
+    "description": "Title of the table session summary screen when it ended early, with rounds still remaining"
   },
   "tablesSummaryRounds": "{completed} of {total} rounds completed",
   "@tablesSummaryRounds": {

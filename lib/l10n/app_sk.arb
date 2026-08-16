@@ -168,6 +168,7 @@
   "tablesSkipRoundButton": "Preskočiť kolo",
   "tablesEndSessionButton": "Ukončiť session",
   "tablesSummaryTitle": "Séria dokončená",
+  "tablesSummaryStoppedTitle": "Séria zastavená",
   "tablesSummaryRounds": "{completed} z {total} kôl dokončených",
   "tablesSummaryTotalHold": "Celkový čas zadržania",
   "tablesSummaryAverageHold": "Priemerné zadržanie",

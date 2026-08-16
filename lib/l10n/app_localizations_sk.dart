@@ -541,6 +541,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tablesSummaryTitle => 'Séria dokončená';
 
   @override
+  String get tablesSummaryStoppedTitle => 'Séria zastavená';
+
+  @override
   String tablesSummaryRounds(int completed, int total) {
     return '$completed z $total kôl dokončených';
   }
