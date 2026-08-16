@@ -439,7 +439,10 @@ class _LungSegment extends ConsumerWidget {
             LungVolume.full) ==
         volume;
 
-    return GestureDetector(
+    // InkWell rather than GestureDetector: keyboard focus (Tab) skips
+    // GestureDetectors entirely, so these segments were unreachable without
+    // a mouse.
+    return InkWell(
       onTap: () => ref.read(selectedLungVolumeProvider.notifier).state = volume,
       child: AnimatedContainer(
         duration: Durations.fast,

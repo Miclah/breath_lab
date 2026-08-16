@@ -40,6 +40,9 @@ ThemeData _buildTheme(BreathLabColorScheme c, Brightness brightness) {
     brightness: brightness,
     colorScheme: colorScheme,
     scaffoldBackgroundColor: c.canvas,
+    // Desktop is keyboard-navigable and had no visible cue at all for
+    // which control Tab had landed on.
+    focusColor: c.primary.withValues(alpha: 0.24),
     textTheme: TextTheme(
       displayLarge: BreathLabTypography.timerDisplay.copyWith(
         color: c.textPrimary,
