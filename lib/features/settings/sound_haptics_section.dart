@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,43 +69,48 @@ class SoundHapticsSection extends ConsumerWidget {
                     : () => ref.read(audioServiceProvider).playHoldStart(),
                 child: Text(l10n.settingsTestSoundButton),
               ),
-              const SizedBox(height: Spacing.xl),
-              Text(
-                l10n.settingsHapticIntensityLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
-              SegmentedButton<HapticIntensity>(
-                segments: [
-                  ButtonSegment(
-                    value: HapticIntensity.off,
-                    label: SegmentLabel(l10n.settingsHapticOff),
-                  ),
-                  ButtonSegment(
-                    value: HapticIntensity.light,
-                    label: SegmentLabel(l10n.settingsHapticLight),
-                  ),
-                  ButtonSegment(
-                    value: HapticIntensity.medium,
-                    label: SegmentLabel(l10n.settingsHapticMedium),
-                  ),
-                  ButtonSegment(
-                    value: HapticIntensity.strong,
-                    label: SegmentLabel(l10n.settingsHapticStrong),
-                  ),
-                ],
-                selected: {intensity},
-                showSelectedIcon: false,
-                onSelectionChanged: (value) =>
-                    ref.read(hapticIntensityProvider.notifier).set(value.first),
-              ),
-              const SizedBox(height: Spacing.sm),
-              OutlinedButton(
-                onPressed: intensity == HapticIntensity.off
-                    ? null
-                    : () => ref.read(hapticsServiceProvider).contraction(),
-                child: Text(l10n.settingsTestHapticButton),
-              ),
+              // Haptics are backed by an Android-only vibrator API, so this
+              // whole block would control nothing on Windows.
+              if (Platform.isAndroid) ...[
+                const SizedBox(height: Spacing.xl),
+                Text(
+                  l10n.settingsHapticIntensityLabel,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const SizedBox(height: Spacing.sm),
+                SegmentedButton<HapticIntensity>(
+                  segments: [
+                    ButtonSegment(
+                      value: HapticIntensity.off,
+                      label: SegmentLabel(l10n.settingsHapticOff),
+                    ),
+                    ButtonSegment(
+                      value: HapticIntensity.light,
+                      label: SegmentLabel(l10n.settingsHapticLight),
+                    ),
+                    ButtonSegment(
+                      value: HapticIntensity.medium,
+                      label: SegmentLabel(l10n.settingsHapticMedium),
+                    ),
+                    ButtonSegment(
+                      value: HapticIntensity.strong,
+                      label: SegmentLabel(l10n.settingsHapticStrong),
+                    ),
+                  ],
+                  selected: {intensity},
+                  showSelectedIcon: false,
+                  onSelectionChanged: (value) => ref
+                      .read(hapticIntensityProvider.notifier)
+                      .set(value.first),
+                ),
+                const SizedBox(height: Spacing.sm),
+                OutlinedButton(
+                  onPressed: intensity == HapticIntensity.off
+                      ? null
+                      : () => ref.read(hapticsServiceProvider).contraction(),
+                  child: Text(l10n.settingsTestHapticButton),
+                ),
+              ],
             ],
           ),
         ),

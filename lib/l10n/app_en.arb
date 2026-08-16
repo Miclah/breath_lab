@@ -254,7 +254,11 @@
   },
   "settingsFocusModeExplanation": "BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.",
   "@settingsFocusModeExplanation": {
-    "description": "Longer explanatory body shown below the focus mode toggle, per Design Additions §7"
+    "description": "Longer explanatory body shown below the focus mode toggle on Android, per Design Additions §7"
+  },
+  "settingsFocusModeExplanationDesktop": "BreathLab will silence its own non-critical notifications during a session.",
+  "@settingsFocusModeExplanationDesktop": {
+    "description": "Explanatory body shown below the focus mode toggle on non-Android platforms — omits the Android Priority Mode/Do Not Disturb references"
   },
   "settingsSoundHapticsSection": "Sound & haptics",
   "@settingsSoundHapticsSection": {

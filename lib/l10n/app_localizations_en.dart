@@ -209,6 +209,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.';
 
   @override
+  String get settingsFocusModeExplanationDesktop =>
+      'BreathLab will silence its own non-critical notifications during a session.';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override

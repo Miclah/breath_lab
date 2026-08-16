@@ -209,6 +209,10 @@ class AppLocalizationsSk extends AppLocalizations {
       'BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie. Ak chceš úplne tichý tréning, môžeš si v nastaveniach Androidu sám zapnúť režim priority — BreathLab nikdy nezasiahne do tvojho systémového nerušiť.';
 
   @override
+  String get settingsFocusModeExplanationDesktop =>
+      'BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie.';
+
+  @override
   String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
 
   @override

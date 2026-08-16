@@ -213,7 +213,9 @@ class AmbientSection extends ConsumerWidget {
             Spacing.md,
           ),
           child: Text(
-            l10n.settingsFocusModeExplanation,
+            Platform.isAndroid
+                ? l10n.settingsFocusModeExplanation
+                : l10n.settingsFocusModeExplanationDesktop,
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: c.textTertiary),

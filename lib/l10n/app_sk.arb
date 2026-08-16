@@ -64,6 +64,7 @@
   "settingsBrightnessOverrideOff": "Vypnuté",
   "settingsFocusModeLabel": "Režim zamerania",
   "settingsFocusModeExplanation": "BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie. Ak chceš úplne tichý tréning, môžeš si v nastaveniach Androidu sám zapnúť režim priority — BreathLab nikdy nezasiahne do tvojho systémového nerušiť.",
+  "settingsFocusModeExplanationDesktop": "BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie.",
   "settingsSoundHapticsSection": "Zvuk a vibrácie",
   "settingsSoundEnabledLabel": "Zvuk",
   "settingsSoundVolumeLabel": "Hlasitosť",
