@@ -11,10 +11,20 @@ import '../../theme/colors.dart';
 /// The arc color transitions teal → amber at 0.75, then amber → red at 1.0.
 /// [child] is placed at the center (timer number + state label).
 class TimerRing extends StatelessWidget {
-  const TimerRing({super.key, required this.value, required this.child});
+  const TimerRing({
+    super.key,
+    required this.value,
+    required this.child,
+    this.size,
+  });
 
   final double value;
   final Widget child;
+
+  /// Explicit diameter, computed by the caller from the space actually
+  /// available. Falls back to a fixed mobile/desktop breakpoint size when
+  /// null — used where nothing bounds the ring's parent height.
+  final double? size;
 
   static const _mobileSize = 220.0;
   static const _desktopSize = 280.0;
@@ -32,11 +42,11 @@ class TimerRing extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.appColors;
     final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final size = isDesktop ? _desktopSize : _mobileSize;
+    final resolvedSize = size ?? (isDesktop ? _desktopSize : _mobileSize);
 
     return SizedBox(
-      width: size,
-      height: size,
+      width: resolvedSize,
+      height: resolvedSize,
       child: CustomPaint(
         painter: _RingPainter(
           value: value,

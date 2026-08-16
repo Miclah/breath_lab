@@ -1,3 +1,5 @@
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -139,35 +141,49 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     if (state.isHolding) stateLabel = l10n.timerStateLabelHold;
     if (state.isDone) stateLabel = l10n.timerStateLabelDone;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onDoubleTap: () => ref.read(timerProvider.notifier).markContraction(),
-          child: TimerRing(
-            value: ringValue,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(formatMmSs(elapsed), style: timerStyle),
-                if (stateLabel != null) ...[
-                  const SizedBox(height: Spacing.xs),
-                  Text(
-                    stateLabel,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-                  ),
-                ],
-              ],
+    // The ring's own fixed mobile/desktop sizes leave hundreds of empty
+    // pixels above and below it in a large window — size it from the space
+    // this Expanded region actually has instead.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final available = min(constraints.maxWidth, constraints.maxHeight);
+        final ringSize = available.isFinite
+            ? (available * 0.85).clamp(220.0, 360.0)
+            : null;
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onDoubleTap: () =>
+                  ref.read(timerProvider.notifier).markContraction(),
+              child: TimerRing(
+                value: ringValue,
+                size: ringSize,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(formatMmSs(elapsed), style: timerStyle),
+                    if (stateLabel != null) ...[
+                      const SizedBox(height: Spacing.xs),
+                      Text(
+                        stateLabel,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        if (state.contractionTime != null) ...[
-          const SizedBox(height: Spacing.md),
-          _ContractionBadge(time: state.contractionTime!),
-        ],
-      ],
+            if (state.contractionTime != null) ...[
+              const SizedBox(height: Spacing.md),
+              _ContractionBadge(time: state.contractionTime!),
+            ],
+          ],
+        );
+      },
     );
   }
 
