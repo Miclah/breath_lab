@@ -1172,6 +1172,12 @@ abstract class AppLocalizations {
   /// **'Not enough holds yet to show a trend.'**
   String get progressChartEmpty;
 
+  /// Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get progressChartAverageLegend;
+
   /// Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill
   ///
   /// In en, this message translates to:

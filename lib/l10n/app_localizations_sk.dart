@@ -588,6 +588,9 @@ class AppLocalizationsSk extends AppLocalizations {
       'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
 
   @override
+  String get progressChartAverageLegend => 'Priemer';
+
+  @override
   String get progressChartFilterAll => 'Všetky';
 
   @override

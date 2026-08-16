@@ -583,6 +583,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressChartEmpty => 'Not enough holds yet to show a trend.';
 
   @override
+  String get progressChartAverageLegend => 'Average';
+
+  @override
   String get progressChartFilterAll => 'All';
 
   @override

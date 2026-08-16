@@ -14,11 +14,24 @@ import 'time_range_selector.dart';
 
 const _bottomLabelCount = 5;
 
+/// Candidate gridline intervals, in seconds — kept to round numbers so
+/// adjacent Y-axis labels never round to the same mm:ss text.
+const _niceIntervalsSeconds = [5, 10, 15, 30, 60, 120, 300, 600, 900, 1800];
+
 String _fmtSeconds(double seconds) {
   final d = Duration(seconds: seconds.round());
   final m = d.inMinutes.toString().padLeft(2, '0');
   final s = (d.inSeconds % 60).toString().padLeft(2, '0');
   return '$m:$s';
+}
+
+/// Smallest candidate from [_niceIntervalsSeconds] that keeps the Y axis to
+/// roughly 4 gridlines for the given max value.
+double _niceInterval(double maxSeconds) {
+  for (final step in _niceIntervalsSeconds) {
+    if (maxSeconds / step <= 4) return step.toDouble();
+  }
+  return (maxSeconds / 4).ceilToDouble();
 }
 
 Color _volumeColor(BreathLabColorScheme c, LungVolume volume) =>
@@ -43,6 +56,7 @@ class ProgressChart extends ConsumerWidget {
     final days = ref.watch(chartWindowDaysProvider);
     final hasData = series.any((s) => s.stats.isNotEmpty);
     final isDesktop = MediaQuery.of(context).size.width >= 600;
+    final showAverage = series.length == 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +69,15 @@ class ProgressChart extends ConsumerWidget {
         Container(
           width: double.infinity,
           height: isDesktop ? 260 : 200,
-          padding: const EdgeInsets.all(Spacing.lg),
+          // Extra right inset beyond the rest of the card's padding — the
+          // last data point and its date label otherwise land right on the
+          // card's edge and get visually clipped.
+          padding: const EdgeInsets.fromLTRB(
+            Spacing.lg,
+            Spacing.lg,
+            Spacing.lg + 12,
+            Spacing.lg,
+          ),
           decoration: BoxDecoration(
             color: c.surface,
             borderRadius: BorderRadius.circular(Radius.md),
@@ -71,6 +93,13 @@ class ProgressChart extends ConsumerWidget {
                 )
               : LineChart(_buildChartData(context, series, days)),
         ),
+        if (hasData && showAverage) ...[
+          const SizedBox(height: Spacing.xs),
+          Align(
+            alignment: Alignment.centerRight,
+            child: _AverageLegend(label: l10n.progressChartAverageLegend),
+          ),
+        ],
         const SizedBox(height: Spacing.md),
         const TimeRangeSelector(),
       ],
@@ -92,13 +121,31 @@ class ProgressChart extends ConsumerWidget {
     final labelInterval = (days / _bottomLabelCount).ceil();
     final showAverage = series.length == 1;
 
+    var maxSeconds = 0.0;
+    for (final s in series) {
+      for (final stat in s.stats) {
+        if (stat.best.inSeconds > maxSeconds) {
+          maxSeconds = stat.best.inSeconds.toDouble();
+        }
+        if (showAverage && stat.average.inSeconds > maxSeconds) {
+          maxSeconds = stat.average.inSeconds.toDouble();
+        }
+      }
+    }
+    final yInterval = _niceInterval(maxSeconds <= 0 ? 60 : maxSeconds);
+    final maxY = maxSeconds <= 0
+        ? yInterval
+        : (maxSeconds / yInterval).ceil() * yInterval;
+
     return LineChartData(
       minX: 0,
       maxX: (days - 1).toDouble(),
       minY: 0,
+      maxY: maxY,
       lineTouchData: const LineTouchData(enabled: false),
       gridData: FlGridData(
         drawVerticalLine: false,
+        horizontalInterval: yInterval,
         getDrawingHorizontalLine: (value) =>
             FlLine(color: c.border.withValues(alpha: 0.2), strokeWidth: 0.5),
       ),
@@ -110,6 +157,7 @@ class ProgressChart extends ConsumerWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 40,
+            interval: yInterval,
             getTitlesWidget: (value, meta) => Text(
               _fmtSeconds(value),
               style: BreathLabTypography.caption.copyWith(
@@ -177,6 +225,38 @@ class ProgressChart extends ConsumerWidget {
               },
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// Dash sample + label explaining the dashed daily-average line, since a
+/// gray dashed curve crossing a colored solid one otherwise has no way to
+/// read as "average" rather than a rendering artifact.
+class _AverageLegend extends StatelessWidget {
+  const _AverageLegend({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < 3; i++)
+          Container(
+            width: 4,
+            height: 1,
+            margin: EdgeInsets.only(right: i < 2 ? 2 : 0),
+            color: c.textTertiary,
+          ),
+        const SizedBox(width: Spacing.xs),
+        Text(
+          label,
+          style: BreathLabTypography.caption.copyWith(color: c.textTertiary),
+        ),
       ],
     );
   }

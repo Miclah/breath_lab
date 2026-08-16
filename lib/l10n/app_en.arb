@@ -765,6 +765,10 @@
   "@progressChartEmpty": {
     "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
   },
+  "progressChartAverageLegend": "Average",
+  "@progressChartAverageLegend": {
+    "description": "Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected"
+  },
   "progressChartFilterAll": "All",
   "@progressChartFilterAll": {
     "description": "Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill"
