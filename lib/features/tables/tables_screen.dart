@@ -7,6 +7,7 @@ import '../../domain/services/co2_table_calculator.dart';
 import '../../domain/services/o2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/bottom_scroll_fade.dart';
 import '../../shared/widgets/content_max_width.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -104,40 +105,44 @@ class TablesScreen extends ConsumerWidget {
                       else ...[
                         _InfoCard(maxMs: maxMs, l10n: l10n),
                         Expanded(
-                          child: ListView.separated(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: Spacing.lg,
+                          child: BottomScrollFade(
+                            child: ListView.separated(
+                              padding: const EdgeInsets.only(
+                                left: Spacing.lg,
+                                right: Spacing.lg,
+                                bottom: Spacing.xl,
+                              ),
+                              itemCount: rounds.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: Spacing.sm),
+                              itemBuilder: (context, i) {
+                                final itemState = _stateFor(
+                                  session,
+                                  sessionActive,
+                                  i,
+                                );
+                                final isActive =
+                                    itemState == RoundItemState.active;
+                                return RoundListItem(
+                                  number: i + 1,
+                                  round: rounds[i],
+                                  state: itemState,
+                                  elapsedMs: isActive
+                                      ? session.elapsed.inMilliseconds
+                                      : null,
+                                  phaseLabel: !isActive
+                                      ? null
+                                      : session.isHolding
+                                      ? l10n.tablesPhaseLabelHold
+                                      : l10n.tablesPhaseLabelRest,
+                                  onStopHold: isActive && session.isHolding
+                                      ? () => ref
+                                            .read(tableSessionProvider.notifier)
+                                            .stopHoldEarly()
+                                      : null,
+                                );
+                              },
                             ),
-                            itemCount: rounds.length,
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(height: Spacing.sm),
-                            itemBuilder: (context, i) {
-                              final itemState = _stateFor(
-                                session,
-                                sessionActive,
-                                i,
-                              );
-                              final isActive =
-                                  itemState == RoundItemState.active;
-                              return RoundListItem(
-                                number: i + 1,
-                                round: rounds[i],
-                                state: itemState,
-                                elapsedMs: isActive
-                                    ? session.elapsed.inMilliseconds
-                                    : null,
-                                phaseLabel: !isActive
-                                    ? null
-                                    : session.isHolding
-                                    ? l10n.tablesPhaseLabelHold
-                                    : l10n.tablesPhaseLabelRest,
-                                onStopHold: isActive && session.isHolding
-                                    ? () => ref
-                                          .read(tableSessionProvider.notifier)
-                                          .stopHoldEarly()
-                                    : null,
-                              );
-                            },
                           ),
                         ),
                       ],
