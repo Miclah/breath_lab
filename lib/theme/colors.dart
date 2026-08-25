@@ -39,6 +39,10 @@ class BreathLabColorScheme {
     required this.infoSurface,
     required this.infoText,
     required this.success,
+    required this.heatmapEmpty,
+    required this.heatmapLow,
+    required this.heatmapMid,
+    required this.heatmapHigh,
   });
 
   final Color canvas;
@@ -82,6 +86,25 @@ class BreathLabColorScheme {
   final Color infoSurface;
   final Color infoText;
   final Color success;
+
+  /// The four heatmap intensity steps, in order.
+  ///
+  /// Design Additions §1 mapped these onto `primarySurface` / `primary` /
+  /// `primaryText`, which was convenient rather than legible: against the
+  /// `surfaceElevated` card the empty cell and the one-session cell both
+  /// land near 1.3:1, so the low end of the scale was a single state
+  /// wearing two names. These are picked instead so each step roughly
+  /// doubles the contrast of the one below it — about 1.3 / 1.9 / 3.7 /
+  /// 7.5 against the card in both themes — which is what makes four
+  /// squares read as four values rather than a smear.
+  ///
+  /// [heatmapEmpty] is also the only neutral one. A day with no training is
+  /// a different kind of thing from a day with some, so it is off the teal
+  /// ramp entirely, not merely the dim end of it.
+  final Color heatmapEmpty;
+  final Color heatmapLow;
+  final Color heatmapMid;
+  final Color heatmapHigh;
 }
 
 class BreathLabColors {
@@ -114,6 +137,10 @@ class BreathLabColors {
     infoSurface: Color(0xFF0C2440),
     infoText: Color(0xFF85B7EB),
     success: Color(0xFF639922),
+    heatmapEmpty: Color(0xFF2A3444),
+    heatmapLow: Color(0xFF145840),
+    heatmapMid: Color(0xFF1A8A66),
+    heatmapHigh: Color(0xFF5DCAA5),
   );
 
   static const BreathLabColorScheme light = BreathLabColorScheme(
@@ -143,5 +170,9 @@ class BreathLabColors {
     infoSurface: Color(0xFFE6F1FB),
     infoText: Color(0xFF0C447C),
     success: Color(0xFF3B6D11),
+    heatmapEmpty: Color(0xFFCFD4DB),
+    heatmapLow: Color(0xFF6FBFA2),
+    heatmapMid: Color(0xFF2A8C6C),
+    heatmapHigh: Color(0xFF0E5A44),
   );
 }

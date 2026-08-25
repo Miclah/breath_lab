@@ -22,11 +22,10 @@ const _labeledWeekdayRows = {0, 2, 4};
 
 Color _cellColor(BuildContext context, int count) {
   final c = context.appColors;
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-  if (count <= 0) return isDark ? c.border.withValues(alpha: 0.4) : c.border;
-  if (count == 1) return c.primarySurface;
-  if (count <= 3) return c.primary;
-  return c.primaryText;
+  if (count <= 0) return c.heatmapEmpty;
+  if (count == 1) return c.heatmapLow;
+  if (count <= 3) return c.heatmapMid;
+  return c.heatmapHigh;
 }
 
 DateTime _dateOnly(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
@@ -210,9 +209,6 @@ class CalendarHeatmap extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: _cellColor(context, step),
                       borderRadius: BorderRadius.circular(2),
-                      // The zero-count swatch is otherwise nearly invisible
-                      // against the card background.
-                      border: Border.all(color: c.border, width: 0.5),
                     ),
                   ),
                 ),
@@ -258,19 +254,17 @@ class _HeatmapCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    final baseColor = _cellColor(context, count);
-    // An outline with no fill at all reads as a broken/empty state rather
-    // than "today" — give it a faint tint even before any sessions land.
-    final fillColor = isToday && count == 0
-        ? Color.lerp(baseColor, c.primary, 0.25)!
-        : baseColor;
+    // Today is marked by the ring alone. Tinting the fill as well used to be
+    // needed because the empty colour was nearly invisible; now that it is a
+    // real step, tinting it would invent a fifth value between empty and one
+    // session and undo the separation the ramp exists for.
     return GestureDetector(
       onTap: count > 0 ? () => onTap(context, date) : null,
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: fillColor,
+          color: _cellColor(context, count),
           borderRadius: BorderRadius.circular(Radius.xs),
           border: isToday ? Border.all(color: c.primary, width: 1) : null,
         ),
