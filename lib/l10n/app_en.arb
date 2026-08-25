@@ -332,6 +332,92 @@
   "@settingsResetButton": {
     "description": "Confirm button in the reset-all-data confirmation dialog"
   },
+  "settingsDataSection": "Data",
+  "@settingsDataSection": {
+    "description": "Settings section header for device name, export, import, and last sync status"
+  },
+  "settingsDeviceNameLabel": "Device name",
+  "@settingsDeviceNameLabel": {
+    "description": "Label on the editable device name text field, shown to the other device after a sync"
+  },
+  "settingsLastSyncNever": "Never synced",
+  "@settingsLastSyncNever": {
+    "description": "Last-sync status line shown when this device has never exported or imported"
+  },
+  "settingsLastSyncWith": "Last synced {when} with {device}",
+  "@settingsLastSyncWith": {
+    "description": "Last-sync status line shown after at least one export or import",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsExportButton": "Export",
+  "@settingsExportButton": {
+    "description": "Button that opens a save dialog to write a .blab backup file"
+  },
+  "settingsShareButton": "Share",
+  "@settingsShareButton": {
+    "description": "Android-only button that hands the backup straight to the share sheet"
+  },
+  "settingsImportButton": "Import",
+  "@settingsImportButton": {
+    "description": "Button that opens a file picker to merge in a .blab backup file"
+  },
+  "settingsExportSuccess": "Backup saved.",
+  "@settingsExportSuccess": {
+    "description": "Snackbar shown after a successful export"
+  },
+  "settingsExportFailed": "Couldn't save the backup.",
+  "@settingsExportFailed": {
+    "description": "Snackbar shown when export or share fails"
+  },
+  "settingsImportFailedTitle": "Import failed",
+  "@settingsImportFailedTitle": {
+    "description": "Title of the dialog shown when import fails"
+  },
+  "settingsImportFailedMalformed": "This file isn't a valid BreathLab backup.",
+  "@settingsImportFailedMalformed": {
+    "description": "Import error: the file isn't valid JSON or is missing required fields"
+  },
+  "settingsImportFailedFormat": "This file isn't a BreathLab backup, or was made by an incompatible version.",
+  "@settingsImportFailedFormat": {
+    "description": "Import error: the file's format or formatVersion isn't recognized"
+  },
+  "settingsImportFailedSchema": "This backup was made by a newer version of BreathLab. Update the app on this device first.",
+  "@settingsImportFailedSchema": {
+    "description": "Import error: the file's schemaVersion is newer than this device's database"
+  },
+  "settingsImportFailedGeneric": "Something went wrong reading this file.",
+  "@settingsImportFailedGeneric": {
+    "description": "Import error: an unexpected failure not covered by a more specific message"
+  },
+  "settingsImportSummaryTitle": "Import complete",
+  "@settingsImportSummaryTitle": {
+    "description": "Title of the dialog shown after a successful import"
+  },
+  "settingsImportSummaryBody": "Added {holdsAdded} holds, {sessionsAdded} sessions. Updated {holdsUpdated} holds. Synced with {device}.",
+  "@settingsImportSummaryBody": {
+    "description": "Body of the post-import summary dialog",
+    "placeholders": {
+      "holdsAdded": {
+        "type": "int"
+      },
+      "sessionsAdded": {
+        "type": "int"
+      },
+      "holdsUpdated": {
+        "type": "int"
+      },
+      "device": {
+        "type": "String"
+      }
+    }
+  },
   "tagAddConfirm": "Add",
   "@tagAddConfirm": {
     "description": "Confirm button in the add-custom-tag dialog"

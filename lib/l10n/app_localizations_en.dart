@@ -268,6 +268,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetButton => 'Reset';
 
   @override
+  String get settingsDataSection => 'Data';
+
+  @override
+  String get settingsDeviceNameLabel => 'Device name';
+
+  @override
+  String get settingsLastSyncNever => 'Never synced';
+
+  @override
+  String settingsLastSyncWith(String when, String device) {
+    return 'Last synced $when with $device';
+  }
+
+  @override
+  String get settingsExportButton => 'Export';
+
+  @override
+  String get settingsShareButton => 'Share';
+
+  @override
+  String get settingsImportButton => 'Import';
+
+  @override
+  String get settingsExportSuccess => 'Backup saved.';
+
+  @override
+  String get settingsExportFailed => 'Couldn\'t save the backup.';
+
+  @override
+  String get settingsImportFailedTitle => 'Import failed';
+
+  @override
+  String get settingsImportFailedMalformed =>
+      'This file isn\'t a valid BreathLab backup.';
+
+  @override
+  String get settingsImportFailedFormat =>
+      'This file isn\'t a BreathLab backup, or was made by an incompatible version.';
+
+  @override
+  String get settingsImportFailedSchema =>
+      'This backup was made by a newer version of BreathLab. Update the app on this device first.';
+
+  @override
+  String get settingsImportFailedGeneric =>
+      'Something went wrong reading this file.';
+
+  @override
+  String get settingsImportSummaryTitle => 'Import complete';
+
+  @override
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  ) {
+    return 'Added $holdsAdded holds, $sessionsAdded sessions. Updated $holdsUpdated holds. Synced with $device.';
+  }
+
+  @override
   String get tagAddConfirm => 'Add';
 
   @override

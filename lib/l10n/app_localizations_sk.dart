@@ -268,6 +268,67 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsResetButton => 'Vymazať';
 
   @override
+  String get settingsDataSection => 'Dáta';
+
+  @override
+  String get settingsDeviceNameLabel => 'Názov zariadenia';
+
+  @override
+  String get settingsLastSyncNever => 'Zatiaľ nesynchronizované';
+
+  @override
+  String settingsLastSyncWith(String when, String device) {
+    return 'Naposledy synchronizované $when so zariadením $device';
+  }
+
+  @override
+  String get settingsExportButton => 'Exportovať';
+
+  @override
+  String get settingsShareButton => 'Zdieľať';
+
+  @override
+  String get settingsImportButton => 'Importovať';
+
+  @override
+  String get settingsExportSuccess => 'Záloha uložená.';
+
+  @override
+  String get settingsExportFailed => 'Zálohu sa nepodarilo uložiť.';
+
+  @override
+  String get settingsImportFailedTitle => 'Import zlyhal';
+
+  @override
+  String get settingsImportFailedMalformed =>
+      'Tento súbor nie je platná záloha BreathLab.';
+
+  @override
+  String get settingsImportFailedFormat =>
+      'Tento súbor nie je záloha BreathLab, alebo bol vytvorený nekompatibilnou verziou.';
+
+  @override
+  String get settingsImportFailedSchema =>
+      'Táto záloha bola vytvorená novšou verziou BreathLab. Najprv aktualizuj aplikáciu na tomto zariadení.';
+
+  @override
+  String get settingsImportFailedGeneric =>
+      'Pri čítaní tohto súboru sa niečo pokazilo.';
+
+  @override
+  String get settingsImportSummaryTitle => 'Import dokončený';
+
+  @override
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  ) {
+    return 'Pridaných $holdsAdded pokusov, $sessionsAdded sérií. Aktualizovaných $holdsUpdated pokusov. Synchronizované so zariadením $device.';
+  }
+
+  @override
   String get tagAddConfirm => 'Pridať';
 
   @override

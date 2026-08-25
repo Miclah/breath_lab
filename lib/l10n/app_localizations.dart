@@ -596,6 +596,107 @@ abstract class AppLocalizations {
   /// **'Reset'**
   String get settingsResetButton;
 
+  /// Settings section header for device name, export, import, and last sync status
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get settingsDataSection;
+
+  /// Label on the editable device name text field, shown to the other device after a sync
+  ///
+  /// In en, this message translates to:
+  /// **'Device name'**
+  String get settingsDeviceNameLabel;
+
+  /// Last-sync status line shown when this device has never exported or imported
+  ///
+  /// In en, this message translates to:
+  /// **'Never synced'**
+  String get settingsLastSyncNever;
+
+  /// Last-sync status line shown after at least one export or import
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced {when} with {device}'**
+  String settingsLastSyncWith(String when, String device);
+
+  /// Button that opens a save dialog to write a .blab backup file
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get settingsExportButton;
+
+  /// Android-only button that hands the backup straight to the share sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get settingsShareButton;
+
+  /// Button that opens a file picker to merge in a .blab backup file
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get settingsImportButton;
+
+  /// Snackbar shown after a successful export
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved.'**
+  String get settingsExportSuccess;
+
+  /// Snackbar shown when export or share fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the backup.'**
+  String get settingsExportFailed;
+
+  /// Title of the dialog shown when import fails
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get settingsImportFailedTitle;
+
+  /// Import error: the file isn't valid JSON or is missing required fields
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn\'t a valid BreathLab backup.'**
+  String get settingsImportFailedMalformed;
+
+  /// Import error: the file's format or formatVersion isn't recognized
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn\'t a BreathLab backup, or was made by an incompatible version.'**
+  String get settingsImportFailedFormat;
+
+  /// Import error: the file's schemaVersion is newer than this device's database
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of BreathLab. Update the app on this device first.'**
+  String get settingsImportFailedSchema;
+
+  /// Import error: an unexpected failure not covered by a more specific message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reading this file.'**
+  String get settingsImportFailedGeneric;
+
+  /// Title of the dialog shown after a successful import
+  ///
+  /// In en, this message translates to:
+  /// **'Import complete'**
+  String get settingsImportSummaryTitle;
+
+  /// Body of the post-import summary dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Added {holdsAdded} holds, {sessionsAdded} sessions. Updated {holdsUpdated} holds. Synced with {device}.'**
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  );
+
   /// Confirm button in the add-custom-tag dialog
   ///
   /// In en, this message translates to:
