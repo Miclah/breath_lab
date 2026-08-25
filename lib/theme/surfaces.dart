@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
@@ -44,14 +46,9 @@ class Surfaces {
     return BoxDecoration(
       color: c.panelPrimary,
       borderRadius: BorderRadius.circular(_primaryRadius),
-      border: Border(
-        top: BorderSide(
-          color: c.primary.withValues(alpha: _topEdgeAlpha),
-          width: 0.5,
-        ),
-        left: BorderSide(color: c.panelBorder, width: 0.5),
-        right: BorderSide(color: c.panelBorder, width: 0.5),
-        bottom: BorderSide(color: c.panelBorder, width: 0.5),
+      border: TopAccentBorder(
+        accent: c.primary.withValues(alpha: _topEdgeAlpha),
+        base: c.panelBorder,
       ),
     );
   }
@@ -79,4 +76,97 @@ class Surfaces {
       border: Border.all(color: c.border, width: 0.5),
     );
   }
+}
+
+/// A hairline box border whose top edge is a different colour from the other
+/// three, and which survives having a corner radius.
+///
+/// Flutter's own [Border] asserts uniform side colours the moment a
+/// `borderRadius` is present, so the primary panel's teal top edge and its
+/// 16 px corners are not expressible together with it. The accent is not
+/// decoration — it is the whole signal that a panel is the screen's subject —
+/// and square corners on one panel out of three would be a worse answer than
+/// drawing the border properly.
+///
+/// The accent follows both top corner arcs rather than stopping at the
+/// straight segment, so the line reads as an edge of the panel and not as a
+/// rule laid across it.
+class TopAccentBorder extends BoxBorder {
+  const TopAccentBorder({
+    required this.accent,
+    required this.base,
+    this.width = 0.5,
+  });
+
+  final Color accent;
+  final Color base;
+  final double width;
+
+  @override
+  BorderSide get top => BorderSide(color: accent, width: width);
+
+  @override
+  BorderSide get bottom => BorderSide(color: base, width: width);
+
+  @override
+  bool get isUniform => false;
+
+  @override
+  EdgeInsetsGeometry get dimensions => EdgeInsets.all(width);
+
+  @override
+  ShapeBorder scale(double t) =>
+      TopAccentBorder(accent: accent, base: base, width: width * t);
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) =>
+      Path()..addRect(rect.deflate(width));
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) =>
+      Path()..addRect(rect);
+
+  @override
+  void paint(
+    Canvas canvas,
+    Rect rect, {
+    TextDirection? textDirection,
+    BoxShape shape = BoxShape.rectangle,
+    BorderRadius? borderRadius,
+  }) {
+    final radius = borderRadius ?? BorderRadius.zero;
+    final rrect = radius.toRRect(rect).deflate(width / 2);
+
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = width
+      ..color = base;
+    canvas.drawRRect(rrect, paint);
+
+    final r = rrect.tlRadiusX;
+    canvas.drawPath(
+      Path()
+        ..moveTo(rrect.left, rrect.top + r)
+        ..arcToPoint(
+          Offset(rrect.left + r, rrect.top),
+          radius: ui.Radius.circular(r),
+        )
+        ..lineTo(rrect.right - r, rrect.top)
+        ..arcToPoint(
+          Offset(rrect.right, rrect.top + r),
+          radius: ui.Radius.circular(r),
+        ),
+      paint..color = accent,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is TopAccentBorder &&
+      other.accent == accent &&
+      other.base == base &&
+      other.width == width;
+
+  @override
+  int get hashCode => Object.hash(accent, base, width);
 }

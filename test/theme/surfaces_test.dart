@@ -37,16 +37,17 @@ void main() {
     testWidgets('the primary panel\'s top edge differs from its other three '
         'in $name', (tester) async {
       final d = await _decorations(tester, brightness);
-      final border = d.primary.border! as Border;
+      final border = d.primary.border! as TopAccentBorder;
 
       // The teal hairline is the whole signal that this panel is the screen's
       // subject. If it matched the other three sides the role would be an
       // ordinary bordered box.
-      expect(border.top.color, isNot(border.left.color));
-      expect(border.top.color, isNot(border.right.color));
       expect(border.top.color, isNot(border.bottom.color));
-      expect(border.left.color, border.right.color);
-      expect(border.left.color, border.bottom.color);
+      expect(border.isUniform, isFalse);
+      // And it has to survive a corner radius, which is what Flutter's own
+      // Border cannot do — it asserts uniform side colours the moment one is
+      // present, which is how this was caught.
+      expect(d.primary.borderRadius, isNotNull);
     });
 
     testWidgets('a quiet panel has no fill in $name', (tester) async {
