@@ -901,6 +901,48 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Heading of the timer side panel card summarising the previous training day
+  ///
+  /// In en, this message translates to:
+  /// **'Last session'**
+  String get timerSideLastSession;
+
+  /// How many holds the previous session contained, shown beside its best time
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hold} other{{count} holds}}'**
+  String timerSideSessionHolds(int count);
+
+  /// Empty state of the timer side panel's last-session card
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet. Your first hold sets the baseline.'**
+  String get timerSideNoHistory;
+
+  /// Heading of the keyboard shortcuts card in the timer side panel
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts'**
+  String get timerSideShortcuts;
+
+  /// What the Space key does on the timer screen
+  ///
+  /// In en, this message translates to:
+  /// **'Start / stop hold'**
+  String get timerSideShortcutStart;
+
+  /// What the C key does during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'Mark contraction'**
+  String get timerSideShortcutContraction;
+
+  /// What the Escape key does during prep, a hold, or on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get timerSideShortcutCancel;
+
   /// Collapsed affordance on the result screen that expands into the notes field
   ///
   /// In en, this message translates to:

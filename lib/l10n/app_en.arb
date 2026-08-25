@@ -559,6 +559,39 @@
       }
     }
   },
+  "timerSideLastSession": "Last session",
+  "@timerSideLastSession": {
+    "description": "Heading of the timer side panel card summarising the previous training day"
+  },
+  "timerSideSessionHolds": "{count, plural, =1{1 hold} other{{count} holds}}",
+  "@timerSideSessionHolds": {
+    "description": "How many holds the previous session contained, shown beside its best time",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timerSideNoHistory": "Nothing logged yet. Your first hold sets the baseline.",
+  "@timerSideNoHistory": {
+    "description": "Empty state of the timer side panel's last-session card"
+  },
+  "timerSideShortcuts": "Shortcuts",
+  "@timerSideShortcuts": {
+    "description": "Heading of the keyboard shortcuts card in the timer side panel"
+  },
+  "timerSideShortcutStart": "Start / stop hold",
+  "@timerSideShortcutStart": {
+    "description": "What the Space key does on the timer screen"
+  },
+  "timerSideShortcutContraction": "Mark contraction",
+  "@timerSideShortcutContraction": {
+    "description": "What the C key does during an active hold"
+  },
+  "timerSideShortcutCancel": "Cancel",
+  "@timerSideShortcutCancel": {
+    "description": "What the Escape key does during prep, a hold, or on the result screen"
+  },
   "resultAddNote": "Add a note",
   "@resultAddNote": {
     "description": "Collapsed affordance on the result screen that expands into the notes field"

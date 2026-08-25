@@ -444,6 +444,37 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get timerSideLastSession => 'Posledné sedenie';
+
+  @override
+  String timerSideSessionHolds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count zadržaní',
+      few: '$count zadržania',
+      one: '1 zadržanie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timerSideNoHistory =>
+      'Zatiaľ nič zaznamenané. Prvé zadržanie určí základ.';
+
+  @override
+  String get timerSideShortcuts => 'Klávesové skratky';
+
+  @override
+  String get timerSideShortcutStart => 'Spustiť / zastaviť zadržanie';
+
+  @override
+  String get timerSideShortcutContraction => 'Označiť kontrakciu';
+
+  @override
+  String get timerSideShortcutCancel => 'Zrušiť';
+
+  @override
   String get resultAddNote => 'Pridať poznámku';
 
   @override

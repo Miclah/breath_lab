@@ -442,6 +442,36 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get timerSideLastSession => 'Last session';
+
+  @override
+  String timerSideSessionHolds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count holds',
+      one: '1 hold',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timerSideNoHistory =>
+      'Nothing logged yet. Your first hold sets the baseline.';
+
+  @override
+  String get timerSideShortcuts => 'Shortcuts';
+
+  @override
+  String get timerSideShortcutStart => 'Start / stop hold';
+
+  @override
+  String get timerSideShortcutContraction => 'Mark contraction';
+
+  @override
+  String get timerSideShortcutCancel => 'Cancel';
+
+  @override
   String get resultAddNote => 'Add a note';
 
   @override
