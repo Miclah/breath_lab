@@ -1,6 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
@@ -13,7 +15,6 @@ const _weeksShown = 12;
 const _daysPerWeek = 7;
 const _cellGap = 3.0;
 const _legendSteps = [0, 1, 2, 4];
-const _dayLabelWidth = 20.0;
 
 /// Weekday rows that get a label to the left of the grid — every row would
 /// be too dense at this cell size, so only Mon/Wed/Fri, matching the
@@ -26,6 +27,26 @@ Color _cellColor(BuildContext context, int count) {
   if (count == 1) return c.heatmapLow;
   if (count <= 3) return c.heatmapMid;
   return c.heatmapHigh;
+}
+
+/// How much room the weekday column needs for the labels it will actually
+/// draw, in this locale, at this style.
+///
+/// A fixed 20 px fitted "Mo" and pushed the "n" onto a second line — and
+/// only in English, since Slovak's two-letter abbreviations fit, so half
+/// the builds never showed the bug. Any constant here is a guess about a
+/// language; measuring is not.
+double _dayLabelWidth(Iterable<String> labels, TextStyle style) {
+  var widest = 0.0;
+  for (final label in labels) {
+    final painter = TextPainter(
+      text: TextSpan(text: label, style: style),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    widest = math.max(widest, painter.width);
+  }
+  return widest;
 }
 
 DateTime _dateOnly(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
@@ -55,6 +76,16 @@ class CalendarHeatmap extends ConsumerWidget {
         firstWeekStart.add(Duration(days: 7 * w)),
     ];
 
+    final axisStyle = BreathLabTypography.caption.copyWith(
+      color: c.textTertiary,
+      fontSize: 10,
+    );
+    final dayLabels = {
+      for (final d in _labeledWeekdayRows)
+        d: DateFormat('EEE').format(firstWeekStart.add(Duration(days: d))),
+    };
+    final dayLabelWidth = _dayLabelWidth(dayLabels.values, axisStyle);
+
     return Container(
       padding: const EdgeInsets.all(Spacing.lg),
       decoration: BoxDecoration(
@@ -75,7 +106,7 @@ class CalendarHeatmap extends ConsumerWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final gridWidth =
-                  constraints.maxWidth - _dayLabelWidth - Spacing.xs;
+                  constraints.maxWidth - dayLabelWidth - Spacing.xs;
               final cellSize =
                   ((gridWidth - (_weeksShown - 1) * _cellGap) / _weeksShown)
                       .clamp(10.0, 22.0);
@@ -85,9 +116,7 @@ class CalendarHeatmap extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                      left: _dayLabelWidth + Spacing.xs,
-                    ),
+                    padding: EdgeInsets.only(left: dayLabelWidth + Spacing.xs),
                     child: SizedBox(
                       height: 14,
                       child: Stack(
@@ -99,10 +128,9 @@ class CalendarHeatmap extends ConsumerWidget {
                                 left: w * colStep,
                                 child: Text(
                                   DateFormat('MMM').format(weekStarts[w]),
-                                  style: BreathLabTypography.caption.copyWith(
-                                    color: c.textTertiary,
-                                    fontSize: 10,
-                                  ),
+                                  style: axisStyle,
+                                  maxLines: 1,
+                                  softWrap: false,
                                 ),
                               ),
                         ],
@@ -114,7 +142,7 @@ class CalendarHeatmap extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: _dayLabelWidth,
+                        width: dayLabelWidth,
                         child: Column(
                           children: [
                             for (var d = 0; d < _daysPerWeek; d++)
@@ -124,21 +152,15 @@ class CalendarHeatmap extends ConsumerWidget {
                                 ),
                                 child: SizedBox(
                                   height: cellSize,
-                                  child: !_labeledWeekdayRows.contains(d)
+                                  child: dayLabels[d] == null
                                       ? null
                                       : Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            DateFormat('EEE').format(
-                                              firstWeekStart.add(
-                                                Duration(days: d),
-                                              ),
-                                            ),
-                                            style: BreathLabTypography.caption
-                                                .copyWith(
-                                                  color: c.textTertiary,
-                                                  fontSize: 10,
-                                                ),
+                                            dayLabels[d]!,
+                                            style: axisStyle,
+                                            maxLines: 1,
+                                            softWrap: false,
                                           ),
                                         ),
                                 ),
