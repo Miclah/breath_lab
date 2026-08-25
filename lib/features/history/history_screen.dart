@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 import 'history_filters.dart';
 
 String _prepModeLabel(PrepMode mode, AppLocalizations l10n) => switch (mode) {
@@ -409,7 +410,7 @@ class _HoldDetailSheetState extends ConsumerState<_HoldDetailSheet> {
                         Chip(
                           label: Text(
                             tagLabel(tag.labelKey, l10n),
-                            style: const TextStyle(fontSize: 12),
+                            style: BreathLabTypography.label,
                           ),
                           visualDensity: VisualDensity.compact,
                         ),

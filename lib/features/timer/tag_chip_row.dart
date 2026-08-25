@@ -8,6 +8,7 @@ import '../../shared/widgets/horizontal_scroll_fade.dart';
 import '../../theme/breakpoints.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 import 'providers.dart';
 
 /// Maps a tag's [labelKey] to its display string.
@@ -179,8 +180,8 @@ class _TagChipState extends State<_TagChip> {
           ),
           child: Text(
             widget.label,
-            style: TextStyle(
-              fontSize: 13,
+            // 13 is not a step on the revised scale; a chip label is a label.
+            style: BreathLabTypography.label.copyWith(
               color: selected ? c.primaryText : c.textSecondary,
             ),
           ),
@@ -245,7 +246,7 @@ class _AddTagChip extends StatelessWidget {
         ),
         child: Text(
           l10n.tagAddLabel,
-          style: TextStyle(fontSize: 13, color: c.textTertiary),
+          style: BreathLabTypography.label.copyWith(color: c.textTertiary),
         ),
       ),
     );

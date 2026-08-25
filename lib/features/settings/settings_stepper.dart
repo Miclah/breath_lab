@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
+import '../../theme/typography.dart';
 
 /// Compact minus/value/plus stepper row used across Settings numeric
 /// inputs. Renders as a single row — label on the left, the control group
@@ -40,7 +42,9 @@ class SettingsStepper extends StatelessWidget {
           child: Text(
             format(value),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: BreathLabTypography.numericMd.copyWith(
+              color: context.appColors.textPrimary,
+            ),
           ),
         ),
         IconButton.filledTonal(

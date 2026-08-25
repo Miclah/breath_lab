@@ -77,10 +77,7 @@ class CalendarHeatmap extends ConsumerWidget {
         firstWeekStart.add(Duration(days: 7 * w)),
     ];
 
-    final axisStyle = BreathLabTypography.micro.copyWith(
-      color: c.textTertiary,
-      fontSize: 10,
-    );
+    final axisStyle = BreathLabTypography.micro.copyWith(color: c.textTertiary);
     final dayLabels = {
       for (final d in _labeledWeekdayRows)
         d: DateFormat('EEE').format(firstWeekStart.add(Duration(days: d))),

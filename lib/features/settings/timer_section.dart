@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
+import '../../theme/colors.dart';
+import '../../theme/typography.dart';
 
 enum _RatioPreset { fourSix, fourFour, fourEight, custom }
 
@@ -91,7 +93,9 @@ class _PrepDurationStepper extends ConsumerWidget {
           child: Text(
             _format(seconds),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: BreathLabTypography.numericMd.copyWith(
+              color: context.appColors.textPrimary,
+            ),
           ),
         ),
         IconButton.filledTonal(
@@ -233,7 +237,9 @@ class _RatioValueStepper extends StatelessWidget {
               child: Text(
                 '${seconds}s',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: BreathLabTypography.numericMd.copyWith(
+                  color: context.appColors.textPrimary,
+                ),
               ),
             ),
             IconButton.filledTonal(
