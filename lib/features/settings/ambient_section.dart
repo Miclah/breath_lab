@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
+import '../../domain/services/tts_service.dart' show TtsLanguageSupport;
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/segment_label.dart';
 import '../../theme/colors.dart';
@@ -113,15 +114,20 @@ class AmbientSection extends ConsumerWidget {
                 showSelectedIcon: false,
                 onSelectionChanged: (value) async {
                   await ref.read(ttsLanguageProvider.notifier).set(value.first);
-                  if (value.first == 'sk' &&
-                      !await ref
-                          .read(ttsServiceProvider)
-                          .isLanguageAvailable('sk-SK')) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.settingsTtsVoiceMissing)),
-                    );
-                  }
+                  if (value.first != 'sk') return;
+                  // Warn only when the engine actually told us the voice is
+                  // missing. `unknown` means the platform gave us no way to
+                  // ask (flutter_tts has no Windows binding for the check) —
+                  // warning then would show a false alarm on every Windows
+                  // machine, including ones with a Slovak voice installed.
+                  final support = await ref
+                      .read(ttsServiceProvider)
+                      .languageSupport('sk-SK');
+                  if (support != TtsLanguageSupport.unavailable) return;
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.settingsTtsVoiceMissing)),
+                  );
                 },
               ),
               const SizedBox(height: Spacing.md),
