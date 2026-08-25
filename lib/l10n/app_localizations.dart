@@ -901,6 +901,30 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Pill shown above the duration on the result screen when the hold beat the previous best
+  ///
+  /// In en, this message translates to:
+  /// **'NEW PB'**
+  String get resultNewPbBadge;
+
+  /// Comparison of this hold against the previous saved max hold; delta arrives pre-formatted as +mm:ss or −mm:ss
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last'**
+  String resultVsLast(String delta);
+
+  /// Comparison of this hold against the personal best it is measured from; delta arrives pre-formatted as +mm:ss or −mm:ss
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs PB'**
+  String resultVsPb(String delta);
+
+  /// Shown in place of the comparison line when there is no earlier hold to compare against
+  ///
+  /// In en, this message translates to:
+  /// **'Your first hold — this is the baseline everything else is measured from.'**
+  String get resultFirstHold;
+
   /// Label for the total hold duration on the result screen metrics row
   ///
   /// In en, this message translates to:

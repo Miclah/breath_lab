@@ -249,6 +249,14 @@ class _ResultViewState extends ConsumerState<ResultView>
               ],
             ),
 
+            const SizedBox(height: Spacing.sm),
+
+            const _PbBadge(),
+
+            const SizedBox(height: Spacing.sm),
+
+            const _ComparisonLine(),
+
             const SizedBox(height: Spacing.lg),
 
             _HoldMetrics(state: state),
@@ -309,6 +317,85 @@ class _ResultViewState extends ConsumerState<ResultView>
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PB badge and comparison line
+// ---------------------------------------------------------------------------
+
+/// The `NEW PB` pill from Design §`hold-result`.
+///
+/// Design assigns it `danger-surface`/`danger-text`; this app already
+/// decided otherwise when it introduced [BreathLabColorScheme.recordText] —
+/// a record is an achievement, and dressing it in the same red as the
+/// safety warnings and the Stop button says the wrong thing about it. The
+/// pill follows the token, not the doc.
+class _PbBadge extends ConsumerWidget {
+  const _PbBadge();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.appColors;
+    final elapsed = ref.watch(timerProvider).holdElapsed;
+    final currentMaxMs = ref.watch(currentMaxMsProvider).valueOrNull;
+
+    // Same test the save path applies, so the badge cannot promise a record
+    // the write then declines to record.
+    final isPb = currentMaxMs == null || elapsed.inMilliseconds > currentMaxMs;
+    if (!isPb) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Spacing.md,
+        vertical: Spacing.xs,
+      ),
+      decoration: BoxDecoration(
+        color: c.primarySurface,
+        borderRadius: BorderRadius.circular(Radius.pill),
+      ),
+      child: Text(
+        AppLocalizations.of(context)!.resultNewPbBadge,
+        style: BreathLabTypography.badge.copyWith(color: c.recordText),
+      ),
+    );
+  }
+}
+
+/// "+00:12 vs last · −00:05 vs PB".
+///
+/// Both references are shown when both exist, rather than picking one:
+/// beating yesterday while sitting short of your best is the ordinary case,
+/// and it is two different facts.
+///
+/// Neither delta is ever red. Design reserves red for events and warnings,
+/// and being five seconds off your best on a given day is a normal training
+/// session, not either of those.
+class _ComparisonLine extends ConsumerWidget {
+  const _ComparisonLine();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final elapsed = ref.watch(timerProvider).holdElapsed;
+    final currentMaxMs = ref.watch(currentMaxMsProvider).valueOrNull;
+    final last = ref.watch(lastMaxHoldProvider);
+
+    final parts = <String>[
+      if (last != null)
+        l10n.resultVsLast(formatSignedMmSs(elapsed - last.duration)),
+      if (currentMaxMs != null && currentMaxMs > 0)
+        l10n.resultVsPb(
+          formatSignedMmSs(elapsed - Duration(milliseconds: currentMaxMs)),
+        ),
+    ];
+
+    return Text(
+      parts.isEmpty ? l10n.resultFirstHold : parts.join('  ·  '),
+      textAlign: TextAlign.center,
+      style: BreathLabTypography.bodySm.copyWith(color: c.textSecondary),
     );
   }
 }

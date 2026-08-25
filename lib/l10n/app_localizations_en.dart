@@ -442,6 +442,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get resultNewPbBadge => 'NEW PB';
+
+  @override
+  String resultVsLast(String delta) {
+    return '$delta vs last';
+  }
+
+  @override
+  String resultVsPb(String delta) {
+    return '$delta vs PB';
+  }
+
+  @override
+  String get resultFirstHold =>
+      'Your first hold — this is the baseline everything else is measured from.';
+
+  @override
   String get resultTotal => 'Total';
 
   @override

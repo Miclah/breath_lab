@@ -444,6 +444,23 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get resultNewPbBadge => 'NOVÝ REKORD';
+
+  @override
+  String resultVsLast(String delta) {
+    return '$delta oproti poslednému';
+  }
+
+  @override
+  String resultVsPb(String delta) {
+    return '$delta oproti rekordu';
+  }
+
+  @override
+  String get resultFirstHold =>
+      'Tvoje prvé zadržanie — základ, od ktorého sa všetko ďalšie meria.';
+
+  @override
   String get resultTotal => 'Celkovo';
 
   @override

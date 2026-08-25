@@ -7,3 +7,11 @@ String formatMmSs(Duration d) {
   final s = (d.inSeconds % 60).toString().padLeft(2, '0');
   return '$m:$s';
 }
+
+/// Signed `±mm:ss`, for a delta against a previous hold or a personal best.
+///
+/// Uses a real minus sign (U+2212) rather than a hyphen: the two appear in
+/// the same column of the same line as a plus, and a hyphen sits visibly
+/// higher and shorter than the plus it is being compared with.
+String formatSignedMmSs(Duration d) =>
+    '${d.isNegative ? '−' : '+'}${formatMmSs(d.abs())}';

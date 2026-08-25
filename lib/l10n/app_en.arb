@@ -559,6 +559,32 @@
       }
     }
   },
+  "resultNewPbBadge": "NEW PB",
+  "@resultNewPbBadge": {
+    "description": "Pill shown above the duration on the result screen when the hold beat the previous best"
+  },
+  "resultVsLast": "{delta} vs last",
+  "@resultVsLast": {
+    "description": "Comparison of this hold against the previous saved max hold; delta arrives pre-formatted as +mm:ss or −mm:ss",
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "resultVsPb": "{delta} vs PB",
+  "@resultVsPb": {
+    "description": "Comparison of this hold against the personal best it is measured from; delta arrives pre-formatted as +mm:ss or −mm:ss",
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "resultFirstHold": "Your first hold — this is the baseline everything else is measured from.",
+  "@resultFirstHold": {
+    "description": "Shown in place of the comparison line when there is no earlier hold to compare against"
+  },
   "resultTotal": "Total",
   "@resultTotal": {
     "description": "Label for the total hold duration on the result screen metrics row"

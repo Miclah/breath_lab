@@ -115,6 +115,19 @@ final todaysHoldsProvider = Provider<List<Hold>>((ref) {
   return todaysHolds(holds);
 });
 
+/// The most recent saved max hold — the "last" a fresh result is compared
+/// against. Null before the very first one.
+///
+/// [allHoldsProvider] is newest-first, and the hold on the result screen is
+/// not saved yet, so the head of that list is genuinely the previous one.
+final lastMaxHoldProvider = Provider<Hold?>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  for (final hold in holds) {
+    if (hold.type == HoldType.max) return hold;
+  }
+  return null;
+});
+
 /// Pure form of [todaysHoldsProvider], with an injectable clock.
 List<Hold> todaysHolds(List<Hold> holds, {DateTime? now}) {
   final today = now ?? DateTime.now();
