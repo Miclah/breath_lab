@@ -30,6 +30,7 @@ class AdaptivePage extends StatelessWidget {
     this.maxWidth = ContentWidth.reading,
     this.side,
     this.padding,
+    this.reserveSide = false,
   });
 
   /// The page body. Receives a full-height box, so a `ListView` or an
@@ -52,6 +53,37 @@ class AdaptivePage extends StatelessWidget {
   /// pads itself, or the two will stack.
   final EdgeInsetsGeometry? padding;
 
+  /// Hold the side column's width open even while [side] is null.
+  ///
+  /// Without this the page centres one column when there is no side content
+  /// and centres content-plus-side when there is, so a screen that shows a
+  /// side panel in some of its states and not others slides its main column
+  /// sideways by half the side width plus half the gap — 176 px — every
+  /// time it changes state. The timer screen does exactly that, and it is
+  /// the reason the ring appeared to jump.
+  ///
+  /// With it, the main column's left edge depends on the page width alone.
+  /// A screen whose side content comes and goes should always set it.
+  final bool reserveSide;
+
+  /// Whether a page capped at [maxWidth] gets a side column in [width], at
+  /// the default padding.
+  ///
+  /// Exposed so a screen can decide what to put where without re-deriving
+  /// the fit rule and drifting out of step with the rule the page actually
+  /// applies.
+  static bool showsSide(double width, {required double maxWidth}) {
+    final breakpoint = Breakpoint.forWidth(width);
+    final available = math.max(
+      0.0,
+      width - PagePadding.horizontal(breakpoint) * 2,
+    );
+    return breakpoint.isExpanded && _sideFits(available, maxWidth);
+  }
+
+  static bool _sideFits(double available, double maxWidth) =>
+      available >= maxWidth + PagePadding.columnGap + ContentWidth.side;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -70,9 +102,9 @@ class AdaptivePage extends StatelessWidget {
         final available = math.max(0.0, width - resolvedPadding.horizontal);
 
         final twoColumn =
-            side != null &&
+            (side != null || reserveSide) &&
             breakpoint.isExpanded &&
-            available >= maxWidth + PagePadding.columnGap + ContentWidth.side;
+            _sideFits(available, maxWidth);
 
         if (!twoColumn) {
           return Align(
@@ -87,6 +119,9 @@ class AdaptivePage extends StatelessWidget {
           children: [
             SizedBox(width: maxWidth, child: child),
             const SizedBox(width: PagePadding.columnGap),
+            // Null child on purpose under [reserveSide]: the box still
+            // occupies its width and paints nothing, which is the whole
+            // point — the geometry must not know whether the slot is full.
             SizedBox(width: ContentWidth.side, child: side),
           ],
         );
