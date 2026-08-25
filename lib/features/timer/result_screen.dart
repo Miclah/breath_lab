@@ -18,6 +18,9 @@ import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
 import 'providers.dart';
 import 'tag_chip_row.dart';
+import 'timer_ring.dart';
+import 'timer_side_panel.dart';
+import 'timer_stage.dart';
 import 'todays_holds_row.dart';
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
@@ -185,145 +188,203 @@ class _ResultViewState extends ConsumerState<ResultView>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(timerProvider);
-    final c = context.appColors;
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final hPad = isDesktop ? Spacing.xxxl : Spacing.xl;
 
-    // Centered as one cohesive block instead of top-anchored content with a
-    // flex Spacer pushing the button group to the physical bottom edge —
-    // that left a large empty gap on most screens. SingleChildScrollView
-    // guards against overflow on short windows now that nothing here is
-    // Expanded/flexible.
+    // The same stage the timer body uses, so the duration number lands on
+    // the pixel the ring's centre was on rather than wherever this screen's
+    // own content happened to push it. Design §`hold-result` says the result
+    // replaces the ring area; this is what that means geometrically.
     return AdaptivePage(
       maxWidth: ContentWidth.reading,
-      padding: EdgeInsets.zero,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: hPad, vertical: Spacing.xxl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      reserveSide: true,
+      side: const TimerSidePanel(),
+      child: TimerStage(
+        top: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Hold duration — pulses on PB, with a glow ring behind it. The
-            // glow's 140x140 footprint is reserved unconditionally so
-            // everything below doesn't jump down the instant _showGlow
-            // flips true.
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 140,
-                  height: 140,
-                  child: !_showGlow
-                      ? null
-                      : AnimatedBuilder(
-                          animation: _glowController,
-                          builder: (_, _) => Opacity(
-                            opacity: _glowOpacity.value,
-                            child: Transform.scale(
-                              scale: _glowScale.value,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: RadialGradient(
-                                    colors: [
-                                      c.recordText.withValues(alpha: 0.5),
-                                      c.recordText.withValues(alpha: 0),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+            _PbBadge(),
+            SizedBox(height: Spacing.sm),
+            _ComparisonLine(),
+          ],
+        ),
+        hero: _ResultHero(
+          elapsed: state.holdElapsed,
+          pbScale: _pbScale,
+          glowController: _glowController,
+          glowScale: _glowScale,
+          glowOpacity: _glowOpacity,
+          showGlow: _showGlow,
+        ),
+        below: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: Spacing.lg),
+
+              _HoldMetrics(state: state),
+
+              const SizedBox(height: Spacing.lg),
+
+              // What today already looks like, so the number above has
+              // something to be read against before it is saved.
+              const TodaysHoldsRow(),
+
+              const SizedBox(height: Spacing.lg),
+
+              const TagChipRow(),
+
+              const SizedBox(height: Spacing.lg),
+
+              const _NoteField(),
+
+              const SizedBox(height: Spacing.xxl),
+
+              const _LungVolumeSelector(),
+
+              const SizedBox(height: Spacing.xxl),
+
+              _SaveButton(saving: _saving, onPressed: _save),
+
+              _DiscardButton(saving: _saving, onPressed: _discard),
+
+              const SizedBox(height: Spacing.xl),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+
+/// The duration, in the square the ring occupies in every other state.
+///
+/// The PB glow now fills that square instead of a hard-coded 140 px box —
+/// the box existed only to stop the glow appearing from shifting everything
+/// below it, and the stage already guarantees that.
+class _ResultHero extends StatelessWidget {
+  const _ResultHero({
+    required this.elapsed,
+    required this.pbScale,
+    required this.glowController,
+    required this.glowScale,
+    required this.glowOpacity,
+    required this.showGlow,
+  });
+
+  final Duration elapsed;
+  final Animation<double> pbScale;
+  final AnimationController glowController;
+  final Animation<double> glowScale;
+  final Animation<double> glowOpacity;
+  final bool showGlow;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final diameter = constraints.biggest.shortestSide;
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            if (showGlow)
+              AnimatedBuilder(
+                animation: glowController,
+                builder: (_, _) => Opacity(
+                  opacity: glowOpacity.value,
+                  child: Transform.scale(
+                    scale: glowScale.value,
+                    child: SizedBox.square(
+                      dimension: diameter * 0.5,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              c.recordText.withValues(alpha: 0.5),
+                              c.recordText.withValues(alpha: 0),
+                            ],
                           ),
                         ),
-                ),
-                AnimatedBuilder(
-                  animation: _pbScale,
-                  builder: (_, child) =>
-                      Transform.scale(scale: _pbScale.value, child: child),
-                  child: Text(
-                    formatMmSs(state.holdElapsed),
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      fontSize: isDesktop ? 64.0 : null,
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
-
-            const SizedBox(height: Spacing.sm),
-
-            const _PbBadge(),
-
-            const SizedBox(height: Spacing.sm),
-
-            const _ComparisonLine(),
-
-            const SizedBox(height: Spacing.lg),
-
-            _HoldMetrics(state: state),
-
-            const SizedBox(height: Spacing.lg),
-
-            // What today already looks like, so the number above has
-            // something to be read against before it is saved.
-            const TodaysHoldsRow(),
-
-            const SizedBox(height: Spacing.lg),
-
-            // Tag chips
-            const TagChipRow(),
-
-            const SizedBox(height: Spacing.lg),
-
-            const _NoteField(),
-
-            const SizedBox(height: Spacing.xxxl),
-
-            // Lung volume selector
-            const _LungVolumeSelector(),
-
-            const SizedBox(height: Spacing.xxl),
-
-            // Save button
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Radius.lg),
-                  ),
-                ),
-                onPressed: _saving ? null : _save,
-                child: _saving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(l10n.resultSaveButton),
               ),
-            ),
-
-            // Discard button — outlined so the only way to throw away a
-            // hold doesn't read as bare, borderless text next to a fully
-            // filled Save button.
-            OutlinedButton(
-              onPressed: _saving ? null : _discard,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: c.textSecondary,
-                side: BorderSide(color: c.border),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Radius.lg),
+            AnimatedBuilder(
+              animation: pbScale,
+              builder: (_, child) =>
+                  Transform.scale(scale: pbScale.value, child: child),
+              child: Text(
+                formatMmSs(elapsed),
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                  fontSize: diameter >= TimerRing.expandedDiameter
+                      ? 64.0
+                      : null,
                 ),
               ),
-              child: Text(l10n.resultDiscardButton),
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Actions
+// ---------------------------------------------------------------------------
+
+class _SaveButton extends StatelessWidget {
+  const _SaveButton({required this.saving, required this.onPressed});
+
+  final bool saving;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: FilledButton(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(TimerStage.actionBandHeight),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Radius.lg),
+          ),
         ),
+        onPressed: saving ? null : onPressed,
+        child: saving
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : Text(AppLocalizations.of(context)!.resultSaveButton),
       ),
+    );
+  }
+}
+
+/// Outlined so the only way to throw away a hold doesn't read as bare,
+/// borderless text next to a fully filled Save button.
+class _DiscardButton extends StatelessWidget {
+  const _DiscardButton({required this.saving, required this.onPressed});
+
+  final bool saving;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+    return OutlinedButton(
+      onPressed: saving ? null : onPressed,
+      style: OutlinedButton.styleFrom(foregroundColor: c.textSecondary),
+      child: Text(AppLocalizations.of(context)!.resultDiscardButton),
     );
   }
 }
