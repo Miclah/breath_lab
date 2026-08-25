@@ -71,6 +71,32 @@ class TablesScreen extends ConsumerWidget {
     );
   }
 
+  Widget _roundRow(
+    WidgetRef ref,
+    AppLocalizations l10n,
+    TableSessionState session,
+    bool sessionActive,
+    List<TableRoundPlan> rounds,
+    int i,
+  ) {
+    final itemState = _stateFor(session, sessionActive, i);
+    final isActive = itemState == RoundItemState.active;
+    return RoundListItem(
+      number: i + 1,
+      round: rounds[i],
+      state: itemState,
+      elapsedMs: isActive ? session.elapsed.inMilliseconds : null,
+      phaseLabel: !isActive
+          ? null
+          : session.isHolding
+          ? l10n.tablesPhaseLabelHold
+          : l10n.tablesPhaseLabelRest,
+      onStopHold: isActive && session.isHolding
+          ? () => ref.read(tableSessionProvider.notifier).stopHoldEarly()
+          : null,
+    );
+  }
+
   Widget _body(
     BuildContext context,
     WidgetRef ref,
@@ -142,38 +168,21 @@ class TablesScreen extends ConsumerWidget {
                         ),
                       Expanded(
                         child: BottomScrollFade(
-                          child: ListView.separated(
+                          child: SingleChildScrollView(
                             padding: const EdgeInsets.only(bottom: Spacing.xl),
-                            itemCount: rounds.length,
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(height: Spacing.sm),
-                            itemBuilder: (context, i) {
-                              final itemState = _stateFor(
-                                session,
-                                sessionActive,
-                                i,
-                              );
-                              final isActive =
-                                  itemState == RoundItemState.active;
-                              return RoundListItem(
-                                number: i + 1,
-                                round: rounds[i],
-                                state: itemState,
-                                elapsedMs: isActive
-                                    ? session.elapsed.inMilliseconds
-                                    : null,
-                                phaseLabel: !isActive
-                                    ? null
-                                    : session.isHolding
-                                    ? l10n.tablesPhaseLabelHold
-                                    : l10n.tablesPhaseLabelRest,
-                                onStopHold: isActive && session.isHolding
-                                    ? () => ref
-                                          .read(tableSessionProvider.notifier)
-                                          .stopHoldEarly()
-                                    : null,
-                              );
-                            },
+                            child: RoundList(
+                              rows: [
+                                for (var i = 0; i < rounds.length; i++)
+                                  _roundRow(
+                                    ref,
+                                    l10n,
+                                    session,
+                                    sessionActive,
+                                    rounds,
+                                    i,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

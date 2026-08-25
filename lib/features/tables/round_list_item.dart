@@ -11,6 +11,98 @@ enum RoundItemState { upcoming, active, completed }
 
 String formatRoundMs(int ms) => formatMmSs(Duration(milliseconds: ms));
 
+/// Width of the hold and rest columns.
+///
+/// Fixed, and shared by the header and every row, because that is what makes
+/// a column a column: a value has to sit under the word that names it.
+const _statColumn = 56.0;
+
+/// Width of the trailing status glyph.
+const _statusColumn = 20.0;
+
+/// The whole round list, as one card.
+///
+/// Design §`table-round` describes rows inside a single card separated by
+/// hairlines. What was built instead was eight separate bordered cards, each
+/// repeating the words "Hold" and "Rest" above its own two numbers — sixteen
+/// labels for two columns. The card is the group; the rows are the members.
+class RoundList extends StatelessWidget {
+  const RoundList({super.key, required this.rows});
+
+  final List<Widget> rows;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.appColors;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(Radius.xl),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          const _RoundListHeader(),
+          for (final (i, row) in rows.indexed) ...[
+            if (i > 0)
+              Divider(
+                height: 0.5,
+                thickness: 0.5,
+                color: c.border.withValues(alpha: 0.3),
+              ),
+            row,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _RoundListHeader extends StatelessWidget {
+  const _RoundListHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final style = BreathLabTypography.label.copyWith(color: c.textTertiary);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Spacing.lg,
+        Spacing.md,
+        Spacing.lg,
+        Spacing.sm,
+      ),
+      child: Row(
+        children: [
+          const Spacer(),
+          SizedBox(
+            width: _statColumn,
+            child: Text(
+              l10n.tablesHoldLabel,
+              textAlign: TextAlign.end,
+              style: style,
+            ),
+          ),
+          const SizedBox(width: Spacing.md),
+          SizedBox(
+            width: _statColumn,
+            child: Text(
+              l10n.tablesRestLabel,
+              textAlign: TextAlign.end,
+              style: style,
+            ),
+          ),
+          const SizedBox(width: Spacing.md),
+          const SizedBox(width: _statusColumn),
+        ],
+      ),
+    );
+  }
+}
+
 /// A single round row in a CO₂/O₂ table, shared by both table types.
 class RoundListItem extends StatelessWidget {
   const RoundListItem({
@@ -41,6 +133,7 @@ class RoundListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
+    final isActive = state == RoundItemState.active;
 
     return AnimatedContainer(
       duration: Durations.normal,
@@ -48,13 +141,9 @@ class RoundListItem extends StatelessWidget {
         horizontal: Spacing.lg,
         vertical: Spacing.md,
       ),
-      decoration: BoxDecoration(
-        color: state == RoundItemState.active ? c.primarySurface : c.surface,
-        border: Border.all(
-          color: state == RoundItemState.active ? c.primary : c.border,
-        ),
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
+      // A tint rather than a border: inside a single card, a row that draws
+      // its own outline reads as a card again.
+      color: isActive ? c.primarySurface : Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,19 +153,16 @@ class RoundListItem extends StatelessWidget {
                 l10n.tablesRoundLabel(number),
                 style: BreathLabTypography.bodySm.copyWith(
                   color: _labelColor(c),
-                  fontWeight: FontWeight.w600,
                 ),
               ),
               const Spacer(),
               _RoundStat(
-                label: l10n.tablesHoldLabel,
                 value: formatRoundMs(round.holdMs),
                 c: c,
                 dimmed: state != RoundItemState.completed,
               ),
-              const SizedBox(width: Spacing.xl),
+              const SizedBox(width: Spacing.md),
               _RoundStat(
-                label: l10n.tablesRestLabel,
                 value: formatRoundMs(round.restMs),
                 c: c,
                 dimmed: state != RoundItemState.completed,
@@ -85,7 +171,7 @@ class RoundListItem extends StatelessWidget {
               _StatusIndicator(state: state, c: c),
             ],
           ),
-          if (state == RoundItemState.active) ...[
+          if (isActive) ...[
             const SizedBox(height: Spacing.md),
             Center(
               child: Column(
@@ -132,33 +218,26 @@ class RoundListItem extends StatelessWidget {
 
 class _RoundStat extends StatelessWidget {
   const _RoundStat({
-    required this.label,
     required this.value,
     required this.c,
     required this.dimmed,
   });
 
-  final String label;
   final String value;
   final BreathLabColorScheme c;
   final bool dimmed;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          label,
-          style: BreathLabTypography.label.copyWith(color: c.textTertiary),
+    return SizedBox(
+      width: _statColumn,
+      child: Text(
+        value,
+        textAlign: TextAlign.end,
+        style: BreathLabTypography.statSm.copyWith(
+          color: dimmed ? c.textTertiary : c.textPrimary,
         ),
-        Text(
-          value,
-          style: BreathLabTypography.statSm.copyWith(
-            color: dimmed ? c.textTertiary : c.textPrimary,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -175,14 +254,14 @@ class _StatusIndicator extends StatelessWidget {
       RoundItemState.completed => Icon(
         Icons.check_circle,
         color: c.primary,
-        size: 20,
+        size: _statusColumn,
       ),
       RoundItemState.active => Icon(
         Icons.arrow_forward,
         color: c.primary,
-        size: 20,
+        size: _statusColumn,
       ),
-      RoundItemState.upcoming => const SizedBox(width: 20),
+      RoundItemState.upcoming => const SizedBox(width: _statusColumn),
     };
   }
 }
