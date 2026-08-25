@@ -94,6 +94,7 @@ class _ResultViewState extends ConsumerState<ResultView>
     ref.read(selectedLungVolumeProvider.notifier).state = null;
     ref.read(selectedTagIdsProvider.notifier).state = const {};
     ref.read(pendingCustomTagsProvider.notifier).state = const [];
+    ref.read(pendingNoteProvider.notifier).state = '';
   }
 
   Future<void> _save() async {
@@ -102,6 +103,7 @@ class _ResultViewState extends ConsumerState<ResultView>
     try {
       final timerState = ref.read(timerProvider);
       final durationMs = timerState.holdElapsed.inMilliseconds;
+      final note = ref.read(pendingNoteProvider).trim();
 
       final LungVolume lungVolume =
           ref.read(selectedLungVolumeProvider) ??
@@ -127,6 +129,7 @@ class _ResultViewState extends ConsumerState<ResultView>
           type: HoldType.max,
           lungVolume: lungVolume,
           prepMode: timerState.prepMode,
+          notes: note.isEmpty ? null : note,
           isPb: isPb,
         ),
       );
@@ -272,6 +275,10 @@ class _ResultViewState extends ConsumerState<ResultView>
             // Tag chips
             const TagChipRow(),
 
+            const SizedBox(height: Spacing.lg),
+
+            const _NoteField(),
+
             const SizedBox(height: Spacing.xxxl),
 
             // Lung volume selector
@@ -317,6 +324,121 @@ class _ResultViewState extends ConsumerState<ResultView>
           ],
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Note field
+// ---------------------------------------------------------------------------
+
+/// Writes `Hold.notes`, which until now had a column, a model field and a
+/// read-only display in the detail sheet — and no way at all to put
+/// anything in it.
+///
+/// Collapsed by default. The result screen is already the busiest surface
+/// in the app and most holds do not want a note; an always-open text box
+/// would read as a field waiting to be filled in before Save.
+class _NoteField extends ConsumerStatefulWidget {
+  const _NoteField();
+
+  @override
+  ConsumerState<_NoteField> createState() => _NoteFieldState();
+}
+
+class _NoteFieldState extends ConsumerState<_NoteField> {
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+  bool _expanded = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _expand() {
+    setState(() => _expanded = true);
+    // Opening the field and then making the user tap it again is one tap
+    // too many for something already behind a disclosure.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _focusNode.requestFocus();
+    });
+  }
+
+  void _collapse() {
+    _controller.clear();
+    ref.read(pendingNoteProvider.notifier).state = '';
+    setState(() => _expanded = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+
+    if (!_expanded) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: TextButton.icon(
+          onPressed: _expand,
+          icon: Icon(Icons.add, size: 16, color: c.textSecondary),
+          label: Text(
+            l10n.resultAddNote,
+            style: BreathLabTypography.button.copyWith(color: c.textSecondary),
+          ),
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: Spacing.sm),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            onChanged: (value) =>
+                ref.read(pendingNoteProvider.notifier).state = value,
+            maxLines: 3,
+            minLines: 1,
+            style: BreathLabTypography.bodyMd.copyWith(color: c.textPrimary),
+            decoration: InputDecoration(
+              hintText: l10n.resultNoteHint,
+              hintStyle: BreathLabTypography.bodyMd.copyWith(
+                color: c.textTertiary,
+              ),
+              filled: true,
+              fillColor: c.surfaceElevated,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: Spacing.md,
+                vertical: Spacing.md,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(Radius.sm),
+                borderSide: BorderSide(color: c.border, width: 0.5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(Radius.sm),
+                borderSide: BorderSide(color: c.border, width: 0.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(Radius.sm),
+                borderSide: BorderSide(color: c.primary, width: 0.5),
+              ),
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: _collapse,
+          tooltip: l10n.resultRemoveNote,
+          icon: Icon(Icons.close, size: 18, color: c.textTertiary),
+        ),
+      ],
     );
   }
 }

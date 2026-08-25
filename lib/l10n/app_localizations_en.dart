@@ -442,6 +442,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get resultAddNote => 'Add a note';
+
+  @override
+  String get resultNoteHint => 'How did it feel?';
+
+  @override
+  String get resultRemoveNote => 'Remove note';
+
+  @override
   String get resultNewPbBadge => 'NEW PB';
 
   @override

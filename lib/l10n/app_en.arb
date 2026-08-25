@@ -559,6 +559,18 @@
       }
     }
   },
+  "resultAddNote": "Add a note",
+  "@resultAddNote": {
+    "description": "Collapsed affordance on the result screen that expands into the notes field"
+  },
+  "resultNoteHint": "How did it feel?",
+  "@resultNoteHint": {
+    "description": "Placeholder inside the result screen notes field"
+  },
+  "resultRemoveNote": "Remove note",
+  "@resultRemoveNote": {
+    "description": "Tooltip on the button that collapses the notes field and discards what was typed"
+  },
   "resultNewPbBadge": "NEW PB",
   "@resultNewPbBadge": {
     "description": "Pill shown above the duration on the result screen when the hold beat the previous best"

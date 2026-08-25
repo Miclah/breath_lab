@@ -901,6 +901,24 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Collapsed affordance on the result screen that expands into the notes field
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note'**
+  String get resultAddNote;
+
+  /// Placeholder inside the result screen notes field
+  ///
+  /// In en, this message translates to:
+  /// **'How did it feel?'**
+  String get resultNoteHint;
+
+  /// Tooltip on the button that collapses the notes field and discards what was typed
+  ///
+  /// In en, this message translates to:
+  /// **'Remove note'**
+  String get resultRemoveNote;
+
   /// Pill shown above the duration on the result screen when the hold beat the previous best
   ///
   /// In en, this message translates to:

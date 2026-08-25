@@ -444,6 +444,15 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get resultAddNote => 'Pridať poznámku';
+
+  @override
+  String get resultNoteHint => 'Aké to bolo?';
+
+  @override
+  String get resultRemoveNote => 'Odstrániť poznámku';
+
+  @override
   String get resultNewPbBadge => 'NOVÝ REKORD';
 
   @override

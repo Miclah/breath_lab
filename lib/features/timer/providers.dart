@@ -115,6 +115,11 @@ final todaysHoldsProvider = Provider<List<Hold>>((ref) {
   return todaysHolds(holds);
 });
 
+/// Free text typed into the result screen's note field, before the hold is
+/// saved. Empty means no note — `Hold.notes` stays null rather than storing
+/// a blank string.
+final pendingNoteProvider = StateProvider<String>((ref) => '');
+
 /// The most recent saved max hold — the "last" a fresh result is compared
 /// against. Null before the very first one.
 ///
