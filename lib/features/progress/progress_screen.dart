@@ -47,13 +47,11 @@ class ProgressScreen extends ConsumerWidget {
 
           return AdaptivePage(
             maxWidth: ContentWidth.chart,
-            padding: EdgeInsets.zero,
             side: split ? const _ProgressSide() : null,
-            // The ListView keeps its own padding rather than handing the
-            // horizontal half to the page: inside the scrollable is where it
-            // was, and moving it out would shift the scrollbar.
+            // Vertical only. The horizontal margin belongs to the page now,
+            // so the two stop stacking into a 40 px inset on a phone.
             child: ListView(
-              padding: const EdgeInsets.all(Spacing.xl),
+              padding: const EdgeInsets.symmetric(vertical: Spacing.xl),
               children: [
                 if (!split) ...[
                   const StatCardRow(),
@@ -81,11 +79,7 @@ class _ProgressSide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.only(
-        top: Spacing.xl,
-        bottom: Spacing.xl,
-        right: Spacing.xl,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: Spacing.xl),
       children: const [
         StatCardRow(axis: Axis.vertical),
         SizedBox(height: Spacing.xxl),

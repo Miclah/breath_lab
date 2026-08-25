@@ -57,11 +57,7 @@ class SectionIndex extends StatelessWidget {
     final c = context.appColors;
 
     return ListView(
-      padding: const EdgeInsets.only(
-        top: Spacing.xl,
-        bottom: Spacing.xl,
-        right: Spacing.xl,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: Spacing.xl),
       children: [
         Padding(
           padding: const EdgeInsets.only(left: Spacing.md, bottom: Spacing.sm),

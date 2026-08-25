@@ -71,14 +71,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         builder: (context, constraints) {
           final split = AdaptivePage.showsSide(
             constraints.maxWidth,
-            maxWidth: ContentWidth.reading,
+            maxWidth: ContentWidth.form,
           );
 
-          // The section rows pad themselves, so the page adds none of its
-          // own — the two would stack.
+          // Design §Layout puts Settings at 520, not the 600 default: it is
+          // a list of rows to tap through, and rows get harder to associate
+          // with their controls the wider they run.
+          //
+          // The page keeps the edge margin. The `Spacing.lg` the section
+          // rows carry is row inset — the gap between a row's border and its
+          // label — not page padding, so the two are meant to add up.
           return AdaptivePage(
-            maxWidth: ContentWidth.reading,
-            padding: EdgeInsets.zero,
+            maxWidth: ContentWidth.form,
             side: !split ? null : SectionIndex(sections: sections),
             // A Column in a scroll view rather than a ListView: the index
             // scrolls to a section by its key, and a lazy list has no

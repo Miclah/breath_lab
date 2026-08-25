@@ -63,7 +63,7 @@ class TablesScreen extends ConsumerWidget {
           // share before this screen sees any.
           final split = AdaptivePage.showsSide(
             constraints.maxWidth,
-            maxWidth: ContentWidth.reading,
+            maxWidth: ContentWidth.list,
           );
           return _body(context, ref, l10n, split);
         },
@@ -86,15 +86,19 @@ class TablesScreen extends ConsumerWidget {
     final session = ref.watch(tableSessionProvider);
     final sessionActive = !session.isIdle;
 
-    // Every row below pads itself, so the page adds none of its own.
+    // Design §Layout caps the round list at 480. Eight short rows do not get
+    // easier to read wider — they get further from the label that says which
+    // column is which.
+    //
+    // Page padding is the page's now; what the rows below still carry is row
+    // inset, which is meant to add to it rather than replace it.
     return AdaptivePage(
-      maxWidth: ContentWidth.reading,
-      padding: EdgeInsets.zero,
+      maxWidth: ContentWidth.list,
       side: !split ? null : _TablesSide(maxMs: maxMsAsync.valueOrNull),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(Spacing.lg),
+            padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
             child: _TablePillToggle(enabled: !sessionActive),
           ),
           Expanded(
@@ -133,22 +137,13 @@ class TablesScreen extends ConsumerWidget {
                       // it — otherwise the same fact would appear twice.
                       if (!split)
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            Spacing.lg,
-                            0,
-                            Spacing.lg,
-                            Spacing.lg,
-                          ),
+                          padding: const EdgeInsets.only(bottom: Spacing.lg),
                           child: TableInfoPanel(maxMs: maxMs),
                         ),
                       Expanded(
                         child: BottomScrollFade(
                           child: ListView.separated(
-                            padding: const EdgeInsets.only(
-                              left: Spacing.lg,
-                              right: Spacing.lg,
-                              bottom: Spacing.xl,
-                            ),
+                            padding: const EdgeInsets.only(bottom: Spacing.xl),
                             itemCount: rounds.length,
                             separatorBuilder: (_, _) =>
                                 const SizedBox(height: Spacing.sm),
@@ -184,23 +179,17 @@ class TablesScreen extends ConsumerWidget {
                       ),
                     ],
                     const SizedBox(height: Spacing.lg),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.lg,
-                      ),
-                      child: _SessionActionButton(
-                        sessionActive: sessionActive,
-                        isDone: session.isDone,
-                        l10n: l10n,
-                        onStart: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .start(selectedType, rounds, maxMs),
-                        onReset: () =>
-                            ref.read(tableSessionProvider.notifier).reset(),
-                        onStop: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .stopSession(),
-                      ),
+                    _SessionActionButton(
+                      sessionActive: sessionActive,
+                      isDone: session.isDone,
+                      l10n: l10n,
+                      onStart: () => ref
+                          .read(tableSessionProvider.notifier)
+                          .start(selectedType, rounds, maxMs),
+                      onReset: () =>
+                          ref.read(tableSessionProvider.notifier).reset(),
+                      onStop: () =>
+                          ref.read(tableSessionProvider.notifier).stopSession(),
                     ),
                     const SizedBox(height: Spacing.lg),
                   ],
@@ -360,7 +349,7 @@ class _TablesSide extends StatelessWidget {
   Widget build(BuildContext context) {
     if (maxMs == null) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(top: Spacing.lg, right: Spacing.lg),
+      padding: const EdgeInsets.only(top: Spacing.lg),
       child: TableInfoPanel(maxMs: maxMs!, stacked: true),
     );
   }
