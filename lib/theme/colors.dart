@@ -19,6 +19,10 @@ class BreathLabColorScheme {
     required this.surfaceHover,
     required this.border,
     required this.borderHover,
+    required this.panelPrimary,
+    required this.panelBorder,
+    required this.quietBorder,
+    required this.insetFill,
     required this.ringTrack,
     required this.textPrimary,
     required this.textSecondary,
@@ -51,6 +55,34 @@ class BreathLabColorScheme {
   final Color surfaceHover;
   final Color border;
   final Color borderHover;
+
+  /// Fill of the primary panel — the one thing that matters on a screen.
+  ///
+  /// The four surface greys it replaces (`canvas`, `surface`,
+  /// `surfaceElevated`, `surfaceHover`) sat inside nine points of lightness
+  /// and formed an *elevation ladder*: every step lighter than the last. That
+  /// gives every card the same weight and leaves a screen with no subject —
+  /// the Progress screen was five boxes that looked identical because at the
+  /// token level they were.
+  ///
+  /// Read these through `Surfaces`, not directly. The role is the API; the
+  /// value is an implementation detail of it.
+  final Color panelPrimary;
+
+  /// Border of the primary panel, on three sides. The fourth — the top — is
+  /// a teal hairline the role draws itself.
+  final Color panelBorder;
+
+  /// Border of a quiet panel, which has no fill at all. An outline on the
+  /// field is what lets a panel recede without disappearing; with everything
+  /// filled, nothing could be quiet.
+  final Color quietBorder;
+
+  /// Fill of an inset — deliberately *darker* than the field in dark mode.
+  ///
+  /// Depth by recessing rather than by elevating, which is also what stops
+  /// nested containers from trending pale.
+  final Color insetFill;
 
   /// The unfilled part of the timer ring.
   ///
@@ -126,6 +158,10 @@ class BreathLabColors {
     surfaceHover: Color(0xFF222A38),
     border: Color(0xFF252D3A),
     borderHover: Color(0xFF354050),
+    panelPrimary: Color(0xFF131B25),
+    panelBorder: Color(0xFF1E2733),
+    quietBorder: Color(0xFF1F2836),
+    insetFill: Color(0xFF070A0F),
     ringTrack: Color(0xFF545F75),
     textPrimary: Color(0xFFE8ECF1),
     textSecondary: Color(0xFF8B95A5),
@@ -159,6 +195,10 @@ class BreathLabColors {
     surfaceHover: Color(0xFFE8EAEF),
     border: Color(0xFFD8DCE3),
     borderHover: Color(0xFFB8BFC9),
+    panelPrimary: Color(0xFFFFFFFF),
+    panelBorder: Color(0xFFD8DCE3),
+    quietBorder: Color(0xFFD8DCE3),
+    insetFill: Color(0xFFE8EAEF),
     ringTrack: Color(0xFF838D9C),
     textPrimary: Color(0xFF1A1D23),
     textSecondary: Color(0xFF5A6474),
