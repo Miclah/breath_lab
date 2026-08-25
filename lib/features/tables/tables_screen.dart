@@ -14,6 +14,7 @@ import '../../theme/tokens.dart';
 import 'providers.dart';
 import 'round_list_item.dart';
 import 'session_summary_view.dart';
+import 'table_info_panel.dart';
 import 'table_session_notifier.dart';
 
 List<TableRoundPlan> _computeRounds(
@@ -53,6 +54,29 @@ class TablesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navTables)),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Asked of the page, not the window: the navigation rail takes its
+          // share before this screen sees any.
+          final split = AdaptivePage.showsSide(
+            constraints.maxWidth,
+            maxWidth: ContentWidth.reading,
+          );
+          return _body(context, ref, l10n, split);
+        },
+      ),
+    );
+  }
+
+  Widget _body(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    bool split,
+  ) {
     final selectedType = ref.watch(selectedTableTypeProvider);
     final maxMsAsync = ref.watch(currentMaxMsProvider);
     final co2Config =
@@ -62,120 +86,129 @@ class TablesScreen extends ConsumerWidget {
     final session = ref.watch(tableSessionProvider);
     final sessionActive = !session.isIdle;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTables)),
-      // Every row below pads itself, so the page adds none of its own.
-      body: AdaptivePage(
-        maxWidth: ContentWidth.reading,
-        padding: EdgeInsets.zero,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(Spacing.lg),
-              child: _TablePillToggle(enabled: !sessionActive),
-            ),
-            Expanded(
-              child: maxMsAsync.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => const SizedBox.shrink(),
-                data: (maxMs) {
-                  if (maxMs == null) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Spacing.xxl,
-                        ),
-                        child: Text(
-                          l10n.tablesNoMaxYet,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+    // Every row below pads itself, so the page adds none of its own.
+    return AdaptivePage(
+      maxWidth: ContentWidth.reading,
+      padding: EdgeInsets.zero,
+      side: !split ? null : _TablesSide(maxMs: maxMsAsync.valueOrNull),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(Spacing.lg),
+            child: _TablePillToggle(enabled: !sessionActive),
+          ),
+          Expanded(
+            child: maxMsAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => const SizedBox.shrink(),
+              data: (maxMs) {
+                if (maxMs == null) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacing.xxl,
                       ),
-                    );
-                  }
-                  final rounds = sessionActive
-                      ? session.rounds
-                      : _computeRounds(
-                          selectedType,
-                          maxMs,
-                          co2Config: co2Config,
-                          o2Config: o2Config,
-                        );
-                  return Column(
-                    children: [
-                      if (session.isDone)
-                        Expanded(child: SessionSummaryView(session: session))
-                      else ...[
-                        _InfoCard(maxMs: maxMs, l10n: l10n),
-                        Expanded(
-                          child: BottomScrollFade(
-                            child: ListView.separated(
-                              padding: const EdgeInsets.only(
-                                left: Spacing.lg,
-                                right: Spacing.lg,
-                                bottom: Spacing.xl,
-                              ),
-                              itemCount: rounds.length,
-                              separatorBuilder: (_, _) =>
-                                  const SizedBox(height: Spacing.sm),
-                              itemBuilder: (context, i) {
-                                final itemState = _stateFor(
-                                  session,
-                                  sessionActive,
-                                  i,
-                                );
-                                final isActive =
-                                    itemState == RoundItemState.active;
-                                return RoundListItem(
-                                  number: i + 1,
-                                  round: rounds[i],
-                                  state: itemState,
-                                  elapsedMs: isActive
-                                      ? session.elapsed.inMilliseconds
-                                      : null,
-                                  phaseLabel: !isActive
-                                      ? null
-                                      : session.isHolding
-                                      ? l10n.tablesPhaseLabelHold
-                                      : l10n.tablesPhaseLabelRest,
-                                  onStopHold: isActive && session.isHolding
-                                      ? () => ref
-                                            .read(tableSessionProvider.notifier)
-                                            .stopHoldEarly()
-                                      : null,
-                                );
-                              },
+                      child: Text(
+                        l10n.tablesNoMaxYet,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  );
+                }
+                final rounds = sessionActive
+                    ? session.rounds
+                    : _computeRounds(
+                        selectedType,
+                        maxMs,
+                        co2Config: co2Config,
+                        o2Config: o2Config,
+                      );
+                return Column(
+                  children: [
+                    if (session.isDone)
+                      Expanded(child: SessionSummaryView(session: session))
+                    else ...[
+                      // Inline only where there is no side column to hold
+                      // it — otherwise the same fact would appear twice.
+                      if (!split)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            Spacing.lg,
+                            0,
+                            Spacing.lg,
+                            Spacing.lg,
+                          ),
+                          child: TableInfoPanel(maxMs: maxMs),
+                        ),
+                      Expanded(
+                        child: BottomScrollFade(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(
+                              left: Spacing.lg,
+                              right: Spacing.lg,
+                              bottom: Spacing.xl,
                             ),
+                            itemCount: rounds.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: Spacing.sm),
+                            itemBuilder: (context, i) {
+                              final itemState = _stateFor(
+                                session,
+                                sessionActive,
+                                i,
+                              );
+                              final isActive =
+                                  itemState == RoundItemState.active;
+                              return RoundListItem(
+                                number: i + 1,
+                                round: rounds[i],
+                                state: itemState,
+                                elapsedMs: isActive
+                                    ? session.elapsed.inMilliseconds
+                                    : null,
+                                phaseLabel: !isActive
+                                    ? null
+                                    : session.isHolding
+                                    ? l10n.tablesPhaseLabelHold
+                                    : l10n.tablesPhaseLabelRest,
+                                onStopHold: isActive && session.isHolding
+                                    ? () => ref
+                                          .read(tableSessionProvider.notifier)
+                                          .stopHoldEarly()
+                                    : null,
+                              );
+                            },
                           ),
                         ),
-                      ],
-                      const SizedBox(height: Spacing.lg),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Spacing.lg,
-                        ),
-                        child: _SessionActionButton(
-                          sessionActive: sessionActive,
-                          isDone: session.isDone,
-                          l10n: l10n,
-                          onStart: () => ref
-                              .read(tableSessionProvider.notifier)
-                              .start(selectedType, rounds, maxMs),
-                          onReset: () =>
-                              ref.read(tableSessionProvider.notifier).reset(),
-                          onStop: () => ref
-                              .read(tableSessionProvider.notifier)
-                              .stopSession(),
-                        ),
                       ),
-                      const SizedBox(height: Spacing.lg),
                     ],
-                  );
-                },
-              ),
+                    const SizedBox(height: Spacing.lg),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacing.lg,
+                      ),
+                      child: _SessionActionButton(
+                        sessionActive: sessionActive,
+                        isDone: session.isDone,
+                        l10n: l10n,
+                        onStart: () => ref
+                            .read(tableSessionProvider.notifier)
+                            .start(selectedType, rounds, maxMs),
+                        onReset: () =>
+                            ref.read(tableSessionProvider.notifier).reset(),
+                        onStop: () => ref
+                            .read(tableSessionProvider.notifier)
+                            .stopSession(),
+                      ),
+                    ),
+                    const SizedBox(height: Spacing.lg),
+                  ],
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -318,31 +351,17 @@ class _PillSegment extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({required this.maxMs, required this.l10n});
+class _TablesSide extends StatelessWidget {
+  const _TablesSide({required this.maxMs});
 
-  final int maxMs;
-  final AppLocalizations l10n;
+  final int? maxMs;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.appColors;
+    if (maxMs == null) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Spacing.lg, 0, Spacing.lg, Spacing.lg),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(Spacing.md),
-        decoration: BoxDecoration(
-          color: c.surfaceElevated,
-          borderRadius: BorderRadius.circular(Radius.md),
-        ),
-        child: Text(
-          l10n.tablesBasedOnMax(formatRoundMs(maxMs)),
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
-        ),
-      ),
+      padding: const EdgeInsets.only(top: Spacing.lg, right: Spacing.lg),
+      child: TableInfoPanel(maxMs: maxMs!, stacked: true),
     );
   }
 }

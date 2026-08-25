@@ -444,6 +444,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get tablesSessionSummaryTitle => 'Toto sedenie';
+
+  @override
   String get timerSideLastSession => 'Posledné sedenie';
 
   @override

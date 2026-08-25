@@ -442,6 +442,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get tablesSessionSummaryTitle => 'This session';
+
+  @override
   String get timerSideLastSession => 'Last session';
 
   @override

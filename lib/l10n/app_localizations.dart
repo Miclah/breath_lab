@@ -901,6 +901,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Heading of the tables side panel summarising the session that is about to run
+  ///
+  /// In en, this message translates to:
+  /// **'This session'**
+  String get tablesSessionSummaryTitle;
+
   /// Heading of the timer side panel card summarising the previous training day
   ///
   /// In en, this message translates to:

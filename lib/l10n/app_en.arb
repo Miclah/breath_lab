@@ -559,6 +559,10 @@
       }
     }
   },
+  "tablesSessionSummaryTitle": "This session",
+  "@tablesSessionSummaryTitle": {
+    "description": "Heading of the tables side panel summarising the session that is about to run"
+  },
   "timerSideLastSession": "Last session",
   "@timerSideLastSession": {
     "description": "Heading of the timer side panel card summarising the previous training day"
