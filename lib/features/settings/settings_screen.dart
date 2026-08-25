@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
+import '../../theme/tokens.dart';
 import 'about_section.dart';
 import 'ambient_section.dart';
 import 'appearance_section.dart';
@@ -23,7 +24,11 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navSettings)),
-      body: ContentMaxWidth(
+      // The section rows pad themselves, so the page adds none of its own
+      // — the two would stack.
+      body: AdaptivePage(
+        maxWidth: ContentWidth.reading,
+        padding: EdgeInsets.zero,
         child: ListView(
           children: [
             SectionHeader(title: l10n.settingsTrainingSection),
