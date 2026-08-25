@@ -19,6 +19,7 @@ class BreathLabColorScheme {
     required this.surfaceHover,
     required this.border,
     required this.borderHover,
+    required this.ringTrack,
     required this.textPrimary,
     required this.textSecondary,
     required this.textTertiary,
@@ -46,6 +47,17 @@ class BreathLabColorScheme {
   final Color surfaceHover;
   final Color border;
   final Color borderHover;
+
+  /// The unfilled part of the timer ring.
+  ///
+  /// Not a border tint. A single alpha over [border] cannot serve two
+  /// canvases: the same value that reads on the light canvas composites to
+  /// almost nothing on `#0A0E14`, which left the idle ring invisible in the
+  /// mode the app is used in most. Each theme names its own colour, chosen
+  /// so the track clears 3:1 against its canvas — the contrast floor for a
+  /// graphical object — while the teal arc sits near 5.75:1 in both. The
+  /// arc stays the louder of the two by the same margin either way.
+  final Color ringTrack;
   final Color textPrimary;
   final Color textSecondary;
   final Color textTertiary;
@@ -82,6 +94,7 @@ class BreathLabColors {
     surfaceHover: Color(0xFF222A38),
     border: Color(0xFF252D3A),
     borderHover: Color(0xFF354050),
+    ringTrack: Color(0xFF545F75),
     textPrimary: Color(0xFFE8ECF1),
     textSecondary: Color(0xFF8B95A5),
     textTertiary: Color(0xFF5A6474),
@@ -110,6 +123,7 @@ class BreathLabColors {
     surfaceHover: Color(0xFFE8EAEF),
     border: Color(0xFFD8DCE3),
     borderHover: Color(0xFFB8BFC9),
+    ringTrack: Color(0xFF838D9C),
     textPrimary: Color(0xFF1A1D23),
     textSecondary: Color(0xFF5A6474),
     textTertiary: Color(0xFF8B95A5),
