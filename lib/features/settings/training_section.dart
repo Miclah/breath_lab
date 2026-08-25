@@ -136,10 +136,10 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
           controller: _controller,
           focusNode: _focusNode,
           keyboardType: TextInputType.datetime,
-          style: BreathLabTypography.statMd.copyWith(color: c.textPrimary),
+          style: BreathLabTypography.numericMd.copyWith(color: c.textPrimary),
           decoration: InputDecoration(
             hintText: 'mm:ss',
-            hintStyle: BreathLabTypography.statMd.copyWith(
+            hintStyle: BreathLabTypography.numericMd.copyWith(
               color: c.textTertiary,
             ),
             errorText: _error,

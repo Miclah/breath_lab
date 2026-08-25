@@ -157,7 +157,7 @@ class _SummaryStat extends StatelessWidget {
         const SizedBox(height: Spacing.xxs),
         Text(
           value,
-          style: BreathLabTypography.statHero.copyWith(color: c.textPrimary),
+          style: BreathLabTypography.displayMd.copyWith(color: c.textPrimary),
         ),
       ],
     );

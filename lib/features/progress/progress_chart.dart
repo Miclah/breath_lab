@@ -86,7 +86,7 @@ class ProgressChart extends ConsumerWidget {
               ? Center(
                   child: Text(
                     l10n.progressChartEmpty,
-                    style: BreathLabTypography.bodySm.copyWith(
+                    style: BreathLabTypography.micro.copyWith(
                       color: c.textTertiary,
                     ),
                   ),
@@ -160,9 +160,7 @@ class ProgressChart extends ConsumerWidget {
             interval: yInterval,
             getTitlesWidget: (value, meta) => Text(
               _fmtSeconds(value),
-              style: BreathLabTypography.caption.copyWith(
-                color: c.textTertiary,
-              ),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             ),
           ),
         ),
@@ -176,7 +174,7 @@ class ProgressChart extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: Spacing.xs),
                 child: Text(
                   DateFormat('d MMM').format(date),
-                  style: BreathLabTypography.caption.copyWith(
+                  style: BreathLabTypography.micro.copyWith(
                     color: c.textTertiary,
                   ),
                 ),
@@ -255,7 +253,7 @@ class _AverageLegend extends StatelessWidget {
         const SizedBox(width: Spacing.xs),
         Text(
           label,
-          style: BreathLabTypography.caption.copyWith(color: c.textTertiary),
+          style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],
     );

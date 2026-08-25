@@ -46,7 +46,7 @@ class TableInfoPanel extends StatelessWidget {
     // times and leaves the addition to them.
     final totalMs = rounds.fold<int>(0, (sum, r) => sum + r.holdMs + r.restMs);
 
-    final style = BreathLabTypography.bodySm.copyWith(color: c.textSecondary);
+    final style = BreathLabTypography.body.copyWith(color: c.textSecondary);
     final body = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,9 +77,8 @@ class TableInfoPanel extends StatelessWidget {
               children: [
                 Text(
                   l10n.tablesSessionSummaryTitle.toUpperCase(),
-                  style: BreathLabTypography.caption.copyWith(
+                  style: BreathLabTypography.section.copyWith(
                     color: c.textTertiary,
-                    letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: Spacing.sm),

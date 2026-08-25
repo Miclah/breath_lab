@@ -151,7 +151,7 @@ class RoundListItem extends StatelessWidget {
             children: [
               Text(
                 l10n.tablesRoundLabel(number),
-                style: BreathLabTypography.bodySm.copyWith(
+                style: BreathLabTypography.label.copyWith(
                   color: _labelColor(c),
                 ),
               ),
@@ -178,7 +178,7 @@ class RoundListItem extends StatelessWidget {
                 children: [
                   Text(
                     elapsedMs == null ? '--:--' : formatRoundMs(elapsedMs!),
-                    style: BreathLabTypography.timerDisplay.copyWith(
+                    style: BreathLabTypography.displayMd.copyWith(
                       color: c.primaryText,
                     ),
                   ),
@@ -186,7 +186,7 @@ class RoundListItem extends StatelessWidget {
                     const SizedBox(height: Spacing.xxs),
                     Text(
                       phaseLabel!,
-                      style: BreathLabTypography.bodySm.copyWith(
+                      style: BreathLabTypography.label.copyWith(
                         color: c.primaryText,
                       ),
                     ),
@@ -234,7 +234,7 @@ class _RoundStat extends StatelessWidget {
       child: Text(
         value,
         textAlign: TextAlign.end,
-        style: BreathLabTypography.statSm.copyWith(
+        style: BreathLabTypography.numericSm.copyWith(
           color: dimmed ? c.textTertiary : c.textPrimary,
         ),
       ),

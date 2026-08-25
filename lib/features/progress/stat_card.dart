@@ -41,7 +41,7 @@ class StatCard extends StatelessWidget {
           const SizedBox(height: Spacing.sm),
           Text(
             value,
-            style: BreathLabTypography.statHero.copyWith(
+            style: BreathLabTypography.displayMd.copyWith(
               color: valueColor ?? c.textPrimary,
             ),
           ),

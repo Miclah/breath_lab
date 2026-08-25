@@ -66,7 +66,7 @@ class _RangePill extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: BreathLabTypography.badge.copyWith(
+          style: BreathLabTypography.micro.copyWith(
             color: selected ? c.primaryText : c.textTertiary,
           ),
         ),

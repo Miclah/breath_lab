@@ -76,7 +76,7 @@ class CalendarHeatmap extends ConsumerWidget {
         firstWeekStart.add(Duration(days: 7 * w)),
     ];
 
-    final axisStyle = BreathLabTypography.caption.copyWith(
+    final axisStyle = BreathLabTypography.micro.copyWith(
       color: c.textTertiary,
       fontSize: 10,
     );
@@ -97,10 +97,7 @@ class CalendarHeatmap extends ConsumerWidget {
         children: [
           Text(
             l10n.progressHeatmapTitle.toUpperCase(),
-            style: BreathLabTypography.caption.copyWith(
-              color: c.textSecondary,
-              letterSpacing: 0.5,
-            ),
+            style: BreathLabTypography.section.copyWith(color: c.textTertiary),
           ),
           const SizedBox(height: Spacing.sm),
           LayoutBuilder(
@@ -217,7 +214,7 @@ class CalendarHeatmap extends ConsumerWidget {
             children: [
               Text(
                 l10n.progressHeatmapLegendLess,
-                style: BreathLabTypography.caption.copyWith(
+                style: BreathLabTypography.micro.copyWith(
                   color: c.textTertiary,
                 ),
               ),
@@ -236,14 +233,14 @@ class CalendarHeatmap extends ConsumerWidget {
                 ),
               Text(
                 l10n.progressHeatmapLegendMore,
-                style: BreathLabTypography.caption.copyWith(
+                style: BreathLabTypography.micro.copyWith(
                   color: c.textTertiary,
                 ),
               ),
               const Spacer(),
               Text(
                 l10n.progressHeatmapStat(data.totalSessions, data.bestWeekDays),
-                style: BreathLabTypography.caption.copyWith(
+                style: BreathLabTypography.micro.copyWith(
                   color: c.textTertiary,
                 ),
               ),

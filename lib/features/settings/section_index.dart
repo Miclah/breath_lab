@@ -70,10 +70,7 @@ class SectionIndex extends StatelessWidget {
           padding: const EdgeInsets.only(left: Spacing.md, bottom: Spacing.sm),
           child: Text(
             AppLocalizations.of(context)!.settingsJumpTo.toUpperCase(),
-            style: BreathLabTypography.caption.copyWith(
-              color: c.textTertiary,
-              letterSpacing: 0.5,
-            ),
+            style: BreathLabTypography.section.copyWith(color: c.textTertiary),
           ),
         ),
         for (final section in sections.where((s) => s.visible))
@@ -87,7 +84,7 @@ class SectionIndex extends StatelessWidget {
               ),
               child: Text(
                 section.title,
-                style: BreathLabTypography.bodyMd.copyWith(
+                style: BreathLabTypography.body.copyWith(
                   color: c.textSecondary,
                 ),
               ),

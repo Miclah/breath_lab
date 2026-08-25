@@ -110,8 +110,8 @@ class RecentHoldsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          l10n.progressRecentHoldsTitle,
-          style: BreathLabTypography.headingSm.copyWith(color: c.textPrimary),
+          l10n.progressRecentHoldsTitle.toUpperCase(),
+          style: BreathLabTypography.section.copyWith(color: c.textTertiary),
         ),
         const SizedBox(height: Spacing.sm),
         if (recentHolds.isEmpty)
@@ -119,7 +119,7 @@ class RecentHoldsSection extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
             child: Text(
               l10n.historyEmpty,
-              style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             ),
           )
         else

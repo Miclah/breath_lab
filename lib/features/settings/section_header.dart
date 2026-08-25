@@ -31,10 +31,7 @@ class SectionHeader extends StatelessWidget {
       ),
       child: Text(
         title.toUpperCase(),
-        style: BreathLabTypography.label.copyWith(
-          color: c.textSecondary,
-          letterSpacing: 0.5,
-        ),
+        style: BreathLabTypography.section.copyWith(color: c.textTertiary),
       ),
     );
   }

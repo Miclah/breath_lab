@@ -65,7 +65,9 @@ class _SettingsSliderState extends State<SettingsSlider> {
             ),
             Text(
               widget.labelBuilder(displayed),
-              style: BreathLabTypography.statMd.copyWith(color: c.textPrimary),
+              style: BreathLabTypography.numericMd.copyWith(
+                color: c.textPrimary,
+              ),
             ),
           ],
         ),
