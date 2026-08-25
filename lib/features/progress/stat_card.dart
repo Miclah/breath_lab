@@ -21,29 +21,31 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(Spacing.md),
-        decoration: BoxDecoration(
-          color: c.surface,
-          borderRadius: BorderRadius.circular(Radius.md),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: BreathLabTypography.label.copyWith(color: c.textTertiary),
+    // No Expanded here any more: whether the card shares a row or stacks in
+    // a column is the parent's business, and baking the flex in meant the
+    // card could only ever be used one way.
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Spacing.md),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(Radius.md),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: BreathLabTypography.label.copyWith(color: c.textTertiary),
+          ),
+          const SizedBox(height: Spacing.sm),
+          Text(
+            value,
+            style: BreathLabTypography.statHero.copyWith(
+              color: valueColor ?? c.textPrimary,
             ),
-            const SizedBox(height: Spacing.sm),
-            Text(
-              value,
-              style: BreathLabTypography.statHero.copyWith(
-                color: valueColor ?? c.textPrimary,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -19,8 +19,88 @@ const _recentHoldsCount = 10;
 /// Progress tab: stat cards, calendar heatmap, trend chart, and a
 /// recent-holds preview. The full filterable history lives on a screen
 /// pushed from here (there is no dedicated History tab). Per PRD §7.3.
+///
+/// Where each piece goes depends on how much room there is. The heatmap and
+/// the chart are the two things that genuinely improve with width — a
+/// 12-week grid and a time series both read better wider — so they keep the
+/// main column. The stat cards and the recent-holds list do not improve with
+/// width at all; stretched across 900 px they are three short numbers and
+/// ten mostly-empty rows. Those move sideways.
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navProgress)),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Asked of the page, not the window: the navigation rail takes its
+          // share first, and a screen that reads the window lays out for
+          // room it does not have.
+          final split = AdaptivePage.showsSide(
+            constraints.maxWidth,
+            maxWidth: ContentWidth.chart,
+          );
+
+          return AdaptivePage(
+            maxWidth: ContentWidth.chart,
+            padding: EdgeInsets.zero,
+            side: split ? const _ProgressSide() : null,
+            // The ListView keeps its own padding rather than handing the
+            // horizontal half to the page: inside the scrollable is where it
+            // was, and moving it out would shift the scrollbar.
+            child: ListView(
+              padding: const EdgeInsets.all(Spacing.xl),
+              children: [
+                if (!split) ...[
+                  const StatCardRow(),
+                  const SizedBox(height: Spacing.lg),
+                ],
+                const CalendarHeatmap(),
+                const SizedBox(height: Spacing.lg),
+                const ProgressChart(),
+                if (!split) ...[
+                  const SizedBox(height: Spacing.xxl),
+                  const RecentHoldsSection(),
+                ],
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ProgressSide extends StatelessWidget {
+  const _ProgressSide();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.only(
+        top: Spacing.xl,
+        bottom: Spacing.xl,
+        right: Spacing.xl,
+      ),
+      children: const [
+        StatCardRow(axis: Axis.vertical),
+        SizedBox(height: Spacing.xxl),
+        RecentHoldsSection(),
+      ],
+    );
+  }
+}
+
+/// The last ten holds, and the way through to the full history.
+///
+/// Lives in the side column where there is one and in the main column where
+/// there is not, so it is a widget rather than a run of list children.
+class RecentHoldsSection extends ConsumerWidget {
+  const RecentHoldsSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,65 +112,45 @@ class ProgressScreen extends ConsumerWidget {
         .take(_recentHoldsCount)
         .toList();
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navProgress)),
-      // The ListView keeps its own padding rather than handing the
-      // horizontal half to the page: inside the scrollable is where it was,
-      // and moving it out would shift the scrollbar.
-      body: AdaptivePage(
-        maxWidth: ContentWidth.chart,
-        padding: EdgeInsets.zero,
-        child: ListView(
-          padding: const EdgeInsets.all(Spacing.xl),
-          children: [
-            const StatCardRow(),
-            const SizedBox(height: Spacing.lg),
-            const CalendarHeatmap(),
-            const SizedBox(height: Spacing.lg),
-            const ProgressChart(),
-            const SizedBox(height: Spacing.xxl),
-            Text(
-              l10n.progressRecentHoldsTitle,
-              style: BreathLabTypography.headingSm.copyWith(
-                color: c.textPrimary,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.progressRecentHoldsTitle,
+          style: BreathLabTypography.headingSm.copyWith(color: c.textPrimary),
+        ),
+        const SizedBox(height: Spacing.sm),
+        if (recentHolds.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
+            child: Text(
+              l10n.historyEmpty,
+              style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
             ),
-            const SizedBox(height: Spacing.sm),
-            if (recentHolds.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
-                child: Text(
-                  l10n.historyEmpty,
-                  style: BreathLabTypography.bodySm.copyWith(
-                    color: c.textTertiary,
-                  ),
-                ),
-              )
-            else
-              for (final (i, hold) in recentHolds.indexed) ...[
-                if (i > 0)
-                  const Divider(
-                    height: 1,
-                    indent: Spacing.xl,
-                    endIndent: Spacing.xl,
-                  ),
-                HoldListItem(
-                  hold: hold,
-                  onTap: () => showHoldDetail(context, hold),
-                ),
-              ],
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const HistoryScreen()),
-                ),
-                child: Text(l10n.progressViewAllHistory),
+          )
+        else
+          for (final (i, hold) in recentHolds.indexed) ...[
+            if (i > 0)
+              const Divider(
+                height: 1,
+                indent: Spacing.xl,
+                endIndent: Spacing.xl,
               ),
+            HoldListItem(
+              hold: hold,
+              onTap: () => showHoldDetail(context, hold),
             ),
           ],
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const HistoryScreen())),
+            child: Text(l10n.progressViewAllHistory),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
