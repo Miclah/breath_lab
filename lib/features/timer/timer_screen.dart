@@ -1,5 +1,3 @@
-import 'dart:math' show min;
-
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +15,8 @@ import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'result_screen.dart';
 import 'timer_ring.dart';
+import 'timer_side_panel.dart';
+import 'timer_stage.dart';
 import 'timer_status_row.dart';
 import 'todays_holds_row.dart';
 
@@ -79,8 +79,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     final state = ref.watch(timerProvider);
     final maxMs = ref.watch(currentMaxMsProvider).valueOrNull;
     final c = context.appColors;
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final hPad = isDesktop ? Spacing.xxxl : Spacing.xl;
 
     final ringValue = (maxMs == null || maxMs == 0)
         ? 0.0
@@ -99,38 +97,45 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
               ? const ResultView()
               : AdaptivePage(
                   maxWidth: ContentWidth.reading,
-                  padding: EdgeInsets.zero,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: hPad),
-                    child: Column(
+                  // Held open in every state. During PREP and HOLD the slot
+                  // is deliberately empty — Design's "don't crowd the timer
+                  // screen" — but its width stays reserved so the main
+                  // column, and with it the ring, does not slide sideways
+                  // when it empties.
+                  reserveSide: true,
+                  side: state.isIdle ? const TimerSidePanel() : null,
+                  child: TimerStage(
+                    top: state.isIdle
+                        ? const Column(
+                            children: [
+                              TimerStatusRow(),
+                              SizedBox(height: Spacing.md),
+                              PresetChipRow(),
+                            ],
+                          )
+                        : null,
+                    hero: state.isPrep
+                        ? const PrepPhaseWidget()
+                        : _buildRing(context, state, l10n, c, ringValue),
+                    below: Column(
                       children: [
-                        const SizedBox(height: Spacing.lg),
-                        if (state.isIdle) ...[
-                          const TimerStatusRow(),
-                          const SizedBox(height: Spacing.md),
-                          const PresetChipRow(),
-                        ],
-                        Expanded(
-                          child: state.isPrep
-                              ? const PrepPhaseWidget()
-                              : _buildRing(
-                                  context,
-                                  state,
-                                  l10n,
-                                  c,
-                                  isDesktop,
-                                  ringValue,
-                                ),
+                        const SizedBox(height: Spacing.md),
+                        StageBand(
+                          height: TimerStage.contractionBandHeight,
+                          child: state.contractionTime == null
+                              ? null
+                              : _ContractionBadge(time: state.contractionTime!),
                         ),
-                        // Idle only: during PREP and HOLD the screen empties
-                        // on purpose (Design §Don't — "don't crowd the timer
-                        // screen"), and after a hold the row belongs to the
-                        // result view, which owns that state.
-                        if (state.isIdle) ...[
-                          const TodaysHoldsRow(),
-                          const SizedBox(height: Spacing.md),
-                        ],
-                        _buildButton(context, state, l10n, c),
+                        const SizedBox(height: Spacing.sm),
+                        StageBand(
+                          height: TimerStage.holdsBandHeight,
+                          child: state.isIdle ? const TodaysHoldsRow() : null,
+                        ),
+                        const SizedBox(height: Spacing.md),
+                        StageBand(
+                          height: TimerStage.actionBandHeight,
+                          child: _buildButton(context, state, l10n, c),
+                        ),
                         const SizedBox(height: Spacing.xl),
                       ],
                     ),
@@ -141,72 +146,53 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     );
   }
 
+  /// The ring, sized and positioned by [TimerStage] rather than by whatever
+  /// height the surrounding rows happened to leave it.
   Widget _buildRing(
     BuildContext context,
     TimerState state,
     AppLocalizations l10n,
     BreathLabColorScheme c,
-    bool isDesktop,
     double ringValue,
   ) {
-    final timerStyle = Theme.of(
-      context,
-    ).textTheme.displayLarge?.copyWith(fontSize: isDesktop ? 64.0 : null);
-
     final elapsed = state.isIdle ? Duration.zero : state.holdElapsed;
 
-    String? stateLabel;
-    if (state.isHolding) stateLabel = l10n.timerStateLabelHold;
-    if (state.isDone) stateLabel = l10n.timerStateLabelDone;
-
-    // Sized from the space this region actually has, but never past the
-    // design token: letting it grow to fill a large window produced a ~380px
-    // ring that was oversized and still looked stranded, because its size
-    // was never what made it look stranded.
     return LayoutBuilder(
       builder: (context, constraints) {
-        final available = min(constraints.maxWidth, constraints.maxHeight);
-        final ceiling = isDesktop
-            ? TimerRing.expandedDiameter
-            : TimerRing.compactDiameter;
-        // min rather than clamp: on a window too short for even the compact
-        // ring, shrinking beats overflowing.
-        final ringSize = available.isFinite
-            ? min(available * 0.85, ceiling)
-            : null;
+        final diameter = constraints.biggest.shortestSide;
+        final timerStyle = Theme.of(context).textTheme.displayLarge?.copyWith(
+          fontSize: diameter >= TimerRing.expandedDiameter ? 64.0 : null,
+        );
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onDoubleTap: () =>
-                  ref.read(timerProvider.notifier).markContraction(),
-              child: TimerRing(
-                value: ringValue,
-                elapsed: elapsed,
-                size: ringSize,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(formatMmSs(elapsed), style: timerStyle),
-                    if (stateLabel != null) ...[
-                      const SizedBox(height: Spacing.xs),
-                      Text(
-                        stateLabel,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-                      ),
-                    ],
-                  ],
+        return GestureDetector(
+          onDoubleTap: () => ref.read(timerProvider.notifier).markContraction(),
+          child: TimerRing(
+            value: ringValue,
+            elapsed: elapsed,
+            size: diameter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(formatMmSs(elapsed), style: timerStyle),
+                // Reserved, not conditional: a label that appears only while
+                // holding would shift the number inside a ring whose own
+                // centre is fixed.
+                SizedBox(
+                  height: 16,
+                  child: AnimatedSwitcher(
+                    duration: Durations.normal,
+                    child: !state.isHolding
+                        ? const SizedBox.shrink()
+                        : Text(
+                            l10n.timerStateLabelHold,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: c.textTertiary),
+                          ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            if (state.contractionTime != null) ...[
-              const SizedBox(height: Spacing.md),
-              _ContractionBadge(time: state.contractionTime!),
-            ],
-          ],
+          ),
         );
       },
     );
@@ -218,6 +204,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     AppLocalizations l10n,
     BreathLabColorScheme c,
   ) {
+    // PREP has no button of its own — the prep widget carries its own skip
+    // and cancel affordances — but the band stays reserved.
     if (state.isPrep) return const SizedBox.shrink();
 
     if (state.isHolding) {
@@ -242,9 +230,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     // idle — Start button
     return SizedBox(
       width: double.infinity,
-      height: 48,
       child: FilledButton(
         style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(TimerStage.actionBandHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Radius.lg),
           ),
