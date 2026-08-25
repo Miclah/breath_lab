@@ -17,6 +17,7 @@ import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'result_screen.dart';
 import 'timer_ring.dart';
+import 'todays_holds_row.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
@@ -116,6 +117,14 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                                   ringValue,
                                 ),
                         ),
+                        // Idle only: during PREP and HOLD the screen empties
+                        // on purpose (Design §Don't — "don't crowd the timer
+                        // screen"), and after a hold the row belongs to the
+                        // result view, which owns that state.
+                        if (state.isIdle) ...[
+                          const TodaysHoldsRow(),
+                          const SizedBox(height: Spacing.md),
+                        ],
                         _buildButton(context, state, l10n, c),
                         const SizedBox(height: Spacing.xl),
                       ],

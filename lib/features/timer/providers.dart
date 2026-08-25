@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/holds_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../tables/providers.dart'
@@ -103,3 +104,30 @@ final selectedTagIdsProvider = StateProvider<Set<String>>((ref) => const {});
 final pendingCustomTagsProvider = StateProvider<List<String>>(
   (ref) => const [],
 );
+
+/// Today's max holds, oldest first — the session the user is in the middle
+/// of, in the order they did it.
+///
+/// Table rounds are excluded: eight co2 rounds would swamp the row and they
+/// are not what "today's holds" means on the timer screen.
+final todaysHoldsProvider = Provider<List<Hold>>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  return todaysHolds(holds);
+});
+
+/// Pure form of [todaysHoldsProvider], with an injectable clock.
+List<Hold> todaysHolds(List<Hold> holds, {DateTime? now}) {
+  final today = now ?? DateTime.now();
+  final result =
+      holds
+          .where(
+            (h) =>
+                h.type == HoldType.max &&
+                h.createdAt.year == today.year &&
+                h.createdAt.month == today.month &&
+                h.createdAt.day == today.day,
+          )
+          .toList()
+        ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  return result;
+}

@@ -17,6 +17,7 @@ import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
 import 'providers.dart';
 import 'tag_chip_row.dart';
+import 'todays_holds_row.dart';
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
 /// and Save / Discard buttons. Replaces the timer ring area entirely.
@@ -269,6 +270,12 @@ class _ResultViewState extends ConsumerState<ResultView>
                 ],
               ),
             ],
+
+            const SizedBox(height: Spacing.lg),
+
+            // What today already looks like, so the number above has
+            // something to be read against before it is saved.
+            const TodaysHoldsRow(),
 
             const SizedBox(height: Spacing.lg),
 
