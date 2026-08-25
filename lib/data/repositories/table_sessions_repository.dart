@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
+import '../../domain/models/sync_payload.dart';
 import '../../domain/models/table_session.dart';
 import 'device_id_provider.dart';
 
@@ -45,6 +46,29 @@ class TableSessionsRepository {
               ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
             .get();
     return rows.map(_fromRow).toList();
+  }
+
+  /// Bulk upsert for sync: writes each record's `updatedAt`/`deviceId` as
+  /// given, rather than stamping local values the way [save] does.
+  Future<void> upsertAll(List<SyncTableSessionRecord> records) async {
+    if (records.isEmpty) return;
+    await _db.batch((batch) {
+      batch.insertAllOnConflictUpdate(_db.tableSessions, [
+        for (final r in records)
+          db.TableSessionsCompanion(
+            id: Value(r.id),
+            createdAt: Value(r.createdAt),
+            updatedAt: Value(r.updatedAt),
+            deviceId: Value(r.deviceId),
+            type: Value(r.type),
+            basedOnMaxMs: Value(r.basedOnMaxMs),
+            roundsTotal: Value(r.roundsTotal),
+            roundsCompleted: Value(r.roundsCompleted),
+            roundDetails: Value(r.roundDetails),
+            deleted: Value(r.deleted ? 1 : 0),
+          ),
+      ]);
+    });
   }
 
   TableSession _fromRow(db.TableSession row) {

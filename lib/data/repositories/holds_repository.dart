@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/models/sync_payload.dart';
 import 'device_id_provider.dart';
 
 class HoldsRepository {
@@ -91,6 +92,74 @@ class HoldsRepository {
     await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
       db.HoldsCompanion(deleted: const Value(1), updatedAt: Value(now)),
     );
+  }
+
+  /// Clears `is_pb` across every max hold and sets it on the single longest
+  /// non-deleted one, returning that hold's duration in ms (null when no max
+  /// holds remain).
+  ///
+  /// `is_pb` is stored rather than derived at read time — the progress
+  /// providers read the column directly — so a merge that brings in a hold
+  /// longer than anything local has to re-derive it.
+  ///
+  /// Deliberately does not stamp `updatedAt`: the flag is derived state each
+  /// device regenerates independently, not an edit worth syncing.
+  Future<int?> recomputePbFlags() async {
+    await (_db.update(_db.holds)..where((t) => t.type.equals('max'))).write(
+      const db.HoldsCompanion(isPb: Value(0)),
+    );
+    final best =
+        await (_db.select(_db.holds)
+              ..where((t) => t.type.equals('max') & t.deleted.equals(0))
+              ..orderBy([
+                (t) => OrderingTerm.desc(t.durationMs),
+                (t) => OrderingTerm.asc(t.createdAt),
+                (t) => OrderingTerm.asc(t.id),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (best == null) return null;
+    await (_db.update(_db.holds)..where((t) => t.id.equals(best.id))).write(
+      const db.HoldsCompanion(isPb: Value(1)),
+    );
+    return best.durationMs;
+  }
+
+  /// Bulk upsert for sync: writes each record's `updatedAt`/`deviceId` as
+  /// given, rather than stamping local values the way [save] does, and
+  /// replaces each hold's tag set wholesale to match [SyncHoldRecord.tagIds].
+  Future<void> upsertAll(List<SyncHoldRecord> records) async {
+    if (records.isEmpty) return;
+    await _db.batch((batch) {
+      batch.insertAllOnConflictUpdate(_db.holds, [
+        for (final r in records)
+          db.HoldsCompanion(
+            id: Value(r.id),
+            createdAt: Value(r.createdAt),
+            updatedAt: Value(r.updatedAt),
+            deviceId: Value(r.deviceId),
+            durationMs: Value(r.durationMs),
+            contractionMs: Value(r.contractionMs),
+            type: Value(r.type),
+            lungVolume: Value(r.lungVolume),
+            prepMode: Value(r.prepMode),
+            notes: Value(r.notes),
+            isPb: Value(r.isPb ? 1 : 0),
+            rating: Value(r.rating),
+            deleted: Value(r.deleted ? 1 : 0),
+          ),
+      ]);
+    });
+
+    final ids = records.map((r) => r.id).toList();
+    await (_db.delete(_db.holdTags)..where((t) => t.holdId.isIn(ids))).go();
+    await _db.batch((batch) {
+      batch.insertAll(_db.holdTags, [
+        for (final r in records)
+          for (final tagId in r.tagIds)
+            db.HoldTagsCompanion.insert(holdId: r.id, tagId: tagId),
+      ]);
+    });
   }
 
   Hold _fromRow(db.Hold row) {

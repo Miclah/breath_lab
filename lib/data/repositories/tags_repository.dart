@@ -4,12 +4,31 @@ import 'package:uuid/uuid.dart';
 
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
+import '../../domain/models/sync_payload.dart';
 
 class TagsRepository {
   TagsRepository(this._db);
 
   final db.AppDatabase _db;
   static const _uuid = Uuid();
+
+  /// Bulk upsert for sync: writes each record's `updatedAt` as given,
+  /// rather than stamping the local clock the way [insertCustom] does.
+  Future<void> upsertAll(List<SyncTagRecord> records) async {
+    if (records.isEmpty) return;
+    await _db.batch((batch) {
+      batch.insertAllOnConflictUpdate(_db.tags, [
+        for (final r in records)
+          db.TagsCompanion(
+            id: Value(r.id),
+            labelKey: Value(r.labelKey),
+            createdAt: Value(r.createdAt),
+            updatedAt: Value(r.updatedAt),
+            deleted: Value(r.deleted ? 1 : 0),
+          ),
+      ]);
+    });
+  }
 
   Future<List<db.Tag>> getAllActive() {
     return (_db.select(_db.tags)
