@@ -7,6 +7,7 @@ import 'about_section.dart';
 import 'ambient_section.dart';
 import 'appearance_section.dart';
 import 'co2_table_section.dart';
+import 'data_section.dart';
 import 'o2_table_section.dart';
 import 'section_header.dart';
 import 'sound_haptics_section.dart';
@@ -36,6 +37,8 @@ class SettingsScreen extends ConsumerWidget {
             const AppearanceSection(),
             SectionHeader(title: l10n.settingsAboutSection),
             const AboutSection(),
+            SectionHeader(title: l10n.settingsDataSection),
+            const DataSection(),
           ],
         ),
       ),
