@@ -895,6 +895,12 @@ abstract class AppLocalizations {
   /// **'done'**
   String get timerStateLabelDone;
 
+  /// Current training streak shown in the timer status row above the preset chips
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
+  String timerStatusStreak(int count);
+
   /// Save button on the result screen
   ///
   /// In en, this message translates to:

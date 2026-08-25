@@ -17,6 +17,7 @@ import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'result_screen.dart';
 import 'timer_ring.dart';
+import 'timer_status_row.dart';
 import 'todays_holds_row.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
@@ -104,7 +105,11 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: Spacing.lg),
-                        if (state.isIdle) const PresetChipRow(),
+                        if (state.isIdle) ...[
+                          const TimerStatusRow(),
+                          const SizedBox(height: Spacing.md),
+                          const PresetChipRow(),
+                        ],
                         Expanded(
                           child: state.isPrep
                               ? const PrepPhaseWidget()

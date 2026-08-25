@@ -132,6 +132,7 @@
   "timerResetButton": "Resetovať",
   "timerStateLabelHold": "drž",
   "timerStateLabelDone": "hotovo",
+  "timerStatusStreak": "{count, plural, =1{1 deň v rade} few{{count} dni v rade} other{{count} dní v rade}}",
   "resultSaveButton": "Uložiť",
   "resultDiscardButton": "Zahodiť",
   "resultContraction": "Kontrakcia",

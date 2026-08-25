@@ -550,6 +550,15 @@
   "@timerStateLabelDone": {
     "description": "State label shown below the timer number after a hold is stopped"
   },
+  "timerStatusStreak": "{count, plural, =1{1 day streak} other{{count} day streak}}",
+  "@timerStatusStreak": {
+    "description": "Current training streak shown in the timer status row above the preset chips",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "resultSaveButton": "Save",
   "@resultSaveButton": {
     "description": "Save button on the result screen"

@@ -432,6 +432,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get timerStateLabelDone => 'hotovo';
 
   @override
+  String timerStatusStreak(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dní v rade',
+      few: '$count dni v rade',
+      one: '1 deň v rade',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get resultSaveButton => 'Uložiť';
 
   @override
