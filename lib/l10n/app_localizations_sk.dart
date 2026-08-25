@@ -258,6 +258,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsResetLabel => 'Vymazať všetky dáta';
 
   @override
+  String get settingsResetSubtitle =>
+      'Vymaže všetky zadržania, tabuľkové sedenia a nastavenia na tomto zariadení.';
+
+  @override
   String get settingsResetConfirmTitle => 'Vymazať všetky dáta?';
 
   @override

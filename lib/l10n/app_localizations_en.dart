@@ -258,6 +258,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetLabel => 'Reset all data';
 
   @override
+  String get settingsResetSubtitle =>
+      'Deletes every hold, table session and setting on this device.';
+
+  @override
   String get settingsResetConfirmTitle => 'Reset all data?';
 
   @override

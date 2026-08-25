@@ -3,7 +3,9 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/db/database_provider.dart';
 import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
@@ -13,10 +15,13 @@ import '../../domain/services/sync_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../safety/safety_provider.dart';
+import 'theme_mode_provider.dart';
 
-/// Settings → Data section: editable device name, last-sync status, and
-/// export/import of a `.blab` backup file. Doubles as cross-device sync
-/// and as backup/restore — see `docs/phases/PHASE_2A_sync.md`.
+/// Settings → Data section: editable device name, last-sync status,
+/// export/import of a `.blab` backup file, and the full reset. Doubles as
+/// cross-device sync and as backup/restore — see
+/// `docs/phases/PHASE_2A_sync.md`.
 class DataSection extends StatelessWidget {
   const DataSection({super.key});
 
@@ -24,8 +29,94 @@ class DataSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [_DeviceNameField(), _LastSyncRow(), _ExportImportButtons()],
+      children: [
+        _DeviceNameField(),
+        _LastSyncRow(),
+        _ExportImportButtons(),
+        // Set apart by a divider and the full section gap: it belongs in
+        // this section, and it does not belong within a thumb's travel of
+        // the Export button people press routinely.
+        SizedBox(height: Spacing.xxl),
+        Divider(height: 0.5),
+        _ResetAllDataRow(),
+      ],
     );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Reset all data
+// ---------------------------------------------------------------------------
+
+/// The one destructive action in Settings.
+///
+/// Keeps the full danger fill nowhere near it: the row is a label in danger
+/// text, and the irreversible part is behind the confirmation dialog.
+class _ResetAllDataRow extends ConsumerWidget {
+  const _ResetAllDataRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+      title: Text(
+        l10n.settingsResetLabel,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: c.dangerText),
+      ),
+      subtitle: Text(
+        l10n.settingsResetSubtitle,
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+      ),
+      onTap: () => _confirmReset(context, ref),
+    );
+  }
+
+  Future<void> _confirmReset(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.settingsResetConfirmTitle),
+        content: Text(l10n.settingsResetConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.historyCancelButton),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.settingsResetButton),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    await ref.read(databaseProvider).resetAllData();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    // Deliberately *not* invalidating databaseProvider: that disposes the
+    // AppDatabase and immediately builds a second one over the same file
+    // while the first connection is still closing, which drift warns about
+    // ("database was opened a second time") and which can leave the new
+    // connection stale or locked. resetAllData() already emptied and
+    // re-seeded every table, so the existing connection is correct — only
+    // the things that cached its contents need to re-read.
+    ref.invalidate(settingsRepositoryProvider);
+    ref.invalidate(allHoldsProvider);
+    ref.invalidate(allTableSessionsProvider);
+    ref.invalidate(holdTagIdsProvider);
+    ref.invalidate(holdTagCountsProvider);
+    ref.invalidate(builtInTagsProvider);
+    ref.invalidate(themeModeProvider);
+    ref.invalidate(safetyAcknowledgedProvider);
   }
 }
 

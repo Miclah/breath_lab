@@ -79,6 +79,7 @@
   "settingsSafetyInfoLink": "Bezpečnostné informácie",
   "settingsVersionLabel": "Verzia",
   "settingsResetLabel": "Vymazať všetky dáta",
+  "settingsResetSubtitle": "Vymaže všetky zadržania, tabuľkové sedenia a nastavenia na tomto zariadení.",
   "settingsResetConfirmTitle": "Vymazať všetky dáta?",
   "settingsResetConfirmMessage": "Týmto sa vymažú všetky pokusy, tabuľkové série, tagy a nastavenia v tomto zariadení. Túto akciu nemožno vrátiť späť.",
   "settingsResetButton": "Vymazať",

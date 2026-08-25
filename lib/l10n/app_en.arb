@@ -317,6 +317,10 @@
     "description": "Row showing the app version and build number"
   },
   "settingsResetLabel": "Reset all data",
+  "settingsResetSubtitle": "Deletes every hold, table session and setting on this device.",
+  "@settingsResetSubtitle": {
+    "description": "Subtitle under the Reset all data row, saying plainly what it destroys"
+  },
   "@settingsResetLabel": {
     "description": "Row that opens the reset-all-data confirmation dialog"
   },

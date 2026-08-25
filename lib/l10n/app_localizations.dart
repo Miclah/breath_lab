@@ -578,6 +578,12 @@ abstract class AppLocalizations {
   /// **'Reset all data'**
   String get settingsResetLabel;
 
+  /// Subtitle under the Reset all data row, saying plainly what it destroys
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes every hold, table session and setting on this device.'**
+  String get settingsResetSubtitle;
+
   /// Title of the reset-all-data confirmation dialog
   ///
   /// In en, this message translates to:
