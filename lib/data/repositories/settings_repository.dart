@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/services/device_name_service.dart';
 import 'setting_notifier.dart';
 
 enum HapticIntensity {
@@ -298,6 +299,29 @@ class SettingsRepository {
 
   Future<void> setFocusModeEnabled(bool enabled) =>
       _set('focus_mode_enabled', enabled ? '1' : '0');
+
+  /// This device's human-readable sync name, or null if never set.
+  Future<String?> getDeviceName() => _get('device_name');
+
+  Future<void> setDeviceName(String name) => _set('device_name', name);
+
+  /// When the most recent successful sync (export or import) happened,
+  /// in epoch milliseconds. Null if this device has never synced.
+  Future<int?> getLastSyncAtMs() async {
+    final value = await _get('last_sync_at');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  /// The other device's name as of the most recent sync.
+  Future<String?> getLastSyncPeerName() => _get('last_sync_peer_name');
+
+  Future<void> setLastSync({
+    required int atMs,
+    required String peerDeviceName,
+  }) async {
+    await _set('last_sync_at', atMs.toString());
+    await _set('last_sync_peer_name', peerDeviceName);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -623,3 +647,43 @@ final focusModeEnabledProvider =
     AsyncNotifierProvider<FocusModeEnabledNotifier, bool>(
       FocusModeEnabledNotifier.new,
     );
+
+/// This device's editable sync name. The first read seeds it from the
+/// platform (hostname on Windows, device model on Android) and persists
+/// that suggestion, so it survives even if the platform lookup is slow or
+/// briefly unavailable on a later read.
+class DeviceNameNotifier extends _RepoSetting<String> {
+  @override
+  Future<String> read() async {
+    final stored = await repo.getDeviceName();
+    if (stored != null && stored.isNotEmpty) return stored;
+    final suggested = await suggestedDeviceName();
+    if (suggested != null) await repo.setDeviceName(suggested);
+    return suggested ?? 'This device';
+  }
+
+  @override
+  Future<void> write(String value) => repo.setDeviceName(value);
+}
+
+final deviceNameProvider = AsyncNotifierProvider<DeviceNameNotifier, String>(
+  DeviceNameNotifier.new,
+);
+
+/// When BreathLab last exported or imported data, and which device it
+/// synced with.
+class LastSyncInfo {
+  const LastSyncInfo({required this.atMs, required this.peerDeviceName});
+
+  final int atMs;
+  final String peerDeviceName;
+}
+
+/// Null if this device has never synced.
+final lastSyncInfoProvider = FutureProvider<LastSyncInfo?>((ref) async {
+  final repo = ref.watch(settingsRepositoryProvider);
+  final atMs = await repo.getLastSyncAtMs();
+  if (atMs == null) return null;
+  final peerDeviceName = await repo.getLastSyncPeerName();
+  return LastSyncInfo(atMs: atMs, peerDeviceName: peerDeviceName ?? '');
+});
