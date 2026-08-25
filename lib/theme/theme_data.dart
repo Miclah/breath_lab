@@ -44,25 +44,31 @@ ThemeData _buildTheme(BreathLabColorScheme c, Brightness brightness) {
     // Desktop is keyboard-navigable and had no visible cue at all for
     // which control Tab had landed on.
     focusColor: c.primary.withValues(alpha: 0.24),
+    // Design Revision §1. Most of the app reads its type through these slots
+    // rather than naming a style, so remapping here is what actually moves
+    // the scale — the three heading sizes collapse into one `title`, and the
+    // small end collapses into `body` / `label` / `micro`.
+    //
+    // `titleMedium` and `displayMedium` were never defined, so every site
+    // using them was silently rendering in Material's default Roboto rather
+    // than in either of the app's two typefaces.
     textTheme: TextTheme(
-      displayLarge: BreathLabTypography.timerDisplay.copyWith(
+      displayLarge: BreathLabTypography.displayLg.copyWith(
         color: c.textPrimary,
       ),
-      headlineLarge: BreathLabTypography.headingLg.copyWith(
+      displayMedium: BreathLabTypography.displayMd.copyWith(
         color: c.textPrimary,
       ),
-      headlineMedium: BreathLabTypography.headingMd.copyWith(
-        color: c.textPrimary,
-      ),
-      headlineSmall: BreathLabTypography.headingSm.copyWith(
-        color: c.textPrimary,
-      ),
-      bodyLarge: BreathLabTypography.bodyMd.copyWith(color: c.textPrimary),
-      bodyMedium: BreathLabTypography.bodySm.copyWith(color: c.textSecondary),
-      bodySmall: BreathLabTypography.caption.copyWith(color: c.textTertiary),
+      headlineLarge: BreathLabTypography.title.copyWith(color: c.textPrimary),
+      headlineMedium: BreathLabTypography.title.copyWith(color: c.textPrimary),
+      headlineSmall: BreathLabTypography.title.copyWith(color: c.textPrimary),
+      titleMedium: BreathLabTypography.title.copyWith(color: c.textPrimary),
+      bodyLarge: BreathLabTypography.body.copyWith(color: c.textPrimary),
+      bodyMedium: BreathLabTypography.body.copyWith(color: c.textSecondary),
+      bodySmall: BreathLabTypography.micro.copyWith(color: c.textTertiary),
       labelLarge: BreathLabTypography.button.copyWith(color: c.textPrimary),
       labelMedium: BreathLabTypography.label.copyWith(color: c.textSecondary),
-      labelSmall: BreathLabTypography.badge.copyWith(color: c.textTertiary),
+      labelSmall: BreathLabTypography.micro.copyWith(color: c.textTertiary),
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: c.surface,
@@ -92,9 +98,7 @@ ThemeData _buildTheme(BreathLabColorScheme c, Brightness brightness) {
       // this border is the boundary instead of relying on scroll-triggered
       // elevation.
       shape: Border(bottom: BorderSide(color: c.border, width: 0.5)),
-      titleTextStyle: BreathLabTypography.headingMd.copyWith(
-        color: c.textPrimary,
-      ),
+      titleTextStyle: BreathLabTypography.title.copyWith(color: c.textPrimary),
     ),
     // Design §Buttons `button-secondary`. Defined once here because the
     // outline treatment is now what a long-lived destructive action wears —
