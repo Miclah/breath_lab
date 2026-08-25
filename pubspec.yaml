@@ -63,6 +63,11 @@ dependencies:
   screen_brightness: ^2.1.1
   wakelock_plus: ^1.2.10
 
+  # Cross-device sync (Phase 2A): .blab file export/import
+  file_selector: ^1.1.0
+  share_plus: ^12.0.2
+  device_info_plus: ^12.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
