@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/holds_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -34,7 +34,12 @@ class ProgressScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navProgress)),
-      body: ContentMaxWidth(
+      // The ListView keeps its own padding rather than handing the
+      // horizontal half to the page: inside the scrollable is where it was,
+      // and moving it out would shift the scrollbar.
+      body: AdaptivePage(
+        maxWidth: ContentWidth.chart,
+        padding: EdgeInsets.zero,
         child: ListView(
           padding: const EdgeInsets.all(Spacing.xl),
           children: [
