@@ -105,24 +105,43 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   reserveSide: true,
                   side: state.isIdle ? const TimerSidePanel() : null,
                   child: TimerStage(
-                    top: state.isIdle
-                        ? const Column(
-                            children: [
-                              TimerStatusRow(),
-                              SizedBox(height: Spacing.md),
-                              PresetChipRow(),
-                            ],
-                          )
-                        : null,
-                    hero: state.isPrep
-                        ? const PrepPhaseWidget()
-                        : _buildRing(context, state, l10n, c, ringValue),
+                    // Every band carries something in every state, or
+                    // carries nothing and keeps its height. What changes is
+                    // the contents, and those crossfade.
+                    top: switch (state.phase) {
+                      TimerPhase.idle => const Column(
+                        children: [
+                          TimerStatusRow(),
+                          SizedBox(height: Spacing.md),
+                          PresetChipRow(),
+                        ],
+                      ),
+                      TimerPhase.prep => const PrepTopLabel(),
+                      _ => null,
+                    },
+                    hero: AnimatedSwitcher(
+                      duration: Durations.normal,
+                      child: state.isPrep
+                          ? const PrepPhaseWidget(key: ValueKey('prep'))
+                          : KeyedSubtree(
+                              key: const ValueKey('ring'),
+                              child: _buildRing(
+                                context,
+                                state,
+                                l10n,
+                                c,
+                                ringValue,
+                              ),
+                            ),
+                    ),
                     below: Column(
                       children: [
                         const SizedBox(height: Spacing.md),
                         StageBand(
                           height: TimerStage.contractionBandHeight,
-                          child: state.contractionTime == null
+                          child: state.isPrep
+                              ? const PrepCountdown()
+                              : state.contractionTime == null
                               ? null
                               : _ContractionBadge(time: state.contractionTime!),
                         ),
@@ -134,7 +153,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                         const SizedBox(height: Spacing.md),
                         StageBand(
                           height: TimerStage.actionBandHeight,
-                          child: _buildButton(context, state, l10n, c),
+                          child: state.isPrep
+                              ? const PrepActionButton()
+                              : _buildButton(context, state, l10n, c),
                         ),
                         const SizedBox(height: Spacing.xl),
                       ],
@@ -204,10 +225,6 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     AppLocalizations l10n,
     BreathLabColorScheme c,
   ) {
-    // PREP has no button of its own — the prep widget carries its own skip
-    // and cancel affordances — but the band stays reserved.
-    if (state.isPrep) return const SizedBox.shrink();
-
     if (state.isHolding) {
       // Outline, not a red slab. Design gives red to events — "when it
       // appears, it means something happened" — and a fill that sits there
