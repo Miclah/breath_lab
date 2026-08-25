@@ -120,7 +120,21 @@ class TablesScreen extends ConsumerWidget {
     // inset, which is meant to add to it rather than replace it.
     return AdaptivePage(
       maxWidth: ContentWidth.list,
-      side: !split ? null : _TablesSide(maxMs: maxMsAsync.valueOrNull),
+      side: !split
+          ? null
+          : _TablesSide(
+              maxMs: maxMsAsync.valueOrNull,
+              rounds: sessionActive
+                  ? session.rounds
+                  : maxMsAsync.valueOrNull == null
+                  ? const []
+                  : _computeRounds(
+                      selectedType,
+                      maxMsAsync.value!,
+                      co2Config: co2Config,
+                      o2Config: o2Config,
+                    ),
+            ),
       child: Column(
         children: [
           Padding(
@@ -164,7 +178,7 @@ class TablesScreen extends ConsumerWidget {
                       if (!split)
                         Padding(
                           padding: const EdgeInsets.only(bottom: Spacing.lg),
-                          child: TableInfoPanel(maxMs: maxMs),
+                          child: TableInfoPanel(maxMs: maxMs, rounds: rounds),
                         ),
                       Expanded(
                         child: BottomScrollFade(
@@ -350,16 +364,17 @@ class _PillSegment extends StatelessWidget {
 }
 
 class _TablesSide extends StatelessWidget {
-  const _TablesSide({required this.maxMs});
+  const _TablesSide({required this.maxMs, required this.rounds});
 
   final int? maxMs;
+  final List<TableRoundPlan> rounds;
 
   @override
   Widget build(BuildContext context) {
     if (maxMs == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: Spacing.lg),
-      child: TableInfoPanel(maxMs: maxMs!, stacked: true),
+      child: TableInfoPanel(maxMs: maxMs!, rounds: rounds, stacked: true),
     );
   }
 }

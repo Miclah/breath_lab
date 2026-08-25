@@ -907,6 +907,12 @@ abstract class AppLocalizations {
   /// **'Jump to'**
   String get settingsJumpTo;
 
+  /// Estimated wall-clock length of the whole table session, shown under the based-on-max line. Rounded to whole minutes — the point is the order of magnitude of the commitment, not a countdown
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =1{About 1 minute in total} other{About {minutes} minutes in total}}'**
+  String tablesEstimatedDuration(int minutes);
+
   /// Heading of the tables side panel summarising the session that is about to run
   ///
   /// In en, this message translates to:

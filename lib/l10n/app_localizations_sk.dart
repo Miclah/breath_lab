@@ -447,6 +447,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsJumpTo => 'Prejsť na';
 
   @override
+  String tablesEstimatedDuration(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Spolu približne $minutes minút',
+      few: 'Spolu približne $minutes minúty',
+      one: 'Spolu približne 1 minúta',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get tablesSessionSummaryTitle => 'Toto sedenie';
 
   @override

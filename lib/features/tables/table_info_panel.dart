@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Durations;
 
+import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -17,9 +18,18 @@ import 'round_list_item.dart';
 /// panel exists partly so those have somewhere to land that is not on top of
 /// the round list.
 class TableInfoPanel extends StatelessWidget {
-  const TableInfoPanel({super.key, required this.maxMs, this.stacked = false});
+  const TableInfoPanel({
+    super.key,
+    required this.maxMs,
+    required this.rounds,
+    this.stacked = false,
+  });
 
   final int maxMs;
+
+  /// The rounds the session will actually run, so the estimate is of this
+  /// table rather than of a typical one.
+  final List<TableRoundPlan> rounds;
 
   /// True in the side column, where the panel is the only thing present and
   /// can spend vertical space; false inline, where it is a thin band above a
@@ -31,9 +41,26 @@ class TableInfoPanel extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
 
-    final body = Text(
-      l10n.tablesBasedOnMax(formatRoundMs(maxMs)),
-      style: BreathLabTypography.bodySm.copyWith(color: c.textSecondary),
+    // The user is about to commit to roughly a quarter of an hour, and
+    // nothing on the screen said so — the round list gives eight pairs of
+    // times and leaves the addition to them.
+    final totalMs = rounds.fold<int>(0, (sum, r) => sum + r.holdMs + r.restMs);
+
+    final style = BreathLabTypography.bodySm.copyWith(color: c.textSecondary);
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.tablesBasedOnMax(formatRoundMs(maxMs)), style: style),
+        if (rounds.isNotEmpty) ...[
+          const SizedBox(height: Spacing.xxs),
+          Text(
+            // Rounded up: a session that runs 14:10 is "15 minutes" of
+            // your afternoon, not 14.
+            l10n.tablesEstimatedDuration((totalMs / 60000).ceil()),
+            style: style.copyWith(color: c.textTertiary),
+          ),
+        ],
+      ],
     );
 
     return Container(

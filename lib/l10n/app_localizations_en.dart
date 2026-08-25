@@ -445,6 +445,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsJumpTo => 'Jump to';
 
   @override
+  String tablesEstimatedDuration(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'About $minutes minutes in total',
+      one: 'About 1 minute in total',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get tablesSessionSummaryTitle => 'This session';
 
   @override

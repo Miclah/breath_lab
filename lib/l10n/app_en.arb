@@ -563,6 +563,15 @@
   "@settingsJumpTo": {
     "description": "Heading of the settings section index in the side column"
   },
+  "tablesEstimatedDuration": "{minutes, plural, =1{About 1 minute in total} other{About {minutes} minutes in total}}",
+  "@tablesEstimatedDuration": {
+    "description": "Estimated wall-clock length of the whole table session, shown under the based-on-max line. Rounded to whole minutes — the point is the order of magnitude of the commitment, not a countdown",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "tablesSessionSummaryTitle": "This session",
   "@tablesSessionSummaryTitle": {
     "description": "Heading of the tables side panel summarising the session that is about to run"
