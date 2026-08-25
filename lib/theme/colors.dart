@@ -71,9 +71,18 @@ class BreathLabColorScheme {
   final Color primarySurface;
   final Color primaryText;
 
-  /// Personal-best highlight — an achievement, not a warning. Deliberately
-  /// its own token rather than reusing [danger]/[dangerText], which is
-  /// reserved for Stop and real warnings.
+  /// Personal-best highlight — an achievement, not a warning.
+  ///
+  /// Deliberately not [danger]/[dangerText], which Design assigns to records
+  /// but which this app reserves for Stop and for safety copy: a record
+  /// dressed in the same red as a warning says the wrong thing about it.
+  ///
+  /// It was, however, set to the same value as [primaryText], which made it
+  /// its own token in name only — on the Progress screen the personal best
+  /// and the streak came out the same green, so two of the three stat cards
+  /// were colour-coded identically. Gold is the third colour: outside the
+  /// teal ramp, outside the danger red, and not [warning] either, which the
+  /// timer ring uses to mean "approaching your limit".
   final Color recordText;
 
   final Color warning;
@@ -126,7 +135,7 @@ class BreathLabColors {
     primary: Color(0xFF1D9E75),
     primarySurface: Color(0xFF0D3D2E),
     primaryText: Color(0xFF5DCAA5),
-    recordText: Color(0xFF5DCAA5),
+    recordText: Color(0xFFE8C36A),
     warning: Color(0xFFEF9F27),
     warningSurface: Color(0xFF3D2A08),
     warningText: Color(0xFFFAC775),
@@ -159,7 +168,7 @@ class BreathLabColors {
     primary: Color(0xFF0F6E56),
     primarySurface: Color(0xFFE1F5EE),
     primaryText: Color(0xFF085041),
-    recordText: Color(0xFF085041),
+    recordText: Color(0xFF8A6410),
     warning: Color(0xFFBA7517),
     warningSurface: Color(0xFFFAEEDA),
     warningText: Color(0xFF633806),

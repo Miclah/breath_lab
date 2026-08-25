@@ -15,6 +15,10 @@ String _fmt(Duration d) {
 
 /// 3 cards: all-time PB, 30-day average, current streak.
 ///
+/// Each carries its own colour, per Design §`stat-card`: the record stands
+/// apart, the streak is teal, and the average is plain text because an
+/// average is not an achievement.
+///
 /// Stacks instead of sitting three-up when it moves into the side column,
 /// where 320 px across three cards would leave each too narrow to hold a
 /// `mm:ss` in stat-hero type.
