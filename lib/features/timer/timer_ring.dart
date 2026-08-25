@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../theme/colors.dart';
+import '../../theme/tokens.dart';
 
 /// Circular progress ring for the hold timer.
 ///
@@ -20,11 +21,19 @@ class TimerRing extends StatelessWidget {
     super.key,
     required this.value,
     required this.child,
+    this.elapsed = Duration.zero,
     this.size,
   });
 
   final double value;
   final Widget child;
+
+  /// How long this hold has actually run.
+  ///
+  /// [value] alone cannot say whether a warning colour is warranted: it is a
+  /// ratio, and a ratio to a one-second personal best is met in one second.
+  /// The colour needs the absolute time as well.
+  final Duration elapsed;
 
   /// Explicit diameter, computed by the caller from the space actually
   /// available. Falls back to a fixed mobile/desktop breakpoint size when
@@ -43,10 +52,20 @@ class TimerRing extends StatelessWidget {
   /// middle is the thing being read, not the ring.
   static double overflowFraction(double value) => (value - 1.0).clamp(0.0, 1.0);
 
-  Color _ringColor(double v, BreathLabColorScheme c) {
-    if (v >= 1.0) return c.danger;
-    if (v >= 0.75) {
-      final t = (v - 0.75) / 0.25;
+  /// Teal below 75% of the personal best, warming through amber to red at
+  /// it — but never before the absolute floors in [RingThresholds]. Both
+  /// conditions have to hold, so a small or freshly-reset best can no
+  /// longer paint the ring red seconds into a hold.
+  static Color ringColor(
+    double value,
+    Duration elapsed,
+    BreathLabColorScheme c,
+  ) {
+    if (value >= 1.0 && elapsed >= RingThresholds.dangerFloor) return c.danger;
+    if (value >= 0.75 && elapsed >= RingThresholds.warningFloor) {
+      // Ratio alone drives how far through the amber ramp we are; the floor
+      // decides only whether the ramp applies at all.
+      final t = ((value - 0.75) / 0.25).clamp(0.0, 1.0);
       return Color.lerp(c.primary, c.warning, t)!;
     }
     return c.primary;
@@ -64,7 +83,7 @@ class TimerRing extends StatelessWidget {
       child: CustomPaint(
         painter: _RingPainter(
           value: value,
-          ringColor: _ringColor(value, c),
+          ringColor: ringColor(value, elapsed, c),
           // Idle track: visible enough to read as the screen's focal shape
           // at a glance — the original 30% alpha on a near-black canvas
           // composited to almost nothing.

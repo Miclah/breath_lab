@@ -74,3 +74,21 @@ class PagePadding {
   /// The gap between the content column and a side slot.
   static const double columnGap = Spacing.xxxl;
 }
+
+/// When the timer ring is allowed to escalate away from calm.
+///
+/// The 75% and 100% thresholds are ratios of the personal best, which stops
+/// meaning anything when the best is small or freshly reset: a 1-second
+/// current max turns the ring red one second into a hold. These floors are
+/// the absolute elapsed times below which no amount of ratio earns a
+/// warning colour, so a beginner is not told they are in the red before
+/// they have held their breath long enough for it to be true.
+class RingThresholds {
+  const RingThresholds._();
+
+  /// No amber before this, whatever the ratio says.
+  static const Duration warningFloor = Duration(seconds: 30);
+
+  /// No red before this, whatever the ratio says.
+  static const Duration dangerFloor = Duration(seconds: 45);
+}

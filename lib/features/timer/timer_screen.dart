@@ -163,6 +163,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   ref.read(timerProvider.notifier).markContraction(),
               child: TimerRing(
                 value: ringValue,
+                elapsed: elapsed,
                 size: ringSize,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
