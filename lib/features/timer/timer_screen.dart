@@ -82,7 +82,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
 
     final ringValue = (maxMs == null || maxMs == 0)
         ? 0.0
-        : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 1.5);
+        // Capped at 2.0 rather than 1.5: the ring's overflow arc closes at
+        // double the PB, and clamping below that hid its top half.
+        : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 2.0);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navTimer)),

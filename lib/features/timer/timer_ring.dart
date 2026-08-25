@@ -10,6 +10,11 @@ import '../../theme/colors.dart';
 ///   0.0 = no progress, 1.0 = at PB, >1.0 = past PB.
 /// The arc color transitions teal → amber at 0.75, then amber → red at 1.0.
 /// [child] is placed at the center (timer number + state label).
+///
+/// Past 1.0 the outer arc has nowhere left to go — a full circle is a full
+/// circle — so beating your best by a second and doubling it rendered
+/// identically. The overflow gets its own inset arc instead, which starts
+/// empty at exactly PB and closes at double it.
 class TimerRing extends StatelessWidget {
   const TimerRing({
     super.key,
@@ -28,6 +33,15 @@ class TimerRing extends StatelessWidget {
 
   static const _mobileSize = 220.0;
   static const _desktopSize = 280.0;
+
+  /// How much of the outer ring to sweep. Full from the PB onwards.
+  static double arcFraction(double value) => value.clamp(0.0, 1.0);
+
+  /// How much of the inset overflow arc to sweep: how far past the PB this
+  /// hold is, capped at one further lap. Beyond double the PB the two arcs
+  /// are both closed and stop distinguishing — by then the number in the
+  /// middle is the thing being read, not the ring.
+  static double overflowFraction(double value) => (value - 1.0).clamp(0.0, 1.0);
 
   Color _ringColor(double v, BreathLabColorScheme c) {
     if (v >= 1.0) return c.danger;
@@ -75,6 +89,9 @@ class _RingPainter extends CustomPainter {
 
   static const _strokeWidth = 4.0;
 
+  /// Clear space between the outer ring and the overflow arc.
+  static const _overflowGap = 6.0;
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
@@ -90,19 +107,37 @@ class _RingPainter extends CustomPainter {
         ..strokeWidth = _strokeWidth,
     );
 
+    final arcPaint = Paint()
+      ..color = ringColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _strokeWidth
+      ..strokeCap = StrokeCap.round;
+
     // Foreground arc - starts at 12 o'clock, sweeps clockwise
-    final clamped = value.clamp(0.0, 1.0);
+    final clamped = TimerRing.arcFraction(value);
     if (clamped > 0) {
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         -pi / 2,
         clamped * 2 * pi,
         false,
-        Paint()
-          ..color = ringColor
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = _strokeWidth
-          ..strokeCap = StrokeCap.round,
+        arcPaint,
+      );
+    }
+
+    // Overflow arc - only past the PB, inset so it reads as a second lap
+    // rather than a thicker version of the first.
+    final overflow = TimerRing.overflowFraction(value);
+    if (overflow > 0) {
+      canvas.drawArc(
+        Rect.fromCircle(
+          center: center,
+          radius: radius - _strokeWidth - _overflowGap,
+        ),
+        -pi / 2,
+        overflow * 2 * pi,
+        false,
+        arcPaint,
       );
     }
   }
