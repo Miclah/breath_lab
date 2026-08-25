@@ -18,7 +18,6 @@ import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
 import 'providers.dart';
 import 'tag_chip_row.dart';
-import 'timer_ring.dart';
 import 'timer_side_panel.dart';
 import 'timer_stage.dart';
 import 'todays_holds_row.dart';
@@ -322,10 +321,11 @@ class _ResultHero extends StatelessWidget {
                   Transform.scale(scale: pbScale.value, child: child),
               child: Text(
                 formatMmSs(elapsed),
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                  fontSize: diameter >= TimerRing.expandedDiameter
-                      ? 64.0
-                      : null,
+                // `displayMd`, not the hold screen's `displayLg`: the result
+                // is read once, at rest; the hold timer is read at arm's
+                // length while trying not to move.
+                style: BreathLabTypography.displayMd.copyWith(
+                  color: c.textPrimary,
                 ),
               ),
             ),
@@ -467,10 +467,10 @@ class _NoteFieldState extends ConsumerState<_NoteField> {
                 ref.read(pendingNoteProvider.notifier).state = value,
             maxLines: 3,
             minLines: 1,
-            style: BreathLabTypography.bodyMd.copyWith(color: c.textPrimary),
+            style: BreathLabTypography.body.copyWith(color: c.textPrimary),
             decoration: InputDecoration(
               hintText: l10n.resultNoteHint,
-              hintStyle: BreathLabTypography.bodyMd.copyWith(
+              hintStyle: BreathLabTypography.body.copyWith(
                 color: c.textTertiary,
               ),
               filled: true,
@@ -540,7 +540,7 @@ class _PbBadge extends ConsumerWidget {
       ),
       child: Text(
         AppLocalizations.of(context)!.resultNewPbBadge,
-        style: BreathLabTypography.badge.copyWith(color: c.recordText),
+        style: BreathLabTypography.micro.copyWith(color: c.recordText),
       ),
     );
   }
@@ -578,7 +578,7 @@ class _ComparisonLine extends ConsumerWidget {
     return Text(
       parts.isEmpty ? l10n.resultFirstHold : parts.join('  ·  '),
       textAlign: TextAlign.center,
-      style: BreathLabTypography.bodySm.copyWith(color: c.textSecondary),
+      style: BreathLabTypography.micro.copyWith(color: c.textSecondary),
     );
   }
 }
@@ -645,7 +645,7 @@ class _HoldMetrics extends StatelessWidget {
         Text(
           l10n.resultStruggleNote,
           textAlign: TextAlign.center,
-          style: BreathLabTypography.caption.copyWith(color: c.textTertiary),
+          style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],
     );
@@ -686,7 +686,7 @@ class _NoContractionCard extends StatelessWidget {
           const SizedBox(height: Spacing.xs),
           Text(
             '$hint ${l10n.resultNoContractionWhy}',
-            style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+            style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
           ),
         ],
       ),
@@ -754,7 +754,7 @@ class _LungVolumeSelector extends ConsumerWidget {
         Text(
           hint,
           textAlign: TextAlign.center,
-          style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+          style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],
     );
@@ -830,7 +830,7 @@ class _StatChip extends StatelessWidget {
         const SizedBox(height: Spacing.xxs),
         Text(
           value,
-          style: BreathLabTypography.statMd.copyWith(
+          style: BreathLabTypography.numericMd.copyWith(
             color: valueColor ?? c.textPrimary,
           ),
         ),

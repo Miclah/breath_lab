@@ -83,7 +83,7 @@ class _HoldBox extends StatelessWidget {
       ),
       child: Text(
         formatMmSs(hold.duration),
-        style: BreathLabTypography.statSm.copyWith(
+        style: BreathLabTypography.numericSm.copyWith(
           color: isBest ? c.textOnPrimary : c.textSecondary,
         ),
       ),

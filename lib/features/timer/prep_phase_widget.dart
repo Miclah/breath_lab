@@ -117,7 +117,7 @@ class PrepCountdown extends ConsumerWidget {
       child: Text(
         '${remaining.inMinutes}:'
         '${(remaining.inSeconds % 60).toString().padLeft(2, '0')}',
-        style: BreathLabTypography.statMd.copyWith(color: c.textSecondary),
+        style: BreathLabTypography.numericMd.copyWith(color: c.textSecondary),
       ),
     );
   }

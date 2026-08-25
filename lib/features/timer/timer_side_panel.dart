@@ -55,7 +55,7 @@ class _LastSessionCard extends ConsumerWidget {
       child: session == null
           ? Text(
               l10n.timerSideNoHistory,
-              style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class _LastSessionCard extends ConsumerWidget {
                   DateFormat.MMMd(
                     Localizations.localeOf(context).toString(),
                   ).format(session.date),
-                  style: BreathLabTypography.bodySm.copyWith(
+                  style: BreathLabTypography.micro.copyWith(
                     color: c.textSecondary,
                   ),
                 ),
@@ -75,14 +75,14 @@ class _LastSessionCard extends ConsumerWidget {
                   children: [
                     Text(
                       formatMmSs(session.best),
-                      style: BreathLabTypography.statMd.copyWith(
+                      style: BreathLabTypography.displayMd.copyWith(
                         color: c.textPrimary,
                       ),
                     ),
                     const SizedBox(width: Spacing.sm),
                     Text(
                       l10n.timerSideSessionHolds(session.count),
-                      style: BreathLabTypography.bodySm.copyWith(
+                      style: BreathLabTypography.micro.copyWith(
                         color: c.textTertiary,
                       ),
                     ),
@@ -190,7 +190,7 @@ class _Shortcut extends StatelessWidget {
             ),
             child: Text(
               keyLabel,
-              style: BreathLabTypography.caption.copyWith(
+              style: BreathLabTypography.section.copyWith(
                 color: c.textSecondary,
               ),
             ),
@@ -199,7 +199,7 @@ class _Shortcut extends StatelessWidget {
           Expanded(
             child: Text(
               action,
-              style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             ),
           ),
         ],
@@ -228,10 +228,7 @@ class _Card extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: BreathLabTypography.caption.copyWith(
-              color: c.textTertiary,
-              letterSpacing: 0.5,
-            ),
+            style: BreathLabTypography.section.copyWith(color: c.textTertiary),
           ),
           const SizedBox(height: Spacing.sm),
           child,

@@ -10,6 +10,7 @@ import '../../shared/format_duration.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 import 'preset_chip_row.dart';
 import 'prep_phase_widget.dart';
 import 'providers.dart';
@@ -181,8 +182,16 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final diameter = constraints.biggest.shortestSide;
-        final timerStyle = Theme.of(context).textTheme.displayLarge?.copyWith(
-          fontSize: diameter >= TimerRing.expandedDiameter ? 64.0 : null,
+        // `displayLg` is 72, sized for the 280 ring. Five monospace glyphs at
+        // 72 are wider than a 220 ring, so below the expanded diameter the
+        // figure scales to the circle it has to sit inside — the ring can be
+        // any size between the two tokens, not just one of them.
+        final timerStyle = BreathLabTypography.displayLg.copyWith(
+          color: c.textPrimary,
+          fontSize: diameter >= TimerRing.expandedDiameter
+              ? null
+              : BreathLabTypography.displayLg.fontSize! *
+                    (diameter / TimerRing.expandedDiameter),
         );
 
         return GestureDetector(
