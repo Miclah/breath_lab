@@ -353,9 +353,10 @@ class _PillSegment extends StatelessWidget {
         ),
         child: Text(
           label,
+          // Design caps weight at 500 — w600 reads as assertive, which is
+          // the opposite of the brief for this app.
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: selected ? c.textOnPrimary : c.textTertiary,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ),

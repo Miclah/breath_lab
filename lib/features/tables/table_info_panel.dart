@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Durations;
 import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'round_list_item.dart';
@@ -66,10 +67,7 @@ class TableInfoPanel extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(stacked ? Spacing.lg : Spacing.md),
-      decoration: BoxDecoration(
-        color: c.surfaceElevated,
-        borderRadius: BorderRadius.circular(stacked ? Radius.xl : Radius.md),
-      ),
+      decoration: Surfaces.primaryPanel(context),
       child: !stacked
           ? body
           : Column(

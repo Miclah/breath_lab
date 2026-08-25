@@ -6,6 +6,7 @@ import '../../domain/models/table_session.dart';
 import '../../domain/services/table_session_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'round_list_item.dart';
@@ -55,10 +56,7 @@ class SessionSummaryView extends ConsumerWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(Spacing.lg),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: BorderRadius.circular(Radius.md),
-          ),
+          decoration: Surfaces.primaryPanel(context),
           child: Column(
             children: [
               Text(

@@ -4,6 +4,7 @@ import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 
@@ -36,10 +37,9 @@ class RoundList extends StatelessWidget {
     final c = context.appColors;
 
     return Container(
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.xl),
-      ),
+      // Recessed: the round list is what the summary above it describes, and
+      // an inset is what nesting looks like now.
+      decoration: Surfaces.inset(context),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
