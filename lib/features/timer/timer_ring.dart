@@ -40,8 +40,11 @@ class TimerRing extends StatelessWidget {
   /// null — used where nothing bounds the ring's parent height.
   final double? size;
 
-  static const _mobileSize = 220.0;
-  static const _desktopSize = 280.0;
+  /// Design §Layout: 220 across on a phone, 280 once there is room. Public
+  /// so a caller sizing the ring from its own space has the same ceiling to
+  /// clamp against, rather than a second opinion about how big it should be.
+  static const compactDiameter = 220.0;
+  static const expandedDiameter = 280.0;
 
   /// How much of the outer ring to sweep. Full from the PB onwards.
   static double arcFraction(double value) => value.clamp(0.0, 1.0);
@@ -75,7 +78,8 @@ class TimerRing extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.appColors;
     final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final resolvedSize = size ?? (isDesktop ? _desktopSize : _mobileSize);
+    final resolvedSize =
+        size ?? (isDesktop ? expandedDiameter : compactDiameter);
 
     return SizedBox(
       width: resolvedSize,

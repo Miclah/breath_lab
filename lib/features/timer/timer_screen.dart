@@ -145,14 +145,20 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     if (state.isHolding) stateLabel = l10n.timerStateLabelHold;
     if (state.isDone) stateLabel = l10n.timerStateLabelDone;
 
-    // The ring's own fixed mobile/desktop sizes leave hundreds of empty
-    // pixels above and below it in a large window — size it from the space
-    // this Expanded region actually has instead.
+    // Sized from the space this region actually has, but never past the
+    // design token: letting it grow to fill a large window produced a ~380px
+    // ring that was oversized and still looked stranded, because its size
+    // was never what made it look stranded.
     return LayoutBuilder(
       builder: (context, constraints) {
         final available = min(constraints.maxWidth, constraints.maxHeight);
+        final ceiling = isDesktop
+            ? TimerRing.expandedDiameter
+            : TimerRing.compactDiameter;
+        // min rather than clamp: on a window too short for even the compact
+        // ring, shrinking beats overflowing.
         final ringSize = available.isFinite
-            ? (available * 0.85).clamp(220.0, 360.0)
+            ? min(available * 0.85, ceiling)
             : null;
 
         return Column(
