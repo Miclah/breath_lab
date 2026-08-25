@@ -9,7 +9,6 @@ import '../../shared/widgets/segment_label.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart'
     show audioServiceProvider, hapticsServiceProvider;
-import 'section_header.dart';
 import 'settings_slider.dart';
 
 /// Settings → Sound & haptics section: sound toggle, volume slider, haptic
@@ -29,7 +28,6 @@ class SoundHapticsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsSoundHapticsSection),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,

@@ -5,7 +5,6 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/services/o2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
-import 'section_header.dart';
 import 'settings_slider.dart';
 import 'settings_stepper.dart';
 import 'table_preview.dart';
@@ -43,7 +42,6 @@ class O2TableSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsO2Section),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,

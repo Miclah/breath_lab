@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
-import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
-import 'section_header.dart';
 
 enum _RatioPreset { fourSix, fourFour, fourEight, custom }
 
@@ -24,15 +22,9 @@ class TimerSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final mode = ref.watch(defaultPrepModeProvider).valueOrNull;
-    if (mode != PrepMode.short && mode != PrepMode.full) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsTimerSection),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,

@@ -10,7 +10,6 @@ import '../../shared/widgets/segment_label.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart' show ttsServiceProvider;
-import 'section_header.dart';
 
 /// Settings → Ambient mode section. Spoken callouts, TTS voice language,
 /// persistent notification, PiP, OLED hold screen, and focus mode toggles.
@@ -39,7 +38,6 @@ class AmbientSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsAmbientSection),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,

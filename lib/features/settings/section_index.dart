@@ -16,6 +16,7 @@ class SettingsSection {
     required this.anchor,
     required this.title,
     required this.body,
+    this.visible = true,
   });
 
   /// Attached to the section's header in the form, and used to scroll to it.
@@ -23,6 +24,12 @@ class SettingsSection {
 
   final String title;
   final Widget body;
+
+  /// Some sections only apply under a setting — the Timer section is
+  /// meaningless unless prep is set to a breathing mode. Hidden here means
+  /// hidden from the jump list too; a list that offers a destination the
+  /// form does not contain is worse than no list.
+  final bool visible;
 }
 
 /// The settings side column: a jump list.
@@ -69,7 +76,7 @@ class SectionIndex extends StatelessWidget {
             ),
           ),
         ),
-        for (final section in sections)
+        for (final section in sections.where((s) => s.visible))
           InkWell(
             onTap: () => _jumpTo(section),
             borderRadius: BorderRadius.circular(Radius.sm),

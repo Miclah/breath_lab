@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/settings_repository.dart';
+import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/tokens.dart';
@@ -26,44 +28,72 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   /// One key per section, created once and kept. Rebuilding them each frame
   /// would hand the index a set of anchors that no longer point at anything.
-  final _anchors = List.generate(4, (_) => GlobalKey());
+  final _anchors = List.generate(9, (_) => GlobalKey());
 
-  List<SettingsSection> _sections(AppLocalizations l10n) => [
-    SettingsSection(
-      anchor: _anchors[0],
-      title: l10n.settingsTrainingSection,
-      body: const Column(
-        children: [
-          TrainingSection(),
-          TimerSection(),
-          Co2TableSection(),
-          O2TableSection(),
-          AmbientSection(),
-          SoundHapticsSection(),
-        ],
-      ),
-    ),
-    SettingsSection(
-      anchor: _anchors[1],
-      title: l10n.settingsAppearanceSection,
-      body: const AppearanceSection(),
-    ),
-    SettingsSection(
-      anchor: _anchors[2],
-      title: l10n.settingsAboutSection,
-      body: const AboutSection(),
-    ),
-    SettingsSection(
-      anchor: _anchors[3],
-      title: l10n.settingsDataSection,
-      body: const DataSection(),
-    ),
-  ];
+  /// The nine sections of PRD §7.4, in its order — including Data above
+  /// About, which the built screen had the other way round.
+  ///
+  /// Declared here rather than each section widget drawing its own header.
+  /// Five of them used to, which meant the screen's own four headers grouped
+  /// six unrelated sections under "Training", and the running order lived
+  /// half here and half in the widgets.
+  List<SettingsSection> _sections(AppLocalizations l10n, PrepMode? prepMode) =>
+      [
+        SettingsSection(
+          anchor: _anchors[0],
+          title: l10n.settingsTrainingSection,
+          body: const TrainingSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[1],
+          title: l10n.settingsTimerSection,
+          body: const TimerSection(),
+          // Prep duration and breathing ratio configure a guide that only runs
+          // in the breathing prep modes.
+          visible: prepMode == PrepMode.short || prepMode == PrepMode.full,
+        ),
+        SettingsSection(
+          anchor: _anchors[2],
+          title: l10n.settingsCo2Section,
+          body: const Co2TableSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[3],
+          title: l10n.settingsO2Section,
+          body: const O2TableSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[4],
+          title: l10n.settingsAmbientSection,
+          body: const AmbientSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[5],
+          title: l10n.settingsSoundHapticsSection,
+          body: const SoundHapticsSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[6],
+          title: l10n.settingsAppearanceSection,
+          body: const AppearanceSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[7],
+          title: l10n.settingsDataSection,
+          body: const DataSection(),
+        ),
+        SettingsSection(
+          anchor: _anchors[8],
+          title: l10n.settingsAboutSection,
+          body: const AboutSection(),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final sections = _sections(l10n);
+    final prepMode = ref.watch(defaultPrepModeProvider).valueOrNull;
+    final sections = _sections(l10n, prepMode);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navSettings)),
@@ -93,10 +123,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  for (final section in sections) ...[
-                    SectionHeader(key: section.anchor, title: section.title),
-                    section.body,
-                  ],
+                  for (final section in sections)
+                    if (section.visible) ...[
+                      SectionHeader(key: section.anchor, title: section.title),
+                      section.body,
+                    ],
                 ],
               ),
             ),
