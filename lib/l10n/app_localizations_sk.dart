@@ -444,6 +444,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get settingsJumpTo => 'Prejsť na';
+
+  @override
   String get tablesSessionSummaryTitle => 'Toto sedenie';
 
   @override

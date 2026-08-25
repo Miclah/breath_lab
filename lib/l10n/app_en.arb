@@ -559,6 +559,10 @@
       }
     }
   },
+  "settingsJumpTo": "Jump to",
+  "@settingsJumpTo": {
+    "description": "Heading of the settings section index in the side column"
+  },
   "tablesSessionSummaryTitle": "This session",
   "@tablesSessionSummaryTitle": {
     "description": "Heading of the tables side panel summarising the session that is about to run"

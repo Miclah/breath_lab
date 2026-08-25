@@ -133,6 +133,7 @@
   "timerStateLabelHold": "drž",
   "timerStateLabelDone": "hotovo",
   "timerStatusStreak": "{count, plural, =1{1 deň v rade} few{{count} dni v rade} other{{count} dní v rade}}",
+  "settingsJumpTo": "Prejsť na",
   "tablesSessionSummaryTitle": "Toto sedenie",
   "timerSideLastSession": "Posledné sedenie",
   "timerSideSessionHolds": "{count, plural, =1{1 zadržanie} few{{count} zadržania} other{{count} zadržaní}}",

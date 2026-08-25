@@ -901,6 +901,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Heading of the settings section index in the side column
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to'**
+  String get settingsJumpTo;
+
   /// Heading of the tables side panel summarising the session that is about to run
   ///
   /// In en, this message translates to:

@@ -442,6 +442,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settingsJumpTo => 'Jump to';
+
+  @override
   String get tablesSessionSummaryTitle => 'This session';
 
   @override

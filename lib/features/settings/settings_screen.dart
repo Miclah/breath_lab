@@ -11,41 +11,93 @@ import 'co2_table_section.dart';
 import 'data_section.dart';
 import 'o2_table_section.dart';
 import 'section_header.dart';
+import 'section_index.dart';
 import 'sound_haptics_section.dart';
 import 'timer_section.dart';
 import 'training_section.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  /// One key per section, created once and kept. Rebuilding them each frame
+  /// would hand the index a set of anchors that no longer point at anything.
+  final _anchors = List.generate(4, (_) => GlobalKey());
+
+  List<SettingsSection> _sections(AppLocalizations l10n) => [
+    SettingsSection(
+      anchor: _anchors[0],
+      title: l10n.settingsTrainingSection,
+      body: const Column(
+        children: [
+          TrainingSection(),
+          TimerSection(),
+          Co2TableSection(),
+          O2TableSection(),
+          AmbientSection(),
+          SoundHapticsSection(),
+        ],
+      ),
+    ),
+    SettingsSection(
+      anchor: _anchors[1],
+      title: l10n.settingsAppearanceSection,
+      body: const AppearanceSection(),
+    ),
+    SettingsSection(
+      anchor: _anchors[2],
+      title: l10n.settingsAboutSection,
+      body: const AboutSection(),
+    ),
+    SettingsSection(
+      anchor: _anchors[3],
+      title: l10n.settingsDataSection,
+      body: const DataSection(),
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final sections = _sections(l10n);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navSettings)),
-      // The section rows pad themselves, so the page adds none of its own
-      // — the two would stack.
-      body: AdaptivePage(
-        maxWidth: ContentWidth.reading,
-        padding: EdgeInsets.zero,
-        child: ListView(
-          children: [
-            SectionHeader(title: l10n.settingsTrainingSection),
-            const TrainingSection(),
-            const TimerSection(),
-            const Co2TableSection(),
-            const O2TableSection(),
-            const AmbientSection(),
-            const SoundHapticsSection(),
-            SectionHeader(title: l10n.settingsAppearanceSection),
-            const AppearanceSection(),
-            SectionHeader(title: l10n.settingsAboutSection),
-            const AboutSection(),
-            SectionHeader(title: l10n.settingsDataSection),
-            const DataSection(),
-          ],
-        ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final split = AdaptivePage.showsSide(
+            constraints.maxWidth,
+            maxWidth: ContentWidth.reading,
+          );
+
+          // The section rows pad themselves, so the page adds none of its
+          // own — the two would stack.
+          return AdaptivePage(
+            maxWidth: ContentWidth.reading,
+            padding: EdgeInsets.zero,
+            side: !split ? null : SectionIndex(sections: sections),
+            // A Column in a scroll view rather than a ListView: the index
+            // scrolls to a section by its key, and a lazy list has no
+            // element — and so no context — for a section that has never
+            // been on screen. The form is a fixed handful of sections, so
+            // building all of it costs nothing worth the indirection.
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final section in sections) ...[
+                    SectionHeader(key: section.anchor, title: section.title),
+                    section.body,
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
