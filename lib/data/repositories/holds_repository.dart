@@ -17,27 +17,72 @@ class HoldsRepository {
 
   String newId() => _uuid.v4();
 
-  Future<void> save(Hold hold) async {
+  /// Persists a hold and, for max holds, re-derives which one carries the PB.
+  ///
+  /// Returns the new best max-hold duration in ms, or null when the hold
+  /// wasn't a max hold or none remain. [hold.isPb] as supplied by the caller
+  /// is overwritten by [recomputePbFlags] — the flag is derived from the data,
+  /// not asserted by the save site.
+  Future<int?> save(Hold hold) async {
     final now = DateTime.now().millisecondsSinceEpoch;
-    await _db
-        .into(_db.holds)
-        .insertOnConflictUpdate(
-          db.HoldsCompanion(
-            id: Value(hold.id),
-            createdAt: Value(hold.createdAt.millisecondsSinceEpoch),
-            updatedAt: Value(now),
-            deviceId: Value(_deviceId),
-            durationMs: Value(hold.duration.inMilliseconds),
-            contractionMs: Value(hold.contractionTime?.inMilliseconds),
-            type: Value(hold.type.dbValue),
-            lungVolume: Value(hold.lungVolume.dbValue),
-            prepMode: Value(hold.prepMode?.dbValue),
-            notes: Value(hold.notes),
-            isPb: Value(hold.isPb ? 1 : 0),
-            rating: Value(hold.rating),
-            deleted: const Value(0),
-          ),
-        );
+    return _db.transaction(() async {
+      await _db
+          .into(_db.holds)
+          .insertOnConflictUpdate(
+            db.HoldsCompanion(
+              id: Value(hold.id),
+              createdAt: Value(hold.createdAt.millisecondsSinceEpoch),
+              updatedAt: Value(now),
+              deviceId: Value(_deviceId),
+              durationMs: Value(hold.duration.inMilliseconds),
+              contractionMs: Value(hold.contractionTime?.inMilliseconds),
+              type: Value(hold.type.dbValue),
+              lungVolume: Value(hold.lungVolume.dbValue),
+              prepMode: Value(hold.prepMode?.dbValue),
+              notes: Value(hold.notes),
+              isPb: Value(hold.isPb ? 1 : 0),
+              rating: Value(hold.rating),
+              deleted: const Value(0),
+            ),
+          );
+      // Table rounds save as co2/o2 holds, eight at a time. They can never
+      // change the PB, so don't pay for a recompute on each one.
+      if (hold.type != HoldType.max) return null;
+      return recomputePbFlags();
+    });
+  }
+
+  /// Clears `is_pb` across every max hold and sets it on the single longest
+  /// non-deleted one, returning that hold's duration in ms (null when no max
+  /// holds remain).
+  ///
+  /// `is_pb` is stored rather than derived at read time — the progress
+  /// providers read the column directly — so every write path that can change
+  /// which hold is longest has to call this: save, delete, and merge. Before
+  /// the save path did, the previous record holder kept its flag and the
+  /// history list showed a PB badge on two different holds.
+  ///
+  /// Deliberately does not stamp `updatedAt`: the flag is derived state each
+  /// device regenerates independently, not an edit worth syncing.
+  Future<int?> recomputePbFlags() async {
+    await (_db.update(_db.holds)..where((t) => t.type.equals('max'))).write(
+      const db.HoldsCompanion(isPb: Value(0)),
+    );
+    final best =
+        await (_db.select(_db.holds)
+              ..where((t) => t.type.equals('max') & t.deleted.equals(0))
+              ..orderBy([
+                (t) => OrderingTerm.desc(t.durationMs),
+                (t) => OrderingTerm.asc(t.createdAt),
+                (t) => OrderingTerm.asc(t.id),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (best == null) return null;
+    await (_db.update(_db.holds)..where((t) => t.id.equals(best.id))).write(
+      const db.HoldsCompanion(isPb: Value(1)),
+    );
+    return best.durationMs;
   }
 
   Future<List<Hold>> getAll() async {
@@ -87,44 +132,6 @@ class HoldsRepository {
     );
   }
 
-  Future<void> delete(String id) async {
-    final now = DateTime.now().millisecondsSinceEpoch;
-    await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
-      db.HoldsCompanion(deleted: const Value(1), updatedAt: Value(now)),
-    );
-  }
-
-  /// Clears `is_pb` across every max hold and sets it on the single longest
-  /// non-deleted one, returning that hold's duration in ms (null when no max
-  /// holds remain).
-  ///
-  /// `is_pb` is stored rather than derived at read time — the progress
-  /// providers read the column directly — so a merge that brings in a hold
-  /// longer than anything local has to re-derive it.
-  ///
-  /// Deliberately does not stamp `updatedAt`: the flag is derived state each
-  /// device regenerates independently, not an edit worth syncing.
-  Future<int?> recomputePbFlags() async {
-    await (_db.update(_db.holds)..where((t) => t.type.equals('max'))).write(
-      const db.HoldsCompanion(isPb: Value(0)),
-    );
-    final best =
-        await (_db.select(_db.holds)
-              ..where((t) => t.type.equals('max') & t.deleted.equals(0))
-              ..orderBy([
-                (t) => OrderingTerm.desc(t.durationMs),
-                (t) => OrderingTerm.asc(t.createdAt),
-                (t) => OrderingTerm.asc(t.id),
-              ])
-              ..limit(1))
-            .getSingleOrNull();
-    if (best == null) return null;
-    await (_db.update(_db.holds)..where((t) => t.id.equals(best.id))).write(
-      const db.HoldsCompanion(isPb: Value(1)),
-    );
-    return best.durationMs;
-  }
-
   /// Bulk upsert for sync: writes each record's `updatedAt`/`deviceId` as
   /// given, rather than stamping local values the way [save] does, and
   /// replaces each hold's tag set wholesale to match [SyncHoldRecord.tagIds].
@@ -159,6 +166,22 @@ class HoldsRepository {
           for (final tagId in r.tagIds)
             db.HoldTagsCompanion.insert(holdId: r.id, tagId: tagId),
       ]);
+    });
+  }
+
+  /// Soft-deletes a hold and, when it was a max hold, moves the PB flag to
+  /// whatever is now longest. Returns the new best max-hold duration in ms.
+  Future<int?> delete(String id) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return _db.transaction(() async {
+      final row = await (_db.select(
+        _db.holds,
+      )..where((t) => t.id.equals(id))).getSingleOrNull();
+      await (_db.update(_db.holds)..where((t) => t.id.equals(id))).write(
+        db.HoldsCompanion(deleted: const Value(1), updatedAt: Value(now)),
+      );
+      if (row == null || row.type != 'max') return null;
+      return recomputePbFlags();
     });
   }
 

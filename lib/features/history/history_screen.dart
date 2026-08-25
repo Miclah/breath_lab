@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
@@ -272,7 +273,15 @@ class _HoldDetailSheetState extends ConsumerState<_HoldDetailSheet> {
     );
     if (confirmed != true) return;
     final holdsRepo = await ref.read(holdsRepositoryProvider.future);
-    await holdsRepo.delete(_hold.id);
+    final bestMs = await holdsRepo.delete(_hold.id);
+    // Deleting the record holder moves the PB flag to whatever is now
+    // longest; the current max has to follow, or the CO2/O2 tables keep
+    // computing their rounds from a hold that no longer exists.
+    // TODO(phase-3b): clear the current max when the last max hold is deleted
+    // — delete() returns null both for that case and for a non-max hold.
+    if (bestMs != null) {
+      await ref.read(currentMaxMsProvider.notifier).set(bestMs);
+    }
     ref.invalidate(allHoldsProvider);
     ref.invalidate(holdTagCountsProvider);
     ref.invalidate(holdTagIdsProvider);
