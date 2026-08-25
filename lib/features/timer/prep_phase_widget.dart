@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
+import 'timer_ring.dart';
 
 /// Dispatches to the correct prep-phase UI based on [TimerState.prepMode].
 /// Returns [SizedBox.shrink] when not in prep or prep mode is [PrepMode.none].
@@ -35,6 +38,25 @@ class PrepPhaseWidget extends ConsumerWidget {
       _ => const SizedBox.shrink(),
     };
   }
+}
+
+/// The circle's diameter, from the space left over after the widget's own
+/// labels and buttons have taken theirs.
+///
+/// Measured rather than budgeted: an earlier version subtracted a constant
+/// for the chrome, which is a guess about text metrics and was wrong by a
+/// few pixels in the one direction that throws.
+///
+/// The chrome is still inside the hero band in this phase, so the circle is
+/// smaller than the ring it stands in for — but concentric with it, which is
+/// what stops the screen jumping between states. Moving the chrome out of
+/// the band, so circle and ring match in size as well as centre, is the next
+/// commit.
+double _circleDiameter(BoxConstraints constraints) {
+  final ceiling = constraints.maxWidth >= TimerRing.expandedDiameter
+      ? TimerRing.expandedDiameter
+      : TimerRing.compactDiameter;
+  return math.max(64.0, math.min(ceiling, constraints.biggest.shortestSide));
 }
 
 // ---------------------------------------------------------------------------
@@ -74,8 +96,6 @@ class _ThreeSecondCountdownState extends ConsumerState<_ThreeSecondCountdown> {
     });
 
     final c = context.appColors;
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final ringSize = isDesktop ? 280.0 : 220.0;
 
     final elapsed = ref.watch(timerProvider).prepElapsed;
     final countdown = _remaining(elapsed);
@@ -84,55 +104,63 @@ class _ThreeSecondCountdownState extends ConsumerState<_ThreeSecondCountdown> {
     final isDone = elapsed.inMilliseconds >= 3000;
     final label = isDone ? l10n.prepGoLabel : '$countdown';
 
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            l10n.prepGetReadyLabel,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
-          ),
-          const SizedBox(height: Spacing.md),
-          SizedBox(
-            width: ringSize,
-            height: ringSize,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                CustomPaint(
-                  size: Size(ringSize, ringSize),
-                  painter: _BreathCirclePainter(color: c.info),
-                ),
-                AnimatedSwitcher(
-                  duration: Durations.fast,
-                  transitionBuilder: (child, animation) =>
-                      ScaleTransition(scale: animation, child: child),
-                  child: Text(
-                    label,
-                    key: ValueKey(label),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.displayLarge?.copyWith(fontSize: 96),
-                    textAlign: TextAlign.center,
+    return Column(
+      children: [
+        Text(
+          l10n.prepGetReadyLabel,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
+        ),
+        const SizedBox(height: Spacing.md),
+        // Expanded rather than a fixed size: the circle takes whatever the
+        // two labels leave, so the column fills the band exactly and cannot
+        // overflow it however the text measures out.
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final diameter = _circleDiameter(constraints);
+              return Center(
+                child: SizedBox(
+                  width: diameter,
+                  height: diameter,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CustomPaint(
+                        size: Size(diameter, diameter),
+                        painter: _BreathCirclePainter(color: c.info),
+                      ),
+                      AnimatedSwitcher(
+                        duration: Durations.fast,
+                        transitionBuilder: (child, animation) =>
+                            ScaleTransition(scale: animation, child: child),
+                        child: Text(
+                          label,
+                          key: ValueKey(label),
+                          style: Theme.of(context).textTheme.displayLarge
+                              ?.copyWith(fontSize: diameter * 0.34),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
-          const SizedBox(height: Spacing.md),
-          TextButton(
-            onPressed: () => ref.read(timerProvider.notifier).reset(),
-            child: Text(
-              l10n.prepCancel,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-            ),
+        ),
+        const SizedBox(height: Spacing.md),
+        TextButton(
+          onPressed: () => ref.read(timerProvider.notifier).reset(),
+          child: Text(
+            l10n.prepCancel,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -212,8 +240,6 @@ class _BreathingGuideState extends ConsumerState<_BreathingGuide>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final ringSize = isDesktop ? 280.0 : 220.0;
 
     ref.listen<TimerState>(timerProvider, (_, next) {
       if (!next.isPrep) return;
@@ -234,60 +260,68 @@ class _BreathingGuideState extends ConsumerState<_BreathingGuide>
     final isInhale = _ctrl.value < _inhaleFraction;
     final phaseLabel = isInhale ? l10n.prepBreatheIn : l10n.prepBreatheOut;
 
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: ringSize,
-            height: ringSize,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AnimatedBuilder(
-                  animation: _scale,
-                  builder: (_, child) =>
-                      Transform.scale(scale: _scale.value, child: child),
-                  child: SizedBox(
-                    width: ringSize,
-                    height: ringSize,
-                    child: CustomPaint(
-                      painter: _BreathCirclePainter(color: c.info),
-                    ),
+    return Column(
+      children: [
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // The circle grows to 1.3 on the inhale, so its resting size is
+              // the available box divided by that, or the breath clips.
+              final box = _circleDiameter(constraints);
+              final diameter = box / 1.3;
+              return Center(
+                child: SizedBox(
+                  width: box,
+                  height: box,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AnimatedBuilder(
+                        animation: _scale,
+                        builder: (_, child) =>
+                            Transform.scale(scale: _scale.value, child: child),
+                        child: SizedBox(
+                          width: diameter,
+                          height: diameter,
+                          child: CustomPaint(
+                            painter: _BreathCirclePainter(color: c.info),
+                          ),
+                        ),
+                      ),
+                      AnimatedSwitcher(
+                        duration: Durations.slow,
+                        child: Text(
+                          phaseLabel,
+                          key: ValueKey(isInhale),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: c.textSecondary),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                AnimatedSwitcher(
-                  duration: Durations.slow,
-                  child: Text(
-                    phaseLabel,
-                    key: ValueKey(isInhale),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: c.textSecondary),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
-          const SizedBox(height: Spacing.md),
-          Text(
-            timeLabel,
+        ),
+        const SizedBox(height: Spacing.md),
+        Text(
+          timeLabel,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: c.textSecondary),
+        ),
+        TextButton(
+          onPressed: () => ref.read(timerProvider.notifier).beginHold(),
+          child: Text(
+            l10n.prepSkip,
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge?.copyWith(color: c.textSecondary),
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
           ),
-          TextButton(
-            onPressed: () => ref.read(timerProvider.notifier).beginHold(),
-            child: Text(
-              l10n.prepSkip,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
