@@ -101,6 +101,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Preview';
 
   @override
+  String settingsTablePreviewRoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rounds',
+      one: '1 round',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get ttsMilestoneOneMinute => 'One minute';
 
   @override

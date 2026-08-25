@@ -278,6 +278,12 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get settingsTablePreviewTitle;
 
+  /// Shown on the collapsed table preview header so the section still says how many rounds it will produce
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 round} other{{count} rounds}}'**
+  String settingsTablePreviewRoundCount(int count);
+
   /// Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language.
   ///
   /// In en, this message translates to:

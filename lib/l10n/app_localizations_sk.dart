@@ -101,6 +101,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsTablePreviewTitle => 'Náhľad';
 
   @override
+  String settingsTablePreviewRoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kôl',
+      few: '$count kolá',
+      one: '1 kolo',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get ttsMilestoneOneMinute => 'Jedna minúta';
 
   @override

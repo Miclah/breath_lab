@@ -30,6 +30,7 @@
   "settingsO2MaxHoldPercentLabel": "Max % zadržania z maxima",
   "settingsO2FixedRestLabel": "Pevný oddych",
   "settingsTablePreviewTitle": "Náhľad",
+  "settingsTablePreviewRoundCount": "{count, plural, =1{1 kolo} few{{count} kolá} other{{count} kôl}}",
   "ttsMilestoneOneMinute": "Jedna minúta",
   "ttsMilestoneOneThirty": "Jedna tridsať",
   "ttsMilestoneTwoMinutes": "Dve minúty",

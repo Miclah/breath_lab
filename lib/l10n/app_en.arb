@@ -117,6 +117,15 @@
     "description": "Label for the O₂ table fixed-rest stepper"
   },
   "settingsTablePreviewTitle": "Preview",
+  "settingsTablePreviewRoundCount": "{count, plural, =1{1 round} other{{count} rounds}}",
+  "@settingsTablePreviewRoundCount": {
+    "description": "Shown on the collapsed table preview header so the section still says how many rounds it will produce",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@settingsTablePreviewTitle": {
     "description": "Heading above the live-computed round preview at the bottom of a table settings section"
   },
