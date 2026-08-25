@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
+import 'tokens.dart';
 import 'typography.dart';
 
 ThemeData buildDarkTheme() =>
@@ -94,6 +95,21 @@ ThemeData _buildTheme(BreathLabColorScheme c, Brightness brightness) {
       titleTextStyle: BreathLabTypography.headingMd.copyWith(
         color: c.textPrimary,
       ),
+    ),
+    // Design §Buttons `button-secondary`. Defined once here because the
+    // outline treatment is now what a long-lived destructive action wears —
+    // Stop during a hold, End session during a table — and those should not
+    // each re-type a style block and drift apart.
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: c.textPrimary,
+        minimumSize: const Size.fromHeight(48),
+        side: BorderSide(color: c.border, width: 0.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radius.lg),
+        ),
+        textStyle: BreathLabTypography.button,
+      ).copyWith(overlayColor: WidgetStatePropertyAll(c.surfaceHover)),
     ),
     dividerTheme: DividerThemeData(color: c.border, thickness: 0.5),
   );

@@ -207,16 +207,17 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     if (state.isPrep) return const SizedBox.shrink();
 
     if (state.isHolding) {
+      // Outline, not a red slab. Design gives red to events — "when it
+      // appears, it means something happened" — and a fill that sits there
+      // for three minutes is the opposite of an event. It was also the
+      // loudest thing on the screen for the whole hold, which the timer
+      // number is supposed to be. The colour stays; only the fill goes.
       return SizedBox(
         width: double.infinity,
-        height: 48,
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: c.danger,
-            foregroundColor: c.textOnDanger,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radius.lg),
-            ),
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: c.dangerText,
+            side: BorderSide(color: c.danger, width: 0.5),
           ),
           onPressed: () => ref.read(timerProvider.notifier).stop(),
           child: Text(l10n.timerStopButton),

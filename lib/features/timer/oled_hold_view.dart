@@ -79,9 +79,13 @@ class _OledHoldViewState extends ConsumerState<OledHoldView> {
                 child: Center(
                   child: Text(
                     l10n.timerStopButton,
+                    // Borderless here, per Design Additions §4 — but the
+                    // text token, not the fill token. Saturated `danger` on
+                    // pure black was the brightest thing on a screen whose
+                    // entire purpose is to be dark.
                     style: Theme.of(
                       context,
-                    ).textTheme.titleMedium?.copyWith(color: c.danger),
+                    ).textTheme.titleMedium?.copyWith(color: c.dangerText),
                   ),
                 ),
               ),

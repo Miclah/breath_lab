@@ -203,16 +203,14 @@ class _SessionActionButton extends StatelessWidget {
     final c = context.appColors;
 
     if (sessionActive && !isDone) {
+      // Same reasoning as the hold Stop button: this one is on screen for
+      // the whole ~15-minute session, so it cannot be a red slab either.
       return SizedBox(
         width: double.infinity,
-        height: 48,
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: c.danger,
-            foregroundColor: c.textOnDanger,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radius.lg),
-            ),
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: c.dangerText,
+            side: BorderSide(color: c.danger, width: 0.5),
           ),
           onPressed: onStop,
           child: Text(l10n.tablesEndSessionButton),
