@@ -9,6 +9,7 @@ import '../../shared/format_duration.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import '../../theme/surfaces.dart';
 
 /// What goes beside the ring at [Breakpoint.expanded], and only there.
 ///
@@ -184,10 +185,8 @@ class _Shortcut extends StatelessWidget {
             width: 44,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: Spacing.xxs),
-            decoration: BoxDecoration(
-              color: c.surfaceElevated,
-              borderRadius: BorderRadius.circular(Radius.xs),
-            ),
+            // A keycap is nested inside a card, which is what an inset is.
+            decoration: Surfaces.inset(context),
             child: Text(
               keyLabel,
               style: BreathLabTypography.section.copyWith(
@@ -219,10 +218,9 @@ class _Card extends StatelessWidget {
     final c = context.appColors;
     return Container(
       padding: const EdgeInsets.all(Spacing.lg),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
+      // Quiet, not primary: the Timer screen's subject is the ring, and
+      // Design Revision §2 gives it no primary panel at all.
+      decoration: Surfaces.quietPanel(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

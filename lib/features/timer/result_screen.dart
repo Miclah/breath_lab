@@ -21,6 +21,7 @@ import 'tag_chip_row.dart';
 import 'timer_side_panel.dart';
 import 'timer_stage.dart';
 import 'todays_holds_row.dart';
+import '../../theme/surfaces.dart';
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
 /// and Save / Discard buttons. Replaces the timer ring area entirely.
@@ -474,7 +475,7 @@ class _NoteFieldState extends ConsumerState<_NoteField> {
                 color: c.textTertiary,
               ),
               filled: true,
-              fillColor: c.surfaceElevated,
+              fillColor: c.insetFill,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: Spacing.md,
                 vertical: Spacing.md,
@@ -672,10 +673,7 @@ class _NoContractionCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(Spacing.lg),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
+      decoration: Surfaces.quietPanel(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

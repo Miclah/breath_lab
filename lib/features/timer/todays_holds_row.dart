@@ -8,6 +8,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'providers.dart';
+import '../../theme/surfaces.dart';
 
 /// The holds done today, as a compact row of boxes below the ring.
 ///
@@ -37,14 +38,11 @@ class TodaysHoldsRow extends ConsumerWidget {
     final bestId = holds.firstWhere((h) => h.duration == best).id;
 
     return Container(
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
+      decoration: Surfaces.quietPanel(context),
       padding: const EdgeInsets.all(Spacing.sm),
       child: HorizontalScrollFade(
         width: Spacing.lg,
-        color: c.surface,
+        color: c.canvas,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: Spacing.sm),
@@ -77,10 +75,12 @@ class _HoldBox extends StatelessWidget {
         horizontal: Spacing.sm,
         vertical: Spacing.xs,
       ),
-      decoration: BoxDecoration(
-        color: isBest ? c.primary : c.surfaceElevated,
-        borderRadius: BorderRadius.circular(Radius.xs),
-      ),
+      decoration: isBest
+          ? BoxDecoration(
+              color: c.primary,
+              borderRadius: BorderRadius.circular(Radius.xs),
+            )
+          : Surfaces.inset(context),
       child: Text(
         formatMmSs(hold.duration),
         style: BreathLabTypography.numericSm.copyWith(
