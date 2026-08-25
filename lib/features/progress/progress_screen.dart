@@ -7,6 +7,7 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import '../history/history_screen.dart';
@@ -114,27 +115,38 @@ class RecentHoldsSection extends ConsumerWidget {
           style: BreathLabTypography.section.copyWith(color: c.textTertiary),
         ),
         const SizedBox(height: Spacing.sm),
-        if (recentHolds.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
-            child: Text(
-              l10n.historyEmpty,
-              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
-            ),
-          )
-        else
-          for (final (i, hold) in recentHolds.indexed) ...[
-            if (i > 0)
-              const Divider(
-                height: 1,
-                indent: Spacing.xl,
-                endIndent: Spacing.xl,
-              ),
-            HoldListItem(
-              hold: hold,
-              onTap: () => showHoldDetail(context, hold),
-            ),
-          ],
+        // Recessed: a list nested under a heading is exactly what an inset
+        // is for, and it stops the rows competing with the chart above.
+        Container(
+          decoration: Surfaces.inset(context),
+          clipBehavior: Clip.antiAlias,
+          child: recentHolds.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(Spacing.lg),
+                  child: Text(
+                    l10n.historyEmpty,
+                    style: BreathLabTypography.micro.copyWith(
+                      color: c.textTertiary,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (final (i, hold) in recentHolds.indexed) ...[
+                      if (i > 0)
+                        const Divider(
+                          height: 1,
+                          indent: Spacing.xl,
+                          endIndent: Spacing.xl,
+                        ),
+                      HoldListItem(
+                        hold: hold,
+                        onTap: () => showHoldDetail(context, hold),
+                      ),
+                    ],
+                  ],
+                ),
+        ),
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(

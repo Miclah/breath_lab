@@ -4,8 +4,12 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 
-/// A single metric tile used in [StatCardRow]. Per Design §"Stat Card":
-/// label on top in tertiary text, value below in stat-hero mono type.
+/// A single metric in [StatCardRow]: label above, value below.
+///
+/// Deliberately undecorated. Design Revision §2 — "a number with a label is
+/// not a card" — and boxing these is what made the Progress screen read as a
+/// grid of equal-weight tiles with no subject. The row separates them with
+/// hairlines instead.
 class StatCard extends StatelessWidget {
   const StatCard({
     super.key,
@@ -21,16 +25,11 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    // No Expanded here any more: whether the card shares a row or stacks in
-    // a column is the parent's business, and baking the flex in meant the
-    // card could only ever be used one way.
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(Spacing.md),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radius.md),
-      ),
+    // No Expanded here either: whether the stat shares a row or stacks in a
+    // column is the parent's business, and baking the flex in meant it could
+    // only ever be used one way.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

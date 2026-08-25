@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'lung_volume_filter_chip.dart';
@@ -78,10 +79,9 @@ class ProgressChart extends ConsumerWidget {
             Spacing.lg + 12,
             Spacing.lg,
           ),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: BorderRadius.circular(Radius.md),
-          ),
+          // The screen's one primary panel: the trend line is what a
+          // Progress screen is for, and the teal top edge is what says so.
+          decoration: Surfaces.primaryPanel(context),
           child: !hasData
               ? Center(
                   child: Text(

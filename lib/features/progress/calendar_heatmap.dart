@@ -6,6 +6,7 @@ import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
+import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'heatmap_day_sheet.dart';
@@ -88,10 +89,9 @@ class CalendarHeatmap extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(Spacing.lg),
-      decoration: BoxDecoration(
-        color: c.surfaceElevated,
-        borderRadius: BorderRadius.circular(Radius.xl),
-      ),
+      // Quiet, not filled. Twelve weeks of attendance is context for the
+      // chart above it, not a second subject competing with it.
+      decoration: Surfaces.quietPanel(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
