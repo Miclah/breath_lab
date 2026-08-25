@@ -442,6 +442,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get resultTotal => 'Total';
+
+  @override
+  String get resultStruggleNote =>
+      'Struggle phase is where most of the measured improvement in novices shows up.';
+
+  @override
+  String get resultNoContractionTitle => 'No contraction marked';
+
+  @override
+  String get resultNoContractionHintTouch =>
+      'Double-tap the ring during a hold to mark your first contraction.';
+
+  @override
+  String get resultNoContractionHintKeyboard =>
+      'Press C during a hold to mark your first contraction.';
+
+  @override
+  String get resultNoContractionWhy =>
+      'The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.';
+
+  @override
   String get resultSaveButton => 'Save';
 
   @override

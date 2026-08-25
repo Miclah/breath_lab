@@ -444,6 +444,28 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get resultTotal => 'Celkovo';
+
+  @override
+  String get resultStruggleNote =>
+      'Fáza boja je miesto, kde sa u začiatočníkov prejaví väčšina nameraného zlepšenia.';
+
+  @override
+  String get resultNoContractionTitle => 'Kontrakcia neoznačená';
+
+  @override
+  String get resultNoContractionHintTouch =>
+      'Dvojitým ťuknutím na kruh počas zadržania označíš prvú kontrakciu.';
+
+  @override
+  String get resultNoContractionHintKeyboard =>
+      'Stlačením C počas zadržania označíš prvú kontrakciu.';
+
+  @override
+  String get resultNoContractionWhy =>
+      'Čas odtiaľ do konca zadržania je tvoja fáza boja — tá časť, ktorá najvernejšie sleduje tvoj pokrok.';
+
+  @override
   String get resultSaveButton => 'Uložiť';
 
   @override

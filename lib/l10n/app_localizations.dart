@@ -901,6 +901,42 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
   String timerStatusStreak(int count);
 
+  /// Label for the total hold duration on the result screen metrics row
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get resultTotal;
+
+  /// Caption below the result metrics explaining why struggle-phase duration is tracked (RESEARCH_ALIGNMENT.md §2, tier A)
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle phase is where most of the measured improvement in novices shows up.'**
+  String get resultStruggleNote;
+
+  /// Heading of the result-screen card shown when the hold had no contraction marker
+  ///
+  /// In en, this message translates to:
+  /// **'No contraction marked'**
+  String get resultNoContractionTitle;
+
+  /// How to mark a contraction, on a touch device
+  ///
+  /// In en, this message translates to:
+  /// **'Double-tap the ring during a hold to mark your first contraction.'**
+  String get resultNoContractionHintTouch;
+
+  /// How to mark a contraction, on a device with a keyboard
+  ///
+  /// In en, this message translates to:
+  /// **'Press C during a hold to mark your first contraction.'**
+  String get resultNoContractionHintKeyboard;
+
+  /// Why marking the contraction matters, shown below the how-to line
+  ///
+  /// In en, this message translates to:
+  /// **'The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.'**
+  String get resultNoContractionWhy;
+
   /// Save button on the result screen
   ///
   /// In en, this message translates to:

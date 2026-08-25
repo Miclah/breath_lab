@@ -6,6 +6,7 @@ import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../shared/global_messenger.dart';
@@ -248,28 +249,9 @@ class _ResultViewState extends ConsumerState<ResultView>
               ],
             ),
 
-            // Contraction + struggle phase stats
-            if (state.contractionTime != null) ...[
-              const SizedBox(height: Spacing.lg),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _StatChip(
-                    label: l10n.resultContraction,
-                    value: formatMmSs(state.contractionTime!),
-                    c: c,
-                  ),
-                  if (state.strugglePhase != null) ...[
-                    const SizedBox(width: Spacing.xl),
-                    _StatChip(
-                      label: l10n.resultStruggle,
-                      value: formatMmSs(state.strugglePhase!),
-                      c: c,
-                    ),
-                  ],
-                ],
-              ),
-            ],
+            const SizedBox(height: Spacing.lg),
+
+            _HoldMetrics(state: state),
 
             const SizedBox(height: Spacing.lg),
 
@@ -326,6 +308,117 @@ class _ResultViewState extends ConsumerState<ResultView>
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hold metrics
+// ---------------------------------------------------------------------------
+
+/// Total, time to first contraction, and struggle phase — the three numbers
+/// Design §`hold-result` asks for, of which only the first was ever shown.
+///
+/// Struggle phase carries the accent because it is the metric with the
+/// strongest evidence behind it: `RESEARCH_ALIGNMENT.md` §2 records Bourdas
+/// & Geladas 2024 placing 59.7 % of measured novice improvement inside it,
+/// which is why it is tier A and total time is not. The result screen is
+/// the only surface where a user can read it at all.
+///
+/// Without a marker there is no struggle phase to show, and the row used to
+/// vanish entirely — leaving no hint that the app tracks the thing, or that
+/// marking it was ever an option. The absence is now the place the feature
+/// gets explained.
+class _HoldMetrics extends StatelessWidget {
+  const _HoldMetrics({required this.state});
+
+  final TimerState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final contraction = state.contractionTime;
+    final struggle = state.strugglePhase;
+
+    if (contraction == null || struggle == null) {
+      return _NoContractionCard(c: c);
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _StatChip(
+              label: l10n.resultTotal,
+              value: formatMmSs(state.holdElapsed),
+              c: c,
+            ),
+            const SizedBox(width: Spacing.xl),
+            _StatChip(
+              label: l10n.resultContraction,
+              value: formatMmSs(contraction),
+              c: c,
+            ),
+            const SizedBox(width: Spacing.xl),
+            _StatChip(
+              label: l10n.resultStruggle,
+              value: formatMmSs(struggle),
+              c: c,
+              valueColor: c.primaryText,
+            ),
+          ],
+        ),
+        const SizedBox(height: Spacing.sm),
+        Text(
+          l10n.resultStruggleNote,
+          textAlign: TextAlign.center,
+          style: BreathLabTypography.caption.copyWith(color: c.textTertiary),
+        ),
+      ],
+    );
+  }
+}
+
+class _NoContractionCard extends StatelessWidget {
+  const _NoContractionCard({required this.c});
+
+  final BreathLabColorScheme c;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // Windows and Android are the only targets, and they do not share an
+    // input model — telling a phone user to press C is worse than saying
+    // nothing.
+    final hint = switch (Theme.of(context).platform) {
+      TargetPlatform.android ||
+      TargetPlatform.iOS => l10n.resultNoContractionHintTouch,
+      _ => l10n.resultNoContractionHintKeyboard,
+    };
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Spacing.lg),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(Radius.md),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.resultNoContractionTitle,
+            style: BreathLabTypography.label.copyWith(color: c.textSecondary),
+          ),
+          const SizedBox(height: Spacing.xs),
+          Text(
+            '$hint ${l10n.resultNoContractionWhy}',
+            style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+          ),
+        ],
       ),
     );
   }
@@ -473,11 +566,20 @@ class _LungSegment extends ConsumerWidget {
 // ---------------------------------------------------------------------------
 
 class _StatChip extends StatelessWidget {
-  const _StatChip({required this.label, required this.value, required this.c});
+  const _StatChip({
+    required this.label,
+    required this.value,
+    required this.c,
+    this.valueColor,
+  });
 
   final String label;
   final String value;
   final BreathLabColorScheme c;
+
+  /// Overrides the default `textPrimary`. Used to mark the one figure in a
+  /// row that the user should read first.
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -493,7 +595,9 @@ class _StatChip extends StatelessWidget {
         const SizedBox(height: Spacing.xxs),
         Text(
           value,
-          style: BreathLabTypography.statMd.copyWith(color: c.textPrimary),
+          style: BreathLabTypography.statMd.copyWith(
+            color: valueColor ?? c.textPrimary,
+          ),
         ),
       ],
     );

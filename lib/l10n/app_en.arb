@@ -559,6 +559,30 @@
       }
     }
   },
+  "resultTotal": "Total",
+  "@resultTotal": {
+    "description": "Label for the total hold duration on the result screen metrics row"
+  },
+  "resultStruggleNote": "Struggle phase is where most of the measured improvement in novices shows up.",
+  "@resultStruggleNote": {
+    "description": "Caption below the result metrics explaining why struggle-phase duration is tracked (RESEARCH_ALIGNMENT.md §2, tier A)"
+  },
+  "resultNoContractionTitle": "No contraction marked",
+  "@resultNoContractionTitle": {
+    "description": "Heading of the result-screen card shown when the hold had no contraction marker"
+  },
+  "resultNoContractionHintTouch": "Double-tap the ring during a hold to mark your first contraction.",
+  "@resultNoContractionHintTouch": {
+    "description": "How to mark a contraction, on a touch device"
+  },
+  "resultNoContractionHintKeyboard": "Press C during a hold to mark your first contraction.",
+  "@resultNoContractionHintKeyboard": {
+    "description": "How to mark a contraction, on a device with a keyboard"
+  },
+  "resultNoContractionWhy": "The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.",
+  "@resultNoContractionWhy": {
+    "description": "Why marking the contraction matters, shown below the how-to line"
+  },
   "resultSaveButton": "Save",
   "@resultSaveButton": {
     "description": "Save button on the result screen"
