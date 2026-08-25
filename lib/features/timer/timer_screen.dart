@@ -9,7 +9,7 @@ import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'preset_chip_row.dart';
@@ -93,7 +93,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         child: SafeArea(
           child: state.isDone
               ? const ResultView()
-              : ContentMaxWidth(
+              : AdaptivePage(
+                  maxWidth: ContentWidth.reading,
+                  padding: EdgeInsets.zero,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: hPad),
                     child: Column(

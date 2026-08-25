@@ -9,7 +9,7 @@ import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../shared/global_messenger.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -191,7 +191,9 @@ class _ResultViewState extends ConsumerState<ResultView>
     // that left a large empty gap on most screens. SingleChildScrollView
     // guards against overflow on short windows now that nothing here is
     // Expanded/flexible.
-    return ContentMaxWidth(
+    return AdaptivePage(
+      maxWidth: ContentWidth.reading,
+      padding: EdgeInsets.zero,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: hPad, vertical: Spacing.xxl),
         child: Column(

@@ -8,7 +8,7 @@ import '../../domain/services/o2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/bottom_scroll_fade.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
@@ -64,7 +64,10 @@ class TablesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navTables)),
-      body: ContentMaxWidth(
+      // Every row below pads itself, so the page adds none of its own.
+      body: AdaptivePage(
+        maxWidth: ContentWidth.reading,
+        padding: EdgeInsets.zero,
         child: Column(
           children: [
             Padding(

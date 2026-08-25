@@ -33,20 +33,6 @@ class Durations {
   static const Duration slow = Duration(milliseconds: 300);
 }
 
-class Layout {
-  const Layout._();
-
-  /// Cap on tab content width. Unconstrained, full-width buttons and
-  /// settings rows that read fine on a phone stretch edge-to-edge on a
-  /// desktop window and become unreadable.
-  ///
-  /// Superseded by [ContentWidth], which says *which kind* of column is
-  /// being capped instead of applying one number to all of them.
-  // TODO(phase-3a): remove along with ContentMaxWidth once every screen is
-  // on AdaptivePage.
-  static const double contentMaxWidth = 600;
-}
-
 /// How wide a column is allowed to get, by what it holds.
 ///
 /// These replace the bare `maxWidth:` numbers that were scattered across

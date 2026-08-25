@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../shared/widgets/content_max_width.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/tokens.dart';
 import 'safety_provider.dart';
 
@@ -18,7 +18,9 @@ class SafetyScreen extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Spacing.lg),
-          child: ContentMaxWidth(
+          child: AdaptivePage(
+            maxWidth: ContentWidth.reading,
+            padding: EdgeInsets.zero,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
