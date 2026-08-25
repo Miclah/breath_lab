@@ -1075,22 +1075,22 @@ abstract class AppLocalizations {
   /// **'Empty'**
   String get lungVolEmpty;
 
-  /// Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when Full is selected
   ///
   /// In en, this message translates to:
-  /// **'Plné pľúca · Full lungs'**
+  /// **'Full lungs'**
   String get lungVolFullHint;
 
-  /// Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when FRC is selected
   ///
   /// In en, this message translates to:
-  /// **'Pasívny výdych · Passive exhale'**
+  /// **'Passive exhale'**
   String get lungVolFrcHint;
 
-  /// Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when Empty is selected
   ///
   /// In en, this message translates to:
-  /// **'Po výdychu · After exhale'**
+  /// **'After exhale'**
   String get lungVolEmptyHint;
 
   /// Built-in session tag — user felt tired

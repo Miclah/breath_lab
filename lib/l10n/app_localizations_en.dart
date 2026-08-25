@@ -547,13 +547,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lungVolEmpty => 'Empty';
 
   @override
-  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+  String get lungVolFullHint => 'Full lungs';
 
   @override
-  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+  String get lungVolFrcHint => 'Passive exhale';
 
   @override
-  String get lungVolEmptyHint => 'Po výdychu · After exhale';
+  String get lungVolEmptyHint => 'After exhale';
 
   @override
   String get tagTired => 'Tired';

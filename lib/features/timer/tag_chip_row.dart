@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/horizontal_scroll_fade.dart';
+import '../../theme/breakpoints.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
@@ -24,8 +25,19 @@ String _tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
   _ => labelKey,
 };
 
-/// Horizontally scrollable row of built-in tag chips plus a custom "+ Add tag"
-/// chip. Wires to [selectedTagIdsProvider] and [pendingCustomTagsProvider].
+/// Built-in tag chips plus a custom "+ Add tag" chip, wired to
+/// [selectedTagIdsProvider] and [pendingCustomTagsProvider].
+///
+/// Two layouts, because one does not serve both widths. On a phone the chips
+/// scroll sideways behind an edge fade — vertical space on the result screen
+/// is scarce and nine tags would take three rows of it. Where the column is
+/// wider than a phone they wrap instead: there is room for two rows, and a
+/// wrapped row shows every tag at once rather than hiding most of them behind
+/// a gesture.
+///
+/// The edge fade is only drawn on the scrolling layout. Painted over a row
+/// that does not scroll it is not an affordance, it is a chip with its last
+/// syllable faded out — which is what "Great p…" was.
 class TagChipRow extends ConsumerWidget {
   const TagChipRow({super.key});
 
@@ -38,50 +50,65 @@ class TagChipRow extends ConsumerWidget {
 
     final tags = tagsAsync.valueOrNull ?? [];
 
-    // Flutter's default dragDevices omit the mouse, so on desktop this row
-    // could not be scrolled at all and any tag past the right edge was
-    // unreachable.
-    return ScrollConfiguration(
-      behavior: const _DragScrollBehavior(),
-      child: HorizontalScrollFade(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
-          child: Row(
-            children: [
-              for (final tag in tags) ...[
-                _TagChip(
-                  label: _tagLabel(tag.labelKey, l10n),
-                  selected: selectedIds.contains(tag.id),
-                  onTap: () {
-                    final current = ref.read(selectedTagIdsProvider);
-                    final next = Set<String>.from(current);
-                    if (current.contains(tag.id)) {
-                      next.remove(tag.id);
-                    } else {
-                      next.add(tag.id);
-                    }
-                    ref.read(selectedTagIdsProvider.notifier).state = next;
-                  },
-                ),
-                const SizedBox(width: Spacing.xs),
-              ],
-              for (final text in pending) ...[
-                _TagChip(label: text, selected: true, onTap: null),
-                const SizedBox(width: Spacing.xs),
-              ],
-              _AddTagChip(
-                onAdd: (text) {
-                  ref.read(pendingCustomTagsProvider.notifier).state = [
-                    ...ref.read(pendingCustomTagsProvider),
-                    text,
-                  ];
-                },
-              ),
-            ],
-          ),
+    final chips = <Widget>[
+      for (final tag in tags)
+        _TagChip(
+          label: _tagLabel(tag.labelKey, l10n),
+          selected: selectedIds.contains(tag.id),
+          onTap: () {
+            final current = ref.read(selectedTagIdsProvider);
+            final next = Set<String>.from(current);
+            if (current.contains(tag.id)) {
+              next.remove(tag.id);
+            } else {
+              next.add(tag.id);
+            }
+            ref.read(selectedTagIdsProvider.notifier).state = next;
+          },
         ),
+      for (final text in pending)
+        _TagChip(label: text, selected: true, onTap: null),
+      _AddTagChip(
+        onAdd: (text) {
+          ref.read(pendingCustomTagsProvider.notifier).state = [
+            ...ref.read(pendingCustomTagsProvider),
+            text,
+          ];
+        },
       ),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (!Breakpoint.forWidth(constraints.maxWidth).isCompact) {
+          return Wrap(
+            spacing: Spacing.xs,
+            runSpacing: Spacing.xs,
+            children: chips,
+          );
+        }
+
+        // Flutter's default dragDevices omit the mouse, so this row could not
+        // be scrolled at all on desktop and any tag past the right edge was
+        // unreachable.
+        return ScrollConfiguration(
+          behavior: const _DragScrollBehavior(),
+          child: HorizontalScrollFade(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+              child: Row(
+                children: [
+                  for (final (i, chip) in chips.indexed) ...[
+                    if (i > 0) const SizedBox(width: Spacing.xs),
+                    chip,
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

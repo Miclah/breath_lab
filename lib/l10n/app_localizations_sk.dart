@@ -550,13 +550,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get lungVolEmpty => 'Empty';
 
   @override
-  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+  String get lungVolFullHint => 'Plné pľúca';
 
   @override
-  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+  String get lungVolFrcHint => 'Pasívny výdych';
 
   @override
-  String get lungVolEmptyHint => 'Po výdychu · After exhale';
+  String get lungVolEmptyHint => 'Po výdychu';
 
   @override
   String get tagTired => 'Unavený';

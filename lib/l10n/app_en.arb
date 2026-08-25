@@ -690,17 +690,17 @@
   "@lungVolEmpty": {
     "description": "Lung volume selector segment label for empty lungs — kept as training term in both languages"
   },
-  "lungVolFullHint": "Plné pľúca · Full lungs",
+  "lungVolFullHint": "Full lungs",
   "@lungVolFullHint": {
-    "description": "Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when Full is selected"
   },
-  "lungVolFrcHint": "Pasívny výdych · Passive exhale",
+  "lungVolFrcHint": "Passive exhale",
   "@lungVolFrcHint": {
-    "description": "Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when FRC is selected"
   },
-  "lungVolEmptyHint": "Po výdychu · After exhale",
+  "lungVolEmptyHint": "After exhale",
   "@lungVolEmptyHint": {
-    "description": "Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when Empty is selected"
   },
   "tagTired": "Tired",
   "@tagTired": {

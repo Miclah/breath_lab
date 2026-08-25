@@ -751,47 +751,12 @@ class _LungVolumeSelector extends ConsumerWidget {
       children: [
         frame,
         const SizedBox(height: Spacing.xs),
-        _BilingualHint(text: hint, c: c),
+        Text(
+          hint,
+          textAlign: TextAlign.center,
+          style: BreathLabTypography.bodySm.copyWith(color: c.textTertiary),
+        ),
       ],
-    );
-  }
-}
-
-/// The lung volume hint strings are deliberately bilingual (Slovak term,
-/// then English) so the trainee picks up the terminology in both languages
-/// — split on the separator and mute the second language instead of
-/// printing "Plné pľúca · Full lungs" as one flat, equally-weighted line.
-class _BilingualHint extends StatelessWidget {
-  const _BilingualHint({required this.text, required this.c});
-
-  final String text;
-  final BreathLabColorScheme c;
-
-  @override
-  Widget build(BuildContext context) {
-    final base = Theme.of(context).textTheme.bodySmall;
-    final parts = text.split(' · ');
-    if (parts.length != 2) {
-      return Text(
-        text,
-        style: base?.copyWith(color: c.textTertiary, fontSize: 12),
-        textAlign: TextAlign.center,
-      );
-    }
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: parts[0],
-            style: base?.copyWith(color: c.textSecondary, fontSize: 12),
-          ),
-          TextSpan(
-            text: '  ·  ${parts[1]}',
-            style: base?.copyWith(color: c.textTertiary, fontSize: 10),
-          ),
-        ],
-      ),
-      textAlign: TextAlign.center,
     );
   }
 }
