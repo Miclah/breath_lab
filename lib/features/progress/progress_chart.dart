@@ -12,6 +12,7 @@ import '../../theme/typography.dart';
 import 'lung_volume_filter_chip.dart';
 import 'providers.dart';
 import 'time_range_selector.dart';
+import 'start_hold_button.dart';
 
 const _bottomLabelCount = 5;
 
@@ -46,16 +47,22 @@ Color _volumeColor(BreathLabColorScheme c, LungVolume volume) =>
 /// (solid, PB dots in record color) and daily average (dashed tertiary,
 /// single-volume view only). 30 days, filtered by [LungVolumeFilterChip]
 /// (Full by default; "All" overlays one best-only line per volume).
+/// Below this the chart shows copy instead of a line. A line needs points.
+const _minimumPointsForATrend = 4;
+
 class ProgressChart extends ConsumerWidget {
   const ProgressChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final c = context.appColors;
     final series = ref.watch(chartSeriesProvider);
     final days = ref.watch(chartWindowDaysProvider);
-    final hasData = series.any((s) => s.stats.isNotEmpty);
+    // Design Revision §5: four points, not one. Two points is a segment and
+    // three is barely a direction; drawing either invites the user to read a
+    // trend out of noise, which is worse than saying there isn't one yet.
+    final pointCount = series.fold<int>(0, (sum, s) => sum + s.stats.length);
+    final hasData = pointCount >= _minimumPointsForATrend;
     final isDesktop = MediaQuery.of(context).size.width >= 600;
     final showAverage = series.length == 1;
 
@@ -83,14 +90,7 @@ class ProgressChart extends ConsumerWidget {
           // Progress screen is for, and the teal top edge is what says so.
           decoration: Surfaces.primaryPanel(context),
           child: !hasData
-              ? Center(
-                  child: Text(
-                    l10n.progressChartEmpty,
-                    style: BreathLabTypography.micro.copyWith(
-                      color: c.textTertiary,
-                    ),
-                  ),
-                )
+              ? const _ChartEmptyState()
               : LineChart(_buildChartData(context, series, days)),
         ),
         if (hasData && showAverage) ...[
@@ -256,6 +256,44 @@ class _AverageLegend extends StatelessWidget {
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],
+    );
+  }
+}
+
+/// What the chart panel holds before there is a trend to draw.
+///
+/// Design Revision §5: a screen with no data shows what it is *for*, never an
+/// empty rendering of what it will become. The second line is the first place
+/// the research reaches the UI — `RESEARCH_ALIGNMENT.md` §2 records that
+/// 59.7 % of measured novice improvement sits in the struggle phase, so a
+/// beginner watching their total time is watching the wrong number.
+class _ChartEmptyState extends StatelessWidget {
+  const _ChartEmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            l10n.progressChartEmpty,
+            textAlign: TextAlign.center,
+            style: BreathLabTypography.body.copyWith(color: c.textSecondary),
+          ),
+          const SizedBox(height: Spacing.sm),
+          Text(
+            l10n.progressChartEmptyWhy,
+            textAlign: TextAlign.center,
+            style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
+          ),
+          const SizedBox(height: Spacing.lg),
+          const StartHoldButton(),
+        ],
+      ),
     );
   }
 }

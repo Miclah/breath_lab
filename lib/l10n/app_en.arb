@@ -1006,7 +1006,19 @@
       }
     }
   },
-  "progressChartEmpty": "Not enough holds yet to show a trend.",
+  "progressChartEmptyWhy": "Early on, the gain shows up in the struggle phase rather than in your total time.",
+  "@progressChartEmptyWhy": {
+    "description": "Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md \u00a72, tier A)"
+  },
+  "progressHeatmapEmpty": "Twelve weeks of training will fill this in.",
+  "@progressHeatmapEmpty": {
+    "description": "Shown over the dimmed heatmap grid before there is anything to plot"
+  },
+  "progressEmptyAction": "Start a hold",
+  "@progressEmptyAction": {
+    "description": "The one action that ends an empty state on the Progress screen; jumps to the Timer tab"
+  },
+  "progressChartEmpty": "A line needs points — four sessions and the trend starts here.",
   "@progressChartEmpty": {
     "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
   },

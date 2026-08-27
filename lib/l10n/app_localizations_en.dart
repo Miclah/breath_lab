@@ -786,7 +786,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get progressChartEmpty => 'Not enough holds yet to show a trend.';
+  String get progressChartEmptyWhy =>
+      'Early on, the gain shows up in the struggle phase rather than in your total time.';
+
+  @override
+  String get progressHeatmapEmpty =>
+      'Twelve weeks of training will fill this in.';
+
+  @override
+  String get progressEmptyAction => 'Start a hold';
+
+  @override
+  String get progressChartEmpty =>
+      'A line needs points — four sessions and the trend starts here.';
 
   @override
   String get progressChartAverageLegend => 'Average';

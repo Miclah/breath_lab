@@ -1453,10 +1453,28 @@ abstract class AppLocalizations {
   /// **'{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}'**
   String progressHeatmapStat(int sessions, int days);
 
+  /// Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md §2, tier A)
+  ///
+  /// In en, this message translates to:
+  /// **'Early on, the gain shows up in the struggle phase rather than in your total time.'**
+  String get progressChartEmptyWhy;
+
+  /// Shown over the dimmed heatmap grid before there is anything to plot
+  ///
+  /// In en, this message translates to:
+  /// **'Twelve weeks of training will fill this in.'**
+  String get progressHeatmapEmpty;
+
+  /// The one action that ends an empty state on the Progress screen; jumps to the Timer tab
+  ///
+  /// In en, this message translates to:
+  /// **'Start a hold'**
+  String get progressEmptyAction;
+
   /// Empty state shown in place of the progress chart when there is no data in the selected range
   ///
   /// In en, this message translates to:
-  /// **'Not enough holds yet to show a trend.'**
+  /// **'A line needs points — four sessions and the trend starts here.'**
   String get progressChartEmpty;
 
   /// Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected

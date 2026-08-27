@@ -795,8 +795,18 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get progressChartEmptyWhy =>
+      'Na začiatku sa zlepšenie prejaví vo fáze boja, nie v celkovom čase.';
+
+  @override
+  String get progressHeatmapEmpty => 'Dvanásť týždňov tréningu toto vyplní.';
+
+  @override
+  String get progressEmptyAction => 'Začať zadržanie';
+
+  @override
   String get progressChartEmpty =>
-      'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
+      'Čiara potrebuje body — po štyroch tréningoch sa tu objaví trend.';
 
   @override
   String get progressChartAverageLegend => 'Priemer';

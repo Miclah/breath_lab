@@ -62,6 +62,11 @@ class CalendarHeatmap extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
     final data = ref.watch(heatmapDataProvider);
+    // Eighty-four identical grey squares presented as though they were a
+    // reading is what a fresh install used to show. Dimmed, with a line
+    // saying what fills it, it reads as a thing waiting for data rather than
+    // as a thing that is broken. Design Revision §5.
+    final isEmpty = data.totalSessions == 0;
 
     final today = _dateOnly(DateTime.now());
     final currentWeekStart = today.subtract(Duration(days: today.weekday - 1));
@@ -97,115 +102,132 @@ class CalendarHeatmap extends ConsumerWidget {
             style: BreathLabTypography.section.copyWith(color: c.textTertiary),
           ),
           const SizedBox(height: Spacing.sm),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final gridWidth =
-                  constraints.maxWidth - dayLabelWidth - Spacing.xs;
-              final cellSize =
-                  ((gridWidth - (_weeksShown - 1) * _cellGap) / _weeksShown)
-                      .clamp(10.0, 22.0);
-              final colStep = cellSize + _cellGap;
+          Opacity(
+            opacity: isEmpty ? 0.35 : 1,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final gridWidth =
+                    constraints.maxWidth - dayLabelWidth - Spacing.xs;
+                final cellSize =
+                    ((gridWidth - (_weeksShown - 1) * _cellGap) / _weeksShown)
+                        .clamp(10.0, 22.0);
+                final colStep = cellSize + _cellGap;
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: dayLabelWidth + Spacing.xs),
-                    child: SizedBox(
-                      height: 14,
-                      child: Stack(
-                        children: [
-                          for (var w = 0; w < _weeksShown; w++)
-                            if (w == 0 ||
-                                weekStarts[w].month != weekStarts[w - 1].month)
-                              Positioned(
-                                left: w * colStep,
-                                child: Text(
-                                  DateFormat('MMM').format(weekStarts[w]),
-                                  style: axisStyle,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                ),
-                              ),
-                        ],
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: dayLabelWidth + Spacing.xs,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: Spacing.xxs),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: dayLabelWidth,
-                        child: Column(
-                          children: [
-                            for (var d = 0; d < _daysPerWeek; d++)
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: d == _daysPerWeek - 1 ? 0 : _cellGap,
-                                ),
-                                child: SizedBox(
-                                  height: cellSize,
-                                  child: dayLabels[d] == null
-                                      ? null
-                                      : Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            dayLabels[d]!,
-                                            style: axisStyle,
-                                            maxLines: 1,
-                                            softWrap: false,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: Spacing.xs),
-                      Expanded(
-                        child: Row(
+                      child: SizedBox(
+                        height: 14,
+                        child: Stack(
                           children: [
                             for (var w = 0; w < _weeksShown; w++)
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: w == _weeksShown - 1 ? 0 : _cellGap,
+                              if (w == 0 ||
+                                  weekStarts[w].month !=
+                                      weekStarts[w - 1].month)
+                                Positioned(
+                                  left: w * colStep,
+                                  child: Text(
+                                    DateFormat('MMM').format(weekStarts[w]),
+                                    style: axisStyle,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                  ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    for (var d = 0; d < _daysPerWeek; d++)
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: d == _daysPerWeek - 1
-                                              ? 0
-                                              : _cellGap,
-                                        ),
-                                        child: _HeatmapCell(
-                                          date: gridDates[w * _daysPerWeek + d],
-                                          count:
-                                              data.countsByDate[gridDates[w *
-                                                      _daysPerWeek +
-                                                  d]] ??
-                                              0,
-                                          isToday:
-                                              gridDates[w * _daysPerWeek + d] ==
-                                              today,
-                                          size: cellSize,
-                                          onTap: showHeatmapDaySheet,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              );
-            },
+                    ),
+                    const SizedBox(height: Spacing.xxs),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: dayLabelWidth,
+                          child: Column(
+                            children: [
+                              for (var d = 0; d < _daysPerWeek; d++)
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: d == _daysPerWeek - 1
+                                        ? 0
+                                        : _cellGap,
+                                  ),
+                                  child: SizedBox(
+                                    height: cellSize,
+                                    child: dayLabels[d] == null
+                                        ? null
+                                        : Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              dayLabels[d]!,
+                                              style: axisStyle,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: Spacing.xs),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              for (var w = 0; w < _weeksShown; w++)
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: w == _weeksShown - 1 ? 0 : _cellGap,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      for (var d = 0; d < _daysPerWeek; d++)
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: d == _daysPerWeek - 1
+                                                ? 0
+                                                : _cellGap,
+                                          ),
+                                          child: _HeatmapCell(
+                                            date:
+                                                gridDates[w * _daysPerWeek + d],
+                                            count:
+                                                data.countsByDate[gridDates[w *
+                                                        _daysPerWeek +
+                                                    d]] ??
+                                                0,
+                                            isToday:
+                                                gridDates[w * _daysPerWeek +
+                                                    d] ==
+                                                today,
+                                            size: cellSize,
+                                            onTap: showHeatmapDaySheet,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
+          if (isEmpty) ...[
+            const SizedBox(height: Spacing.md),
+            Text(
+              l10n.progressHeatmapEmpty,
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
+            ),
+          ],
           const SizedBox(height: Spacing.md),
           Row(
             children: [
