@@ -31,6 +31,7 @@ class AdaptivePage extends StatelessWidget {
     this.side,
     this.padding,
     this.reserveSide = false,
+    this.centerVertically = false,
   });
 
   /// The page body. Receives a full-height box, so a `ListView` or an
@@ -65,6 +66,39 @@ class AdaptivePage extends StatelessWidget {
   /// With it, the main column's left edge depends on the page width alone.
   /// A screen whose side content comes and goes should always set it.
   final bool reserveSide;
+
+  /// Give the content column a scroll view that only scrolls when it has
+  /// to, and centre the content inside it when it does not.
+  ///
+  /// Design Revision §4: a screen shorter than its viewport centres
+  /// vertically rather than top-anchoring with the action button pinned to
+  /// the window bottom — that pairing is what read as abandonment rather
+  /// than breathing room, and it is why the old build put its content in the
+  /// top 41 % of a tall window.
+  ///
+  /// Only for screens whose content is a fixed block. A screen that already
+  /// passes its own `ListView` must leave this false, or it nests one
+  /// scrollable inside another.
+  final bool centerVertically;
+
+  /// Wraps [child] so it can overflow into a scroll instead of an error.
+  ///
+  /// `minHeight` is what does the centring: it forces the child to at least
+  /// the viewport's height, so a `Column` inside it with
+  /// `MainAxisAlignment.center` has room to distribute. Taller content
+  /// exceeds the minimum, the scroll view takes over, and it top-anchors —
+  /// which is the behaviour the revision keeps for overflow.
+  Widget _fitted(Widget content) {
+    if (!centerVertically) return content;
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: content,
+        ),
+      ),
+    );
+  }
 
   /// Whether a page capped at [maxWidth] gets a side column in [width], at
   /// the default padding.
@@ -135,7 +169,7 @@ class AdaptivePage extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: SizedBox(
               width: math.min(maxWidth, composition),
-              child: child,
+              child: _fitted(child),
             ),
           );
         }
@@ -154,7 +188,7 @@ class AdaptivePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(width: contentWidth, child: child),
+            SizedBox(width: contentWidth, child: _fitted(child)),
             const SizedBox(width: PagePadding.columnGap),
             // Null child on purpose under [reserveSide]: the box still
             // occupies its width and paints nothing, which is the whole

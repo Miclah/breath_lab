@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:breath_lab/features/timer/timer_status_row.dart';
+import 'package:breath_lab/shared/widgets/adaptive_page.dart';
 
 /// Same reasoning as `progress_screen_test.dart`: the real drift database
 /// never resolves under `flutter test`, so the data providers are faked.
@@ -41,9 +43,13 @@ Offset _heroCentre(WidgetTester tester) {
   return tester.getCenter(band.at(1));
 }
 
-Future<ProviderContainer> _pumpTimer(WidgetTester tester, double width) async {
+Future<ProviderContainer> _pumpTimer(
+  WidgetTester tester,
+  double width, {
+  double height = 900,
+}) async {
   SharedPreferences.setMockInitialValues({'acknowledged_safety': true});
-  tester.view.physicalSize = Size(width, 900);
+  tester.view.physicalSize = Size(width, height);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
 
@@ -63,7 +69,7 @@ Future<ProviderContainer> _pumpTimer(WidgetTester tester, double width) async {
 void main() {
   for (final width in [634.0, 1600.0]) {
     testWidgets(
-      'the hero centre does not move across idle/prep/hold/done at ${width.toInt()}px',
+      'the hero centre does not move across idle/prep/hold at ${width.toInt()}px',
       (tester) async {
         final container = await _pumpTimer(tester, width);
         final notifier = container.read(timerProvider.notifier);
@@ -87,13 +93,79 @@ void main() {
 
         expect(prep, idle, reason: 'idle -> prep moved the hero');
         expect(hold, idle, reason: 'prep -> hold moved the hero');
-        expect(done, idle, reason: 'hold -> result moved the hero');
+
+        // RESULT is the exception, and it is one Design Revision §4
+        // introduced deliberately. Content shorter than the viewport centres
+        // vertically; content that overflows scrolls and top-anchors. The
+        // three hold states are short and centre together; the result screen
+        // — duration, metrics, today's holds, tags, a note field, the lung
+        // selector and two buttons — is taller than the viewport and so
+        // top-anchors. A tall block and a short block cannot centre their
+        // heroes on the same pixel, so Phase 3B's four-state guarantee
+        // narrowed to three rather than §4's centring being dropped.
+        //
+        // What still has to hold is the column geometry: the hero's
+        // horizontal centre is unchanged, because that is the part the
+        // reserved side slot and the fixed band widths are responsible for.
+        expect(
+          done.dx,
+          idle.dx,
+          reason: 'hold -> result moved the hero sideways',
+        );
+        expect(
+          done.dy,
+          lessThan(idle.dy),
+          reason: 'the result screen should top-anchor, not centre',
+        );
 
         notifier.reset();
         await tester.pumpAndSettle();
       },
     );
   }
+
+  testWidgets('short timer content centres vertically', (tester) async {
+    // Design Revision §4's acceptance. The complaint it fixes is specific:
+    // the old build put its content in the top 41 % of a tall window and
+    // pinned the action button to the bottom edge, which read as abandonment
+    // rather than as breathing room.
+    //
+    // Measured from the first and last things actually drawn — the status row
+    // and the action button — against the page, not the Scaffold, which would
+    // include the app bar.
+    await _pumpTimer(tester, 1400, height: 900);
+
+    final page = tester.getRect(find.byType(AdaptivePage));
+    final firstRow = tester.getRect(find.byType(TimerStatusRow));
+    final action = tester.getRect(find.byType(FilledButton).first);
+
+    final above = firstRow.top - page.top;
+    final below = page.bottom - action.bottom;
+
+    expect(above, greaterThan(0), reason: 'content is not top-anchored');
+    expect(
+      below,
+      greaterThan(0),
+      reason: 'the button is not pinned to the bottom',
+    );
+    // The two differ only by the stage's own lead-in and trailing gap.
+    expect(above, closeTo(below, 8));
+  });
+
+  testWidgets('timer content taller than the viewport scrolls', (tester) async {
+    await _pumpTimer(tester, 1400, height: 460);
+
+    // The other half of the rule: overflow scrolls rather than throwing, and
+    // it is also why the ring no longer shrinks to fit a short window.
+    expect(tester.takeException(), isNull);
+    expect(
+      find.ancestor(
+        of: find.byType(TimerStage),
+        matching: find.byType(SingleChildScrollView),
+      ),
+      findsOneWidget,
+    );
+  });
 
   testWidgets('emptying the side slot does not move the main column', (
     tester,

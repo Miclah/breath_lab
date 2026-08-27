@@ -44,7 +44,13 @@ class TimerStage extends StatelessWidget {
   /// Laid out in a square of [diameterFor].
   final Widget hero;
 
-  /// Everything under the hero. Gets the rest of the height.
+  /// Everything under the hero, at its own height.
+  ///
+  /// It used to be `Expanded`, which handed it every spare pixel and pinned
+  /// the action button to the bottom of the window — on a 900 px-tall window
+  /// that left a third of the screen empty between the button and the holds
+  /// row above it. The bands inside it are all fixed height anyway, so the
+  /// slack was never doing anything except separating them.
   final Widget below;
 
   /// Breathing room above the top band.
@@ -100,7 +106,13 @@ class TimerStage extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final diameter = diameterFor(constraints);
+        // Centred as one block. Every band in it has a height that does not
+        // vary by state, so the block's height does not either — which is
+        // what keeps the hero's centre fixed across state changes even though
+        // it is now measured from the middle of the viewport rather than
+        // from its top.
         return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: leadIn),
             SizedBox(height: topBandHeight, width: double.infinity, child: top),
@@ -111,7 +123,7 @@ class TimerStage extends StatelessWidget {
                 child: SizedBox.square(dimension: diameter, child: hero),
               ),
             ),
-            Expanded(child: below),
+            below,
           ],
         );
       },

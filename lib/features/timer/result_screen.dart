@@ -197,6 +197,7 @@ class _ResultViewState extends ConsumerState<ResultView>
     return AdaptivePage(
       maxWidth: ContentWidth.wide,
       reserveSide: true,
+      centerVertically: true,
       side: const TimerSidePanel(),
       child: TimerStage(
         top: const Column(
@@ -215,41 +216,42 @@ class _ResultViewState extends ConsumerState<ResultView>
           glowOpacity: _glowOpacity,
           showGlow: _showGlow,
         ),
-        below: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: Spacing.lg),
+        // No scroll view of its own any more: the page owns the one scroll,
+        // so a second one here would trap this content in a nested scrollable
+        // that never scrolls.
+        below: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: Spacing.lg),
 
-              _HoldMetrics(state: state),
+            _HoldMetrics(state: state),
 
-              const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.lg),
 
-              // What today already looks like, so the number above has
-              // something to be read against before it is saved.
-              const TodaysHoldsRow(),
+            // What today already looks like, so the number above has
+            // something to be read against before it is saved.
+            const TodaysHoldsRow(),
 
-              const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.lg),
 
-              const TagChipRow(),
+            const TagChipRow(),
 
-              const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.lg),
 
-              const _NoteField(),
+            const _NoteField(),
 
-              const SizedBox(height: Spacing.xxl),
+            const SizedBox(height: Spacing.xxl),
 
-              const _LungVolumeSelector(),
+            const _LungVolumeSelector(),
 
-              const SizedBox(height: Spacing.xxl),
+            const SizedBox(height: Spacing.xxl),
 
-              _SaveButton(saving: _saving, onPressed: _save),
+            _SaveButton(saving: _saving, onPressed: _save),
 
-              _DiscardButton(saving: _saving, onPressed: _discard),
+            _DiscardButton(saving: _saving, onPressed: _discard),
 
-              const SizedBox(height: Spacing.xl),
-            ],
-          ),
+            const SizedBox(height: Spacing.xl),
+          ],
         ),
       ),
     );

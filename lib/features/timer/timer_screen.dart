@@ -104,6 +104,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   // column, and with it the ring, does not slide sideways
                   // when it empties.
                   reserveSide: true,
+                  centerVertically: true,
                   side: state.isIdle ? const TimerSidePanel() : null,
                   child: TimerStage(
                     // Every band carries something in every state, or
@@ -136,6 +137,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                             ),
                     ),
                     below: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(height: Spacing.md),
                         StageBand(
