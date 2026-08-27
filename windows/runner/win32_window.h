@@ -39,6 +39,12 @@ class Win32Window {
   // Show the current window. Returns true if the window was successfully shown.
   bool Show();
 
+  // Reads the size, position and maximised state the window was last closed
+  // at. Returns false when nothing has been stored yet, or when what was
+  // stored is smaller than the minimum the layout needs — in which case the
+  // caller should fall back to its default.
+  static bool RestoreGeometry(Point* origin, Size* size, bool* maximized);
+
   // Release OS resources associated with window.
   void Destroy();
 
@@ -70,6 +76,11 @@ class Win32Window {
 
   // Called when Destroy is called.
   virtual void OnDestroy();
+
+  // Records the window's restored geometry so the next launch can reopen at
+  // it. Called as the window is being destroyed, while its handle is still
+  // valid.
+  void SaveGeometry(HWND hwnd);
 
  private:
   friend class WindowClassRegistrar;
