@@ -75,7 +75,17 @@ void main() {
 
       expect(find.byKey(_sideKey), findsOneWidget);
       expect(_widthOf(tester, _contentKey), ContentWidth.reading);
-      expect(_widthOf(tester, _sideKey), ContentWidth.side);
+      // The side column became fluid in Design Revision §4, so this asserts
+      // the rule rather than the single value it used to have: it stays
+      // inside its range, and it is narrower than the content beside it.
+      // A value here would need editing again the next time the curve is
+      // tuned, which is not what this test is for.
+      final sideWidth = _widthOf(tester, _sideKey);
+      expect(
+        sideWidth,
+        inInclusiveRange(ContentWidth.sideMin, ContentWidth.sideMax),
+      );
+      expect(sideWidth, lessThan(_widthOf(tester, _contentKey)));
       // Side sits to the right of the content, not on top of it.
       expect(
         tester.getTopLeft(find.byKey(_sideKey)).dx,
@@ -92,6 +102,41 @@ void main() {
 
       expect(find.byKey(_sideKey), findsNothing);
       expect(_widthOf(tester, _contentKey), ContentWidth.wide);
+    });
+
+    testWidgets('the composition caps and the surplus becomes margin', (
+      tester,
+    ) async {
+      // Design Revision §4. The dead-canvas failure was a fixed 600 column
+      // in a 2560 window; the opposite failure is a 2560-wide column. The
+      // cap is what rules out both.
+      await _pumpAt(tester, 2560, maxWidth: ContentWidth.wide);
+
+      final content = _widthOf(tester, _contentKey);
+      final side = _widthOf(tester, _sideKey);
+      expect(
+        content + PagePadding.columnGap + side,
+        lessThanOrEqualTo(ContentWidth.composition),
+      );
+
+      // Centred, so the margin either side is equal.
+      final left = tester.getTopLeft(find.byKey(_contentKey)).dx;
+      final right = 2560 - tester.getTopRight(find.byKey(_sideKey)).dx;
+      expect(left, closeTo(right, 1));
+    });
+
+    testWidgets('the side column widens as the composition does', (
+      tester,
+    ) async {
+      await _pumpAt(tester, 1100);
+      final narrow = _widthOf(tester, _sideKey);
+
+      await _pumpAt(tester, 1400);
+      final wide = _widthOf(tester, _sideKey);
+
+      expect(narrow, greaterThanOrEqualTo(ContentWidth.sideMin));
+      expect(wide, greaterThan(narrow));
+      expect(wide, lessThanOrEqualTo(ContentWidth.sideMax));
     });
 
     testWidgets('no side slot means one column however wide the window is', (

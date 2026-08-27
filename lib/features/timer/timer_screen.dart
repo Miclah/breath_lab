@@ -97,7 +97,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
           child: state.isDone
               ? const ResultView()
               : AdaptivePage(
-                  maxWidth: ContentWidth.reading,
+                  maxWidth: ContentWidth.wide,
                   // Held open in every state. During PREP and HOLD the slot
                   // is deliberately empty — Design's "don't crowd the timer
                   // screen" — but its width stays reserved so the main

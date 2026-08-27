@@ -82,7 +82,25 @@ class AdaptivePage extends StatelessWidget {
   }
 
   static bool _sideFits(double available, double maxWidth) =>
-      available >= maxWidth + PagePadding.columnGap + ContentWidth.side;
+      available >= maxWidth + PagePadding.columnGap + ContentWidth.sideMin;
+
+  /// The narrowest composition that fits two columns at their minimums.
+  static const _narrowestTwoColumn =
+      ContentWidth.reading + PagePadding.columnGap + ContentWidth.sideMin;
+
+  /// How wide the side column is inside a composition of [composition] px.
+  ///
+  /// Interpolated across the range the composition itself grows over, so it
+  /// sits at [ContentWidth.sideMin] the moment two columns first fit and at
+  /// [ContentWidth.sideMax] once the composition reaches its cap.
+  static double sideWidthFor(double composition) {
+    final t =
+        ((composition - _narrowestTwoColumn) /
+                (ContentWidth.composition - _narrowestTwoColumn))
+            .clamp(0.0, 1.0);
+    return ContentWidth.sideMin +
+        (ContentWidth.sideMax - ContentWidth.sideMin) * t;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +119,12 @@ class AdaptivePage extends StatelessWidget {
         // narrower than the cap — which is the one case it exists for.
         final available = math.max(0.0, width - resolvedPadding.horizontal);
 
+        // Design Revision §4: the composition caps, and past the cap the
+        // surplus is margin rather than column width. Without this a 2560 px
+        // window either stretched one column across the whole canvas or left
+        // most of it dead — the two failure modes the revision names.
+        final composition = math.min(available, ContentWidth.composition);
+
         final twoColumn =
             (side != null || reserveSide) &&
             breakpoint.isExpanded &&
@@ -109,20 +133,33 @@ class AdaptivePage extends StatelessWidget {
         if (!twoColumn) {
           return Align(
             alignment: Alignment.topCenter,
-            child: SizedBox(width: math.min(maxWidth, available), child: child),
+            child: SizedBox(
+              width: math.min(maxWidth, composition),
+              child: child,
+            ),
           );
         }
+
+        // Both columns are fluid, and [maxWidth] is the ceiling on the
+        // content one rather than its fixed width — which is what lets a
+        // screen grow from 600 towards 900 with the window while Settings
+        // and Tables stay at the narrower caps Design §Layout gives them.
+        final sideWidth = sideWidthFor(composition);
+        final contentWidth = math.min(
+          maxWidth,
+          composition - PagePadding.columnGap - sideWidth,
+        );
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(width: maxWidth, child: child),
+            SizedBox(width: contentWidth, child: child),
             const SizedBox(width: PagePadding.columnGap),
             // Null child on purpose under [reserveSide]: the box still
             // occupies its width and paints nothing, which is the whole
             // point — the geometry must not know whether the slot is full.
-            SizedBox(width: ContentWidth.side, child: side),
+            SizedBox(width: sideWidth, child: side),
           ],
         );
       },

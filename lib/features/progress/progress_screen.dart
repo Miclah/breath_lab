@@ -43,11 +43,11 @@ class ProgressScreen extends ConsumerWidget {
           // room it does not have.
           final split = AdaptivePage.showsSide(
             constraints.maxWidth,
-            maxWidth: ContentWidth.chart,
+            maxWidth: ContentWidth.wide,
           );
 
           return AdaptivePage(
-            maxWidth: ContentWidth.chart,
+            maxWidth: ContentWidth.wide,
             side: split ? const _ProgressSide() : null,
             // Vertical only. The horizontal margin belongs to the page now,
             // so the two stop stacking into a 40 px inset on a phone.

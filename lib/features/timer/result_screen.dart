@@ -195,7 +195,7 @@ class _ResultViewState extends ConsumerState<ResultView>
     // own content happened to push it. Design §`hold-result` says the result
     // replaces the ring area; this is what that means geometrically.
     return AdaptivePage(
-      maxWidth: ContentWidth.reading,
+      maxWidth: ContentWidth.wide,
       reserveSide: true,
       side: const TimerSidePanel(),
       child: TimerStage(

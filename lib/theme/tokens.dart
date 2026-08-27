@@ -59,7 +59,20 @@ class ContentWidth {
   static const double wide = 900;
 
   /// The supplementary column beside the content at [Breakpoint.expanded].
-  static const double side = 320;
+  ///
+  /// Fluid between these two rather than fixed at one width: a side panel on
+  /// a large monitor should not be the same strip it is on a small laptop.
+  /// Design Revision §4.
+  static const double sideMin = 320;
+  static const double sideMax = 360;
+
+  /// The whole composition — content column, gap and side column — never
+  /// grows past this.
+  ///
+  /// Past it the composition centres and the surplus becomes margin. This is
+  /// what stops a 2560 px window from either stretching one column across the
+  /// full width or leaving 62 % of its canvas dead. Design Revision §4.
+  static const double composition = 1180;
 }
 
 /// Padding tokens that depend on how much room there is.
