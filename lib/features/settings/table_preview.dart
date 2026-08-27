@@ -5,6 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/round_list_item.dart' show formatRoundMs;
+import '../../theme/surfaces.dart';
 
 /// Compact read-only preview of computed table rounds, shown at the bottom
 /// of the CO₂/O₂ settings sections so changes are visible immediately.
@@ -74,10 +75,7 @@ class _TablePreviewState extends State<TablePreview> {
         else ...[
           const SizedBox(height: Spacing.sm),
           Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: c.border, width: 0.5),
-              borderRadius: BorderRadius.circular(Radius.md),
-            ),
+            decoration: Surfaces.inset(context),
             child: Column(
               children: [
                 for (final (i, round) in rounds.indexed) ...[

@@ -17,6 +17,7 @@ import 'section_index.dart';
 import 'sound_haptics_section.dart';
 import 'timer_section.dart';
 import 'training_section.dart';
+import '../../theme/surfaces.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -123,10 +124,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Each group is a quiet panel: unfilled, so the form reads
+                  // as one surface with rules on it rather than a stack of
+                  // competing cards. Settings takes no primary panel — a form
+                  // has no subject.
                   for (final section in sections)
                     if (section.visible) ...[
                       SectionHeader(key: section.anchor, title: section.title),
-                      section.body,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: Spacing.sm),
+                        child: Container(
+                          decoration: Surfaces.quietPanel(context),
+                          clipBehavior: Clip.antiAlias,
+                          child: section.body,
+                        ),
+                      ),
                     ],
                 ],
               ),

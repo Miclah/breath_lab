@@ -14,6 +14,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'history_filters.dart';
+import '../../theme/surfaces.dart';
 
 String _prepModeLabel(PrepMode mode, AppLocalizations l10n) => switch (mode) {
   PrepMode.none => l10n.historyPrepModeNone,
@@ -122,21 +123,34 @@ class HistoryScreen extends ConsumerWidget {
                           ),
                         );
                       }
-                      return ListView.separated(
-                        itemCount: entries.length,
-                        separatorBuilder: (context, index) => const Divider(
-                          height: 1,
-                          indent: Spacing.xl,
-                          endIndent: Spacing.xl,
+                      // Recessed: the list is nested under the filter bar
+                      // that scopes it, and an inset is what nesting looks
+                      // like now.
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(
+                          Spacing.xl,
+                          0,
+                          Spacing.xl,
+                          Spacing.xl,
                         ),
-                        itemBuilder: (_, i) => switch (entries[i]) {
-                          _HoldEntry(:final hold) => HoldListItem(
-                            hold: hold,
-                            onTap: () => showHoldDetail(context, hold),
+                        decoration: Surfaces.inset(context),
+                        clipBehavior: Clip.antiAlias,
+                        child: ListView.separated(
+                          itemCount: entries.length,
+                          separatorBuilder: (context, index) => const Divider(
+                            height: 1,
+                            indent: Spacing.xl,
+                            endIndent: Spacing.xl,
                           ),
-                          _TableSessionEntry(:final session) =>
-                            _TableSessionRow(session: session),
-                        },
+                          itemBuilder: (_, i) => switch (entries[i]) {
+                            _HoldEntry(:final hold) => HoldListItem(
+                              hold: hold,
+                              onTap: () => showHoldDetail(context, hold),
+                            ),
+                            _TableSessionEntry(:final session) =>
+                              _TableSessionRow(session: session),
+                          },
+                        ),
                       );
                     },
                   ),

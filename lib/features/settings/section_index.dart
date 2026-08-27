@@ -4,6 +4,7 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import '../../theme/surfaces.dart';
 
 /// One group of the settings form, declared once and rendered twice: as a
 /// header plus body in the form, and as a row in the jump list.
@@ -73,23 +74,34 @@ class SectionIndex extends StatelessWidget {
             style: BreathLabTypography.section.copyWith(color: c.textTertiary),
           ),
         ),
-        for (final section in sections.where((s) => s.visible))
-          InkWell(
-            onTap: () => _jumpTo(section),
-            borderRadius: BorderRadius.circular(Radius.sm),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Spacing.md,
-                vertical: Spacing.sm,
-              ),
-              child: Text(
-                section.title,
-                style: BreathLabTypography.body.copyWith(
-                  color: c.textSecondary,
+        // Recessed: the jump list is a second view of the form beside it, not
+        // a thing in its own right, and an inset is what that looks like.
+        Container(
+          decoration: Surfaces.inset(context),
+          clipBehavior: Clip.antiAlias,
+          padding: const EdgeInsets.symmetric(vertical: Spacing.xs),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (final section in sections.where((s) => s.visible))
+                InkWell(
+                  onTap: () => _jumpTo(section),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Spacing.md,
+                      vertical: Spacing.sm,
+                    ),
+                    child: Text(
+                      section.title,
+                      style: BreathLabTypography.body.copyWith(
+                        color: c.textSecondary,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+            ],
           ),
+        ),
       ],
     );
   }

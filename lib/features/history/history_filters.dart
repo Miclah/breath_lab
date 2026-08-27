@@ -10,6 +10,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'history_screen.dart' show tagLabel;
+import '../../theme/surfaces.dart';
 
 /// Type filter for the History screen. Standalone max holds vs. the two
 /// table session types.
@@ -75,52 +76,62 @@ class HistoryFilterBar extends ConsumerWidget {
     final lungVolumes = ref.watch(historyLungVolumeFilterProvider);
     final tagFilter = ref.watch(historyTagFilterProvider);
 
-    return HorizontalScrollFade(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(
-          horizontal: Spacing.xl,
-          vertical: Spacing.sm,
-        ),
-        child: Row(
-          children: [
-            for (final type in HistoryTypeFilter.values) ...[
+    // Quiet: the filter bar frames the list without competing with it.
+    // History takes no primary panel — the list is the screen.
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: Spacing.xl,
+        vertical: Spacing.sm,
+      ),
+      decoration: Surfaces.quietPanel(context),
+      clipBehavior: Clip.antiAlias,
+      child: HorizontalScrollFade(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.md,
+            vertical: Spacing.sm,
+          ),
+          child: Row(
+            children: [
+              for (final type in HistoryTypeFilter.values) ...[
+                _FilterChip(
+                  label: switch (type) {
+                    HistoryTypeFilter.max => l10n.historyFilterMax,
+                    HistoryTypeFilter.co2 => l10n.tablesCo2Toggle,
+                    HistoryTypeFilter.o2 => l10n.tablesO2Toggle,
+                  },
+                  selected: types.contains(type),
+                  onTap: () => _toggle(ref, historyTypeFilterProvider, type),
+                ),
+                const SizedBox(width: Spacing.sm),
+              ],
+              for (final volume in LungVolume.values) ...[
+                _FilterChip(
+                  label: switch (volume) {
+                    LungVolume.full => l10n.lungVolFull,
+                    LungVolume.frc => l10n.lungVolFrc,
+                    LungVolume.empty => l10n.lungVolEmpty,
+                  },
+                  selected: lungVolumes.contains(volume),
+                  onTap: () =>
+                      _toggle(ref, historyLungVolumeFilterProvider, volume),
+                ),
+                const SizedBox(width: Spacing.sm),
+              ],
               _FilterChip(
-                label: switch (type) {
-                  HistoryTypeFilter.max => l10n.historyFilterMax,
-                  HistoryTypeFilter.co2 => l10n.tablesCo2Toggle,
-                  HistoryTypeFilter.o2 => l10n.tablesO2Toggle,
-                },
-                selected: types.contains(type),
-                onTap: () => _toggle(ref, historyTypeFilterProvider, type),
+                label: tagFilter.isEmpty
+                    ? l10n.historyFilterTags
+                    : '${l10n.historyFilterTags} (${tagFilter.length})',
+                selected: tagFilter.isNotEmpty,
+                onTap: () => showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (_) => const _TagFilterSheet(),
+                ),
               ),
-              const SizedBox(width: Spacing.sm),
             ],
-            for (final volume in LungVolume.values) ...[
-              _FilterChip(
-                label: switch (volume) {
-                  LungVolume.full => l10n.lungVolFull,
-                  LungVolume.frc => l10n.lungVolFrc,
-                  LungVolume.empty => l10n.lungVolEmpty,
-                },
-                selected: lungVolumes.contains(volume),
-                onTap: () =>
-                    _toggle(ref, historyLungVolumeFilterProvider, volume),
-              ),
-              const SizedBox(width: Spacing.sm),
-            ],
-            _FilterChip(
-              label: tagFilter.isEmpty
-                  ? l10n.historyFilterTags
-                  : '${l10n.historyFilterTags} (${tagFilter.length})',
-              selected: tagFilter.isNotEmpty,
-              onTap: () => showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (_) => const _TagFilterSheet(),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

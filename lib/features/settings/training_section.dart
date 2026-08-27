@@ -144,7 +144,7 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
             ),
             errorText: _error,
             filled: true,
-            fillColor: c.surfaceElevated,
+            fillColor: c.insetFill,
             isDense: true,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: Spacing.md,
