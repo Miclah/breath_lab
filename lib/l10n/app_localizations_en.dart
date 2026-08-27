@@ -757,7 +757,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressStatStreak => 'Streak';
 
   @override
-  String get progressStatNoData => '—';
+  String get statAbsentDuration => '——:——';
+
+  @override
+  String get statAbsentCount => '—';
 
   @override
   String get progressHeatmapTitle => 'Last 12 weeks';

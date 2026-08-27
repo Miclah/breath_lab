@@ -1423,11 +1423,17 @@ abstract class AppLocalizations {
   /// **'Streak'**
   String get progressStatStreak;
 
-  /// Placeholder value for a stat card when there is not enough history yet
+  /// Stands in for a duration that has no value yet. Shaped like mm:ss so the row keeps its rhythm — zero is a measurement, absence is not, so this is never 00:00
+  ///
+  /// In en, this message translates to:
+  /// **'——:——'**
+  String get statAbsentDuration;
+
+  /// Stands in for a count that has no value yet
   ///
   /// In en, this message translates to:
   /// **'—'**
-  String get progressStatNoData;
+  String get statAbsentCount;
 
   /// Section header above the calendar heatmap on the Progress screen
   ///

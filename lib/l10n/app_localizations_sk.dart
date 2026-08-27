@@ -764,7 +764,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressStatStreak => 'Séria';
 
   @override
-  String get progressStatNoData => '—';
+  String get statAbsentDuration => '——:——';
+
+  @override
+  String get statAbsentCount => '—';
 
   @override
   String get progressHeatmapTitle => 'Posledných 12 týždňov';

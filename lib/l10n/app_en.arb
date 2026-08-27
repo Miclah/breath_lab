@@ -978,9 +978,13 @@
   "@progressStatStreak": {
     "description": "Label for the current streak stat card on the Progress screen"
   },
-  "progressStatNoData": "—",
-  "@progressStatNoData": {
-    "description": "Placeholder value for a stat card when there is not enough history yet"
+  "statAbsentDuration": "\u2014\u2014:\u2014\u2014",
+  "@statAbsentDuration": {
+    "description": "Stands in for a duration that has no value yet. Shaped like mm:ss so the row keeps its rhythm — zero is a measurement, absence is not, so this is never 00:00"
+  },
+  "statAbsentCount": "\u2014",
+  "@statAbsentCount": {
+    "description": "Stands in for a count that has no value yet"
   },
   "progressHeatmapTitle": "Last 12 weeks",
   "@progressHeatmapTitle": {

@@ -35,20 +35,25 @@ class StatCardRow extends ConsumerWidget {
     final avg = ref.watch(avg30dProvider);
     final streak = ref.watch(currentStreakProvider);
 
+    // An absent value keeps the row's rhythm but not its accent: gold on
+    // `\u2014\u2014:\u2014\u2014` would be colour-coding a record that does not exist.
     final cards = [
       StatCard(
         label: l10n.progressStatPb,
-        value: pb == null ? l10n.progressStatNoData : _fmt(pb),
-        valueColor: c.recordText,
+        value: pb == null ? l10n.statAbsentDuration : _fmt(pb),
+        valueColor: pb == null ? c.textTertiary : c.recordText,
       ),
       StatCard(
         label: l10n.progressStatAvg30d,
-        value: avg == null ? l10n.progressStatNoData : _fmt(avg),
+        value: avg == null ? l10n.statAbsentDuration : _fmt(avg),
+        valueColor: avg == null ? c.textTertiary : null,
       ),
       StatCard(
         label: l10n.progressStatStreak,
-        value: '$streak',
-        valueColor: c.primaryText,
+        // Zero and none are the same thing to a reader here, and none is the
+        // honest one on a fresh install.
+        value: streak == 0 ? l10n.statAbsentCount : '$streak',
+        valueColor: streak == 0 ? c.textTertiary : c.primaryText,
       ),
     ];
 

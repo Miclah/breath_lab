@@ -177,7 +177,9 @@ class RoundListItem extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    elapsedMs == null ? '--:--' : formatRoundMs(elapsedMs!),
+                    elapsedMs == null
+                        ? l10n.statAbsentDuration
+                        : formatRoundMs(elapsedMs!),
                     style: BreathLabTypography.displayMd.copyWith(
                       color: c.primaryText,
                     ),

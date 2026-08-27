@@ -13,6 +13,7 @@ import '../../theme/typography.dart';
 import '../history/history_screen.dart';
 import 'calendar_heatmap.dart';
 import 'progress_chart.dart';
+import 'start_hold_button.dart';
 import 'stat_card_row.dart';
 
 const _recentHoldsCount = 10;
@@ -123,11 +124,18 @@ class RecentHoldsSection extends ConsumerWidget {
           child: recentHolds.isEmpty
               ? Padding(
                   padding: const EdgeInsets.all(Spacing.lg),
-                  child: Text(
-                    l10n.historyEmpty,
-                    style: BreathLabTypography.micro.copyWith(
-                      color: c.textTertiary,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.historyEmpty,
+                        style: BreathLabTypography.micro.copyWith(
+                          color: c.textTertiary,
+                        ),
+                      ),
+                      const SizedBox(height: Spacing.md),
+                      const StartHoldButton(),
+                    ],
                   ),
                 )
               : Column(
