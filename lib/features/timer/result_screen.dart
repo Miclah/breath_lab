@@ -22,6 +22,7 @@ import 'timer_side_panel.dart';
 import 'timer_stage.dart';
 import 'todays_holds_row.dart';
 import '../../theme/surfaces.dart';
+import '../../shared/widgets/primary_action.dart';
 
 /// Shown after a hold is stopped. Displays stats, lung volume selector,
 /// and Save / Discard buttons. Replaces the timer ring area entirely.
@@ -351,8 +352,7 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return PrimaryAction(
       child: FilledButton(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(TimerStage.actionBandHeight),
@@ -384,10 +384,12 @@ class _DiscardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
-    return OutlinedButton(
-      onPressed: saving ? null : onPressed,
-      style: OutlinedButton.styleFrom(foregroundColor: c.textSecondary),
-      child: Text(AppLocalizations.of(context)!.resultDiscardButton),
+    return PrimaryAction(
+      child: OutlinedButton(
+        onPressed: saving ? null : onPressed,
+        style: OutlinedButton.styleFrom(foregroundColor: c.textSecondary),
+        child: Text(AppLocalizations.of(context)!.resultDiscardButton),
+      ),
     );
   }
 }

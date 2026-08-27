@@ -58,6 +58,10 @@ class ContentWidth {
   /// Content that genuinely uses the room — a multi-column body.
   static const double wide = 900;
 
+  /// A primary action button, once there is room to stop it being a slab.
+  /// Design Revision §4.
+  static const double action = 360;
+
   /// The supplementary column beside the content at [Breakpoint.expanded].
   ///
   /// Fluid between these two rather than fixed at one width: a side panel on

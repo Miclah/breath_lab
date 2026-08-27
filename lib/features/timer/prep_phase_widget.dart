@@ -14,6 +14,7 @@ import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'providers.dart';
 import 'timer_ring.dart';
+import '../../shared/widgets/primary_action.dart';
 
 /// The prep phase, split across the stage's bands rather than stacked inside
 /// one of them.
@@ -137,8 +138,7 @@ class PrepActionButton extends ConsumerWidget {
     final mode = ref.watch(timerProvider).prepMode;
     final isCountdown = mode == PrepMode.threeSeconds;
 
-    return SizedBox(
-      width: double.infinity,
+    return PrimaryAction(
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(foregroundColor: c.textSecondary),
         onPressed: isCountdown

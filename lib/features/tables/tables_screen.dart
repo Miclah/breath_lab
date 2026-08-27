@@ -16,6 +16,7 @@ import 'round_list_item.dart';
 import 'session_summary_view.dart';
 import 'table_info_panel.dart';
 import 'table_session_notifier.dart';
+import '../../shared/widgets/primary_action.dart';
 
 List<TableRoundPlan> _computeRounds(
   TableType type,
@@ -250,8 +251,7 @@ class _SessionActionButton extends StatelessWidget {
     if (sessionActive && !isDone) {
       // Same reasoning as the hold Stop button: this one is on screen for
       // the whole ~15-minute session, so it cannot be a red slab either.
-      return SizedBox(
-        width: double.infinity,
+      return PrimaryAction(
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: c.dangerText,
@@ -263,11 +263,10 @@ class _SessionActionButton extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
+    return PrimaryAction(
       child: FilledButton(
         style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Radius.lg),
           ),

@@ -20,6 +20,7 @@ import 'timer_side_panel.dart';
 import 'timer_stage.dart';
 import 'timer_status_row.dart';
 import 'todays_holds_row.dart';
+import '../../shared/widgets/primary_action.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
@@ -242,8 +243,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       // for three minutes is the opposite of an event. It was also the
       // loudest thing on the screen for the whole hold, which the timer
       // number is supposed to be. The colour stays; only the fill goes.
-      return SizedBox(
-        width: double.infinity,
+      return PrimaryAction(
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             foregroundColor: c.dangerText,
@@ -256,8 +256,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     }
 
     // idle — Start button
-    return SizedBox(
-      width: double.infinity,
+    return PrimaryAction(
       child: FilledButton(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(TimerStage.actionBandHeight),
