@@ -89,6 +89,8 @@ class TimerRing extends StatelessWidget {
           value: value,
           ringColor: ringColor(value, elapsed, c),
           trackColor: c.ringTrack,
+          tickColor: c.ringTrack.withValues(alpha: 0.35),
+          majorTickColor: c.textSecondary.withValues(alpha: 0.9),
         ),
         child: Center(child: child),
       ),
@@ -101,21 +103,67 @@ class _RingPainter extends CustomPainter {
     required this.value,
     required this.ringColor,
     required this.trackColor,
+    required this.tickColor,
+    required this.majorTickColor,
   });
 
   final double value;
   final Color ringColor;
   final Color trackColor;
+  final Color tickColor;
+  final Color majorTickColor;
 
   static const _strokeWidth = 4.0;
 
   /// Clear space between the outer ring and the overflow arc.
   static const _overflowGap = 6.0;
 
+  /// Graduations, per Design Revision §3 — form A, "Instrument".
+  ///
+  /// They solve one specific problem: at rest the ring was an empty grey
+  /// circle with nothing to look at, and the sweeping arc had nothing to
+  /// travel against. Marks give it both, and they are drawn once and never
+  /// animate, so "don't animate during an active hold" is untouched.
+  static const _tickCount = 48;
+  static const _majorEvery = _tickCount ~/ 4;
+  static const _tickWidth = 1.4;
+  static const _majorTickWidth = 1.7;
+
+  /// How far a tick reaches beyond each edge of the track.
+  static const _tickOvershoot = 3.0;
+  static const _majorTickOvershoot = 6.0;
+
+  void _paintGraduations(Canvas canvas, Offset center, double radius) {
+    final inner = radius - _strokeWidth / 2;
+    final outer = radius + _strokeWidth / 2;
+
+    for (var i = 0; i < _tickCount; i++) {
+      final isMajor = i % _majorEvery == 0;
+      final overshoot = isMajor ? _majorTickOvershoot : _tickOvershoot;
+      // Twelve o'clock, then clockwise, so the majors land on the quarters
+      // the arc itself is measured from.
+      final angle = -pi / 2 + (i / _tickCount) * 2 * pi;
+      final unit = Offset(cos(angle), sin(angle));
+
+      canvas.drawLine(
+        center + unit * (inner - overshoot),
+        center + unit * (outer + overshoot),
+        Paint()
+          ..color = isMajor ? majorTickColor : tickColor
+          ..strokeWidth = isMajor ? _majorTickWidth : _tickWidth
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.shortestSide - _strokeWidth) / 2;
+
+    // Under the track, so each tick reads as a mark the track is laid across
+    // rather than as a spoke crossing it.
+    _paintGraduations(canvas, center, radius);
 
     // Background track - full circle
     canvas.drawCircle(
@@ -166,5 +214,7 @@ class _RingPainter extends CustomPainter {
   bool shouldRepaint(_RingPainter old) =>
       old.value != value ||
       old.ringColor != ringColor ||
-      old.trackColor != trackColor;
+      old.trackColor != trackColor ||
+      old.tickColor != tickColor ||
+      old.majorTickColor != majorTickColor;
 }
