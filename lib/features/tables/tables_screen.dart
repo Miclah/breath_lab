@@ -121,7 +121,10 @@ class TablesScreen extends ConsumerWidget {
     // inset, which is meant to add to it rather than replace it.
     return AdaptivePage(
       maxWidth: ContentWidth.list,
-      side: !split
+      // Gone once the session is done: the summary view is the primary panel
+      // then, and Design Revision §2 allows a screen exactly one. Two panels
+      // both claiming to be the subject is a screen with two subjects.
+      side: !split || session.isDone
           ? null
           : _TablesSide(
               maxMs: maxMsAsync.valueOrNull,
