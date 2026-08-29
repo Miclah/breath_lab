@@ -8,6 +8,7 @@ import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../shared/widgets/adaptive_page.dart';
+import '../imst/imst_log_screen.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -89,7 +90,18 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 2.0);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTimer)),
+      appBar: AppBar(
+        title: Text(l10n.navTimer),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.fitness_center),
+            tooltip: l10n.imstLogOpen,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ImstLogScreen()),
+            ),
+          ),
+        ],
+      ),
       body: Focus(
         focusNode: _focusNode,
         autofocus: true,

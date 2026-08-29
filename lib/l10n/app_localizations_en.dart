@@ -822,6 +822,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressViewAllHistory => 'View all';
 
   @override
+  String get imstLogOpen => 'Log an IMST session';
+
+  @override
+  String get imstLogTitle => 'IMST session';
+
+  @override
+  String get imstLogBreathsLabel => 'Breaths';
+
+  @override
+  String imstLogBreathsOfTarget(int target) {
+    return 'of $target target';
+  }
+
+  @override
+  String get imstLogLevelLabel => 'Resistance level';
+
+  @override
+  String get imstLogEvidenceNote =>
+      'IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.';
+
+  @override
+  String get imstLogSave => 'Save session';
+
+  @override
+  String get imstLogSaved => 'IMST session saved';
+
+  @override
+  String get imstLogSaveFailed => 'Couldn\'t save the session';
+
+  @override
   String get settingsImstGroupLabel => 'Inspiratory muscle training (IMST)';
 
   @override

@@ -830,6 +830,36 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressViewAllHistory => 'Zobraziť všetko';
 
   @override
+  String get imstLogOpen => 'Zaznamenať IMST tréning';
+
+  @override
+  String get imstLogTitle => 'IMST tréning';
+
+  @override
+  String get imstLogBreathsLabel => 'Nádychy';
+
+  @override
+  String imstLogBreathsOfTarget(int target) {
+    return 'z cieľa $target';
+  }
+
+  @override
+  String get imstLogLevelLabel => 'Úroveň odporu';
+
+  @override
+  String get imstLogEvidenceNote =>
+      'IMST má silnú evidenciu pre krvný tlak a cievne funkcie; jeho priamy vplyv na dĺžku zadržania dychu je mierny.';
+
+  @override
+  String get imstLogSave => 'Uložiť tréning';
+
+  @override
+  String get imstLogSaved => 'IMST tréning uložený';
+
+  @override
+  String get imstLogSaveFailed => 'Tréning sa nepodarilo uložiť';
+
+  @override
   String get settingsImstGroupLabel => 'Tréning nádychových svalov (IMST)';
 
   @override

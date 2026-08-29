@@ -1050,6 +1050,47 @@
   "@progressViewAllHistory": {
     "description": "Link below the recent holds list that pushes the full history screen"
   },
+  "imstLogOpen": "Log an IMST session",
+  "@imstLogOpen": {
+    "description": "Tooltip on the Timer screen app-bar action that opens the IMST logging screen"
+  },
+  "imstLogTitle": "IMST session",
+  "@imstLogTitle": {
+    "description": "Title of the IMST session logging screen"
+  },
+  "imstLogBreathsLabel": "Breaths",
+  "@imstLogBreathsLabel": {
+    "description": "Section header above the breath counter on the IMST logging screen"
+  },
+  "imstLogBreathsOfTarget": "of {target} target",
+  "@imstLogBreathsOfTarget": {
+    "description": "Sub-label under the breath count showing the daily target",
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "imstLogLevelLabel": "Resistance level",
+  "@imstLogLevelLabel": {
+    "description": "Label for the per-session resistance level stepper, seeded from Settings"
+  },
+  "imstLogEvidenceNote": "IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.",
+  "@imstLogEvidenceNote": {
+    "description": "Tier note on the IMST logging screen — RESEARCH_ALIGNMENT.md §2 requires stating the direct breath-hold evidence is modest"
+  },
+  "imstLogSave": "Save session",
+  "@imstLogSave": {
+    "description": "Save button on the IMST logging screen"
+  },
+  "imstLogSaved": "IMST session saved",
+  "@imstLogSaved": {
+    "description": "Confirmation snackbar after saving an IMST session"
+  },
+  "imstLogSaveFailed": "Couldn't save the session",
+  "@imstLogSaveFailed": {
+    "description": "Error snackbar when saving an IMST session fails"
+  },
   "settingsImstGroupLabel": "Inspiratory muscle training (IMST)",
   "@settingsImstGroupLabel": {
     "description": "Label for the IMST configuration group inside Settings → Training"

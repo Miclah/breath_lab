@@ -1519,6 +1519,60 @@ abstract class AppLocalizations {
   /// **'View all'**
   String get progressViewAllHistory;
 
+  /// Tooltip on the Timer screen app-bar action that opens the IMST logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'Log an IMST session'**
+  String get imstLogOpen;
+
+  /// Title of the IMST session logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'IMST session'**
+  String get imstLogTitle;
+
+  /// Section header above the breath counter on the IMST logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'Breaths'**
+  String get imstLogBreathsLabel;
+
+  /// Sub-label under the breath count showing the daily target
+  ///
+  /// In en, this message translates to:
+  /// **'of {target} target'**
+  String imstLogBreathsOfTarget(int target);
+
+  /// Label for the per-session resistance level stepper, seeded from Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Resistance level'**
+  String get imstLogLevelLabel;
+
+  /// Tier note on the IMST logging screen — RESEARCH_ALIGNMENT.md §2 requires stating the direct breath-hold evidence is modest
+  ///
+  /// In en, this message translates to:
+  /// **'IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.'**
+  String get imstLogEvidenceNote;
+
+  /// Save button on the IMST logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save session'**
+  String get imstLogSave;
+
+  /// Confirmation snackbar after saving an IMST session
+  ///
+  /// In en, this message translates to:
+  /// **'IMST session saved'**
+  String get imstLogSaved;
+
+  /// Error snackbar when saving an IMST session fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the session'**
+  String get imstLogSaveFailed;
+
   /// Label for the IMST configuration group inside Settings → Training
   ///
   /// In en, this message translates to:
