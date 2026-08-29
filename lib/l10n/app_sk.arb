@@ -235,5 +235,14 @@
   "progressChartRange30d": "30d",
   "progressChartRange90d": "90d",
   "progressRecentHoldsTitle": "Nedávne pokusy",
-  "progressViewAllHistory": "Zobraziť všetko"
+  "progressViewAllHistory": "Zobraziť všetko",
+  "evidenceTierBadgePrefix": "Evidencia",
+  "evidenceTierStrong": "Silná evidencia",
+  "evidenceTierMechanistic": "Mechanicky podložené",
+  "evidenceTierConvention": "Zaužívaná prax",
+  "evidenceTierContraindicated": "Kontraindikované",
+  "evidenceTierStrongDesc": "Kontrolované štúdie merali práve ten účinok, ktorý tento režim sľubuje.",
+  "evidenceTierMechanisticDesc": "Fyziológia je známa, ale výhoda oproti jednoduchšiemu tréningu nie je dokázaná.",
+  "evidenceTierConventionDesc": "Bežne sa používa a dáva zmysel, no pre tento účel nebola overená v štúdiách.",
+  "evidenceTierContraindicatedDesc": "Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie."
 }

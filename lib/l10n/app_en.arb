@@ -1049,5 +1049,41 @@
   "progressViewAllHistory": "View all",
   "@progressViewAllHistory": {
     "description": "Link below the recent holds list that pushes the full history screen"
+  },
+  "evidenceTierBadgePrefix": "Evidence",
+  "@evidenceTierBadgePrefix": {
+    "description": "Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'"
+  },
+  "evidenceTierStrong": "Strong evidence",
+  "@evidenceTierStrong": {
+    "description": "Tier A label (RESEARCH_ALIGNMENT.md §1): controlled trials measure the claimed outcome"
+  },
+  "evidenceTierMechanistic": "Mechanistically sound",
+  "@evidenceTierMechanistic": {
+    "description": "Tier B label: the physiology follows but superiority over simpler options is unproven"
+  },
+  "evidenceTierConvention": "Practice convention",
+  "@evidenceTierConvention": {
+    "description": "Tier C label: widely practised and face-valid, no controlled trials for this outcome"
+  },
+  "evidenceTierContraindicated": "Contraindicated",
+  "@evidenceTierContraindicated": {
+    "description": "Tier X label: dangerous in the way the app is used; only ever shown as a warning"
+  },
+  "evidenceTierStrongDesc": "Controlled trials measured the outcome this mode claims to improve.",
+  "@evidenceTierStrongDesc": {
+    "description": "One-line meaning of tier A, for the badge tooltip"
+  },
+  "evidenceTierMechanisticDesc": "The physiology is understood, but its advantage over simpler training is unproven.",
+  "@evidenceTierMechanisticDesc": {
+    "description": "One-line meaning of tier B"
+  },
+  "evidenceTierConventionDesc": "Widely practised and reasonable, but not tested in controlled trials for this.",
+  "@evidenceTierConventionDesc": {
+    "description": "One-line meaning of tier C. Must not imply the mode is worse, only less proven"
+  },
+  "evidenceTierContraindicatedDesc": "Unsafe in the way this app is used. Shown only to warn against it.",
+  "@evidenceTierContraindicatedDesc": {
+    "description": "One-line meaning of tier X"
   }
 }

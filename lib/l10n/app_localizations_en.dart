@@ -820,4 +820,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressViewAllHistory => 'View all';
+
+  @override
+  String get evidenceTierBadgePrefix => 'Evidence';
+
+  @override
+  String get evidenceTierStrong => 'Strong evidence';
+
+  @override
+  String get evidenceTierMechanistic => 'Mechanistically sound';
+
+  @override
+  String get evidenceTierConvention => 'Practice convention';
+
+  @override
+  String get evidenceTierContraindicated => 'Contraindicated';
+
+  @override
+  String get evidenceTierStrongDesc =>
+      'Controlled trials measured the outcome this mode claims to improve.';
+
+  @override
+  String get evidenceTierMechanisticDesc =>
+      'The physiology is understood, but its advantage over simpler training is unproven.';
+
+  @override
+  String get evidenceTierConventionDesc =>
+      'Widely practised and reasonable, but not tested in controlled trials for this.';
+
+  @override
+  String get evidenceTierContraindicatedDesc =>
+      'Unsafe in the way this app is used. Shown only to warn against it.';
 }

@@ -1518,6 +1518,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View all'**
   String get progressViewAllHistory;
+
+  /// Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'
+  ///
+  /// In en, this message translates to:
+  /// **'Evidence'**
+  String get evidenceTierBadgePrefix;
+
+  /// Tier A label (RESEARCH_ALIGNMENT.md §1): controlled trials measure the claimed outcome
+  ///
+  /// In en, this message translates to:
+  /// **'Strong evidence'**
+  String get evidenceTierStrong;
+
+  /// Tier B label: the physiology follows but superiority over simpler options is unproven
+  ///
+  /// In en, this message translates to:
+  /// **'Mechanistically sound'**
+  String get evidenceTierMechanistic;
+
+  /// Tier C label: widely practised and face-valid, no controlled trials for this outcome
+  ///
+  /// In en, this message translates to:
+  /// **'Practice convention'**
+  String get evidenceTierConvention;
+
+  /// Tier X label: dangerous in the way the app is used; only ever shown as a warning
+  ///
+  /// In en, this message translates to:
+  /// **'Contraindicated'**
+  String get evidenceTierContraindicated;
+
+  /// One-line meaning of tier A, for the badge tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Controlled trials measured the outcome this mode claims to improve.'**
+  String get evidenceTierStrongDesc;
+
+  /// One-line meaning of tier B
+  ///
+  /// In en, this message translates to:
+  /// **'The physiology is understood, but its advantage over simpler training is unproven.'**
+  String get evidenceTierMechanisticDesc;
+
+  /// One-line meaning of tier C. Must not imply the mode is worse, only less proven
+  ///
+  /// In en, this message translates to:
+  /// **'Widely practised and reasonable, but not tested in controlled trials for this.'**
+  String get evidenceTierConventionDesc;
+
+  /// One-line meaning of tier X
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
+  String get evidenceTierContraindicatedDesc;
 }
 
 class _AppLocalizationsDelegate

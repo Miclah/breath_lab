@@ -828,4 +828,35 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get progressViewAllHistory => 'Zobraziť všetko';
+
+  @override
+  String get evidenceTierBadgePrefix => 'Evidencia';
+
+  @override
+  String get evidenceTierStrong => 'Silná evidencia';
+
+  @override
+  String get evidenceTierMechanistic => 'Mechanicky podložené';
+
+  @override
+  String get evidenceTierConvention => 'Zaužívaná prax';
+
+  @override
+  String get evidenceTierContraindicated => 'Kontraindikované';
+
+  @override
+  String get evidenceTierStrongDesc =>
+      'Kontrolované štúdie merali práve ten účinok, ktorý tento režim sľubuje.';
+
+  @override
+  String get evidenceTierMechanisticDesc =>
+      'Fyziológia je známa, ale výhoda oproti jednoduchšiemu tréningu nie je dokázaná.';
+
+  @override
+  String get evidenceTierConventionDesc =>
+      'Bežne sa používa a dáva zmysel, no pre tento účel nebola overená v štúdiách.';
+
+  @override
+  String get evidenceTierContraindicatedDesc =>
+      'Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie.';
 }
