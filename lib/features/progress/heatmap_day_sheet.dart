@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/table_session.dart';
@@ -46,6 +47,9 @@ class HeatmapDaySheet extends ConsumerWidget {
     final tables = (ref.watch(allTableSessionsProvider).valueOrNull ?? const [])
         .where((t) => _isSameDay(t.createdAt, date))
         .toList();
+    final imst = (ref.watch(allImstSessionsProvider).valueOrNull ?? const [])
+        .where((s) => _isSameDay(s.createdAt, date))
+        .toList();
 
     return SafeArea(
       child: Padding(
@@ -74,6 +78,11 @@ class HeatmapDaySheet extends ConsumerWidget {
                   TableType.co2 => l10n.tablesCo2Toggle,
                   TableType.o2 => l10n.tablesO2Toggle,
                 },
+              ),
+            for (final session in imst)
+              _DayTableTile(
+                time: DateFormat('HH:mm').format(session.createdAt),
+                label: l10n.imstDayRow(session.breaths),
               ),
             const SizedBox(height: Spacing.lg),
             SizedBox(

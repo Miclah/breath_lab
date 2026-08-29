@@ -1,6 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:breath_lab/domain/models/hold.dart';
+import 'package:breath_lab/domain/models/imst_session.dart';
 import 'package:breath_lab/features/progress/providers.dart';
+
+ImstSession _imst(DateTime createdAt, {int breaths = 30}) => ImstSession(
+  id: 'imst-${createdAt.millisecondsSinceEpoch}',
+  createdAt: createdAt,
+  updatedAt: createdAt,
+  deviceId: 'device',
+  breaths: breaths,
+);
 
 Hold _hold(
   DateTime createdAt, {
@@ -65,6 +74,23 @@ void main() {
       expect(data.countsByDate, isEmpty);
       expect(data.totalSessions, 0);
       expect(data.bestWeekDays, 0);
+    });
+
+    test('an IMST session fills its day and counts toward the best week', () {
+      final monday = DateTime(2026, 7, 13);
+      final data = computeHeatmapData(
+        [_hold(monday)],
+        [],
+        imst: [
+          _imst(monday.add(const Duration(days: 1))),
+          _imst(monday.add(const Duration(days: 2))),
+        ],
+        now: now,
+      );
+
+      expect(data.countsByDate[DateTime(2026, 7, 14)], 1);
+      expect(data.totalSessions, 3);
+      expect(data.bestWeekDays, 3);
     });
   });
 

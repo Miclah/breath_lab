@@ -852,6 +852,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imstLogSaveFailed => 'Couldn\'t save the session';
 
   @override
+  String imstDayRow(int breaths) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths breaths',
+      one: '1 breath',
+    );
+    return 'IMST · $_temp0';
+  }
+
+  @override
   String get settingsImstGroupLabel => 'Inspiratory muscle training (IMST)';
 
   @override

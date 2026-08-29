@@ -1091,6 +1091,15 @@
   "@imstLogSaveFailed": {
     "description": "Error snackbar when saving an IMST session fails"
   },
+  "imstDayRow": "IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}}",
+  "@imstDayRow": {
+    "description": "Row label for an IMST session in the heatmap day sheet and history list",
+    "placeholders": {
+      "breaths": {
+        "type": "int"
+      }
+    }
+  },
   "settingsImstGroupLabel": "Inspiratory muscle training (IMST)",
   "@settingsImstGroupLabel": {
     "description": "Label for the IMST configuration group inside Settings → Training"

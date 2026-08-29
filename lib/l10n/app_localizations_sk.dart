@@ -860,6 +860,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imstLogSaveFailed => 'Tréning sa nepodarilo uložiť';
 
   @override
+  String imstDayRow(int breaths) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths nádychov',
+      few: '$breaths nádychy',
+      one: '1 nádych',
+    );
+    return 'IMST · $_temp0';
+  }
+
+  @override
   String get settingsImstGroupLabel => 'Tréning nádychových svalov (IMST)';
 
   @override

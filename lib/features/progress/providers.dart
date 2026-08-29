@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/stats_service.dart';
 
@@ -22,7 +24,8 @@ final avg30dProvider = Provider<Duration?>((ref) {
 final currentStreakProvider = Provider<int>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  return StatsService.currentStreak(holds, tables);
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return StatsService.currentStreak(holds, tables, imst: imst);
 });
 
 /// Per-day session counts (holds + table sessions) for the calendar
@@ -43,7 +46,8 @@ class HeatmapData {
 final heatmapDataProvider = Provider<HeatmapData>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  return computeHeatmapData(holds, tables);
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return computeHeatmapData(holds, tables, imst: imst);
 });
 
 /// Windows [holds]/[tables] down to the last 12 Monday-start weeks
@@ -51,6 +55,7 @@ final heatmapDataProvider = Provider<HeatmapData>((ref) {
 HeatmapData computeHeatmapData(
   List<Hold> holds,
   List<TableSession> tables, {
+  List<ImstSession> imst = const [],
   DateTime? now,
 }) {
   final today = _dateOnly(now ?? DateTime.now());
@@ -63,11 +68,15 @@ HeatmapData computeHeatmapData(
   final windowTables = tables
       .where((t) => !_dateOnly(t.createdAt).isBefore(windowStart))
       .toList();
+  final windowImst = imst
+      .where((s) => !_dateOnly(s.createdAt).isBefore(windowStart))
+      .toList();
 
   final counts = <DateTime, int>{};
   for (final createdAt in [
     ...windowHolds.map((h) => h.createdAt),
     ...windowTables.map((t) => t.createdAt),
+    ...windowImst.map((s) => s.createdAt),
   ]) {
     final date = _dateOnly(createdAt);
     counts[date] = (counts[date] ?? 0) + 1;
@@ -76,7 +85,11 @@ HeatmapData computeHeatmapData(
   return HeatmapData(
     countsByDate: counts,
     totalSessions: counts.values.fold(0, (sum, n) => sum + n),
-    bestWeekDays: StatsService.bestWeek(windowHolds, windowTables),
+    bestWeekDays: StatsService.bestWeek(
+      windowHolds,
+      windowTables,
+      imst: windowImst,
+    ),
   );
 }
 

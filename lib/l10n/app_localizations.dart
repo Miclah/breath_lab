@@ -1573,6 +1573,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save the session'**
   String get imstLogSaveFailed;
 
+  /// Row label for an IMST session in the heatmap day sheet and history list
+  ///
+  /// In en, this message translates to:
+  /// **'IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}}'**
+  String imstDayRow(int breaths);
+
   /// Label for the IMST configuration group inside Settings → Training
   ///
   /// In en, this message translates to:

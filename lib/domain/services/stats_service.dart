@@ -1,4 +1,5 @@
 import '../models/hold.dart';
+import '../models/imst_session.dart';
 import '../models/table_session.dart';
 
 /// Pure functions computing progress stats from hold and table session
@@ -40,9 +41,10 @@ class StatsService {
   static int currentStreak(
     List<Hold> holds,
     List<TableSession> tables, {
+    List<ImstSession> imst = const [],
     DateTime? now,
   }) {
-    final dates = _sessionDates(holds, tables);
+    final dates = _sessionDates(holds, tables, imst);
     var day = _dateOnly(now ?? DateTime.now());
     if (!dates.contains(day)) {
       day = day.subtract(const Duration(days: 1));
@@ -57,8 +59,12 @@ class StatsService {
   }
 
   /// The longest run of consecutive training days across all history.
-  static int longestStreak(List<Hold> holds, List<TableSession> tables) {
-    final dates = _sessionDates(holds, tables);
+  static int longestStreak(
+    List<Hold> holds,
+    List<TableSession> tables, {
+    List<ImstSession> imst = const [],
+  }) {
+    final dates = _sessionDates(holds, tables, imst);
     if (dates.isEmpty) return 0;
     final sorted = dates.toList()..sort();
     var longest = 1;
@@ -72,8 +78,12 @@ class StatsService {
   }
 
   /// The most training days recorded within any single Monday-start week.
-  static int bestWeek(List<Hold> holds, List<TableSession> tables) {
-    final dates = _sessionDates(holds, tables);
+  static int bestWeek(
+    List<Hold> holds,
+    List<TableSession> tables, {
+    List<ImstSession> imst = const [],
+  }) {
+    final dates = _sessionDates(holds, tables, imst);
     if (dates.isEmpty) return 0;
     final countsByWeekStart = <DateTime, int>{};
     for (final date in dates) {
@@ -103,10 +113,12 @@ class StatsService {
   static Set<DateTime> _sessionDates(
     List<Hold> holds,
     List<TableSession> tables,
+    List<ImstSession> imst,
   ) {
     return {
       ...holds.map((h) => _dateOnly(h.createdAt)),
       ...tables.map((t) => _dateOnly(t.createdAt)),
+      ...imst.map((s) => _dateOnly(s.createdAt)),
     };
   }
 
