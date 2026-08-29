@@ -1519,6 +1519,54 @@ abstract class AppLocalizations {
   /// **'View all'**
   String get progressViewAllHistory;
 
+  /// Label for the IMST configuration group inside Settings → Training
+  ///
+  /// In en, this message translates to:
+  /// **'Inspiratory muscle training (IMST)'**
+  String get settingsImstGroupLabel;
+
+  /// One-line explainer under the IMST settings group heading
+  ///
+  /// In en, this message translates to:
+  /// **'Craighead\'s protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can\'t take.'**
+  String get settingsImstIntro;
+
+  /// Label for the free-text IMST device name field
+  ///
+  /// In en, this message translates to:
+  /// **'Trainer'**
+  String get settingsImstDeviceNameLabel;
+
+  /// Placeholder for the IMST trainer name field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. POWERbreathe Plus'**
+  String get settingsImstDeviceNameHint;
+
+  /// Label for the IMST resistance dial position stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Resistance level'**
+  String get settingsImstLevelLabel;
+
+  /// Label for the IMST target-breaths-per-day stepper (default 30)
+  ///
+  /// In en, this message translates to:
+  /// **'Daily breath target'**
+  String get settingsImstTargetLabel;
+
+  /// Label for the optional measured maximal inspiratory pressure stepper; shows an em dash when unset
+  ///
+  /// In en, this message translates to:
+  /// **'PImax (cmH₂O, optional)'**
+  String get settingsImstPimaxLabel;
+
+  /// Helper text under the PImax field, per PHASE_3D_research.md — honest beats precise-looking
+  ///
+  /// In en, this message translates to:
+  /// **'A numbered dial can\'t be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.'**
+  String get settingsImstPimaxNote;
+
   /// Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)
   ///
   /// In en, this message translates to:

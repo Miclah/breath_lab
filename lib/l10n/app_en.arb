@@ -1050,6 +1050,38 @@
   "@progressViewAllHistory": {
     "description": "Link below the recent holds list that pushes the full history screen"
   },
+  "settingsImstGroupLabel": "Inspiratory muscle training (IMST)",
+  "@settingsImstGroupLabel": {
+    "description": "Label for the IMST configuration group inside Settings → Training"
+  },
+  "settingsImstIntro": "Craighead's protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can't take.",
+  "@settingsImstIntro": {
+    "description": "One-line explainer under the IMST settings group heading"
+  },
+  "settingsImstDeviceNameLabel": "Trainer",
+  "@settingsImstDeviceNameLabel": {
+    "description": "Label for the free-text IMST device name field"
+  },
+  "settingsImstDeviceNameHint": "e.g. POWERbreathe Plus",
+  "@settingsImstDeviceNameHint": {
+    "description": "Placeholder for the IMST trainer name field"
+  },
+  "settingsImstLevelLabel": "Resistance level",
+  "@settingsImstLevelLabel": {
+    "description": "Label for the IMST resistance dial position stepper"
+  },
+  "settingsImstTargetLabel": "Daily breath target",
+  "@settingsImstTargetLabel": {
+    "description": "Label for the IMST target-breaths-per-day stepper (default 30)"
+  },
+  "settingsImstPimaxLabel": "PImax (cmH₂O, optional)",
+  "@settingsImstPimaxLabel": {
+    "description": "Label for the optional measured maximal inspiratory pressure stepper; shows an em dash when unset"
+  },
+  "settingsImstPimaxNote": "A numbered dial can't be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.",
+  "@settingsImstPimaxNote": {
+    "description": "Helper text under the PImax field, per PHASE_3D_research.md — honest beats precise-looking"
+  },
   "tablesEvidenceNote": "For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).",
   "@tablesEvidenceNote": {
     "description": "Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)"

@@ -822,6 +822,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressViewAllHistory => 'View all';
 
   @override
+  String get settingsImstGroupLabel => 'Inspiratory muscle training (IMST)';
+
+  @override
+  String get settingsImstIntro =>
+      'Craighead\'s protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can\'t take.';
+
+  @override
+  String get settingsImstDeviceNameLabel => 'Trainer';
+
+  @override
+  String get settingsImstDeviceNameHint => 'e.g. POWERbreathe Plus';
+
+  @override
+  String get settingsImstLevelLabel => 'Resistance level';
+
+  @override
+  String get settingsImstTargetLabel => 'Daily breath target';
+
+  @override
+  String get settingsImstPimaxLabel => 'PImax (cmH₂O, optional)';
+
+  @override
+  String get settingsImstPimaxNote =>
+      'A numbered dial can\'t be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.';
+
+  @override
   String get tablesEvidenceNote =>
       'For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).';
 

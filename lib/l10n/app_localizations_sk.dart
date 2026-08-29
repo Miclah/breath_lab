@@ -830,6 +830,32 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressViewAllHistory => 'Zobraziť všetko';
 
   @override
+  String get settingsImstGroupLabel => 'Tréning nádychových svalov (IMST)';
+
+  @override
+  String get settingsImstIntro =>
+      'Craigheadov protokol: 30 nádychov proti odporu denne, 5–6 dní v týždni. Zaznamenáš, ako si trénoval, nie meranie, ktoré appka nevie spraviť.';
+
+  @override
+  String get settingsImstDeviceNameLabel => 'Tréner';
+
+  @override
+  String get settingsImstDeviceNameHint => 'napr. POWERbreathe Plus';
+
+  @override
+  String get settingsImstLevelLabel => 'Úroveň odporu';
+
+  @override
+  String get settingsImstTargetLabel => 'Denný cieľ nádychov';
+
+  @override
+  String get settingsImstPimaxLabel => 'PImax (cmH₂O, voliteľné)';
+
+  @override
+  String get settingsImstPimaxNote =>
+      'Číselný ciferník sa nedá previesť na percento PImax. Ak máš PImax odmerané, 50 % → 75 % PImax je postup podložený evidenciou.';
+
+  @override
   String get tablesEvidenceNote =>
       'U začiatočníkov sa nepreukázalo, že by tabuľky pridávali hypoxickú alebo hyperkapnickú záťaž oproti bežným maximálnym zadržaniam (Declercq a Bouten, 2024).';
 

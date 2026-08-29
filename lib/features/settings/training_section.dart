@@ -9,6 +9,7 @@ import '../../shared/widgets/segment_label.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
+import 'imst_settings_group.dart';
 
 /// Settings → Training section: current max, default prep mode, default
 /// lung volume. All values are read from and written straight to
@@ -43,6 +44,8 @@ class TrainingSection extends StatelessWidget {
           ),
           const SizedBox(height: Spacing.sm),
           const _DefaultLungVolumeSelector(),
+          const SizedBox(height: Spacing.xxl),
+          const ImstSettingsGroup(),
         ],
       ),
     );
