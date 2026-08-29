@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart' hide Durations;
 
+import '../../domain/models/evidence_tier.dart';
 import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/tier_badge.dart';
 import '../../theme/colors.dart';
 import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
@@ -61,6 +63,16 @@ class TableInfoPanel extends StatelessWidget {
             style: style.copyWith(color: c.textTertiary),
           ),
         ],
+        const SizedBox(height: Spacing.md),
+        // RESEARCH_ALIGNMENT.md §2: tables are tier B, and Declercq/Bouten
+        // 2024 found they add no hypoxic or hypercapnic stimulus over plain
+        // maximal holds in novices. Stated plainly, not implied by silence.
+        const TierBadge(EvidenceTier.mechanistic),
+        const SizedBox(height: Spacing.xs),
+        Text(
+          l10n.tablesEvidenceNote,
+          style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
+        ),
       ],
     );
 

@@ -822,6 +822,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressViewAllHistory => 'View all';
 
   @override
+  String get tablesEvidenceNote =>
+      'For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).';
+
+  @override
   String get evidenceTierBadgePrefix => 'Evidence';
 
   @override

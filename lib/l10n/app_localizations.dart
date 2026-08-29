@@ -1519,6 +1519,12 @@ abstract class AppLocalizations {
   /// **'View all'**
   String get progressViewAllHistory;
 
+  /// Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)
+  ///
+  /// In en, this message translates to:
+  /// **'For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).'**
+  String get tablesEvidenceNote;
+
   /// Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'
   ///
   /// In en, this message translates to:

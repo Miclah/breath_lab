@@ -1050,6 +1050,10 @@
   "@progressViewAllHistory": {
     "description": "Link below the recent holds list that pushes the full history screen"
   },
+  "tablesEvidenceNote": "For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).",
+  "@tablesEvidenceNote": {
+    "description": "Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)"
+  },
   "evidenceTierBadgePrefix": "Evidence",
   "@evidenceTierBadgePrefix": {
     "description": "Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'"

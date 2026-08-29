@@ -5,10 +5,12 @@ import '../../data/repositories/device_id_provider.dart';
 import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
+import '../../domain/models/evidence_tier.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
+import '../../shared/widgets/tier_badge.dart';
 import '../../shared/global_messenger.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
@@ -618,7 +620,13 @@ class _HoldMetrics extends StatelessWidget {
     final struggle = state.strugglePhase;
 
     if (contraction == null || struggle == null) {
-      return _NoContractionCard(c: c);
+      return Column(
+        children: [
+          _NoContractionCard(c: c),
+          const SizedBox(height: Spacing.md),
+          const TierBadge(EvidenceTier.strong),
+        ],
+      );
     }
 
     return Column(
@@ -652,6 +660,10 @@ class _HoldMetrics extends StatelessWidget {
           textAlign: TextAlign.center,
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
+        const SizedBox(height: Spacing.md),
+        // Max holds are the tier-A mode (RESEARCH_ALIGNMENT.md §2): the
+        // struggle phase above is where the controlled trials put the gain.
+        const TierBadge(EvidenceTier.strong),
       ],
     );
   }

@@ -830,6 +830,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressViewAllHistory => 'Zobraziť všetko';
 
   @override
+  String get tablesEvidenceNote =>
+      'U začiatočníkov sa nepreukázalo, že by tabuľky pridávali hypoxickú alebo hyperkapnickú záťaž oproti bežným maximálnym zadržaniam (Declercq a Bouten, 2024).';
+
+  @override
   String get evidenceTierBadgePrefix => 'Evidencia';
 
   @override
