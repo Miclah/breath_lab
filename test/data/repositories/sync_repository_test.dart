@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:breath_lab/data/db/app_database.dart' hide Hold;
 import 'package:breath_lab/data/repositories/holds_repository.dart';
+import 'package:breath_lab/data/repositories/imst_sessions_repository.dart';
 import 'package:breath_lab/data/repositories/settings_repository.dart';
 import 'package:breath_lab/data/repositories/sync_repository.dart';
 import 'package:breath_lab/data/repositories/table_sessions_repository.dart';
@@ -24,6 +25,7 @@ void main() {
         deviceId: 'local-device',
         holdsRepo: holdsRepo,
         sessionsRepo: TableSessionsRepository(db, 'local-device'),
+        imstRepo: ImstSessionsRepository(db, 'local-device'),
         tagsRepo: TagsRepository(db),
         settingsRepo: SettingsRepository(db),
       );

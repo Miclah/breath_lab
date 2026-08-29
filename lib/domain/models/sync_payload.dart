@@ -153,6 +153,66 @@ class SyncTableSessionRecord {
   }
 }
 
+/// Mirrors an `imst_sessions` row exactly. Merged by the same id-keyed,
+/// last-write-wins rule as holds — `device_id` is the tiebreak.
+class SyncImstSessionRecord {
+  const SyncImstSessionRecord({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deviceId,
+    required this.breaths,
+    this.deviceName,
+    this.deviceLevel,
+    this.pimaxCmh2o,
+    this.percentPimax,
+    this.durationMs,
+    required this.deleted,
+  });
+
+  final String id;
+  final int createdAt;
+  final int updatedAt;
+  final String deviceId;
+  final int breaths;
+  final String? deviceName;
+  final int? deviceLevel;
+  final int? pimaxCmh2o;
+  final int? percentPimax;
+  final int? durationMs;
+  final bool deleted;
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'createdAt': createdAt,
+    'updatedAt': updatedAt,
+    'deviceId': deviceId,
+    'breaths': breaths,
+    'deviceName': deviceName,
+    'deviceLevel': deviceLevel,
+    'pimaxCmh2o': pimaxCmh2o,
+    'percentPimax': percentPimax,
+    'durationMs': durationMs,
+    'deleted': deleted,
+  };
+
+  factory SyncImstSessionRecord.fromJson(Map<String, dynamic> json) {
+    return SyncImstSessionRecord(
+      id: _requireString(json, 'id'),
+      createdAt: _requireInt(json, 'createdAt'),
+      updatedAt: _requireInt(json, 'updatedAt'),
+      deviceId: _requireString(json, 'deviceId'),
+      breaths: _requireInt(json, 'breaths'),
+      deviceName: _optionalString(json, 'deviceName'),
+      deviceLevel: _optionalInt(json, 'deviceLevel'),
+      pimaxCmh2o: _optionalInt(json, 'pimaxCmh2o'),
+      percentPimax: _optionalInt(json, 'percentPimax'),
+      durationMs: _optionalInt(json, 'durationMs'),
+      deleted: json['deleted'] == true,
+    );
+  }
+}
+
 /// Mirrors a `tags` row exactly. Unlike holds/table_sessions, the `tags`
 /// table has no `device_id` column, so the merge engine's tiebreak for
 /// this type falls back to `id` — see [SyncMergeService][].
@@ -203,6 +263,7 @@ class SyncPayload {
     required this.appVersion,
     required this.holds,
     required this.tableSessions,
+    this.imstSessions = const [],
     required this.tags,
   });
 
@@ -216,6 +277,7 @@ class SyncPayload {
   final String appVersion;
   final List<SyncHoldRecord> holds;
   final List<SyncTableSessionRecord> tableSessions;
+  final List<SyncImstSessionRecord> imstSessions;
   final List<SyncTagRecord> tags;
 
   String encode() => jsonEncode(toJson());
@@ -230,6 +292,7 @@ class SyncPayload {
     'appVersion': appVersion,
     'holds': holds.map((h) => h.toJson()).toList(),
     'tableSessions': tableSessions.map((s) => s.toJson()).toList(),
+    'imstSessions': imstSessions.map((s) => s.toJson()).toList(),
     'tags': tags.map((t) => t.toJson()).toList(),
   };
 
@@ -286,6 +349,11 @@ class SyncPayload {
           json,
           'tableSessions',
         ).map((e) => SyncTableSessionRecord.fromJson(_asObject(e))).toList(),
+        // Absent in schema-2 payloads, which a schema-3 build still accepts.
+        imstSessions: _optionalList(
+          json,
+          'imstSessions',
+        ).map((e) => SyncImstSessionRecord.fromJson(_asObject(e))).toList(),
         tags: _requireList(
           json,
           'tags',
@@ -354,6 +422,18 @@ List<Object?> _requireList(Map<String, dynamic> json, String key) {
   throw SyncPayloadException(
     SyncPayloadErrorReason.malformed,
     'Missing or invalid field "$key".',
+  );
+}
+
+/// Like [_requireList] but treats an absent key as an empty list. Used for
+/// fields added in a later schema than some payloads on disk were written at.
+List<Object?> _optionalList(Map<String, dynamic> json, String key) {
+  final value = json[key];
+  if (value == null) return const [];
+  if (value is List) return value;
+  throw SyncPayloadException(
+    SyncPayloadErrorReason.malformed,
+    'Invalid field "$key".',
   );
 }
 

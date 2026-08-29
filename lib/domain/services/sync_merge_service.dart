@@ -8,6 +8,8 @@ class MergeCounts {
     this.holdsUpdated = 0,
     this.sessionsAdded = 0,
     this.sessionsUpdated = 0,
+    this.imstAdded = 0,
+    this.imstUpdated = 0,
     this.tagsAdded = 0,
     this.tagsUpdated = 0,
   });
@@ -16,6 +18,8 @@ class MergeCounts {
   final int holdsUpdated;
   final int sessionsAdded;
   final int sessionsUpdated;
+  final int imstAdded;
+  final int imstUpdated;
   final int tagsAdded;
   final int tagsUpdated;
 }
@@ -24,12 +28,14 @@ class MergeResult {
   const MergeResult({
     required this.holds,
     required this.tableSessions,
+    required this.imstSessions,
     required this.tags,
     required this.counts,
   });
 
   final List<SyncHoldRecord> holds;
   final List<SyncTableSessionRecord> tableSessions;
+  final List<SyncImstSessionRecord> imstSessions;
   final List<SyncTagRecord> tags;
   final MergeCounts counts;
 }
@@ -71,6 +77,13 @@ class SyncMergeService {
       updatedAt: (s) => s.updatedAt,
       tiebreak: (s) => s.deviceId,
     );
+    final imst = _mergeById<SyncImstSessionRecord>(
+      local: local.imstSessions,
+      remote: remote.imstSessions,
+      id: (s) => s.id,
+      updatedAt: (s) => s.updatedAt,
+      tiebreak: (s) => s.deviceId,
+    );
     final tags = _mergeById<SyncTagRecord>(
       local: local.tags,
       remote: remote.tags,
@@ -86,12 +99,15 @@ class SyncMergeService {
     return MergeResult(
       holds: holds.merged,
       tableSessions: sessions.merged,
+      imstSessions: imst.merged,
       tags: tags.merged,
       counts: MergeCounts(
         holdsAdded: holds.added,
         holdsUpdated: holds.updated,
         sessionsAdded: sessions.added,
         sessionsUpdated: sessions.updated,
+        imstAdded: imst.added,
+        imstUpdated: imst.updated,
         tagsAdded: tags.added,
         tagsUpdated: tags.updated,
       ),

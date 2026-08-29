@@ -6,6 +6,7 @@ import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import 'device_id_provider.dart';
 import 'holds_repository.dart';
+import 'imst_sessions_repository.dart';
 import 'settings_repository.dart';
 import 'table_sessions_repository.dart';
 import 'tags_repository.dart';
@@ -19,6 +20,7 @@ class SyncRepository {
     required this.deviceId,
     required this._holdsRepo,
     required this._sessionsRepo,
+    required this._imstRepo,
     required this._tagsRepo,
     required this._settingsRepo,
   }) : _db = database;
@@ -27,6 +29,7 @@ class SyncRepository {
   final String deviceId;
   final HoldsRepository _holdsRepo;
   final TableSessionsRepository _sessionsRepo;
+  final ImstSessionsRepository _imstRepo;
   final TagsRepository _tagsRepo;
   final SettingsRepository _settingsRepo;
 
@@ -76,6 +79,8 @@ class SyncRepository {
         ),
     ];
 
+    final imstSessions = await _imstRepo.allSyncRecords();
+
     final tagRows = await _db.select(_db.tags).get();
     final tags = [
       for (final row in tagRows)
@@ -96,6 +101,7 @@ class SyncRepository {
       appVersion: appVersion,
       holds: holds,
       tableSessions: tableSessions,
+      imstSessions: imstSessions,
       tags: tags,
     );
   }
@@ -114,6 +120,7 @@ class SyncRepository {
       await _tagsRepo.upsertAll(result.tags);
       await _holdsRepo.upsertAll(result.holds);
       await _sessionsRepo.upsertAll(result.tableSessions);
+      await _imstRepo.upsertAll(result.imstSessions);
       await _recomputePbFlags();
       await _settingsRepo.setLastSync(
         atMs: now,
@@ -137,6 +144,7 @@ final syncRepositoryProvider = FutureProvider<SyncRepository>((ref) async {
   final deviceId = await ref.watch(deviceIdProvider.future);
   final holdsRepo = await ref.watch(holdsRepositoryProvider.future);
   final sessionsRepo = await ref.watch(tableSessionsRepositoryProvider.future);
+  final imstRepo = await ref.watch(imstSessionsRepositoryProvider.future);
   final tagsRepo = ref.watch(tagsRepositoryProvider);
   final settingsRepo = ref.watch(settingsRepositoryProvider);
   return SyncRepository(
@@ -144,6 +152,7 @@ final syncRepositoryProvider = FutureProvider<SyncRepository>((ref) async {
     deviceId: deviceId,
     holdsRepo: holdsRepo,
     sessionsRepo: sessionsRepo,
+    imstRepo: imstRepo,
     tagsRepo: tagsRepo,
     settingsRepo: settingsRepo,
   );
