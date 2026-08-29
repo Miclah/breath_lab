@@ -863,6 +863,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String imstHistoryRow(int breaths, int level) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths breaths',
+      one: '1 breath',
+    );
+    return 'IMST · $_temp0 · level $level';
+  }
+
+  @override
+  String get historyFilterImst => 'IMST';
+
+  @override
   String get settingsImstGroupLabel => 'Inspiratory muscle training (IMST)';
 
   @override

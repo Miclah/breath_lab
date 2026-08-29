@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/tags_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/hold_list_item.dart';
@@ -67,6 +69,22 @@ class _TableSessionEntry extends _HistoryEntry {
   DateTime get createdAt => session.createdAt;
 }
 
+class _ImstEntry extends _HistoryEntry {
+  _ImstEntry(this.session);
+  final ImstSession session;
+  @override
+  DateTime get createdAt => session.createdAt;
+}
+
+/// Opens the read-only IMST session detail sheet.
+void showImstDetail(BuildContext context, ImstSession session) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (_) => _ImstDetailSheet(session: session),
+  );
+}
+
 // ---------------------------------------------------------------------------
 // History screen
 // ---------------------------------------------------------------------------
@@ -81,6 +99,8 @@ class HistoryScreen extends ConsumerWidget {
     final tableSessionsAsync = ref.watch(allTableSessionsProvider);
     final holds = holdsAsync.valueOrNull;
     final tableSessions = tableSessionsAsync.valueOrNull;
+    final imstSessions =
+        ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
     final holdTagIds = ref.watch(holdTagIdsProvider).valueOrNull ?? const {};
     final types = ref.watch(historyTypeFilterProvider);
     final lungVolumes = ref.watch(historyLungVolumeFilterProvider);
@@ -113,6 +133,9 @@ class HistoryScreen extends ConsumerWidget {
                         for (final session in tableSessions)
                           if (tableSessionMatchesHistoryFilters(session, types))
                             _TableSessionEntry(session),
+                        for (final session in imstSessions)
+                          if (imstMatchesHistoryFilters(types))
+                            _ImstEntry(session),
                       ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
                       if (entries.isEmpty) {
@@ -149,6 +172,10 @@ class HistoryScreen extends ConsumerWidget {
                             ),
                             _TableSessionEntry(:final session) =>
                               _TableSessionRow(session: session),
+                            _ImstEntry(:final session) => _ImstSessionRow(
+                              session: session,
+                              onTap: () => showImstDetail(context, session),
+                            ),
                           },
                         ),
                       );
@@ -198,6 +225,45 @@ class _TableSessionRow extends StatelessWidget {
                 session.roundsTotal,
                 fmtHoldDuration(Duration(milliseconds: avgMs)),
               ),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Text(
+            holdDateLabel(session.createdAt),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImstSessionRow extends StatelessWidget {
+  const _ImstSessionRow({required this.session, required this.onTap});
+
+  final ImstSession session;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: Spacing.xl,
+        vertical: Spacing.xs,
+      ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              session.deviceLevel == null
+                  ? l10n.imstDayRow(session.breaths)
+                  : l10n.imstHistoryRow(session.breaths, session.deviceLevel!),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -538,6 +604,80 @@ class _EditForm extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ImstDetailSheet extends StatelessWidget {
+  const _ImstDetailSheet({required this.session});
+
+  final ImstSession session;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(Spacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.imstLogTitle,
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+            const SizedBox(height: Spacing.xs),
+            Text(
+              DateFormat('d MMM yyyy, HH:mm').format(session.createdAt),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+            ),
+            const SizedBox(height: Spacing.lg),
+            Wrap(
+              spacing: Spacing.xl,
+              runSpacing: Spacing.sm,
+              children: [
+                _DetailStat(
+                  label: l10n.imstLogBreathsLabel,
+                  value: '${session.breaths}',
+                  c: c,
+                ),
+                if (session.deviceLevel != null)
+                  _DetailStat(
+                    label: l10n.imstLogLevelLabel,
+                    value: '${session.deviceLevel}',
+                    c: c,
+                  ),
+                if (session.deviceName != null &&
+                    session.deviceName!.isNotEmpty)
+                  _DetailStat(
+                    label: l10n.settingsImstDeviceNameLabel,
+                    value: session.deviceName!,
+                    c: c,
+                  ),
+                if (session.pimaxCmH2O != null)
+                  _DetailStat(
+                    label: l10n.settingsImstPimaxLabel,
+                    value: '${session.pimaxCmH2O}',
+                    c: c,
+                  ),
+              ],
+            ),
+            const SizedBox(height: Spacing.lg),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(l10n.historyDetailClose),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1579,6 +1579,18 @@ abstract class AppLocalizations {
   /// **'IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}}'**
   String imstDayRow(int breaths);
 
+  /// History list row for an IMST session that records the resistance level used
+  ///
+  /// In en, this message translates to:
+  /// **'IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}} · level {level}'**
+  String imstHistoryRow(int breaths, int level);
+
+  /// History type filter chip for IMST sessions
+  ///
+  /// In en, this message translates to:
+  /// **'IMST'**
+  String get historyFilterImst;
+
   /// Label for the IMST configuration group inside Settings → Training
   ///
   /// In en, this message translates to:

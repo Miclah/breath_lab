@@ -1100,6 +1100,22 @@
       }
     }
   },
+  "imstHistoryRow": "IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}} · level {level}",
+  "@imstHistoryRow": {
+    "description": "History list row for an IMST session that records the resistance level used",
+    "placeholders": {
+      "breaths": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "historyFilterImst": "IMST",
+  "@historyFilterImst": {
+    "description": "History type filter chip for IMST sessions"
+  },
   "settingsImstGroupLabel": "Inspiratory muscle training (IMST)",
   "@settingsImstGroupLabel": {
     "description": "Label for the IMST configuration group inside Settings → Training"

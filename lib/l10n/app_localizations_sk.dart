@@ -872,6 +872,21 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String imstHistoryRow(int breaths, int level) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths nádychov',
+      few: '$breaths nádychy',
+      one: '1 nádych',
+    );
+    return 'IMST · $_temp0 · úroveň $level';
+  }
+
+  @override
+  String get historyFilterImst => 'IMST';
+
+  @override
   String get settingsImstGroupLabel => 'Tréning nádychových svalov (IMST)';
 
   @override

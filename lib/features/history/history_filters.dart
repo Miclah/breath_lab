@@ -12,9 +12,9 @@ import '../../theme/typography.dart';
 import 'history_screen.dart' show tagLabel;
 import '../../theme/surfaces.dart';
 
-/// Type filter for the History screen. Standalone max holds vs. the two
-/// table session types.
-enum HistoryTypeFilter { max, co2, o2 }
+/// Type filter for the History screen. Standalone max holds, the two table
+/// session types, and IMST sessions.
+enum HistoryTypeFilter { max, co2, o2, imst }
 
 /// Selected type filters. Empty means no restriction (show every type) --
 /// each chip narrows the list further once selected.
@@ -64,6 +64,11 @@ bool tableSessionMatchesHistoryFilters(
   return types.contains(filterType);
 }
 
+/// True if an IMST session passes the type filter. Only the type filter
+/// applies — IMST sessions have no tags or lung volume.
+bool imstMatchesHistoryFilters(Set<HistoryTypeFilter> types) =>
+    types.isEmpty || types.contains(HistoryTypeFilter.imst);
+
 /// Filter chip row at the top of the History screen: type, lung volume,
 /// and a tag multi-select opened via bottom sheet. Combinable.
 class HistoryFilterBar extends ConsumerWidget {
@@ -100,6 +105,7 @@ class HistoryFilterBar extends ConsumerWidget {
                     HistoryTypeFilter.max => l10n.historyFilterMax,
                     HistoryTypeFilter.co2 => l10n.tablesCo2Toggle,
                     HistoryTypeFilter.o2 => l10n.tablesO2Toggle,
+                    HistoryTypeFilter.imst => l10n.historyFilterImst,
                   },
                   selected: types.contains(type),
                   onTap: () => _toggle(ref, historyTypeFilterProvider, type),
