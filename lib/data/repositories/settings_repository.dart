@@ -153,6 +153,46 @@ class SettingsRepository {
     await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
   }
 
+  // --- IMST (inspiratory muscle strength training) ---------------------------
+
+  /// The trainer's name the user typed, e.g. "POWERbreathe Plus". Null until
+  /// set; an empty string clears it.
+  Future<String?> getImstDeviceName() => _get('imst_device_name');
+
+  Future<void> setImstDeviceName(String? name) => name == null || name.isEmpty
+      ? _delete('imst_device_name')
+      : _set('imst_device_name', name);
+
+  /// The numbered resistance position on the trainer — a dial position, never
+  /// converted to % PImax (see `PHASE_3D_research.md`). Defaults to 3.
+  Future<int> getImstDeviceLevel() async {
+    final value = await _get('imst_device_level');
+    return value == null ? 3 : int.parse(value);
+  }
+
+  Future<void> setImstDeviceLevel(int level) =>
+      _set('imst_device_level', level.toString());
+
+  /// Measured maximal inspiratory pressure in cmH₂O, for the minority who
+  /// have a real figure. Null otherwise — never inferred from the dial.
+  Future<int?> getImstPimaxCmH2O() async {
+    final value = await _get('imst_pimax_cmh2o');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  Future<void> setImstPimaxCmH2O(int? value) => value == null
+      ? _delete('imst_pimax_cmh2o')
+      : _set('imst_pimax_cmh2o', value.toString());
+
+  /// Target resisted breaths per day. Craighead's protocol is 30.
+  Future<int> getImstTargetBreaths() async {
+    final value = await _get('imst_target_breaths');
+    return value == null ? 30 : int.parse(value);
+  }
+
+  Future<void> setImstTargetBreaths(int breaths) =>
+      _set('imst_target_breaths', breaths.toString());
+
   /// CO₂ table config as (rounds, holdPercent 0-100, restDecrementSeconds).
   /// Defaults per PRD: 7 rounds, 50% hold, 15s rest decrement.
   Future<(int, int, int)> getCo2TableConfig() async {
@@ -421,6 +461,61 @@ class BreathingRatioNotifier extends _RepoSetting<(int, int)> {
 final breathingRatioProvider =
     AsyncNotifierProvider<BreathingRatioNotifier, (int, int)>(
       BreathingRatioNotifier.new,
+    );
+
+/// IMST trainer name (null until set).
+class ImstDeviceNameNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getImstDeviceName();
+
+  @override
+  Future<void> write(String? value) => repo.setImstDeviceName(value);
+}
+
+final imstDeviceNameProvider =
+    AsyncNotifierProvider<ImstDeviceNameNotifier, String?>(
+      ImstDeviceNameNotifier.new,
+    );
+
+/// IMST resistance dial position.
+class ImstDeviceLevelNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getImstDeviceLevel();
+
+  @override
+  Future<void> write(int value) => repo.setImstDeviceLevel(value);
+}
+
+final imstDeviceLevelProvider =
+    AsyncNotifierProvider<ImstDeviceLevelNotifier, int>(
+      ImstDeviceLevelNotifier.new,
+    );
+
+/// Optional measured PImax in cmH₂O (null when unknown).
+class ImstPimaxNotifier extends _RepoSetting<int?> {
+  @override
+  Future<int?> read() => repo.getImstPimaxCmH2O();
+
+  @override
+  Future<void> write(int? value) => repo.setImstPimaxCmH2O(value);
+}
+
+final imstPimaxCmH2OProvider = AsyncNotifierProvider<ImstPimaxNotifier, int?>(
+  ImstPimaxNotifier.new,
+);
+
+/// Target resisted breaths per day (default 30).
+class ImstTargetBreathsNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getImstTargetBreaths();
+
+  @override
+  Future<void> write(int value) => repo.setImstTargetBreaths(value);
+}
+
+final imstTargetBreathsProvider =
+    AsyncNotifierProvider<ImstTargetBreathsNotifier, int>(
+      ImstTargetBreathsNotifier.new,
     );
 
 /// CO₂ table config as (rounds, holdPercent, restDecrementSeconds).
