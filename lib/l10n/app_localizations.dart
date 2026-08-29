@@ -248,6 +248,24 @@ abstract class AppLocalizations {
   /// **'Exhale'**
   String get settingsBreathingRatioExhaleLabel;
 
+  /// Standing hint under the custom breathing ratio steppers stating the safety bounds (RESEARCH_ALIGNMENT.md §4 S2)
+  ///
+  /// In en, this message translates to:
+  /// **'Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.'**
+  String get settingsBreathingRatioRule;
+
+  /// Shown when the user tries to set a breathing cycle shorter than 6 seconds — an explanation, not a silent clamp
+  ///
+  /// In en, this message translates to:
+  /// **'Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.'**
+  String get settingsBreathingRatioTooFast;
+
+  /// Shown when the user tries to set an exhale shorter than the inhale
+  ///
+  /// In en, this message translates to:
+  /// **'Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.'**
+  String get settingsBreathingRatioExhaleShort;
+
   /// Settings section header for CO₂ table configuration
   ///
   /// In en, this message translates to:

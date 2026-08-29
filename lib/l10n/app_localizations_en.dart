@@ -89,6 +89,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Exhale';
 
   @override
+  String get settingsBreathingRatioRule =>
+      'Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.';
+
+  @override
+  String get settingsBreathingRatioTooFast =>
+      'Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.';
+
+  @override
+  String get settingsBreathingRatioExhaleShort =>
+      'Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.';
+
+  @override
   String get settingsCo2Section => 'CO₂ table';
 
   @override

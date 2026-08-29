@@ -100,6 +100,18 @@
   "@settingsBreathingRatioExhaleLabel": {
     "description": "Label for the custom exhale-duration stepper"
   },
+  "settingsBreathingRatioRule": "Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.",
+  "@settingsBreathingRatioRule": {
+    "description": "Standing hint under the custom breathing ratio steppers stating the safety bounds (RESEARCH_ALIGNMENT.md §4 S2)"
+  },
+  "settingsBreathingRatioTooFast": "Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.",
+  "@settingsBreathingRatioTooFast": {
+    "description": "Shown when the user tries to set a breathing cycle shorter than 6 seconds — an explanation, not a silent clamp"
+  },
+  "settingsBreathingRatioExhaleShort": "Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.",
+  "@settingsBreathingRatioExhaleShort": {
+    "description": "Shown when the user tries to set an exhale shorter than the inhale"
+  },
   "settingsCo2Section": "CO₂ table",
   "@settingsCo2Section": {
     "description": "Settings section header for CO₂ table configuration"

@@ -138,17 +138,39 @@ class SettingsRepository {
   Future<void> setPrepBreathingDurationSeconds(int seconds) =>
       _set('prep_breathing_duration_s', seconds.toString());
 
-  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6.
+  static const _defaultBreathingRatio = (4, 6);
+
+  /// The prep breathing guide must never be able to coach hyperventilation —
+  /// the exact mechanism the first safety screen warns about, and the leading
+  /// cause of hypoxic blackout (`RESEARCH_ALIGNMENT.md` §4 S2). A ratio is
+  /// only allowed if the exhale is at least as long as the inhale and the
+  /// whole cycle runs 6 seconds or longer.
+  static const minBreathingCycleSeconds = 6;
+
+  static bool isValidBreathingRatio(int inhaleSeconds, int exhaleSeconds) =>
+      exhaleSeconds >= inhaleSeconds &&
+      inhaleSeconds + exhaleSeconds >= minBreathingCycleSeconds;
+
+  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6, and
+  /// a stored value that fails [isValidBreathingRatio] — from an older build
+  /// or a hand-edited database — reads back as the default rather than
+  /// driving the pacer.
   Future<(int, int)> getBreathingRatio() async {
     final inhale = await _get('breathing_ratio_inhale_s');
     final exhale = await _get('breathing_ratio_exhale_s');
-    return (
-      inhale == null ? 4 : int.parse(inhale),
-      exhale == null ? 6 : int.parse(exhale),
+    final ratio = (
+      inhale == null ? _defaultBreathingRatio.$1 : int.parse(inhale),
+      exhale == null ? _defaultBreathingRatio.$2 : int.parse(exhale),
     );
+    return isValidBreathingRatio(ratio.$1, ratio.$2)
+        ? ratio
+        : _defaultBreathingRatio;
   }
 
+  /// Persists a ratio. Invalid ratios are refused outright — the UI is
+  /// responsible for explaining why rather than relying on a silent clamp.
   Future<void> setBreathingRatio(int inhaleSeconds, int exhaleSeconds) async {
+    if (!isValidBreathingRatio(inhaleSeconds, exhaleSeconds)) return;
     await _set('breathing_ratio_inhale_s', inhaleSeconds.toString());
     await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
   }

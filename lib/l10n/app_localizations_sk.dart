@@ -89,6 +89,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Výdych';
 
   @override
+  String get settingsBreathingRatioRule =>
+      'Výdych aspoň taký dlhý ako nádych a celý cyklus 6 sekúnd alebo viac.';
+
+  @override
+  String get settingsBreathingRatioTooFast =>
+      'Ponechané: cyklus kratší než 6 sekúnd je hyperventilácia. Maskuje nízky kyslík namiesto tréningu tolerancie naň — mechanizmus za väčšinou odpadnutí pri zadržaní dychu.';
+
+  @override
+  String get settingsBreathingRatioExhaleShort =>
+      'Ponechané: nasilu kratší výdych spôsobuje tú istú hyperventiláciu, pred ktorou varuje prvá bezpečnostná obrazovka. Výdych nechaj aspoň taký dlhý ako nádych.';
+
+  @override
   String get settingsCo2Section => 'CO₂ tabuľka';
 
   @override

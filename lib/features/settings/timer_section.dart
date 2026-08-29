@@ -166,7 +166,7 @@ class _BreathingRatioSelector extends ConsumerWidget {
   }
 }
 
-class _CustomRatioInputs extends ConsumerWidget {
+class _CustomRatioInputs extends ConsumerStatefulWidget {
   const _CustomRatioInputs({
     required this.inhaleSeconds,
     required this.exhaleSeconds,
@@ -179,27 +179,60 @@ class _CustomRatioInputs extends ConsumerWidget {
   static const _maxSeconds = 15;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_CustomRatioInputs> createState() => _CustomRatioInputsState();
+}
+
+class _CustomRatioInputsState extends ConsumerState<_CustomRatioInputs> {
+  /// Which safety rule the last attempt broke, or null. Not a silent clamp:
+  /// the app refuses the change and says why (`RESEARCH_ALIGNMENT.md` §4 S2).
+  String? _refusal;
+
+  void _attempt(int inhale, int exhale) {
     final l10n = AppLocalizations.of(context)!;
+    if (inhale + exhale < SettingsRepository.minBreathingCycleSeconds) {
+      setState(() => _refusal = l10n.settingsBreathingRatioTooFast);
+      return;
+    }
+    if (exhale < inhale) {
+      setState(() => _refusal = l10n.settingsBreathingRatioExhaleShort);
+      return;
+    }
+    setState(() => _refusal = null);
+    ref.read(breathingRatioProvider.notifier).set((inhale, exhale));
+  }
 
-    Future<void> update(int inhale, int exhale) =>
-        ref.read(breathingRatioProvider.notifier).set((inhale, exhale));
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
 
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _RatioValueStepper(
-            label: l10n.settingsBreathingRatioInhaleLabel,
-            seconds: inhaleSeconds,
-            onChanged: (v) => update(v, exhaleSeconds),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _RatioValueStepper(
+                label: l10n.settingsBreathingRatioInhaleLabel,
+                seconds: widget.inhaleSeconds,
+                onChanged: (v) => _attempt(v, widget.exhaleSeconds),
+              ),
+            ),
+            const SizedBox(width: Spacing.lg),
+            Expanded(
+              child: _RatioValueStepper(
+                label: l10n.settingsBreathingRatioExhaleLabel,
+                seconds: widget.exhaleSeconds,
+                onChanged: (v) => _attempt(widget.inhaleSeconds, v),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: Spacing.lg),
-        Expanded(
-          child: _RatioValueStepper(
-            label: l10n.settingsBreathingRatioExhaleLabel,
-            seconds: exhaleSeconds,
-            onChanged: (v) => update(inhaleSeconds, v),
+        const SizedBox(height: Spacing.xs),
+        Text(
+          _refusal ?? l10n.settingsBreathingRatioRule,
+          style: BreathLabTypography.micro.copyWith(
+            color: _refusal == null ? c.textTertiary : c.dangerText,
           ),
         ),
       ],
