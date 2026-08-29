@@ -76,6 +76,15 @@ class _ImstEntry extends _HistoryEntry {
   DateTime get createdAt => session.createdAt;
 }
 
+/// A logged rest day or stretching session — a [Hold] row by storage, but an
+/// event with no duration, so it never renders as a "00:00" hold.
+class _EventEntry extends _HistoryEntry {
+  _EventEntry(this.hold);
+  final Hold hold;
+  @override
+  DateTime get createdAt => hold.createdAt;
+}
+
 /// Opens the read-only IMST session detail sheet.
 void showImstDetail(BuildContext context, ImstSession session) {
   showModalBottomSheet(
@@ -120,7 +129,12 @@ class HistoryScreen extends ConsumerWidget {
                     builder: (context) {
                       final entries = <_HistoryEntry>[
                         for (final hold in holds)
-                          if (hold.type != HoldType.co2 &&
+                          if ((hold.type == HoldType.rest ||
+                                  hold.type == HoldType.stretch) &&
+                              types.isEmpty)
+                            _EventEntry(hold)
+                          else if (!hold.type.isEvent &&
+                              hold.type != HoldType.co2 &&
                               hold.type != HoldType.o2 &&
                               holdMatchesHistoryFilters(
                                 hold,
@@ -176,6 +190,7 @@ class HistoryScreen extends ConsumerWidget {
                               session: session,
                               onTap: () => showImstDetail(context, session),
                             ),
+                            _EventEntry(:final hold) => _EventRow(hold: hold),
                           },
                         ),
                       );
@@ -269,6 +284,42 @@ class _ImstSessionRow extends StatelessWidget {
           ),
           Text(
             holdDateLabel(session.createdAt),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A display-only row for a logged rest day or stretching session.
+class _EventRow extends StatelessWidget {
+  const _EventRow({required this.hold});
+
+  final Hold hold;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+    final label = hold.type == HoldType.stretch
+        ? l10n.historyStretchRow
+        : l10n.historyRestRow;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: Spacing.xl,
+        vertical: Spacing.xs,
+      ),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+          ),
+          Text(
+            holdDateLabel(hold.createdAt),
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: c.textTertiary),

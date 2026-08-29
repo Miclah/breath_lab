@@ -104,7 +104,12 @@ class RecentHoldsSection extends ConsumerWidget {
     final c = context.appColors;
     final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
     final recentHolds = holds
-        .where((h) => h.type != HoldType.co2 && h.type != HoldType.o2)
+        .where(
+          (h) =>
+              h.type != HoldType.co2 &&
+              h.type != HoldType.o2 &&
+              !h.type.isEvent,
+        )
         .take(_recentHoldsCount)
         .toList();
 

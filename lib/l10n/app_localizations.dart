@@ -1525,11 +1525,83 @@ abstract class AppLocalizations {
   /// **'View all'**
   String get progressViewAllHistory;
 
-  /// Tooltip on the Timer screen app-bar action that opens the IMST logging screen
+  /// Menu item / tooltip that opens the IMST logging screen from the Timer screen
   ///
   /// In en, this message translates to:
   /// **'Log an IMST session'**
   String get imstLogOpen;
+
+  /// Tooltip on the Timer app-bar button that opens the log-a-session menu (IMST, rest, stretch)
+  ///
+  /// In en, this message translates to:
+  /// **'Log a session'**
+  String get logMenuTooltip;
+
+  /// Menu item to log a rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get logRestMenuItem;
+
+  /// Menu item to log a chest-wall stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get logStretchMenuItem;
+
+  /// Title of the rest-day logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log a rest day'**
+  String get logRestTitle;
+
+  /// Title of the stretching-session logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log stretching'**
+  String get logStretchTitle;
+
+  /// Explains why a rest day is a positive logged event (RESEARCH_ALIGNMENT.md §3)
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery is training. A logged rest day counts toward your week\'s structure rather than breaking a streak.'**
+  String get logRestBlurb;
+
+  /// States the weak evidence and small effect size for stretching (RESEARCH_ALIGNMENT.md §2)
+  ///
+  /// In en, this message translates to:
+  /// **'Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.'**
+  String get logStretchBlurb;
+
+  /// Confirm button on the rest/stretch logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log it'**
+  String get logSessionConfirm;
+
+  /// Confirmation snackbar after logging a rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day logged'**
+  String get logRestSaved;
+
+  /// Confirmation snackbar after logging a stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching session logged'**
+  String get logStretchSaved;
+
+  /// History and heatmap-day-sheet row label for a logged rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get historyRestRow;
+
+  /// History and heatmap-day-sheet row label for a logged stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get historyStretchRow;
 
   /// Title of the IMST session logging screen
   ///

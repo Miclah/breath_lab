@@ -836,6 +836,44 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imstLogOpen => 'Zaznamenať IMST tréning';
 
   @override
+  String get logMenuTooltip => 'Zaznamenať tréning';
+
+  @override
+  String get logRestMenuItem => 'Deň odpočinku';
+
+  @override
+  String get logStretchMenuItem => 'Naťahovanie';
+
+  @override
+  String get logRestTitle => 'Zaznamenať deň odpočinku';
+
+  @override
+  String get logStretchTitle => 'Zaznamenať naťahovanie';
+
+  @override
+  String get logRestBlurb =>
+      'Regenerácia je tréning. Zaznamenaný deň odpočinku sa počíta do štruktúry týždňa, nenaruší sériu.';
+
+  @override
+  String get logStretchBlurb =>
+      'Naťahovanie hrudníka je jediná cesta k miernemu nárastu vitálnej kapacity — jednotky percent počas mesiacov, nie pol litra z mýtov.';
+
+  @override
+  String get logSessionConfirm => 'Zaznamenať';
+
+  @override
+  String get logRestSaved => 'Deň odpočinku zaznamenaný';
+
+  @override
+  String get logStretchSaved => 'Naťahovanie zaznamenané';
+
+  @override
+  String get historyRestRow => 'Deň odpočinku';
+
+  @override
+  String get historyStretchRow => 'Naťahovanie';
+
+  @override
   String get imstLogTitle => 'IMST tréning';
 
   @override

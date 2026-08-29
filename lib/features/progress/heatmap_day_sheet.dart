@@ -36,14 +36,18 @@ class HeatmapDaySheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final holds = (ref.watch(allHoldsProvider).valueOrNull ?? const [])
+    final dayHolds = (ref.watch(allHoldsProvider).valueOrNull ?? const [])
+        .where((h) => _isSameDay(h.createdAt, date))
+        .toList();
+    final holds = dayHolds
         .where(
           (h) =>
-              _isSameDay(h.createdAt, date) &&
               h.type != HoldType.co2 &&
-              h.type != HoldType.o2,
+              h.type != HoldType.o2 &&
+              !h.type.isEvent,
         )
         .toList();
+    final events = dayHolds.where((h) => h.type.isEvent).toList();
     final tables = (ref.watch(allTableSessionsProvider).valueOrNull ?? const [])
         .where((t) => _isSameDay(t.createdAt, date))
         .toList();
@@ -83,6 +87,13 @@ class HeatmapDaySheet extends ConsumerWidget {
               _DayTableTile(
                 time: DateFormat('HH:mm').format(session.createdAt),
                 label: l10n.imstDayRow(session.breaths),
+              ),
+            for (final event in events)
+              _DayTableTile(
+                time: DateFormat('HH:mm').format(event.createdAt),
+                label: event.type == HoldType.stretch
+                    ? l10n.historyStretchRow
+                    : l10n.historyRestRow,
               ),
             const SizedBox(height: Spacing.lg),
             SizedBox(

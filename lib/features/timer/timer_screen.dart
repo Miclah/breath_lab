@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../imst/imst_log_screen.dart';
+import 'log_session_sheet.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -93,12 +94,31 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       appBar: AppBar(
         title: Text(l10n.navTimer),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.fitness_center),
-            tooltip: l10n.imstLogOpen,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const ImstLogScreen()),
-            ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.add),
+            tooltip: l10n.logMenuTooltip,
+            onSelected: (value) {
+              switch (value) {
+                case 'imst':
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const ImstLogScreen(),
+                    ),
+                  );
+                case 'rest':
+                  showLogSessionSheet(context, LoggableSession.rest);
+                case 'stretch':
+                  showLogSessionSheet(context, LoggableSession.stretch);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'imst', child: Text(l10n.imstLogOpen)),
+              PopupMenuItem(value: 'rest', child: Text(l10n.logRestMenuItem)),
+              PopupMenuItem(
+                value: 'stretch',
+                child: Text(l10n.logStretchMenuItem),
+              ),
+            ],
           ),
         ],
       ),

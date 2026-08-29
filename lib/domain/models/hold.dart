@@ -26,6 +26,14 @@ enum HoldType {
     'rest' => HoldType.rest,
     _ => HoldType.max,
   };
+
+  /// A logged event with no meaningful duration — a rest day or a stretching
+  /// session. These count as training days but must never render as a "00:00"
+  /// hold in the history list or the recent-holds preview.
+  bool get isEvent =>
+      this == HoldType.rest ||
+      this == HoldType.stretch ||
+      this == HoldType.imst;
 }
 
 enum LungVolume {

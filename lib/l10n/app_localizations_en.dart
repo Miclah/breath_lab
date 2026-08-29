@@ -828,6 +828,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imstLogOpen => 'Log an IMST session';
 
   @override
+  String get logMenuTooltip => 'Log a session';
+
+  @override
+  String get logRestMenuItem => 'Rest day';
+
+  @override
+  String get logStretchMenuItem => 'Stretching';
+
+  @override
+  String get logRestTitle => 'Log a rest day';
+
+  @override
+  String get logStretchTitle => 'Log stretching';
+
+  @override
+  String get logRestBlurb =>
+      'Recovery is training. A logged rest day counts toward your week\'s structure rather than breaking a streak.';
+
+  @override
+  String get logStretchBlurb =>
+      'Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.';
+
+  @override
+  String get logSessionConfirm => 'Log it';
+
+  @override
+  String get logRestSaved => 'Rest day logged';
+
+  @override
+  String get logStretchSaved => 'Stretching session logged';
+
+  @override
+  String get historyRestRow => 'Rest day';
+
+  @override
+  String get historyStretchRow => 'Stretching';
+
+  @override
   String get imstLogTitle => 'IMST session';
 
   @override

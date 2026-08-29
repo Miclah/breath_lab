@@ -1056,7 +1056,55 @@
   },
   "imstLogOpen": "Log an IMST session",
   "@imstLogOpen": {
-    "description": "Tooltip on the Timer screen app-bar action that opens the IMST logging screen"
+    "description": "Menu item / tooltip that opens the IMST logging screen from the Timer screen"
+  },
+  "logMenuTooltip": "Log a session",
+  "@logMenuTooltip": {
+    "description": "Tooltip on the Timer app-bar button that opens the log-a-session menu (IMST, rest, stretch)"
+  },
+  "logRestMenuItem": "Rest day",
+  "@logRestMenuItem": {
+    "description": "Menu item to log a rest day"
+  },
+  "logStretchMenuItem": "Stretching",
+  "@logStretchMenuItem": {
+    "description": "Menu item to log a chest-wall stretching session"
+  },
+  "logRestTitle": "Log a rest day",
+  "@logRestTitle": {
+    "description": "Title of the rest-day logging sheet"
+  },
+  "logStretchTitle": "Log stretching",
+  "@logStretchTitle": {
+    "description": "Title of the stretching-session logging sheet"
+  },
+  "logRestBlurb": "Recovery is training. A logged rest day counts toward your week's structure rather than breaking a streak.",
+  "@logRestBlurb": {
+    "description": "Explains why a rest day is a positive logged event (RESEARCH_ALIGNMENT.md §3)"
+  },
+  "logStretchBlurb": "Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.",
+  "@logStretchBlurb": {
+    "description": "States the weak evidence and small effect size for stretching (RESEARCH_ALIGNMENT.md §2)"
+  },
+  "logSessionConfirm": "Log it",
+  "@logSessionConfirm": {
+    "description": "Confirm button on the rest/stretch logging sheet"
+  },
+  "logRestSaved": "Rest day logged",
+  "@logRestSaved": {
+    "description": "Confirmation snackbar after logging a rest day"
+  },
+  "logStretchSaved": "Stretching session logged",
+  "@logStretchSaved": {
+    "description": "Confirmation snackbar after logging a stretching session"
+  },
+  "historyRestRow": "Rest day",
+  "@historyRestRow": {
+    "description": "History and heatmap-day-sheet row label for a logged rest day"
+  },
+  "historyStretchRow": "Stretching",
+  "@historyStretchRow": {
+    "description": "History and heatmap-day-sheet row label for a logged stretching session"
   },
   "imstLogTitle": "IMST session",
   "@imstLogTitle": {
