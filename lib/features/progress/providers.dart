@@ -7,6 +7,7 @@ import '../../domain/models/hold.dart';
 import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
 import '../../domain/services/adherence_service.dart';
+import '../../domain/services/plateau_service.dart';
 import '../../domain/services/stats_service.dart';
 
 /// The single longest max hold ever recorded.
@@ -37,6 +38,14 @@ final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
   final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
   return AdherenceService.currentWeek(holds: holds, tables: tables, imst: imst);
+});
+
+/// Whether the last 28 days of Full-lung max holds have failed to beat the
+/// 28 before — surfaces the deload card on Progress (`RESEARCH_ALIGNMENT.md`
+/// §3.2).
+final plateauStatusProvider = Provider<PlateauStatus>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  return PlateauService.detect(holds);
 });
 
 /// Per-day session counts (holds + table sessions) for the calendar

@@ -1417,6 +1417,24 @@ abstract class AppLocalizations {
   /// **'30d avg'**
   String get progressStatAvg30d;
 
+  /// Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)
+  ///
+  /// In en, this message translates to:
+  /// **'Progress has stalled'**
+  String get plateauTitle;
+
+  /// Body of the deload card, stating the two figures being compared
+  ///
+  /// In en, this message translates to:
+  /// **'Your best Full-lung hold over the last four weeks ({recent}) hasn\'t beaten the four weeks before ({previous}).'**
+  String plateauBody(String recent, String previous);
+
+  /// Advice line on the deload card — the research's own recommendation (RESEARCH_ALIGNMENT.md §3.2)
+  ///
+  /// In en, this message translates to:
+  /// **'The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.'**
+  String get plateauAdvice;
+
   /// Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)
   ///
   /// In en, this message translates to:

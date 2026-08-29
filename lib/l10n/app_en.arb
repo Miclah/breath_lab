@@ -974,6 +974,22 @@
   "@progressStatAvg30d": {
     "description": "Label for the 30-day average hold stat card on the Progress screen"
   },
+  "plateauTitle": "Progress has stalled",
+  "@plateauTitle": {
+    "description": "Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)"
+  },
+  "plateauBody": "Your best Full-lung hold over the last four weeks ({recent}) hasn't beaten the four weeks before ({previous}).",
+  "@plateauBody": {
+    "description": "Body of the deload card, stating the two figures being compared",
+    "placeholders": {
+      "recent": { "type": "String" },
+      "previous": { "type": "String" }
+    }
+  },
+  "plateauAdvice": "The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.",
+  "@plateauAdvice": {
+    "description": "Advice line on the deload card — the research's own recommendation (RESEARCH_ALIGNMENT.md §3.2)"
+  },
   "progressStatWeeksTrained": "Weeks trained",
   "@progressStatWeeksTrained": {
     "description": "Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)"

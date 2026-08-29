@@ -754,6 +754,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressStatAvg30d => '30d priemer';
 
   @override
+  String get plateauTitle => 'Pokrok sa zastavil';
+
+  @override
+  String plateauBody(String recent, String previous) {
+    return 'Tvoje najlepšie zadržanie s plnými pľúcami za posledné štyri týždne ($recent) neprekonalo predchádzajúce štyri týždne ($previous).';
+  }
+
+  @override
+  String get plateauAdvice =>
+      'Výskum tu odporúča regeneráciu a naťahovanie hrudníka namiesto väčšieho objemu. Jedno- až dvojtýždňový deload to často pohne.';
+
+  @override
   String get progressStatWeeksTrained => 'Odtrénované týždne';
 
   @override

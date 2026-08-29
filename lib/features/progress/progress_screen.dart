@@ -12,6 +12,8 @@ import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import '../history/history_screen.dart';
 import 'calendar_heatmap.dart';
+import 'plateau_card.dart';
+import 'providers.dart';
 import 'progress_chart.dart';
 import 'start_hold_button.dart';
 import 'stat_card_row.dart';
@@ -61,6 +63,7 @@ class ProgressScreen extends ConsumerWidget {
                 ],
                 const CalendarHeatmap(),
                 const SizedBox(height: Spacing.lg),
+                const _PlateauSlot(),
                 const ProgressChart(),
                 if (!split) ...[
                   const SizedBox(height: Spacing.xxl),
@@ -71,6 +74,23 @@ class ProgressScreen extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+}
+
+/// The plateau card plus the gap under it — both present only when there is
+/// a plateau to report, so a quiet screen keeps its rhythm.
+class _PlateauSlot extends ConsumerWidget {
+  const _PlateauSlot();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(plateauStatusProvider).plateaued) {
+      return const SizedBox.shrink();
+    }
+    return const Padding(
+      padding: EdgeInsets.only(bottom: Spacing.lg),
+      child: PlateauCard(),
     );
   }
 }

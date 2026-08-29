@@ -748,6 +748,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressStatAvg30d => '30d avg';
 
   @override
+  String get plateauTitle => 'Progress has stalled';
+
+  @override
+  String plateauBody(String recent, String previous) {
+    return 'Your best Full-lung hold over the last four weeks ($recent) hasn\'t beaten the four weeks before ($previous).';
+  }
+
+  @override
+  String get plateauAdvice =>
+      'The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.';
+
+  @override
   String get progressStatWeeksTrained => 'Weeks trained';
 
   @override
