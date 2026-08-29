@@ -36,6 +36,37 @@
   "@safetyRule2": {
     "description": "Safety rule 2 — no hyperventilation"
   },
+  "recoveryTitle": "Recovery breaths",
+  "@recoveryTitle": {
+    "description": "Header of the guided hook-breath recovery prompt on the result screen (RESEARCH_ALIGNMENT.md §2, tier C)"
+  },
+  "recoveryBlurb": "Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.",
+  "@recoveryBlurb": {
+    "description": "Framing text for recovery breaths — practice, not evidence"
+  },
+  "recoveryStart": "Guide me",
+  "@recoveryStart": {
+    "description": "Button that starts the guided recovery-breath sequence"
+  },
+  "recoveryDone": "Done — take it easy for a minute.",
+  "@recoveryDone": {
+    "description": "Shown after the recovery-breath sequence finishes"
+  },
+  "recoveryCueInhale": "Breathe in",
+  "@recoveryCueInhale": { "description": "Recovery breath cue: inhale phase" },
+  "recoveryCueHook": "Hook — hold",
+  "@recoveryCueHook": { "description": "Recovery breath cue: the brief hooked hold" },
+  "recoveryCueExhale": "Out",
+  "@recoveryCueExhale": { "description": "Recovery breath cue: passive exhale" },
+  "recoveryProgress": "{cue} · {breath}/{total}",
+  "@recoveryProgress": {
+    "description": "Live cue plus breath counter during the guided recovery sequence",
+    "placeholders": {
+      "cue": { "type": "String" },
+      "breath": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
   "sambaResponseTitle": "Stop training for today",
   "@sambaResponseTitle": {
     "description": "Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)"

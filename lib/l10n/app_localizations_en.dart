@@ -37,6 +37,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safetyRule2 => 'Never hyperventilate before a breath hold.';
 
   @override
+  String get recoveryTitle => 'Recovery breaths';
+
+  @override
+  String get recoveryBlurb =>
+      'Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.';
+
+  @override
+  String get recoveryStart => 'Guide me';
+
+  @override
+  String get recoveryDone => 'Done — take it easy for a minute.';
+
+  @override
+  String get recoveryCueInhale => 'Breathe in';
+
+  @override
+  String get recoveryCueHook => 'Hook — hold';
+
+  @override
+  String get recoveryCueExhale => 'Out';
+
+  @override
+  String recoveryProgress(String cue, int breath, int total) {
+    return '$cue · $breath/$total';
+  }
+
+  @override
   String get sambaResponseTitle => 'Stop training for today';
 
   @override

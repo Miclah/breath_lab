@@ -37,6 +37,33 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyRule2 => 'Nikdy nehyperventiluj pred zadržaním dychu.';
 
   @override
+  String get recoveryTitle => 'Zotavovacie dychy';
+
+  @override
+  String get recoveryBlurb =>
+      'Tri „hook“ dychy — potápačský zvyk pre prvú polminútu po zadržaní. Nepreukázalo sa, že zlepšujú výkon.';
+
+  @override
+  String get recoveryStart => 'Naviguj ma';
+
+  @override
+  String get recoveryDone => 'Hotovo — minútu to ber pokojne.';
+
+  @override
+  String get recoveryCueInhale => 'Nádych';
+
+  @override
+  String get recoveryCueHook => 'Hook — zadrž';
+
+  @override
+  String get recoveryCueExhale => 'Von';
+
+  @override
+  String recoveryProgress(String cue, int breath, int total) {
+    return '$cue · $breath/$total';
+  }
+
+  @override
   String get sambaResponseTitle => 'Dnes už netrénuj';
 
   @override

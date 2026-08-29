@@ -152,6 +152,54 @@ abstract class AppLocalizations {
   /// **'Never hyperventilate before a breath hold.'**
   String get safetyRule2;
 
+  /// Header of the guided hook-breath recovery prompt on the result screen (RESEARCH_ALIGNMENT.md §2, tier C)
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery breaths'**
+  String get recoveryTitle;
+
+  /// Framing text for recovery breaths — practice, not evidence
+  ///
+  /// In en, this message translates to:
+  /// **'Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.'**
+  String get recoveryBlurb;
+
+  /// Button that starts the guided recovery-breath sequence
+  ///
+  /// In en, this message translates to:
+  /// **'Guide me'**
+  String get recoveryStart;
+
+  /// Shown after the recovery-breath sequence finishes
+  ///
+  /// In en, this message translates to:
+  /// **'Done — take it easy for a minute.'**
+  String get recoveryDone;
+
+  /// Recovery breath cue: inhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe in'**
+  String get recoveryCueInhale;
+
+  /// Recovery breath cue: the brief hooked hold
+  ///
+  /// In en, this message translates to:
+  /// **'Hook — hold'**
+  String get recoveryCueHook;
+
+  /// Recovery breath cue: passive exhale
+  ///
+  /// In en, this message translates to:
+  /// **'Out'**
+  String get recoveryCueExhale;
+
+  /// Live cue plus breath counter during the guided recovery sequence
+  ///
+  /// In en, this message translates to:
+  /// **'{cue} · {breath}/{total}'**
+  String recoveryProgress(String cue, int breath, int total);
+
   /// Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)
   ///
   /// In en, this message translates to:

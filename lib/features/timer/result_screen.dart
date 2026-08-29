@@ -11,6 +11,7 @@ import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
 import '../../shared/widgets/tier_badge.dart';
+import 'recovery_breathing.dart';
 import '../../shared/global_messenger.dart';
 import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
@@ -225,6 +226,12 @@ class _ResultViewState extends ConsumerState<ResultView>
         below: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: Spacing.lg),
+
+            // Time-sensitive — hook breaths are for the first half-minute
+            // after the hold — so it sits above the metrics, not buried.
+            const RecoveryBreathingPrompt(),
+
             const SizedBox(height: Spacing.lg),
 
             _HoldMetrics(state: state),
