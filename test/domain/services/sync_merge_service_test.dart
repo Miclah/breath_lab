@@ -25,20 +25,41 @@ SyncHoldRecord _hold({
   );
 }
 
+SyncImstSessionRecord _imst({
+  required String id,
+  required int updatedAt,
+  int breaths = 30,
+  int? deviceLevel,
+  String deviceId = 'device-a',
+  bool deleted = false,
+}) {
+  return SyncImstSessionRecord(
+    id: id,
+    createdAt: 1,
+    updatedAt: updatedAt,
+    deviceId: deviceId,
+    breaths: breaths,
+    deviceLevel: deviceLevel,
+    deleted: deleted,
+  );
+}
+
 SyncPayload _payload({
   List<SyncHoldRecord> holds = const [],
   List<SyncTableSessionRecord> tableSessions = const [],
+  List<SyncImstSessionRecord> imstSessions = const [],
   List<SyncTagRecord> tags = const [],
   String deviceId = 'device-a',
 }) {
   return SyncPayload(
-    schemaVersion: 2,
+    schemaVersion: 3,
     exportedAt: 1700000000000,
     deviceId: deviceId,
     deviceName: 'Test device',
     appVersion: '1.0.0',
     holds: holds,
     tableSessions: tableSessions,
+    imstSessions: imstSessions,
     tags: tags,
   );
 }
@@ -217,5 +238,67 @@ void main() {
         expect(mergedOnB.tags.single.labelKey, 'custom:from-b');
       },
     );
+
+    group('IMST sessions merge like holds', () {
+      test('a session present only on the remote is added', () {
+        final local = _payload(imstSessions: [_imst(id: 'x', updatedAt: 1)]);
+        final remote = _payload(imstSessions: [_imst(id: 'y', updatedAt: 1)]);
+
+        final result = SyncMergeService.merge(local: local, remote: remote);
+
+        expect(
+          result.imstSessions.map((s) => s.id),
+          unorderedEquals(['x', 'y']),
+        );
+        expect(result.counts.imstAdded, 1);
+        expect(result.counts.imstUpdated, 0);
+      });
+
+      test('last-write-wins keeps the later session and counts an update', () {
+        final local = _payload(
+          imstSessions: [_imst(id: 'x', updatedAt: 1, deviceLevel: 3)],
+        );
+        final remote = _payload(
+          imstSessions: [_imst(id: 'x', updatedAt: 2, deviceLevel: 5)],
+        );
+
+        final result = SyncMergeService.merge(local: local, remote: remote);
+
+        expect(result.imstSessions.single.deviceLevel, 5);
+        expect(result.counts.imstUpdated, 1);
+      });
+
+      test('a soft delete propagates', () {
+        final local = _payload(imstSessions: [_imst(id: 'x', updatedAt: 1)]);
+        final remote = _payload(
+          imstSessions: [_imst(id: 'x', updatedAt: 2, deleted: true)],
+        );
+
+        final result = SyncMergeService.merge(local: local, remote: remote);
+
+        expect(result.imstSessions.single.deleted, isTrue);
+      });
+
+      test('both devices converge on the same winner', () {
+        final onA = _payload(
+          deviceId: 'device-a',
+          imstSessions: [
+            _imst(id: 'x', updatedAt: 5, deviceId: 'device-a', deviceLevel: 4),
+          ],
+        );
+        final onB = _payload(
+          deviceId: 'device-b',
+          imstSessions: [
+            _imst(id: 'x', updatedAt: 5, deviceId: 'device-b', deviceLevel: 9),
+          ],
+        );
+
+        final mergedOnA = SyncMergeService.merge(local: onA, remote: onB);
+        final mergedOnB = SyncMergeService.merge(local: onB, remote: onA);
+
+        expect(mergedOnA.imstSessions.single.deviceLevel, 9);
+        expect(mergedOnB.imstSessions.single.deviceLevel, 9);
+      });
+    });
   });
 }

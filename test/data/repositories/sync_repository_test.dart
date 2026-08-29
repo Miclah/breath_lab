@@ -1,6 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:breath_lab/data/db/app_database.dart' hide Hold;
+import 'package:breath_lab/data/db/app_database.dart' hide Hold, ImstSession;
 import 'package:breath_lab/data/repositories/holds_repository.dart';
 import 'package:breath_lab/data/repositories/imst_sessions_repository.dart';
 import 'package:breath_lab/data/repositories/settings_repository.dart';
@@ -8,6 +8,7 @@ import 'package:breath_lab/data/repositories/sync_repository.dart';
 import 'package:breath_lab/data/repositories/table_sessions_repository.dart';
 import 'package:breath_lab/data/repositories/tags_repository.dart';
 import 'package:breath_lab/domain/models/hold.dart';
+import 'package:breath_lab/domain/models/imst_session.dart';
 import 'package:breath_lab/domain/models/sync_payload.dart';
 import 'package:breath_lab/domain/services/sync_merge_service.dart';
 
@@ -15,17 +16,19 @@ void main() {
   group('SyncRepository', () {
     late AppDatabase db;
     late HoldsRepository holdsRepo;
+    late ImstSessionsRepository imstRepo;
     late SyncRepository syncRepo;
 
     setUp(() {
       db = AppDatabase.forTesting(NativeDatabase.memory());
       holdsRepo = HoldsRepository(db, 'local-device');
+      imstRepo = ImstSessionsRepository(db, 'local-device');
       syncRepo = SyncRepository(
         database: db,
         deviceId: 'local-device',
         holdsRepo: holdsRepo,
         sessionsRepo: TableSessionsRepository(db, 'local-device'),
-        imstRepo: ImstSessionsRepository(db, 'local-device'),
+        imstRepo: imstRepo,
         tagsRepo: TagsRepository(db),
         settingsRepo: SettingsRepository(db),
       );
@@ -172,6 +175,72 @@ void main() {
       final settingsRepo = SettingsRepository(db);
       expect(await settingsRepo.getLastSyncAtMs(), isNotNull);
       expect(await settingsRepo.getLastSyncPeerName(), "Remote's Phone");
+    });
+
+    test(
+      'an IMST session survives an encode/decode export round trip',
+      () async {
+        await imstRepo.save(
+          ImstSession(
+            id: 'imst-1',
+            createdAt: DateTime.fromMillisecondsSinceEpoch(1000),
+            updatedAt: DateTime.fromMillisecondsSinceEpoch(1000),
+            deviceId: 'local-device',
+            breaths: 30,
+            deviceName: 'POWERbreathe Plus',
+            deviceLevel: 4,
+            duration: const Duration(minutes: 2),
+          ),
+        );
+
+        final payload = await syncRepo.buildLocalPayload(appVersion: '1.0.0');
+        final restored = SyncPayload.decode(payload.encode());
+
+        expect(payload.schemaVersion, db.schemaVersion);
+        final session = restored.imstSessions.singleWhere(
+          (s) => s.id == 'imst-1',
+        );
+        expect(session.breaths, 30);
+        expect(session.deviceName, 'POWERbreathe Plus');
+        expect(session.deviceLevel, 4);
+        expect(session.durationMs, 120000);
+      },
+    );
+
+    test('applyMerge writes an incoming IMST session to the table', () async {
+      final local = await syncRepo.buildLocalPayload(appVersion: '1.0.0');
+      final remote = SyncPayload(
+        schemaVersion: db.schemaVersion,
+        exportedAt: 5000,
+        deviceId: 'remote-device',
+        deviceName: "Remote's Phone",
+        appVersion: '1.0.0',
+        holds: const [],
+        tableSessions: const [],
+        imstSessions: const [
+          SyncImstSessionRecord(
+            id: 'remote-imst',
+            createdAt: 3000,
+            updatedAt: 3000,
+            deviceId: 'remote-device',
+            breaths: 28,
+            deviceLevel: 6,
+            deleted: false,
+          ),
+        ],
+        tags: local.tags,
+      );
+
+      final result = SyncMergeService.merge(local: local, remote: remote);
+      await syncRepo.applyMerge(
+        result: result,
+        peerDeviceName: remote.deviceName,
+      );
+
+      final rows = await db.select(db.imstSessions).get();
+      expect(rows.single.id, 'remote-imst');
+      expect(rows.single.breaths, 28);
+      expect(rows.single.deviceLevel, 6);
     });
   });
 }
