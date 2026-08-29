@@ -8,7 +8,6 @@ import '../../domain/models/imst_session.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/global_messenger.dart';
 import '../../shared/widgets/adaptive_page.dart';
-import '../../shared/widgets/primary_action.dart';
 import '../../shared/widgets/tier_badge.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
@@ -90,47 +89,52 @@ class _ImstLogScreenState extends ConsumerState<ImstLogScreen> {
         child: AdaptivePage(
           maxWidth: ContentWidth.reading,
           centerVertically: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Text(
-                  l10n.imstLogBreathsLabel.toUpperCase(),
-                  style: BreathLabTypography.section.copyWith(
-                    color: c.textTertiary,
-                  ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: Spacing.xxl),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.imstLogBreathsLabel.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: BreathLabTypography.section.copyWith(
+                        color: c.textTertiary,
+                      ),
+                    ),
+                    const SizedBox(height: Spacing.md),
+                    _BreathCounter(
+                      breaths: _breaths,
+                      target: target,
+                      onChanged: (v) => setState(() => _breaths = v),
+                    ),
+                    const SizedBox(height: Spacing.xxxl),
+                    _LevelStepper(
+                      level: level,
+                      onChanged: (v) => setState(() => _level = v),
+                    ),
+                    const SizedBox(height: Spacing.xxl),
+                    const Center(child: TierBadge(EvidenceTier.strong)),
+                    const SizedBox(height: Spacing.sm),
+                    Text(
+                      l10n.imstLogEvidenceNote,
+                      textAlign: TextAlign.center,
+                      style: BreathLabTypography.micro.copyWith(
+                        color: c.textTertiary,
+                      ),
+                    ),
+                    const SizedBox(height: Spacing.xxxl),
+                    FilledButton(
+                      onPressed: _saving || _breaths == 0 ? null : _save,
+                      child: Text(l10n.imstLogSave),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: Spacing.sm),
-              _BreathCounter(
-                breaths: _breaths,
-                target: target,
-                onChanged: (v) => setState(() => _breaths = v),
-              ),
-              const SizedBox(height: Spacing.xxl),
-              _LevelRow(
-                level: level,
-                onChanged: (v) => setState(() => _level = v),
-              ),
-              const SizedBox(height: Spacing.xxl),
-              const Center(child: TierBadge(EvidenceTier.strong)),
-              const SizedBox(height: Spacing.sm),
-              Text(
-                l10n.imstLogEvidenceNote,
-                textAlign: TextAlign.center,
-                style: BreathLabTypography.micro.copyWith(
-                  color: c.textTertiary,
-                ),
-              ),
-              const SizedBox(height: Spacing.xxl),
-              PrimaryAction(
-                child: FilledButton(
-                  onPressed: _saving || _breaths == 0 ? null : _save,
-                  child: Text(l10n.imstLogSave),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -161,24 +165,30 @@ class _BreathCounter extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton.filledTonal(
+              iconSize: 28,
               onPressed: breaths > 0 ? () => onChanged(breaths - 1) : null,
               icon: const Icon(Icons.remove),
             ),
-            const SizedBox(width: Spacing.xl),
-            Text(
-              '$breaths',
-              style: BreathLabTypography.displayMd.copyWith(
-                color: reachedTarget ? c.primaryText : c.textPrimary,
+            const SizedBox(width: Spacing.lg),
+            SizedBox(
+              width: 96,
+              child: Text(
+                '$breaths',
+                textAlign: TextAlign.center,
+                style: BreathLabTypography.displayMd.copyWith(
+                  color: reachedTarget ? c.primaryText : c.textPrimary,
+                ),
               ),
             ),
-            const SizedBox(width: Spacing.xl),
+            const SizedBox(width: Spacing.lg),
             IconButton.filledTonal(
+              iconSize: 28,
               onPressed: () => onChanged(breaths + 1),
               icon: const Icon(Icons.add),
             ),
           ],
         ),
-        const SizedBox(height: Spacing.xs),
+        const SizedBox(height: Spacing.sm),
         Text(
           l10n.imstLogBreathsOfTarget(target),
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
@@ -188,8 +198,8 @@ class _BreathCounter extends StatelessWidget {
   }
 }
 
-class _LevelRow extends StatelessWidget {
-  const _LevelRow({required this.level, required this.onChanged});
+class _LevelStepper extends StatelessWidget {
+  const _LevelStepper({required this.level, required this.onChanged});
 
   final int level;
   final ValueChanged<int> onChanged;
@@ -199,29 +209,37 @@ class _LevelRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
 
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: Text(
-            l10n.imstLogLevelLabel,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+        Text(
+          l10n.imstLogLevelLabel.toUpperCase(),
+          style: BreathLabTypography.section.copyWith(color: c.textTertiary),
         ),
-        IconButton.filledTonal(
-          onPressed: level > 1 ? () => onChanged(level - 1) : null,
-          icon: const Icon(Icons.remove),
-        ),
-        SizedBox(
-          width: 44,
-          child: Text(
-            '$level',
-            textAlign: TextAlign.center,
-            style: BreathLabTypography.numericMd.copyWith(color: c.textPrimary),
-          ),
-        ),
-        IconButton.filledTonal(
-          onPressed: level < 12 ? () => onChanged(level + 1) : null,
-          icon: const Icon(Icons.add),
+        const SizedBox(height: Spacing.sm),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton.filledTonal(
+              onPressed: level > 1 ? () => onChanged(level - 1) : null,
+              icon: const Icon(Icons.remove),
+            ),
+            const SizedBox(width: Spacing.lg),
+            SizedBox(
+              width: 44,
+              child: Text(
+                '$level',
+                textAlign: TextAlign.center,
+                style: BreathLabTypography.numericMd.copyWith(
+                  color: c.textPrimary,
+                ),
+              ),
+            ),
+            const SizedBox(width: Spacing.lg),
+            IconButton.filledTonal(
+              onPressed: level < 12 ? () => onChanged(level + 1) : null,
+              icon: const Icon(Icons.add),
+            ),
+          ],
         ),
       ],
     );

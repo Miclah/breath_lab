@@ -627,7 +627,7 @@ class _ImstDetailSheet extends StatelessWidget {
           children: [
             Text(
               l10n.imstLogTitle,
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: Spacing.xs),
             Text(
