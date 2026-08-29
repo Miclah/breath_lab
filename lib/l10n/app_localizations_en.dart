@@ -37,6 +37,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safetyRule2 => 'Never hyperventilate before a breath hold.';
 
   @override
+  String get safetyRuleBuddy =>
+      'Have someone with you who can help. One person holds while another stays alert — never both at once.';
+
+  @override
+  String get safetyRuleMedical =>
+      'Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.';
+
+  @override
+  String get safetyRulePacking =>
+      'Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.';
+
+  @override
   String get safetyRule3 =>
       'Stop immediately if you feel dizzy, tingling, or loss of control.';
 

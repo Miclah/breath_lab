@@ -37,6 +37,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyRule2 => 'Nikdy nehyperventiluj pred zadržaním dychu.';
 
   @override
+  String get safetyRuleBuddy =>
+      'Maj pri sebe niekoho, kto vie pomôcť. Jeden zadržiava dych, druhý zostáva pozorný — nikdy nie obaja naraz.';
+
+  @override
+  String get safetyRuleMedical =>
+      'Najprv sa poraď s lekárom, ak máš srdcové ochorenie, arytmiu, neliečený vysoký tlak, epilepsiu alebo záchvaty v anamnéze, si tehotná, alebo si niekedy odpadol/odpadla.';
+
+  @override
+  String get safetyRulePacking =>
+      'Nikdy si nepakuj pľúca — nevtláčaj vzduch nasilu po plnom nádychu. Môže to spôsobiť odpadnutie, poranenie pľúc a vzduchovú embóliu.';
+
+  @override
   String get safetyRule3 =>
       'Okamžite prestaň, ak pocítiš závraty, mravčenie alebo stratu kontroly.';
 

@@ -36,6 +36,18 @@
   "@safetyRule2": {
     "description": "Safety rule 2 — no hyperventilation"
   },
+  "safetyRuleBuddy": "Have someone with you who can help. One person holds while another stays alert — never both at once.",
+  "@safetyRuleBuddy": {
+    "description": "Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)"
+  },
+  "safetyRuleMedical": "Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.",
+  "@safetyRuleMedical": {
+    "description": "Safety rule: medical clearance for known contraindications (RESEARCH_ALIGNMENT.md §4 S1, research §6)"
+  },
+  "safetyRulePacking": "Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.",
+  "@safetyRulePacking": {
+    "description": "Safety rule: the prohibition on lung packing / glossopharyngeal insufflation for beginners (RESEARCH_ALIGNMENT.md §2, §4 S1)"
+  },
   "safetyRule3": "Stop immediately if you feel dizzy, tingling, or loss of control.",
   "@safetyRule3": {
     "description": "Safety rule 3 — stop on warning signs"

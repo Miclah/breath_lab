@@ -152,6 +152,24 @@ abstract class AppLocalizations {
   /// **'Never hyperventilate before a breath hold.'**
   String get safetyRule2;
 
+  /// Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)
+  ///
+  /// In en, this message translates to:
+  /// **'Have someone with you who can help. One person holds while another stays alert — never both at once.'**
+  String get safetyRuleBuddy;
+
+  /// Safety rule: medical clearance for known contraindications (RESEARCH_ALIGNMENT.md §4 S1, research §6)
+  ///
+  /// In en, this message translates to:
+  /// **'Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.'**
+  String get safetyRuleMedical;
+
+  /// Safety rule: the prohibition on lung packing / glossopharyngeal insufflation for beginners (RESEARCH_ALIGNMENT.md §2, §4 S1)
+  ///
+  /// In en, this message translates to:
+  /// **'Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.'**
+  String get safetyRulePacking;
+
   /// Safety rule 3 — stop on warning signs
   ///
   /// In en, this message translates to:
