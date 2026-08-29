@@ -907,11 +907,11 @@ abstract class AppLocalizations {
   /// **'done'**
   String get timerStateLabelDone;
 
-  /// Current training streak shown in the timer status row above the preset chips
+  /// This week's structure adherence, shown in the timer status row above the preset chips (RESEARCH_ALIGNMENT.md §3.1)
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 day streak} other{{count} day streak}}'**
-  String timerStatusStreak(int count);
+  /// **'{percent}% this week'**
+  String timerStatusAdherence(int percent);
 
   /// Heading of the settings section index in the side column
   ///
@@ -1417,11 +1417,11 @@ abstract class AppLocalizations {
   /// **'30d avg'**
   String get progressStatAvg30d;
 
-  /// Label for the current streak stat card on the Progress screen
+  /// Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)
   ///
   /// In en, this message translates to:
-  /// **'Streak'**
-  String get progressStatStreak;
+  /// **'Weeks trained'**
+  String get progressStatWeeksTrained;
 
   /// Stands in for a duration that has no value yet. Shaped like mm:ss so the row keeps its rhythm — zero is a measurement, absence is not, so this is never 00:00
   ///

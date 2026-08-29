@@ -77,6 +77,23 @@ class StatsService {
     return longest;
   }
 
+  /// How many distinct Monday-start weeks contain at least one session.
+  ///
+  /// This is the demoted "streak" (`RESEARCH_ALIGNMENT.md` §3.1): it rewards
+  /// sustained training without punishing the rest day a consecutive-days
+  /// count does.
+  static int trainingWeeks(
+    List<Hold> holds,
+    List<TableSession> tables, {
+    List<ImstSession> imst = const [],
+  }) {
+    final weekStarts = <DateTime>{};
+    for (final date in _sessionDates(holds, tables, imst)) {
+      weekStarts.add(date.subtract(Duration(days: date.weekday - 1)));
+    }
+    return weekStarts.length;
+  }
+
   /// The most training days recorded within any single Monday-start week.
   static int bestWeek(
     List<Hold> holds,

@@ -13,11 +13,13 @@ String _fmt(Duration d) {
   return '$m:$s';
 }
 
-/// 3 cards: all-time PB, 30-day average, current streak.
+/// 3 cards: all-time PB, 30-day average, weeks trained.
 ///
 /// Each carries its own colour, per Design §`stat-card`: the record stands
-/// apart, the streak is teal, and the average is plain text because an
-/// average is not an achievement.
+/// apart, the weeks figure is teal, and the average is plain text because an
+/// average is not an achievement. Weeks trained is the demoted streak
+/// (`RESEARCH_ALIGNMENT.md` §3.1) — this week's adherence is the headline,
+/// on the Timer screen.
 ///
 /// Stacks instead of sitting three-up when it moves into the side column,
 /// where 320 px across three cards would leave each too narrow to hold a
@@ -33,7 +35,7 @@ class StatCardRow extends ConsumerWidget {
     final c = context.appColors;
     final pb = ref.watch(allTimePbProvider);
     final avg = ref.watch(avg30dProvider);
-    final streak = ref.watch(currentStreakProvider);
+    final weeks = ref.watch(trainingWeeksProvider);
 
     // An absent value keeps the row's rhythm but not its accent: gold on
     // `\u2014\u2014:\u2014\u2014` would be colour-coding a record that does not exist.
@@ -49,11 +51,11 @@ class StatCardRow extends ConsumerWidget {
         valueColor: avg == null ? c.textTertiary : null,
       ),
       StatCard(
-        label: l10n.progressStatStreak,
+        label: l10n.progressStatWeeksTrained,
         // Zero and none are the same thing to a reader here, and none is the
         // honest one on a fresh install.
-        value: streak == 0 ? l10n.statAbsentCount : '$streak',
-        valueColor: streak == 0 ? c.textTertiary : c.primaryText,
+        value: weeks == 0 ? l10n.statAbsentCount : '$weeks',
+        valueColor: weeks == 0 ? c.textTertiary : c.primaryText,
       ),
     ];
 

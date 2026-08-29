@@ -11,8 +11,8 @@ import '../progress/providers.dart';
 import 'providers.dart';
 
 /// The thin band above the preset chips that PRD §7.1 reserved and nothing
-/// ever filled: the current streak on the left, the preset the next hold
-/// will actually use on the right.
+/// ever filled: this week's structure adherence on the left, the preset the
+/// next hold will actually use on the right.
 ///
 /// The preset half is not decoration. The chips below show which chip is
 /// selected, but the selection falls back to the saved default when the
@@ -20,9 +20,9 @@ import 'providers.dart';
 /// that default was — so "Start" could run a two-minute breathing guide
 /// with no warning. This states it in words before the button is pressed.
 ///
-/// The streak is here on borrowed time. `RESEARCH_ALIGNMENT.md` §3.1 demotes
-/// consecutive-days streaks because they punish the rest day the research
-/// prescribes; Phase 3C replaces this half with weekly structure adherence.
+/// Adherence replaces the consecutive-days streak per `RESEARCH_ALIGNMENT.md`
+/// §3.1 — the streak punished the rest day the research prescribes; adherence
+/// counts a logged rest day toward the week.
 class TimerStatusRow extends ConsumerWidget {
   const TimerStatusRow({super.key});
 
@@ -30,7 +30,7 @@ class TimerStatusRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
-    final streak = ref.watch(currentStreakProvider);
+    final adherence = ref.watch(currentAdherenceProvider);
     final mode =
         ref.watch(selectedPresetProvider) ??
         ref.watch(defaultPrepModeProvider).valueOrNull ??
@@ -40,10 +40,10 @@ class TimerStatusRow extends ConsumerWidget {
       height: 20,
       child: Row(
         children: [
-          if (streak > 0)
+          if (adherence.score > 0)
             _Item(
-              icon: Icons.local_fire_department_outlined,
-              label: l10n.timerStatusStreak(streak),
+              icon: Icons.track_changes_outlined,
+              label: l10n.timerStatusAdherence(adherence.percent),
               color: c.primaryText,
             ),
           const Spacer(),

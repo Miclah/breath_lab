@@ -6,6 +6,7 @@ import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
+import '../../domain/services/adherence_service.dart';
 import '../../domain/services/stats_service.dart';
 
 /// The single longest max hold ever recorded.
@@ -20,12 +21,22 @@ final avg30dProvider = Provider<Duration?>((ref) {
   return StatsService.averageWithinDays(holds, 30);
 });
 
-/// Consecutive training days ending today (or yesterday).
-final currentStreakProvider = Provider<int>((ref) {
+/// Distinct training weeks — the demoted "streak" (`RESEARCH_ALIGNMENT.md`
+/// §3.1), which no longer punishes a rest day.
+final trainingWeeksProvider = Provider<int>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
   final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
-  return StatsService.currentStreak(holds, tables, imst: imst);
+  return StatsService.trainingWeeks(holds, tables, imst: imst);
+});
+
+/// This week's structure adherence — the headline metric that replaces the
+/// consecutive-days streak on the Timer screen.
+final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return AdherenceService.currentWeek(holds: holds, tables: tables, imst: imst);
 });
 
 /// Per-day session counts (holds + table sessions) for the calendar

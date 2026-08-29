@@ -563,11 +563,11 @@
   "@timerStateLabelDone": {
     "description": "State label shown below the timer number after a hold is stopped"
   },
-  "timerStatusStreak": "{count, plural, =1{1 day streak} other{{count} day streak}}",
-  "@timerStatusStreak": {
-    "description": "Current training streak shown in the timer status row above the preset chips",
+  "timerStatusAdherence": "{percent}% this week",
+  "@timerStatusAdherence": {
+    "description": "This week's structure adherence, shown in the timer status row above the preset chips (RESEARCH_ALIGNMENT.md §3.1)",
     "placeholders": {
-      "count": {
+      "percent": {
         "type": "int"
       }
     }
@@ -974,9 +974,9 @@
   "@progressStatAvg30d": {
     "description": "Label for the 30-day average hold stat card on the Progress screen"
   },
-  "progressStatStreak": "Streak",
-  "@progressStatStreak": {
-    "description": "Label for the current streak stat card on the Progress screen"
+  "progressStatWeeksTrained": "Weeks trained",
+  "@progressStatWeeksTrained": {
+    "description": "Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)"
   },
   "statAbsentDuration": "\u2014\u2014:\u2014\u2014",
   "@statAbsentDuration": {

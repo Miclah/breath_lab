@@ -448,15 +448,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get timerStateLabelDone => 'hotovo';
 
   @override
-  String timerStatusStreak(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count dní v rade',
-      few: '$count dni v rade',
-      one: '1 deň v rade',
-    );
-    return '$_temp0';
+  String timerStatusAdherence(int percent) {
+    return '$percent % tento týždeň';
   }
 
   @override
@@ -761,7 +754,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressStatAvg30d => '30d priemer';
 
   @override
-  String get progressStatStreak => 'Séria';
+  String get progressStatWeeksTrained => 'Odtrénované týždne';
 
   @override
   String get statAbsentDuration => '——:——';

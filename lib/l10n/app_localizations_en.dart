@@ -446,14 +446,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timerStateLabelDone => 'done';
 
   @override
-  String timerStatusStreak(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count day streak',
-      one: '1 day streak',
-    );
-    return '$_temp0';
+  String timerStatusAdherence(int percent) {
+    return '$percent% this week';
   }
 
   @override
@@ -754,7 +748,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressStatAvg30d => '30d avg';
 
   @override
-  String get progressStatStreak => 'Streak';
+  String get progressStatWeeksTrained => 'Weeks trained';
 
   @override
   String get statAbsentDuration => '——:——';
