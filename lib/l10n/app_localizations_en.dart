@@ -804,6 +804,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'A line needs points — four sessions and the trend starts here.';
 
   @override
+  String get progressChartStruggleLegend => 'Struggle phase';
+
+  @override
   String get progressChartAverageLegend => 'Average';
 
   @override

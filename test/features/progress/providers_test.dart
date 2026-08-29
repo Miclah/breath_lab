@@ -16,12 +16,14 @@ Hold _hold(
   Duration duration = const Duration(minutes: 1),
   HoldType type = HoldType.max,
   LungVolume lungVolume = LungVolume.full,
+  Duration? contractionTime,
   bool isPb = false,
 }) {
   return Hold(
     id: 'id-${createdAt.millisecondsSinceEpoch}-${duration.inMilliseconds}',
     createdAt: createdAt,
     updatedAt: createdAt,
+    contractionTime: contractionTime,
     deviceId: 'device',
     duration: duration,
     type: type,
@@ -137,6 +139,33 @@ void main() {
       final stats = computeDailyHoldStats(holds, days: 30, now: now);
 
       expect(stats.map((s) => s.dayIndex).toList(), [24, 29]);
+    });
+
+    test('bestStruggle is the longest total-minus-contraction that day', () {
+      final holds = [
+        // struggle 90s
+        _hold(
+          now,
+          duration: const Duration(minutes: 2, seconds: 30),
+          contractionTime: const Duration(minutes: 1),
+        ),
+        // struggle 40s — shorter, so not the winner
+        _hold(
+          now,
+          duration: const Duration(minutes: 2),
+          contractionTime: const Duration(minutes: 1, seconds: 20),
+        ),
+        // no marker — contributes nothing to struggle
+        _hold(now, duration: const Duration(minutes: 5)),
+      ];
+      final stats = computeDailyHoldStats(holds, now: now);
+
+      expect(stats.single.bestStruggle, const Duration(seconds: 90));
+    });
+
+    test('bestStruggle is zero on a day with no contraction markers', () {
+      final stats = computeDailyHoldStats([_hold(now)], now: now);
+      expect(stats.single.bestStruggle, Duration.zero);
     });
 
     test('is empty for no history', () {

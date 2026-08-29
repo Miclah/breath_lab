@@ -230,6 +230,7 @@
   "progressHeatmapEmpty": "Dvanásť týždňov tréningu toto vyplní.",
   "progressEmptyAction": "Začať zadržanie",
   "progressChartEmpty": "Čiara potrebuje body — po štyroch tréningoch sa tu objaví trend.",
+  "progressChartStruggleLegend": "Fáza boja",
   "progressChartAverageLegend": "Priemer",
   "progressChartFilterAll": "Všetky",
   "progressChartRange30d": "30d",

@@ -1483,6 +1483,12 @@ abstract class AppLocalizations {
   /// **'A line needs points — four sessions and the trend starts here.'**
   String get progressChartEmpty;
 
+  /// Legend label for the faint struggle-phase line on the progress chart (RESEARCH_ALIGNMENT.md §2), shown only in single-volume view
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle phase'**
+  String get progressChartStruggleLegend;
+
   /// Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected
   ///
   /// In en, this message translates to:

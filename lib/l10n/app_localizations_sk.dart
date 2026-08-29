@@ -812,6 +812,9 @@ class AppLocalizationsSk extends AppLocalizations {
       'Čiara potrebuje body — po štyroch tréningoch sa tu objaví trend.';
 
   @override
+  String get progressChartStruggleLegend => 'Fáza boja';
+
+  @override
   String get progressChartAverageLegend => 'Priemer';
 
   @override

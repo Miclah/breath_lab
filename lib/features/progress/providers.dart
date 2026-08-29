@@ -102,6 +102,7 @@ class DailyHoldStat {
     required this.dayIndex,
     required this.best,
     required this.average,
+    required this.bestStruggle,
     required this.hasPb,
   });
 
@@ -113,6 +114,13 @@ class DailyHoldStat {
   final int dayIndex;
   final Duration best;
   final Duration average;
+
+  /// The longest struggle phase (total − time-to-first-contraction) among
+  /// the day's holds that had a contraction marked. `Duration.zero` when no
+  /// hold that day carried a marker — `RESEARCH_ALIGNMENT.md` §2 puts most
+  /// of a novice's measured gain here, not in [best].
+  final Duration bestStruggle;
+
   final bool hasPb;
 }
 
@@ -141,11 +149,19 @@ List<DailyHoldStat> computeDailyHoldStats(
       0,
       (sum, h) => sum + h.duration.inMilliseconds,
     );
+    final struggles = [
+      for (final h in dayHolds)
+        if (h.contractionTime != null && h.duration > h.contractionTime!)
+          h.duration - h.contractionTime!,
+    ];
     return DailyHoldStat(
       date: entry.key,
       dayIndex: entry.key.difference(windowStart).inDays,
       best: dayHolds.map((h) => h.duration).reduce((a, b) => a > b ? a : b),
       average: Duration(milliseconds: totalMs ~/ dayHolds.length),
+      bestStruggle: struggles.isEmpty
+          ? Duration.zero
+          : struggles.reduce((a, b) => a > b ? a : b),
       hasPb: dayHolds.any((h) => h.isPb),
     );
   }).toList();

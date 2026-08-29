@@ -64,7 +64,12 @@ class ProgressChart extends ConsumerWidget {
     final pointCount = series.fold<int>(0, (sum, s) => sum + s.stats.length);
     final hasData = pointCount >= _minimumPointsForATrend;
     final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final showAverage = series.length == 1;
+    // The dashed average and the struggle-phase line both only make sense
+    // over a single volume — overlaid three-deep in "All" they are noise.
+    final showExtras = series.length == 1;
+    final hasStruggle =
+        showExtras &&
+        series.single.stats.any((s) => s.bestStruggle > Duration.zero);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,13 +96,32 @@ class ProgressChart extends ConsumerWidget {
           decoration: Surfaces.primaryPanel(context),
           child: !hasData
               ? const _ChartEmptyState()
-              : LineChart(_buildChartData(context, series, days)),
+              : LineChart(_buildChartData(context, series, days, hasStruggle)),
         ),
-        if (hasData && showAverage) ...[
+        if (hasData && showExtras) ...[
           const SizedBox(height: Spacing.xs),
           Align(
             alignment: Alignment.centerRight,
-            child: _AverageLegend(label: l10n.progressChartAverageLegend),
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              spacing: Spacing.md,
+              runSpacing: Spacing.xxs,
+              children: [
+                if (hasStruggle)
+                  _ChartLegend(
+                    color: _volumeColor(
+                      context.appColors,
+                      series.single.lungVolume,
+                    ).withValues(alpha: 0.5),
+                    label: l10n.progressChartStruggleLegend,
+                  ),
+                _ChartLegend(
+                  color: context.appColors.textTertiary,
+                  dashed: true,
+                  label: l10n.progressChartAverageLegend,
+                ),
+              ],
+            ),
           ),
         ],
         const SizedBox(height: Spacing.md),
@@ -110,6 +134,7 @@ class ProgressChart extends ConsumerWidget {
     BuildContext context,
     List<ChartSeries> series,
     int days,
+    bool showStruggle,
   ) {
     final c = context.appColors;
     final today = DateTime.now();
@@ -199,6 +224,24 @@ class ProgressChart extends ConsumerWidget {
             dashArray: const [4, 4],
             dotData: const FlDotData(show: false),
           ),
+        if (showStruggle)
+          LineChartBarData(
+            spots: [
+              for (final stat in series.single.stats)
+                if (stat.bestStruggle > Duration.zero)
+                  FlSpot(
+                    stat.dayIndex.toDouble(),
+                    stat.bestStruggle.inSeconds.toDouble(),
+                  ),
+            ],
+            isCurved: false,
+            color: _volumeColor(
+              c,
+              series.single.lungVolume,
+            ).withValues(alpha: 0.5),
+            barWidth: 1.5,
+            dotData: const FlDotData(show: false),
+          ),
         for (final s in series)
           LineChartBarData(
             spots: [
@@ -228,13 +271,19 @@ class ProgressChart extends ConsumerWidget {
   }
 }
 
-/// Dash sample + label explaining the dashed daily-average line, since a
-/// gray dashed curve crossing a colored solid one otherwise has no way to
-/// read as "average" rather than a rendering artifact.
-class _AverageLegend extends StatelessWidget {
-  const _AverageLegend({required this.label});
+/// A swatch + label for one of the chart's secondary lines. A gray dashed
+/// curve or a faint tinted one crossing the solid best line otherwise has no
+/// way to read as anything but a rendering artifact.
+class _ChartLegend extends StatelessWidget {
+  const _ChartLegend({
+    required this.color,
+    required this.label,
+    this.dashed = false,
+  });
 
+  final Color color;
   final String label;
+  final bool dashed;
 
   @override
   Widget build(BuildContext context) {
@@ -243,13 +292,16 @@ class _AverageLegend extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (var i = 0; i < 3; i++)
-          Container(
-            width: 4,
-            height: 1,
-            margin: EdgeInsets.only(right: i < 2 ? 2 : 0),
-            color: c.textTertiary,
-          ),
+        if (dashed)
+          for (var i = 0; i < 3; i++)
+            Container(
+              width: 4,
+              height: 1,
+              margin: EdgeInsets.only(right: i < 2 ? 2 : 0),
+              color: color,
+            )
+        else
+          Container(width: 14, height: 2, color: color),
         const SizedBox(width: Spacing.xs),
         Text(
           label,

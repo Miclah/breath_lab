@@ -1026,6 +1026,10 @@
   "@progressChartEmpty": {
     "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
   },
+  "progressChartStruggleLegend": "Struggle phase",
+  "@progressChartStruggleLegend": {
+    "description": "Legend label for the faint struggle-phase line on the progress chart (RESEARCH_ALIGNMENT.md §2), shown only in single-volume view"
+  },
   "progressChartAverageLegend": "Average",
   "@progressChartAverageLegend": {
     "description": "Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected"
