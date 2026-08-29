@@ -748,6 +748,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressStatAvg30d => '30d avg';
 
   @override
+  String get retestPromptTitle => 'Time to retest';
+
+  @override
+  String retestPromptBody(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: '$weeks weeks',
+      one: 'a week',
+    );
+    return 'Your last max hold was $_temp0 ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.';
+  }
+
+  @override
+  String get retestPromptDismiss => 'Dismiss';
+
+  @override
   String get plateauTitle => 'Progress has stalled';
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/holds_repository.dart';
 import '../../data/repositories/imst_sessions_repository.dart';
+import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/imst_session.dart';
@@ -46,6 +47,62 @@ final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
 final plateauStatusProvider = Provider<PlateauStatus>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   return PlateauService.detect(holds);
+});
+
+/// Whether to nudge the user to retest their max (`RESEARCH_ALIGNMENT.md`
+/// §5: every 2–4 weeks) and how long it has been.
+class RetestPrompt {
+  const RetestPrompt({required this.show, this.weeksSinceLastMax = 0});
+
+  static const hidden = RetestPrompt(show: false);
+
+  final bool show;
+  final int weeksSinceLastMax;
+}
+
+/// Research names 2–4 weeks; nudge at three.
+const _retestAfterDays = 21;
+
+/// A dismissal quiets the prompt for a week — long enough not to nag, short
+/// enough that an ignored retest comes back.
+const _retestDismissalDays = 7;
+
+RetestPrompt computeRetestPrompt(
+  List<Hold> holds, {
+  int? dismissedAtMs,
+  DateTime? now,
+}) {
+  final today = _dateOnly(now ?? DateTime.now());
+  DateTime? lastMax;
+  for (final hold in holds) {
+    if (hold.type != HoldType.max) continue;
+    final day = _dateOnly(hold.createdAt);
+    if (lastMax == null || day.isAfter(lastMax)) lastMax = day;
+  }
+  if (lastMax == null) return RetestPrompt.hidden;
+
+  final daysSince = today.difference(lastMax).inDays;
+  if (daysSince < _retestAfterDays) return RetestPrompt.hidden;
+
+  if (dismissedAtMs != null) {
+    final dismissed = _dateOnly(
+      DateTime.fromMillisecondsSinceEpoch(dismissedAtMs),
+    );
+    if (dismissed.isAfter(lastMax) &&
+        today.difference(dismissed).inDays < _retestDismissalDays) {
+      return RetestPrompt.hidden;
+    }
+  }
+
+  return RetestPrompt(show: true, weeksSinceLastMax: daysSince ~/ 7);
+}
+
+final retestPromptProvider = FutureProvider<RetestPrompt>((ref) async {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final dismissedAt = await ref
+      .watch(settingsRepositoryProvider)
+      .getRetestPromptDismissedAt();
+  return computeRetestPrompt(holds, dismissedAtMs: dismissedAt);
 });
 
 /// Per-day session counts (holds + table sessions) for the calendar

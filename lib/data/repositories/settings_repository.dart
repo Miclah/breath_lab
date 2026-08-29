@@ -184,6 +184,17 @@ class SettingsRepository {
       ? _delete('imst_pimax_cmh2o')
       : _set('imst_pimax_cmh2o', value.toString());
 
+  /// When the user last dismissed the "retest your max" prompt, epoch ms.
+  /// Null if never dismissed. The prompt re-appears a week after a dismissal
+  /// (or as soon as a fresh max hold makes it moot).
+  Future<int?> getRetestPromptDismissedAt() async {
+    final value = await _get('retest_prompt_dismissed_at');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  Future<void> setRetestPromptDismissedAt(int atMs) =>
+      _set('retest_prompt_dismissed_at', atMs.toString());
+
   /// Target resisted breaths per day. Craighead's protocol is 30.
   Future<int> getImstTargetBreaths() async {
     final value = await _get('imst_target_breaths');

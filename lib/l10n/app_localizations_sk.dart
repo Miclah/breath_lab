@@ -754,6 +754,24 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressStatAvg30d => '30d priemer';
 
   @override
+  String get retestPromptTitle => 'Čas na pretestovanie';
+
+  @override
+  String retestPromptBody(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: '$weeks týždňami',
+      few: '$weeks týždňami',
+      one: 'týždňom',
+    );
+    return 'Tvoje posledné maximálne zadržanie bolo pred $_temp0. Pretestuj ho, aby tvoje CO₂ a O₂ tabuľky vychádzali z aktuálneho čísla.';
+  }
+
+  @override
+  String get retestPromptDismiss => 'Zavrieť';
+
+  @override
   String get plateauTitle => 'Pokrok sa zastavil';
 
   @override

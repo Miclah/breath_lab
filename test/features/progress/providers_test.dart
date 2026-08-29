@@ -173,6 +173,53 @@ void main() {
     });
   });
 
+  group('computeRetestPrompt', () {
+    final now = DateTime(2026, 7, 30, 12);
+
+    test('hidden when the last max hold is recent', () {
+      final p = computeRetestPrompt([
+        _hold(now.subtract(const Duration(days: 10))),
+      ], now: now);
+      expect(p.show, isFalse);
+    });
+
+    test('shows once the last max hold is 3+ weeks old', () {
+      final p = computeRetestPrompt([
+        _hold(now.subtract(const Duration(days: 24))),
+      ], now: now);
+      expect(p.show, isTrue);
+      expect(p.weeksSinceLastMax, 3);
+    });
+
+    test('a recent dismissal quiets it', () {
+      final dismissed = now
+          .subtract(const Duration(days: 2))
+          .millisecondsSinceEpoch;
+      final p = computeRetestPrompt(
+        [_hold(now.subtract(const Duration(days: 30)))],
+        dismissedAtMs: dismissed,
+        now: now,
+      );
+      expect(p.show, isFalse);
+    });
+
+    test('a stale dismissal no longer suppresses it', () {
+      final dismissed = now
+          .subtract(const Duration(days: 10))
+          .millisecondsSinceEpoch;
+      final p = computeRetestPrompt(
+        [_hold(now.subtract(const Duration(days: 30)))],
+        dismissedAtMs: dismissed,
+        now: now,
+      );
+      expect(p.show, isTrue);
+    });
+
+    test('hidden with no max holds at all', () {
+      expect(computeRetestPrompt(const [], now: now).show, isFalse);
+    });
+  });
+
   group('resolveChartWindowDays', () {
     final now = DateTime(2026, 7, 13, 12);
 

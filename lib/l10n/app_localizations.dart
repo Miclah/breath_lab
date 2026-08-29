@@ -1417,6 +1417,24 @@ abstract class AppLocalizations {
   /// **'30d avg'**
   String get progressStatAvg30d;
 
+  /// Heading on the retest-your-max prompt card on Progress (RESEARCH_ALIGNMENT.md §5)
+  ///
+  /// In en, this message translates to:
+  /// **'Time to retest'**
+  String get retestPromptTitle;
+
+  /// Body of the retest prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Your last max hold was {weeks, plural, =1{a week} other{{weeks} weeks}} ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.'**
+  String retestPromptBody(int weeks);
+
+  /// Tooltip on the retest prompt's dismiss button
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get retestPromptDismiss;
+
   /// Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)
   ///
   /// In en, this message translates to:

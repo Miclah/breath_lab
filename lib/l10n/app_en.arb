@@ -974,6 +974,21 @@
   "@progressStatAvg30d": {
     "description": "Label for the 30-day average hold stat card on the Progress screen"
   },
+  "retestPromptTitle": "Time to retest",
+  "@retestPromptTitle": {
+    "description": "Heading on the retest-your-max prompt card on Progress (RESEARCH_ALIGNMENT.md §5)"
+  },
+  "retestPromptBody": "Your last max hold was {weeks, plural, =1{a week} other{{weeks} weeks}} ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.",
+  "@retestPromptBody": {
+    "description": "Body of the retest prompt",
+    "placeholders": {
+      "weeks": { "type": "int" }
+    }
+  },
+  "retestPromptDismiss": "Dismiss",
+  "@retestPromptDismiss": {
+    "description": "Tooltip on the retest prompt's dismiss button"
+  },
   "plateauTitle": "Progress has stalled",
   "@plateauTitle": {
     "description": "Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)"

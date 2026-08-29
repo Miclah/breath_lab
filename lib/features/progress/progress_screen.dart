@@ -15,6 +15,7 @@ import 'calendar_heatmap.dart';
 import 'plateau_card.dart';
 import 'providers.dart';
 import 'progress_chart.dart';
+import 'retest_prompt_card.dart';
 import 'start_hold_button.dart';
 import 'stat_card_row.dart';
 
@@ -63,7 +64,7 @@ class ProgressScreen extends ConsumerWidget {
                 ],
                 const CalendarHeatmap(),
                 const SizedBox(height: Spacing.lg),
-                const _PlateauSlot(),
+                const _AdvisorySlot(),
                 const ProgressChart(),
                 if (!split) ...[
                   const SizedBox(height: Spacing.xxl),
@@ -78,19 +79,27 @@ class ProgressScreen extends ConsumerWidget {
   }
 }
 
-/// The plateau card plus the gap under it — both present only when there is
-/// a plateau to report, so a quiet screen keeps its rhythm.
-class _PlateauSlot extends ConsumerWidget {
-  const _PlateauSlot();
+/// The advisory cards (plateau, retest) plus the gap under them — each
+/// present only when it has something to say, so a quiet screen keeps its
+/// rhythm.
+class _AdvisorySlot extends ConsumerWidget {
+  const _AdvisorySlot();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!ref.watch(plateauStatusProvider).plateaued) {
-      return const SizedBox.shrink();
-    }
-    return const Padding(
-      padding: EdgeInsets.only(bottom: Spacing.lg),
-      child: PlateauCard(),
+    final plateaued = ref.watch(plateauStatusProvider).plateaued;
+    final retest = ref.watch(retestPromptProvider).valueOrNull?.show ?? false;
+    if (!plateaued && !retest) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Spacing.lg),
+      child: Column(
+        children: [
+          if (plateaued) const PlateauCard(),
+          if (plateaued && retest) const SizedBox(height: Spacing.md),
+          if (retest) const RetestPromptCard(),
+        ],
+      ),
     );
   }
 }
