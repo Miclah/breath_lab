@@ -2207,6 +2207,681 @@ class TableSessionsCompanion extends UpdateCompanion<TableSession> {
   }
 }
 
+class $ImstSessionsTable extends ImstSessions
+    with TableInfo<$ImstSessionsTable, ImstSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ImstSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceIdMeta = const VerificationMeta(
+    'deviceId',
+  );
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+    'device_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _breathsMeta = const VerificationMeta(
+    'breaths',
+  );
+  @override
+  late final GeneratedColumn<int> breaths = GeneratedColumn<int>(
+    'breaths',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deviceNameMeta = const VerificationMeta(
+    'deviceName',
+  );
+  @override
+  late final GeneratedColumn<String> deviceName = GeneratedColumn<String>(
+    'device_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deviceLevelMeta = const VerificationMeta(
+    'deviceLevel',
+  );
+  @override
+  late final GeneratedColumn<int> deviceLevel = GeneratedColumn<int>(
+    'device_level',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pimaxCmh2oMeta = const VerificationMeta(
+    'pimaxCmh2o',
+  );
+  @override
+  late final GeneratedColumn<int> pimaxCmh2o = GeneratedColumn<int>(
+    'pimax_cmh2o',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _percentPimaxMeta = const VerificationMeta(
+    'percentPimax',
+  );
+  @override
+  late final GeneratedColumn<int> percentPimax = GeneratedColumn<int>(
+    'percent_pimax',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMsMeta = const VerificationMeta(
+    'durationMs',
+  );
+  @override
+  late final GeneratedColumn<int> durationMs = GeneratedColumn<int>(
+    'duration_ms',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deletedMeta = const VerificationMeta(
+    'deleted',
+  );
+  @override
+  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
+    'deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deviceId,
+    breaths,
+    deviceName,
+    deviceLevel,
+    pimaxCmh2o,
+    percentPimax,
+    durationMs,
+    deleted,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'imst_sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ImstSession> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(
+        _deviceIdMeta,
+        deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deviceIdMeta);
+    }
+    if (data.containsKey('breaths')) {
+      context.handle(
+        _breathsMeta,
+        breaths.isAcceptableOrUnknown(data['breaths']!, _breathsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_breathsMeta);
+    }
+    if (data.containsKey('device_name')) {
+      context.handle(
+        _deviceNameMeta,
+        deviceName.isAcceptableOrUnknown(data['device_name']!, _deviceNameMeta),
+      );
+    }
+    if (data.containsKey('device_level')) {
+      context.handle(
+        _deviceLevelMeta,
+        deviceLevel.isAcceptableOrUnknown(
+          data['device_level']!,
+          _deviceLevelMeta,
+        ),
+      );
+    }
+    if (data.containsKey('pimax_cmh2o')) {
+      context.handle(
+        _pimaxCmh2oMeta,
+        pimaxCmh2o.isAcceptableOrUnknown(data['pimax_cmh2o']!, _pimaxCmh2oMeta),
+      );
+    }
+    if (data.containsKey('percent_pimax')) {
+      context.handle(
+        _percentPimaxMeta,
+        percentPimax.isAcceptableOrUnknown(
+          data['percent_pimax']!,
+          _percentPimaxMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_ms')) {
+      context.handle(
+        _durationMsMeta,
+        durationMs.isAcceptableOrUnknown(data['duration_ms']!, _durationMsMeta),
+      );
+    }
+    if (data.containsKey('deleted')) {
+      context.handle(
+        _deletedMeta,
+        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ImstSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ImstSession(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deviceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_id'],
+      )!,
+      breaths: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}breaths'],
+      )!,
+      deviceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}device_name'],
+      ),
+      deviceLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}device_level'],
+      ),
+      pimaxCmh2o: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}pimax_cmh2o'],
+      ),
+      percentPimax: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}percent_pimax'],
+      ),
+      durationMs: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_ms'],
+      ),
+      deleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted'],
+      )!,
+    );
+  }
+
+  @override
+  $ImstSessionsTable createAlias(String alias) {
+    return $ImstSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class ImstSession extends DataClass implements Insertable<ImstSession> {
+  final String id;
+  final int createdAt;
+  final int updatedAt;
+  final String deviceId;
+  final int breaths;
+  final String? deviceName;
+  final int? deviceLevel;
+  final int? pimaxCmh2o;
+  final int? percentPimax;
+  final int? durationMs;
+  final int deleted;
+  const ImstSession({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deviceId,
+    required this.breaths,
+    this.deviceName,
+    this.deviceLevel,
+    this.pimaxCmh2o,
+    this.percentPimax,
+    this.durationMs,
+    required this.deleted,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    map['device_id'] = Variable<String>(deviceId);
+    map['breaths'] = Variable<int>(breaths);
+    if (!nullToAbsent || deviceName != null) {
+      map['device_name'] = Variable<String>(deviceName);
+    }
+    if (!nullToAbsent || deviceLevel != null) {
+      map['device_level'] = Variable<int>(deviceLevel);
+    }
+    if (!nullToAbsent || pimaxCmh2o != null) {
+      map['pimax_cmh2o'] = Variable<int>(pimaxCmh2o);
+    }
+    if (!nullToAbsent || percentPimax != null) {
+      map['percent_pimax'] = Variable<int>(percentPimax);
+    }
+    if (!nullToAbsent || durationMs != null) {
+      map['duration_ms'] = Variable<int>(durationMs);
+    }
+    map['deleted'] = Variable<int>(deleted);
+    return map;
+  }
+
+  ImstSessionsCompanion toCompanion(bool nullToAbsent) {
+    return ImstSessionsCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deviceId: Value(deviceId),
+      breaths: Value(breaths),
+      deviceName: deviceName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceName),
+      deviceLevel: deviceLevel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceLevel),
+      pimaxCmh2o: pimaxCmh2o == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pimaxCmh2o),
+      percentPimax: percentPimax == null && nullToAbsent
+          ? const Value.absent()
+          : Value(percentPimax),
+      durationMs: durationMs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationMs),
+      deleted: Value(deleted),
+    );
+  }
+
+  factory ImstSession.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ImstSession(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deviceId: serializer.fromJson<String>(json['deviceId']),
+      breaths: serializer.fromJson<int>(json['breaths']),
+      deviceName: serializer.fromJson<String?>(json['deviceName']),
+      deviceLevel: serializer.fromJson<int?>(json['deviceLevel']),
+      pimaxCmh2o: serializer.fromJson<int?>(json['pimaxCmh2o']),
+      percentPimax: serializer.fromJson<int?>(json['percentPimax']),
+      durationMs: serializer.fromJson<int?>(json['durationMs']),
+      deleted: serializer.fromJson<int>(json['deleted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deviceId': serializer.toJson<String>(deviceId),
+      'breaths': serializer.toJson<int>(breaths),
+      'deviceName': serializer.toJson<String?>(deviceName),
+      'deviceLevel': serializer.toJson<int?>(deviceLevel),
+      'pimaxCmh2o': serializer.toJson<int?>(pimaxCmh2o),
+      'percentPimax': serializer.toJson<int?>(percentPimax),
+      'durationMs': serializer.toJson<int?>(durationMs),
+      'deleted': serializer.toJson<int>(deleted),
+    };
+  }
+
+  ImstSession copyWith({
+    String? id,
+    int? createdAt,
+    int? updatedAt,
+    String? deviceId,
+    int? breaths,
+    Value<String?> deviceName = const Value.absent(),
+    Value<int?> deviceLevel = const Value.absent(),
+    Value<int?> pimaxCmh2o = const Value.absent(),
+    Value<int?> percentPimax = const Value.absent(),
+    Value<int?> durationMs = const Value.absent(),
+    int? deleted,
+  }) => ImstSession(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deviceId: deviceId ?? this.deviceId,
+    breaths: breaths ?? this.breaths,
+    deviceName: deviceName.present ? deviceName.value : this.deviceName,
+    deviceLevel: deviceLevel.present ? deviceLevel.value : this.deviceLevel,
+    pimaxCmh2o: pimaxCmh2o.present ? pimaxCmh2o.value : this.pimaxCmh2o,
+    percentPimax: percentPimax.present ? percentPimax.value : this.percentPimax,
+    durationMs: durationMs.present ? durationMs.value : this.durationMs,
+    deleted: deleted ?? this.deleted,
+  );
+  ImstSession copyWithCompanion(ImstSessionsCompanion data) {
+    return ImstSession(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      breaths: data.breaths.present ? data.breaths.value : this.breaths,
+      deviceName: data.deviceName.present
+          ? data.deviceName.value
+          : this.deviceName,
+      deviceLevel: data.deviceLevel.present
+          ? data.deviceLevel.value
+          : this.deviceLevel,
+      pimaxCmh2o: data.pimaxCmh2o.present
+          ? data.pimaxCmh2o.value
+          : this.pimaxCmh2o,
+      percentPimax: data.percentPimax.present
+          ? data.percentPimax.value
+          : this.percentPimax,
+      durationMs: data.durationMs.present
+          ? data.durationMs.value
+          : this.durationMs,
+      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImstSession(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('breaths: $breaths, ')
+          ..write('deviceName: $deviceName, ')
+          ..write('deviceLevel: $deviceLevel, ')
+          ..write('pimaxCmh2o: $pimaxCmh2o, ')
+          ..write('percentPimax: $percentPimax, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('deleted: $deleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deviceId,
+    breaths,
+    deviceName,
+    deviceLevel,
+    pimaxCmh2o,
+    percentPimax,
+    durationMs,
+    deleted,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ImstSession &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deviceId == this.deviceId &&
+          other.breaths == this.breaths &&
+          other.deviceName == this.deviceName &&
+          other.deviceLevel == this.deviceLevel &&
+          other.pimaxCmh2o == this.pimaxCmh2o &&
+          other.percentPimax == this.percentPimax &&
+          other.durationMs == this.durationMs &&
+          other.deleted == this.deleted);
+}
+
+class ImstSessionsCompanion extends UpdateCompanion<ImstSession> {
+  final Value<String> id;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<String> deviceId;
+  final Value<int> breaths;
+  final Value<String?> deviceName;
+  final Value<int?> deviceLevel;
+  final Value<int?> pimaxCmh2o;
+  final Value<int?> percentPimax;
+  final Value<int?> durationMs;
+  final Value<int> deleted;
+  final Value<int> rowid;
+  const ImstSessionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.breaths = const Value.absent(),
+    this.deviceName = const Value.absent(),
+    this.deviceLevel = const Value.absent(),
+    this.pimaxCmh2o = const Value.absent(),
+    this.percentPimax = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ImstSessionsCompanion.insert({
+    required String id,
+    required int createdAt,
+    required int updatedAt,
+    required String deviceId,
+    required int breaths,
+    this.deviceName = const Value.absent(),
+    this.deviceLevel = const Value.absent(),
+    this.pimaxCmh2o = const Value.absent(),
+    this.percentPimax = const Value.absent(),
+    this.durationMs = const Value.absent(),
+    this.deleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       deviceId = Value(deviceId),
+       breaths = Value(breaths);
+  static Insertable<ImstSession> custom({
+    Expression<String>? id,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<String>? deviceId,
+    Expression<int>? breaths,
+    Expression<String>? deviceName,
+    Expression<int>? deviceLevel,
+    Expression<int>? pimaxCmh2o,
+    Expression<int>? percentPimax,
+    Expression<int>? durationMs,
+    Expression<int>? deleted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deviceId != null) 'device_id': deviceId,
+      if (breaths != null) 'breaths': breaths,
+      if (deviceName != null) 'device_name': deviceName,
+      if (deviceLevel != null) 'device_level': deviceLevel,
+      if (pimaxCmh2o != null) 'pimax_cmh2o': pimaxCmh2o,
+      if (percentPimax != null) 'percent_pimax': percentPimax,
+      if (durationMs != null) 'duration_ms': durationMs,
+      if (deleted != null) 'deleted': deleted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ImstSessionsCompanion copyWith({
+    Value<String>? id,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<String>? deviceId,
+    Value<int>? breaths,
+    Value<String?>? deviceName,
+    Value<int?>? deviceLevel,
+    Value<int?>? pimaxCmh2o,
+    Value<int?>? percentPimax,
+    Value<int?>? durationMs,
+    Value<int>? deleted,
+    Value<int>? rowid,
+  }) {
+    return ImstSessionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deviceId: deviceId ?? this.deviceId,
+      breaths: breaths ?? this.breaths,
+      deviceName: deviceName ?? this.deviceName,
+      deviceLevel: deviceLevel ?? this.deviceLevel,
+      pimaxCmh2o: pimaxCmh2o ?? this.pimaxCmh2o,
+      percentPimax: percentPimax ?? this.percentPimax,
+      durationMs: durationMs ?? this.durationMs,
+      deleted: deleted ?? this.deleted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    if (breaths.present) {
+      map['breaths'] = Variable<int>(breaths.value);
+    }
+    if (deviceName.present) {
+      map['device_name'] = Variable<String>(deviceName.value);
+    }
+    if (deviceLevel.present) {
+      map['device_level'] = Variable<int>(deviceLevel.value);
+    }
+    if (pimaxCmh2o.present) {
+      map['pimax_cmh2o'] = Variable<int>(pimaxCmh2o.value);
+    }
+    if (percentPimax.present) {
+      map['percent_pimax'] = Variable<int>(percentPimax.value);
+    }
+    if (durationMs.present) {
+      map['duration_ms'] = Variable<int>(durationMs.value);
+    }
+    if (deleted.present) {
+      map['deleted'] = Variable<int>(deleted.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImstSessionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('breaths: $breaths, ')
+          ..write('deviceName: $deviceName, ')
+          ..write('deviceLevel: $deviceLevel, ')
+          ..write('pimaxCmh2o: $pimaxCmh2o, ')
+          ..write('percentPimax: $percentPimax, ')
+          ..write('durationMs: $durationMs, ')
+          ..write('deleted: $deleted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2215,6 +2890,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $HoldTagsTable holdTags = $HoldTagsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
   late final $TableSessionsTable tableSessions = $TableSessionsTable(this);
+  late final $ImstSessionsTable imstSessions = $ImstSessionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2225,6 +2901,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     holdTags,
     settings,
     tableSessions,
+    imstSessions,
   ];
 }
 
@@ -3364,6 +4041,330 @@ typedef $$TableSessionsTableProcessedTableManager =
       TableSession,
       PrefetchHooks Function()
     >;
+typedef $$ImstSessionsTableCreateCompanionBuilder =
+    ImstSessionsCompanion Function({
+      required String id,
+      required int createdAt,
+      required int updatedAt,
+      required String deviceId,
+      required int breaths,
+      Value<String?> deviceName,
+      Value<int?> deviceLevel,
+      Value<int?> pimaxCmh2o,
+      Value<int?> percentPimax,
+      Value<int?> durationMs,
+      Value<int> deleted,
+      Value<int> rowid,
+    });
+typedef $$ImstSessionsTableUpdateCompanionBuilder =
+    ImstSessionsCompanion Function({
+      Value<String> id,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<String> deviceId,
+      Value<int> breaths,
+      Value<String?> deviceName,
+      Value<int?> deviceLevel,
+      Value<int?> pimaxCmh2o,
+      Value<int?> percentPimax,
+      Value<int?> durationMs,
+      Value<int> deleted,
+      Value<int> rowid,
+    });
+
+class $$ImstSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $ImstSessionsTable> {
+  $$ImstSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get breaths => $composableBuilder(
+    column: $table.breaths,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deviceLevel => $composableBuilder(
+    column: $table.deviceLevel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get pimaxCmh2o => $composableBuilder(
+    column: $table.pimaxCmh2o,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get percentPimax => $composableBuilder(
+    column: $table.percentPimax,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ImstSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ImstSessionsTable> {
+  $$ImstSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+    column: $table.deviceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get breaths => $composableBuilder(
+    column: $table.breaths,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deviceLevel => $composableBuilder(
+    column: $table.deviceLevel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get pimaxCmh2o => $composableBuilder(
+    column: $table.pimaxCmh2o,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get percentPimax => $composableBuilder(
+    column: $table.percentPimax,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deleted => $composableBuilder(
+    column: $table.deleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ImstSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ImstSessionsTable> {
+  $$ImstSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+
+  GeneratedColumn<int> get breaths =>
+      $composableBuilder(column: $table.breaths, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceName => $composableBuilder(
+    column: $table.deviceName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get deviceLevel => $composableBuilder(
+    column: $table.deviceLevel,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get pimaxCmh2o => $composableBuilder(
+    column: $table.pimaxCmh2o,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get percentPimax => $composableBuilder(
+    column: $table.percentPimax,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get durationMs => $composableBuilder(
+    column: $table.durationMs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get deleted =>
+      $composableBuilder(column: $table.deleted, builder: (column) => column);
+}
+
+class $$ImstSessionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ImstSessionsTable,
+          ImstSession,
+          $$ImstSessionsTableFilterComposer,
+          $$ImstSessionsTableOrderingComposer,
+          $$ImstSessionsTableAnnotationComposer,
+          $$ImstSessionsTableCreateCompanionBuilder,
+          $$ImstSessionsTableUpdateCompanionBuilder,
+          (
+            ImstSession,
+            BaseReferences<_$AppDatabase, $ImstSessionsTable, ImstSession>,
+          ),
+          ImstSession,
+          PrefetchHooks Function()
+        > {
+  $$ImstSessionsTableTableManager(_$AppDatabase db, $ImstSessionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ImstSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImstSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImstSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<String> deviceId = const Value.absent(),
+                Value<int> breaths = const Value.absent(),
+                Value<String?> deviceName = const Value.absent(),
+                Value<int?> deviceLevel = const Value.absent(),
+                Value<int?> pimaxCmh2o = const Value.absent(),
+                Value<int?> percentPimax = const Value.absent(),
+                Value<int?> durationMs = const Value.absent(),
+                Value<int> deleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ImstSessionsCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deviceId: deviceId,
+                breaths: breaths,
+                deviceName: deviceName,
+                deviceLevel: deviceLevel,
+                pimaxCmh2o: pimaxCmh2o,
+                percentPimax: percentPimax,
+                durationMs: durationMs,
+                deleted: deleted,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required int createdAt,
+                required int updatedAt,
+                required String deviceId,
+                required int breaths,
+                Value<String?> deviceName = const Value.absent(),
+                Value<int?> deviceLevel = const Value.absent(),
+                Value<int?> pimaxCmh2o = const Value.absent(),
+                Value<int?> percentPimax = const Value.absent(),
+                Value<int?> durationMs = const Value.absent(),
+                Value<int> deleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ImstSessionsCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deviceId: deviceId,
+                breaths: breaths,
+                deviceName: deviceName,
+                deviceLevel: deviceLevel,
+                pimaxCmh2o: pimaxCmh2o,
+                percentPimax: percentPimax,
+                durationMs: durationMs,
+                deleted: deleted,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ImstSessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ImstSessionsTable,
+      ImstSession,
+      $$ImstSessionsTableFilterComposer,
+      $$ImstSessionsTableOrderingComposer,
+      $$ImstSessionsTableAnnotationComposer,
+      $$ImstSessionsTableCreateCompanionBuilder,
+      $$ImstSessionsTableUpdateCompanionBuilder,
+      (
+        ImstSession,
+        BaseReferences<_$AppDatabase, $ImstSessionsTable, ImstSession>,
+      ),
+      ImstSession,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3377,4 +4378,6 @@ class $AppDatabaseManager {
       $$SettingsTableTableManager(_db, _db.settings);
   $$TableSessionsTableTableManager get tableSessions =>
       $$TableSessionsTableTableManager(_db, _db.tableSessions);
+  $$ImstSessionsTableTableManager get imstSessions =>
+      $$ImstSessionsTableTableManager(_db, _db.imstSessions);
 }

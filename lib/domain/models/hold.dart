@@ -2,19 +2,28 @@ enum HoldType {
   max,
   co2,
   o2,
-  walk;
+  walk,
+  imst,
+  stretch,
+  rest;
 
   String get dbValue => switch (this) {
     HoldType.max => 'max',
     HoldType.co2 => 'co2',
     HoldType.o2 => 'o2',
     HoldType.walk => 'walk',
+    HoldType.imst => 'imst',
+    HoldType.stretch => 'stretch',
+    HoldType.rest => 'rest',
   };
 
   static HoldType fromDb(String value) => switch (value) {
     'co2' => HoldType.co2,
     'o2' => HoldType.o2,
     'walk' => HoldType.walk,
+    'imst' => HoldType.imst,
+    'stretch' => HoldType.stretch,
+    'rest' => HoldType.rest,
     _ => HoldType.max,
   };
 }

@@ -78,6 +78,26 @@ class TableSessions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class ImstSessions extends Table {
+  TextColumn get id => text()();
+  IntColumn get createdAt => integer()();
+  IntColumn get updatedAt => integer()();
+  TextColumn get deviceId => text()();
+  IntColumn get breaths => integer()();
+  // Free-text trainer name; the numbered resistance position the user set.
+  TextColumn get deviceName => text().nullable()();
+  IntColumn get deviceLevel => integer().nullable()();
+  // Measured maximal inspiratory pressure and session load, for the minority
+  // who have a real figure. Never inferred from the dial.
+  IntColumn get pimaxCmh2o => integer().nullable()();
+  IntColumn get percentPimax => integer().nullable()();
+  IntColumn get durationMs => integer().nullable()();
+  IntColumn get deleted => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // ---------------------------------------------------------------------------
 // Database
 // ---------------------------------------------------------------------------
@@ -94,7 +114,9 @@ const _builtInTagKeys = [
   'tag.hot',
 ];
 
-@DriftDatabase(tables: [Holds, Tags, HoldTags, Settings, TableSessions])
+@DriftDatabase(
+  tables: [Holds, Tags, HoldTags, Settings, TableSessions, ImstSessions],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -104,7 +126,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -116,6 +138,9 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) {
         await m.createTable(tableSessions);
       }
+      if (from < 3) {
+        await m.createTable(imstSessions);
+      }
     },
   );
 
@@ -125,6 +150,7 @@ class AppDatabase extends _$AppDatabase {
     await transaction(() async {
       await delete(holdTags).go();
       await delete(holds).go();
+      await delete(imstSessions).go();
       await delete(tableSessions).go();
       await delete(tags).go();
       await delete(settings).go();
