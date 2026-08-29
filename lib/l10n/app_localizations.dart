@@ -152,6 +152,30 @@ abstract class AppLocalizations {
   /// **'Never hyperventilate before a breath hold.'**
   String get safetyRule2;
 
+  /// Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)
+  ///
+  /// In en, this message translates to:
+  /// **'Stop training for today'**
+  String get sambaResponseTitle;
+
+  /// Body of the samba safety-response dialog
+  ///
+  /// In en, this message translates to:
+  /// **'A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don\'t hold your breath again today, and take it easier next session.'**
+  String get sambaResponseBody;
+
+  /// Button on the samba dialog that opens the safety screen
+  ///
+  /// In en, this message translates to:
+  /// **'Safety notes'**
+  String get sambaResponseSafety;
+
+  /// Dismiss button on the samba safety-response dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get sambaResponseAcknowledge;
+
   /// Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)
   ///
   /// In en, this message translates to:

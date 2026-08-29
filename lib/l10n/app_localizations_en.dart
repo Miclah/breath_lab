@@ -37,6 +37,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safetyRule2 => 'Never hyperventilate before a breath hold.';
 
   @override
+  String get sambaResponseTitle => 'Stop training for today';
+
+  @override
+  String get sambaResponseBody =>
+      'A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don\'t hold your breath again today, and take it easier next session.';
+
+  @override
+  String get sambaResponseSafety => 'Safety notes';
+
+  @override
+  String get sambaResponseAcknowledge => 'Got it';
+
+  @override
   String get safetyRuleBuddy =>
       'Have someone with you who can help. One person holds while another stays alert — never both at once.';
 

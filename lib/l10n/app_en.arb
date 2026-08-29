@@ -36,6 +36,22 @@
   "@safetyRule2": {
     "description": "Safety rule 2 — no hyperventilation"
   },
+  "sambaResponseTitle": "Stop training for today",
+  "@sambaResponseTitle": {
+    "description": "Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)"
+  },
+  "sambaResponseBody": "A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don't hold your breath again today, and take it easier next session.",
+  "@sambaResponseBody": {
+    "description": "Body of the samba safety-response dialog"
+  },
+  "sambaResponseSafety": "Safety notes",
+  "@sambaResponseSafety": {
+    "description": "Button on the samba dialog that opens the safety screen"
+  },
+  "sambaResponseAcknowledge": "Got it",
+  "@sambaResponseAcknowledge": {
+    "description": "Dismiss button on the samba safety-response dialog"
+  },
   "safetyRuleBuddy": "Have someone with you who can help. One person holds while another stays alert — never both at once.",
   "@safetyRuleBuddy": {
     "description": "Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)"

@@ -37,6 +37,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyRule2 => 'Nikdy nehyperventiluj pred zadržaním dychu.';
 
   @override
+  String get sambaResponseTitle => 'Dnes už netrénuj';
+
+  @override
+  String get sambaResponseBody =>
+      'Samba — strata kontroly nad pohybmi — je takmer odpadnutie. Tvoj mozog mal málo kyslíka. Dnes už dych nezadržiavaj a najbližší tréning ber miernejšie.';
+
+  @override
+  String get sambaResponseSafety => 'Bezpečnostné informácie';
+
+  @override
+  String get sambaResponseAcknowledge => 'Rozumiem';
+
+  @override
   String get safetyRuleBuddy =>
       'Maj pri sebe niekoho, kto vie pomôcť. Jeden zadržiava dych, druhý zostáva pozorný — nikdy nie obaja naraz.';
 

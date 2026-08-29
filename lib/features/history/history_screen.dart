@@ -10,6 +10,7 @@ import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
+import '../../features/safety/samba_response.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/hold_list_item.dart';
 import '../../theme/colors.dart';
@@ -649,7 +650,12 @@ class _EditForm extends ConsumerWidget {
                 FilterChip(
                   label: Text(tagLabel(tag.labelKey, l10n)),
                   selected: selectedTagIds.contains(tag.id),
-                  onSelected: (selected) => onTagToggled(tag.id, selected),
+                  onSelected: (selected) {
+                    onTagToggled(tag.id, selected);
+                    if (selected && tag.labelKey == sambaTagKey) {
+                      showSambaSafetyResponse(context);
+                    }
+                  },
                 ),
             ],
           ),

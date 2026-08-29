@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/tags_repository.dart';
+import '../../features/safety/samba_response.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/horizontal_scroll_fade.dart';
 import '../../theme/breakpoints.dart';
@@ -59,12 +60,16 @@ class TagChipRow extends ConsumerWidget {
           onTap: () {
             final current = ref.read(selectedTagIdsProvider);
             final next = Set<String>.from(current);
-            if (current.contains(tag.id)) {
-              next.remove(tag.id);
-            } else {
+            final adding = !current.contains(tag.id);
+            if (adding) {
               next.add(tag.id);
+            } else {
+              next.remove(tag.id);
             }
             ref.read(selectedTagIdsProvider.notifier).state = next;
+            if (adding && tag.labelKey == sambaTagKey) {
+              showSambaSafetyResponse(context);
+            }
           },
         ),
       for (final text in pending)
