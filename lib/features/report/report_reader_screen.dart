@@ -119,12 +119,24 @@ class _Reader extends StatelessWidget {
   ];
 
   Widget _body(BuildContext context, {required bool withInlineIndex}) {
+    // The document's own title comes first, then the app's framing — the
+    // English-only notice and (on compact) the jump list — then the body.
+    final leadsWithTitle =
+        blocks.isNotEmpty &&
+        blocks.first is HeadingBlock &&
+        (blocks.first as HeadingBlock).level <= 1;
+    final rest = leadsWithTitle ? blocks.skip(1) : blocks;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: Spacing.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _LanguageNotice(),
+          if (leadsWithTitle) ReportBlockView(blocks.first),
+          Padding(
+            padding: const EdgeInsets.only(top: Spacing.sm),
+            child: const _LanguageNotice(),
+          ),
           if (withInlineIndex)
             Padding(
               padding: const EdgeInsets.only(top: Spacing.lg),
@@ -134,7 +146,7 @@ class _Reader extends StatelessWidget {
                 collapsible: true,
               ),
             ),
-          for (final block in blocks)
+          for (final block in rest)
             if (block is HeadingBlock && block.anchor != null)
               KeyedSubtree(
                 key: keyFor(block.anchor!),
