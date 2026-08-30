@@ -17,6 +17,7 @@ import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../safety/safety_provider.dart';
 import '../sync/lan_sync_host_screen.dart';
+import '../sync/lan_sync_providers.dart';
 import '../sync/lan_sync_scan_screen.dart';
 import 'theme_mode_provider.dart';
 
@@ -281,7 +282,7 @@ class _ExportImportButtonsState extends ConsumerState<_ExportImportButtons> {
       final service = await ref.read(syncServiceProvider.future);
       final summary = await service.importFromFile();
       if (!mounted || summary == null) return;
-      _invalidateAfterImport();
+      invalidateAfterSync(ref);
       await _showMessageDialog(
         title: l10n.settingsImportSummaryTitle,
         body: l10n.settingsImportSummaryBody(
@@ -312,16 +313,6 @@ class _ExportImportButtonsState extends ConsumerState<_ExportImportButtons> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
-  }
-
-  void _invalidateAfterImport() {
-    ref.invalidate(allHoldsProvider);
-    ref.invalidate(allTableSessionsProvider);
-    ref.invalidate(holdTagIdsProvider);
-    ref.invalidate(holdTagCountsProvider);
-    ref.invalidate(builtInTagsProvider);
-    ref.invalidate(currentMaxMsProvider);
-    ref.invalidate(lastSyncInfoProvider);
   }
 
   Future<void> _showMessageDialog({
