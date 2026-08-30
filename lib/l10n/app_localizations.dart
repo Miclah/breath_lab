@@ -1921,6 +1921,96 @@ abstract class AppLocalizations {
   /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
   String get evidenceTierContraindicatedDesc;
 
+  /// Settings > Data button that starts QR-paired LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Sync over Wi-Fi'**
+  String get lanSyncEntryButton;
+
+  /// Title of both the host (QR) and scan screens
+  ///
+  /// In en, this message translates to:
+  /// **'Sync over Wi-Fi'**
+  String get lanSyncTitle;
+
+  /// Shown on the host screen while the local server binds
+  ///
+  /// In en, this message translates to:
+  /// **'Starting…'**
+  String get lanSyncHostStarting;
+
+  /// Instruction above the QR code on the host screen
+  ///
+  /// In en, this message translates to:
+  /// **'Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.'**
+  String get lanSyncHostInstruction;
+
+  /// Honest limitation notice on the host screen — the exchange is not encrypted
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone on this Wi-Fi network can see the transfer while it runs.'**
+  String get lanSyncPlaintextNotice;
+
+  /// Warns the Windows user to expect the firewall prompt on first listen
+  ///
+  /// In en, this message translates to:
+  /// **'Windows may ask to allow BreathLab through the firewall — allow it.'**
+  String get lanSyncFirewallHint;
+
+  /// Shown on both screens while the merge is in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing…'**
+  String get lanSyncExchanging;
+
+  /// Heading of the success state after a LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Sync complete'**
+  String get lanSyncDoneTitle;
+
+  /// Button that restarts a failed LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get lanSyncRetry;
+
+  /// Fallback error message for a LAN sync that failed without a specific reason
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed. Try again.'**
+  String get lanSyncFailedGeneric;
+
+  /// Instruction on the Android scan screen viewfinder
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the code shown on your PC.'**
+  String get lanSyncScanInstruction;
+
+  /// Shown when the scanned QR is valid but not a BreathLab pairing code
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t a BreathLab pairing code.'**
+  String get lanSyncScanNotRecognised;
+
+  /// Heading when camera permission is required to scan
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access needed'**
+  String get lanSyncCameraPermissionTitle;
+
+  /// Rationale shown when camera permission is denied
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.'**
+  String get lanSyncCameraPermissionBody;
+
+  /// Button to the system settings when camera permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get lanSyncCameraPermissionOpenSettings;
+
   /// Link on a contextual tip that opens the research reader at the relevant section
   ///
   /// In en, this message translates to:

@@ -1066,6 +1066,57 @@ class AppLocalizationsEn extends AppLocalizations {
       'Unsafe in the way this app is used. Shown only to warn against it.';
 
   @override
+  String get lanSyncEntryButton => 'Sync over Wi-Fi';
+
+  @override
+  String get lanSyncTitle => 'Sync over Wi-Fi';
+
+  @override
+  String get lanSyncHostStarting => 'Starting…';
+
+  @override
+  String get lanSyncHostInstruction =>
+      'Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.';
+
+  @override
+  String get lanSyncPlaintextNotice =>
+      'Anyone on this Wi-Fi network can see the transfer while it runs.';
+
+  @override
+  String get lanSyncFirewallHint =>
+      'Windows may ask to allow BreathLab through the firewall — allow it.';
+
+  @override
+  String get lanSyncExchanging => 'Syncing…';
+
+  @override
+  String get lanSyncDoneTitle => 'Sync complete';
+
+  @override
+  String get lanSyncRetry => 'Try again';
+
+  @override
+  String get lanSyncFailedGeneric => 'Sync failed. Try again.';
+
+  @override
+  String get lanSyncScanInstruction =>
+      'Point the camera at the code shown on your PC.';
+
+  @override
+  String get lanSyncScanNotRecognised =>
+      'That code isn\'t a BreathLab pairing code.';
+
+  @override
+  String get lanSyncCameraPermissionTitle => 'Camera access needed';
+
+  @override
+  String get lanSyncCameraPermissionBody =>
+      'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.';
+
+  @override
+  String get lanSyncCameraPermissionOpenSettings => 'Open settings';
+
+  @override
   String get contextualTipReadMore => 'Read more';
 
   @override

@@ -1342,6 +1342,66 @@
   "@evidenceTierContraindicatedDesc": {
     "description": "One-line meaning of tier X"
   },
+  "lanSyncEntryButton": "Sync over Wi-Fi",
+  "@lanSyncEntryButton": {
+    "description": "Settings > Data button that starts QR-paired LAN sync"
+  },
+  "lanSyncTitle": "Sync over Wi-Fi",
+  "@lanSyncTitle": {
+    "description": "Title of both the host (QR) and scan screens"
+  },
+  "lanSyncHostStarting": "Starting…",
+  "@lanSyncHostStarting": {
+    "description": "Shown on the host screen while the local server binds"
+  },
+  "lanSyncHostInstruction": "Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.",
+  "@lanSyncHostInstruction": {
+    "description": "Instruction above the QR code on the host screen"
+  },
+  "lanSyncPlaintextNotice": "Anyone on this Wi-Fi network can see the transfer while it runs.",
+  "@lanSyncPlaintextNotice": {
+    "description": "Honest limitation notice on the host screen — the exchange is not encrypted"
+  },
+  "lanSyncFirewallHint": "Windows may ask to allow BreathLab through the firewall — allow it.",
+  "@lanSyncFirewallHint": {
+    "description": "Warns the Windows user to expect the firewall prompt on first listen"
+  },
+  "lanSyncExchanging": "Syncing…",
+  "@lanSyncExchanging": {
+    "description": "Shown on both screens while the merge is in progress"
+  },
+  "lanSyncDoneTitle": "Sync complete",
+  "@lanSyncDoneTitle": {
+    "description": "Heading of the success state after a LAN sync"
+  },
+  "lanSyncRetry": "Try again",
+  "@lanSyncRetry": {
+    "description": "Button that restarts a failed LAN sync"
+  },
+  "lanSyncFailedGeneric": "Sync failed. Try again.",
+  "@lanSyncFailedGeneric": {
+    "description": "Fallback error message for a LAN sync that failed without a specific reason"
+  },
+  "lanSyncScanInstruction": "Point the camera at the code shown on your PC.",
+  "@lanSyncScanInstruction": {
+    "description": "Instruction on the Android scan screen viewfinder"
+  },
+  "lanSyncScanNotRecognised": "That code isn't a BreathLab pairing code.",
+  "@lanSyncScanNotRecognised": {
+    "description": "Shown when the scanned QR is valid but not a BreathLab pairing code"
+  },
+  "lanSyncCameraPermissionTitle": "Camera access needed",
+  "@lanSyncCameraPermissionTitle": {
+    "description": "Heading when camera permission is required to scan"
+  },
+  "lanSyncCameraPermissionBody": "BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.",
+  "@lanSyncCameraPermissionBody": {
+    "description": "Rationale shown when camera permission is denied"
+  },
+  "lanSyncCameraPermissionOpenSettings": "Open settings",
+  "@lanSyncCameraPermissionOpenSettings": {
+    "description": "Button to the system settings when camera permission is permanently denied"
+  },
   "contextualTipReadMore": "Read more",
   "@contextualTipReadMore": {
     "description": "Link on a contextual tip that opens the research reader at the relevant section"

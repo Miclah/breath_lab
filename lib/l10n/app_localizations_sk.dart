@@ -1076,6 +1076,57 @@ class AppLocalizationsSk extends AppLocalizations {
       'Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie.';
 
   @override
+  String get lanSyncEntryButton => 'Synchronizovať cez Wi-Fi';
+
+  @override
+  String get lanSyncTitle => 'Synchronizácia cez Wi-Fi';
+
+  @override
+  String get lanSyncHostStarting => 'Spúšťa sa…';
+
+  @override
+  String get lanSyncHostInstruction =>
+      'Na telefóne otvor BreathLab, zvoľ Synchronizovať cez Wi-Fi a naskenuj tento kód.';
+
+  @override
+  String get lanSyncPlaintextNotice =>
+      'Počas prenosu ho môže vidieť ktokoľvek v tejto Wi-Fi sieti.';
+
+  @override
+  String get lanSyncFirewallHint =>
+      'Windows sa môže spýtať, či povoliť BreathLab cez firewall — povoľ to.';
+
+  @override
+  String get lanSyncExchanging => 'Synchronizuje sa…';
+
+  @override
+  String get lanSyncDoneTitle => 'Synchronizácia dokončená';
+
+  @override
+  String get lanSyncRetry => 'Skúsiť znova';
+
+  @override
+  String get lanSyncFailedGeneric => 'Synchronizácia zlyhala. Skús to znova.';
+
+  @override
+  String get lanSyncScanInstruction =>
+      'Namier fotoaparát na kód zobrazený na počítači.';
+
+  @override
+  String get lanSyncScanNotRecognised =>
+      'Tento kód nie je párovací kód BreathLab.';
+
+  @override
+  String get lanSyncCameraPermissionTitle => 'Potrebný prístup k fotoaparátu';
+
+  @override
+  String get lanSyncCameraPermissionBody =>
+      'BreathLab potrebuje fotoaparát na naskenovanie párovacieho kódu na počítači. Na nič iné sa nepoužíva.';
+
+  @override
+  String get lanSyncCameraPermissionOpenSettings => 'Otvoriť nastavenia';
+
+  @override
   String get contextualTipReadMore => 'Čítať viac';
 
   @override
