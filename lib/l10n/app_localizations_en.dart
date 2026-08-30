@@ -1114,6 +1114,27 @@ class AppLocalizationsEn extends AppLocalizations {
       'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.';
 
   @override
+  String get posterScreenTitle => 'Training system';
+
+  @override
+  String get posterFullSystem => 'Full system';
+
+  @override
+  String get posterDoingAHold => 'Doing a hold';
+
+  @override
+  String get posterTimeline => 'Timeline';
+
+  @override
+  String get posterShareImage => 'Share this poster';
+
+  @override
+  String get posterSharePdf => 'Share all three as PDF';
+
+  @override
+  String get posterShareFailed => 'Could not share the poster.';
+
+  @override
   String get contextualTipReadMore => 'Read more';
 
   @override

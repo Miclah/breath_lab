@@ -1124,6 +1124,27 @@ class AppLocalizationsSk extends AppLocalizations {
       'BreathLab potrebuje fotoaparát na naskenovanie párovacieho kódu na počítači. Na nič iné sa nepoužíva.';
 
   @override
+  String get posterScreenTitle => 'Tréningový systém';
+
+  @override
+  String get posterFullSystem => 'Celý systém';
+
+  @override
+  String get posterDoingAHold => 'Ako zadržať dych';
+
+  @override
+  String get posterTimeline => 'Časová os';
+
+  @override
+  String get posterShareImage => 'Zdieľať tento plagát';
+
+  @override
+  String get posterSharePdf => 'Zdieľať všetky tri ako PDF';
+
+  @override
+  String get posterShareFailed => 'Plagát sa nepodarilo zdieľať.';
+
+  @override
   String get contextualTipReadMore => 'Čítať viac';
 
   @override

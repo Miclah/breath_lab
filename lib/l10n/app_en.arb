@@ -1398,6 +1398,34 @@
   "@lanSyncCameraPermissionBody": {
     "description": "Rationale shown when camera permission is denied"
   },
+  "posterScreenTitle": "Training system",
+  "@posterScreenTitle": {
+    "description": "Title of the poster viewer screen and its Settings entry point"
+  },
+  "posterFullSystem": "Full system",
+  "@posterFullSystem": {
+    "description": "Picker label for the overview poster — the week, technique, progression, safety"
+  },
+  "posterDoingAHold": "Doing a hold",
+  "@posterDoingAHold": {
+    "description": "Picker label for the step-by-step hold walkthrough poster"
+  },
+  "posterTimeline": "Timeline",
+  "@posterTimeline": {
+    "description": "Picker label for the progression-expectations poster"
+  },
+  "posterShareImage": "Share this poster",
+  "@posterShareImage": {
+    "description": "Action that shares the current poster as a PNG image"
+  },
+  "posterSharePdf": "Share all three as PDF",
+  "@posterSharePdf": {
+    "description": "Action that shares the whole poster set as one PDF"
+  },
+  "posterShareFailed": "Could not share the poster.",
+  "@posterShareFailed": {
+    "description": "Shown when sharing a poster image or PDF fails"
+  },
   "contextualTipReadMore": "Read more",
   "@contextualTipReadMore": {
     "description": "Link on a contextual tip that opens the research reader at the relevant section"

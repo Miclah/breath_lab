@@ -2005,6 +2005,48 @@ abstract class AppLocalizations {
   /// **'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.'**
   String get lanSyncCameraPermissionBody;
 
+  /// Title of the poster viewer screen and its Settings entry point
+  ///
+  /// In en, this message translates to:
+  /// **'Training system'**
+  String get posterScreenTitle;
+
+  /// Picker label for the overview poster — the week, technique, progression, safety
+  ///
+  /// In en, this message translates to:
+  /// **'Full system'**
+  String get posterFullSystem;
+
+  /// Picker label for the step-by-step hold walkthrough poster
+  ///
+  /// In en, this message translates to:
+  /// **'Doing a hold'**
+  String get posterDoingAHold;
+
+  /// Picker label for the progression-expectations poster
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get posterTimeline;
+
+  /// Action that shares the current poster as a PNG image
+  ///
+  /// In en, this message translates to:
+  /// **'Share this poster'**
+  String get posterShareImage;
+
+  /// Action that shares the whole poster set as one PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Share all three as PDF'**
+  String get posterSharePdf;
+
+  /// Shown when sharing a poster image or PDF fails
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share the poster.'**
+  String get posterShareFailed;
+
   /// Link on a contextual tip that opens the research reader at the relevant section
   ///
   /// In en, this message translates to:
