@@ -1114,9 +1114,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.';
 
   @override
-  String get lanSyncCameraPermissionOpenSettings => 'Open settings';
-
-  @override
   String get contextualTipReadMore => 'Read more';
 
   @override

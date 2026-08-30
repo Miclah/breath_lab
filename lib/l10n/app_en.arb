@@ -1398,10 +1398,6 @@
   "@lanSyncCameraPermissionBody": {
     "description": "Rationale shown when camera permission is denied"
   },
-  "lanSyncCameraPermissionOpenSettings": "Open settings",
-  "@lanSyncCameraPermissionOpenSettings": {
-    "description": "Button to the system settings when camera permission is permanently denied"
-  },
   "contextualTipReadMore": "Read more",
   "@contextualTipReadMore": {
     "description": "Link on a contextual tip that opens the research reader at the relevant section"

@@ -1124,9 +1124,6 @@ class AppLocalizationsSk extends AppLocalizations {
       'BreathLab potrebuje fotoaparát na naskenovanie párovacieho kódu na počítači. Na nič iné sa nepoužíva.';
 
   @override
-  String get lanSyncCameraPermissionOpenSettings => 'Otvoriť nastavenia';
-
-  @override
   String get contextualTipReadMore => 'Čítať viac';
 
   @override

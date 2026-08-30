@@ -317,7 +317,6 @@
   "lanSyncScanNotRecognised": "Tento kód nie je párovací kód BreathLab.",
   "lanSyncCameraPermissionTitle": "Potrebný prístup k fotoaparátu",
   "lanSyncCameraPermissionBody": "BreathLab potrebuje fotoaparát na naskenovanie párovacieho kódu na počítači. Na nič iné sa nepoužíva.",
-  "lanSyncCameraPermissionOpenSettings": "Otvoriť nastavenia",
   "contextualTipReadMore": "Čítať viac",
   "settingsResearchSummaryLink": "Prehľad výskumu",
   "reportReaderTitle": "Prehľad výskumu",

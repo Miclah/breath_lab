@@ -2005,12 +2005,6 @@ abstract class AppLocalizations {
   /// **'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.'**
   String get lanSyncCameraPermissionBody;
 
-  /// Button to the system settings when camera permission is permanently denied
-  ///
-  /// In en, this message translates to:
-  /// **'Open settings'**
-  String get lanSyncCameraPermissionOpenSettings;
-
   /// Link on a contextual tip that opens the research reader at the relevant section
   ///
   /// In en, this message translates to:
