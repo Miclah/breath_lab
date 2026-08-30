@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../posters/training_posters_screen.dart';
 import '../report/report_reader_screen.dart';
 import '../safety/safety_screen.dart';
 
@@ -37,10 +38,14 @@ class AboutSection extends ConsumerWidget {
             context,
           ).push(MaterialPageRoute(builder: (_) => const ReportReaderScreen())),
         ),
-        // TODO(phase-3f): training-system infographic poster entry point.
-        // Blocked on RESEARCH_ALIGNMENT.md §3.3 — its progression figures
-        // overstate the research by 30-60 s and must be corrected first.
-        // See docs/phases/PHASE_3F_poster.md.
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+          title: Text(l10n.posterScreenTitle),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const TrainingPostersScreen()),
+          ),
+        ),
         ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
           title: Text(l10n.settingsSafetyInfoLink),
