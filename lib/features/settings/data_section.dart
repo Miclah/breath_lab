@@ -16,6 +16,8 @@ import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../safety/safety_provider.dart';
+import '../sync/lan_sync_host_screen.dart';
+import '../sync/lan_sync_scan_screen.dart';
 import 'theme_mode_provider.dart';
 
 /// Settings → Data section: editable device name, last-sync status,
@@ -370,7 +372,21 @@ class _ExportImportButtonsState extends ConsumerState<_ExportImportButtons> {
             onPressed: _busy ? null : _import,
             child: Text(l10n.settingsImportButton),
           ),
+          OutlinedButton(
+            onPressed: _busy ? null : _syncOverWifi,
+            child: Text(l10n.lanSyncEntryButton),
+          ),
         ],
+      ),
+    );
+  }
+
+  void _syncOverWifi() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => Platform.isAndroid
+            ? const LanSyncScanScreen()
+            : const LanSyncHostScreen(),
       ),
     );
   }
