@@ -152,6 +152,96 @@ abstract class AppLocalizations {
   /// **'Never hyperventilate before a breath hold.'**
   String get safetyRule2;
 
+  /// Header of the guided hook-breath recovery prompt on the result screen (RESEARCH_ALIGNMENT.md §2, tier C)
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery breaths'**
+  String get recoveryTitle;
+
+  /// Framing text for recovery breaths — practice, not evidence
+  ///
+  /// In en, this message translates to:
+  /// **'Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.'**
+  String get recoveryBlurb;
+
+  /// Button that starts the guided recovery-breath sequence
+  ///
+  /// In en, this message translates to:
+  /// **'Guide me'**
+  String get recoveryStart;
+
+  /// Shown after the recovery-breath sequence finishes
+  ///
+  /// In en, this message translates to:
+  /// **'Done — take it easy for a minute.'**
+  String get recoveryDone;
+
+  /// Recovery breath cue: inhale phase
+  ///
+  /// In en, this message translates to:
+  /// **'Breathe in'**
+  String get recoveryCueInhale;
+
+  /// Recovery breath cue: the brief hooked hold
+  ///
+  /// In en, this message translates to:
+  /// **'Hook — hold'**
+  String get recoveryCueHook;
+
+  /// Recovery breath cue: passive exhale
+  ///
+  /// In en, this message translates to:
+  /// **'Out'**
+  String get recoveryCueExhale;
+
+  /// Live cue plus breath counter during the guided recovery sequence
+  ///
+  /// In en, this message translates to:
+  /// **'{cue} · {breath}/{total}'**
+  String recoveryProgress(String cue, int breath, int total);
+
+  /// Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)
+  ///
+  /// In en, this message translates to:
+  /// **'Stop training for today'**
+  String get sambaResponseTitle;
+
+  /// Body of the samba safety-response dialog
+  ///
+  /// In en, this message translates to:
+  /// **'A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don\'t hold your breath again today, and take it easier next session.'**
+  String get sambaResponseBody;
+
+  /// Button on the samba dialog that opens the safety screen
+  ///
+  /// In en, this message translates to:
+  /// **'Safety notes'**
+  String get sambaResponseSafety;
+
+  /// Dismiss button on the samba safety-response dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get sambaResponseAcknowledge;
+
+  /// Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)
+  ///
+  /// In en, this message translates to:
+  /// **'Have someone with you who can help. One person holds while another stays alert — never both at once.'**
+  String get safetyRuleBuddy;
+
+  /// Safety rule: medical clearance for known contraindications (RESEARCH_ALIGNMENT.md §4 S1, research §6)
+  ///
+  /// In en, this message translates to:
+  /// **'Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.'**
+  String get safetyRuleMedical;
+
+  /// Safety rule: the prohibition on lung packing / glossopharyngeal insufflation for beginners (RESEARCH_ALIGNMENT.md §2, §4 S1)
+  ///
+  /// In en, this message translates to:
+  /// **'Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.'**
+  String get safetyRulePacking;
+
   /// Safety rule 3 — stop on warning signs
   ///
   /// In en, this message translates to:
@@ -230,6 +320,24 @@ abstract class AppLocalizations {
   /// **'Exhale'**
   String get settingsBreathingRatioExhaleLabel;
 
+  /// Standing hint under the custom breathing ratio steppers stating the safety bounds (RESEARCH_ALIGNMENT.md §4 S2)
+  ///
+  /// In en, this message translates to:
+  /// **'Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.'**
+  String get settingsBreathingRatioRule;
+
+  /// Shown when the user tries to set a breathing cycle shorter than 6 seconds — an explanation, not a silent clamp
+  ///
+  /// In en, this message translates to:
+  /// **'Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.'**
+  String get settingsBreathingRatioTooFast;
+
+  /// Shown when the user tries to set an exhale shorter than the inhale
+  ///
+  /// In en, this message translates to:
+  /// **'Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.'**
+  String get settingsBreathingRatioExhaleShort;
+
   /// Settings section header for CO₂ table configuration
   ///
   /// In en, this message translates to:
@@ -277,6 +385,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preview'**
   String get settingsTablePreviewTitle;
+
+  /// Shown on the collapsed table preview header so the section still says how many rounds it will produce
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 round} other{{count} rounds}}'**
+  String settingsTablePreviewRoundCount(int count);
 
   /// Spoken TTS callout at 1:00 elapsed. Not shown as UI text — spoken in the TTS voice language, independent of the app UI language.
   ///
@@ -476,11 +590,17 @@ abstract class AppLocalizations {
   /// **'Focus mode'**
   String get settingsFocusModeLabel;
 
-  /// Longer explanatory body shown below the focus mode toggle, per Design Additions §7
+  /// Longer explanatory body shown below the focus mode toggle on Android, per Design Additions §7
   ///
   /// In en, this message translates to:
   /// **'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.'**
   String get settingsFocusModeExplanation;
+
+  /// Explanatory body shown below the focus mode toggle on non-Android platforms — omits the Android Priority Mode/Do Not Disturb references
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab will silence its own non-critical notifications during a session.'**
+  String get settingsFocusModeExplanationDesktop;
 
   /// Settings section header for sound and haptics options
   ///
@@ -572,6 +692,12 @@ abstract class AppLocalizations {
   /// **'Reset all data'**
   String get settingsResetLabel;
 
+  /// Subtitle under the Reset all data row, saying plainly what it destroys
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes every hold, table session and setting on this device.'**
+  String get settingsResetSubtitle;
+
   /// Title of the reset-all-data confirmation dialog
   ///
   /// In en, this message translates to:
@@ -589,6 +715,131 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset'**
   String get settingsResetButton;
+
+  /// Settings section header for device name, export, import, and last sync status
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get settingsDataSection;
+
+  /// Label on the editable device name text field, shown to the other device after a sync
+  ///
+  /// In en, this message translates to:
+  /// **'Device name'**
+  String get settingsDeviceNameLabel;
+
+  /// Last-sync status line shown when this device has never exported or imported
+  ///
+  /// In en, this message translates to:
+  /// **'Never synced'**
+  String get settingsLastSyncNever;
+
+  /// Last-sync status line shown after at least one export or import
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced {when} with {device}'**
+  String settingsLastSyncWith(String when, String device);
+
+  /// Button that opens a save dialog to write a .blab backup file
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get settingsExportButton;
+
+  /// Android-only button that hands the backup straight to the share sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get settingsShareButton;
+
+  /// Button that opens a file picker to merge in a .blab backup file
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get settingsImportButton;
+
+  /// Snackbar shown after a successful export
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved.'**
+  String get settingsExportSuccess;
+
+  /// Snackbar shown when export or share fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the backup.'**
+  String get settingsExportFailed;
+
+  /// Title of the dialog shown when import fails
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get settingsImportFailedTitle;
+
+  /// Import error: the file isn't valid JSON or is missing required fields
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn\'t a valid BreathLab backup.'**
+  String get settingsImportFailedMalformed;
+
+  /// Import error: the file's format or formatVersion isn't recognized
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn\'t a BreathLab backup, or was made by an incompatible version.'**
+  String get settingsImportFailedFormat;
+
+  /// Import error: the file's schemaVersion is newer than this device's database
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of BreathLab. Update the app on this device first.'**
+  String get settingsImportFailedSchema;
+
+  /// Import error: an unexpected failure not covered by a more specific message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong reading this file.'**
+  String get settingsImportFailedGeneric;
+
+  /// Title of the dialog shown after a successful import
+  ///
+  /// In en, this message translates to:
+  /// **'Import complete'**
+  String get settingsImportSummaryTitle;
+
+  /// Body of the post-import summary dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Added {holdsAdded} holds, {sessionsAdded} sessions. Updated {holdsUpdated} holds. Synced with {device}.'**
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  );
+
+  /// Confirm button in the add-custom-tag dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get tagAddConfirm;
+
+  /// Cancel button in the add-custom-tag dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get tagAddCancel;
+
+  /// Snackbar shown when persisting a setting change fails and the control reverts
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that setting.'**
+  String get settingsSaveFailed;
+
+  /// Snackbar shown when saving a completed hold to the database fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that hold. Try again.'**
+  String get resultSaveFailed;
 
   /// Label for the theme selector in Settings
   ///
@@ -674,6 +925,18 @@ abstract class AppLocalizations {
   /// **'Go!'**
   String get prepGoLabel;
 
+  /// Label shown above the number during the 3-second prep countdown
+  ///
+  /// In en, this message translates to:
+  /// **'Get ready'**
+  String get prepGetReadyLabel;
+
+  /// Button that aborts the 3-second prep countdown and returns to idle
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get prepCancel;
+
   /// Text shown inside the breathing circle during the inhale phase
   ///
   /// In en, this message translates to:
@@ -752,6 +1015,150 @@ abstract class AppLocalizations {
   /// **'done'**
   String get timerStateLabelDone;
 
+  /// This week's structure adherence, shown in the timer status row above the preset chips (RESEARCH_ALIGNMENT.md §3.1)
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% this week'**
+  String timerStatusAdherence(int percent);
+
+  /// Heading of the settings section index in the side column
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to'**
+  String get settingsJumpTo;
+
+  /// Estimated wall-clock length of the whole table session, shown under the based-on-max line. Rounded to whole minutes — the point is the order of magnitude of the commitment, not a countdown
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =1{About 1 minute in total} other{About {minutes} minutes in total}}'**
+  String tablesEstimatedDuration(int minutes);
+
+  /// Heading of the tables side panel summarising the session that is about to run
+  ///
+  /// In en, this message translates to:
+  /// **'This session'**
+  String get tablesSessionSummaryTitle;
+
+  /// Heading of the timer side panel card summarising the previous training day
+  ///
+  /// In en, this message translates to:
+  /// **'Last session'**
+  String get timerSideLastSession;
+
+  /// How many holds the previous session contained, shown beside its best time
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hold} other{{count} holds}}'**
+  String timerSideSessionHolds(int count);
+
+  /// Empty state of the timer side panel's last-session card
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet. Your first hold sets the baseline.'**
+  String get timerSideNoHistory;
+
+  /// Heading of the keyboard shortcuts card in the timer side panel
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts'**
+  String get timerSideShortcuts;
+
+  /// What the Space key does on the timer screen
+  ///
+  /// In en, this message translates to:
+  /// **'Start / stop hold'**
+  String get timerSideShortcutStart;
+
+  /// What the C key does during an active hold
+  ///
+  /// In en, this message translates to:
+  /// **'Mark contraction'**
+  String get timerSideShortcutContraction;
+
+  /// What the Escape key does during prep, a hold, or on the result screen
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get timerSideShortcutCancel;
+
+  /// Collapsed affordance on the result screen that expands into the notes field
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note'**
+  String get resultAddNote;
+
+  /// Placeholder inside the result screen notes field
+  ///
+  /// In en, this message translates to:
+  /// **'How did it feel?'**
+  String get resultNoteHint;
+
+  /// Tooltip on the button that collapses the notes field and discards what was typed
+  ///
+  /// In en, this message translates to:
+  /// **'Remove note'**
+  String get resultRemoveNote;
+
+  /// Pill shown above the duration on the result screen when the hold beat the previous best
+  ///
+  /// In en, this message translates to:
+  /// **'NEW PB'**
+  String get resultNewPbBadge;
+
+  /// Comparison of this hold against the previous saved max hold; delta arrives pre-formatted as +mm:ss or −mm:ss
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last'**
+  String resultVsLast(String delta);
+
+  /// Comparison of this hold against the personal best it is measured from; delta arrives pre-formatted as +mm:ss or −mm:ss
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs PB'**
+  String resultVsPb(String delta);
+
+  /// Shown in place of the comparison line when there is no earlier hold to compare against
+  ///
+  /// In en, this message translates to:
+  /// **'Your first hold — this is the baseline everything else is measured from.'**
+  String get resultFirstHold;
+
+  /// Label for the total hold duration on the result screen metrics row
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get resultTotal;
+
+  /// Caption below the result metrics explaining why struggle-phase duration is tracked (RESEARCH_ALIGNMENT.md §2, tier A)
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle phase is where most of the measured improvement in novices shows up.'**
+  String get resultStruggleNote;
+
+  /// Heading of the result-screen card shown when the hold had no contraction marker
+  ///
+  /// In en, this message translates to:
+  /// **'No contraction marked'**
+  String get resultNoContractionTitle;
+
+  /// How to mark a contraction, on a touch device
+  ///
+  /// In en, this message translates to:
+  /// **'Double-tap the ring during a hold to mark your first contraction.'**
+  String get resultNoContractionHintTouch;
+
+  /// How to mark a contraction, on a device with a keyboard
+  ///
+  /// In en, this message translates to:
+  /// **'Press C during a hold to mark your first contraction.'**
+  String get resultNoContractionHintKeyboard;
+
+  /// Why marking the contraction matters, shown below the how-to line
+  ///
+  /// In en, this message translates to:
+  /// **'The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.'**
+  String get resultNoContractionWhy;
+
   /// Save button on the result screen
   ///
   /// In en, this message translates to:
@@ -794,22 +1201,22 @@ abstract class AppLocalizations {
   /// **'Empty'**
   String get lungVolEmpty;
 
-  /// Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when Full is selected
   ///
   /// In en, this message translates to:
-  /// **'Plné pľúca · Full lungs'**
+  /// **'Full lungs'**
   String get lungVolFullHint;
 
-  /// Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when FRC is selected
   ///
   /// In en, this message translates to:
-  /// **'Pasívny výdych · Passive exhale'**
+  /// **'Passive exhale'**
   String get lungVolFrcHint;
 
-  /// Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec
+  /// Helper line below the lung volume selector when Empty is selected
   ///
   /// In en, this message translates to:
-  /// **'Po výdychu · After exhale'**
+  /// **'After exhale'**
   String get lungVolEmptyHint;
 
   /// Built-in session tag — user felt tired
@@ -901,6 +1308,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Max'**
   String get historyFilterMax;
+
+  /// Tag count shown on a hold row in place of unlabeled dots, e.g. '2 tags'
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 tag} other{{count} tags}}'**
+  String historyTagCount(int count);
 
   /// Filter chip on the History screen that opens the tag multi-select sheet
   ///
@@ -1040,11 +1453,29 @@ abstract class AppLocalizations {
   /// **'rest'**
   String get tablesPhaseLabelRest;
 
-  /// Title of the table session summary screen
+  /// Button on the active round card that ends its current hold/rest phase early and moves to the next round
+  ///
+  /// In en, this message translates to:
+  /// **'Skip round'**
+  String get tablesSkipRoundButton;
+
+  /// Full-width button that ends the entire table session, as opposed to skipping just the current round
+  ///
+  /// In en, this message translates to:
+  /// **'End session'**
+  String get tablesEndSessionButton;
+
+  /// Title of the table session summary screen when every planned round was completed
   ///
   /// In en, this message translates to:
   /// **'Session complete'**
   String get tablesSummaryTitle;
+
+  /// Title of the table session summary screen when it ended early, with rounds still remaining
+  ///
+  /// In en, this message translates to:
+  /// **'Session stopped'**
+  String get tablesSummaryStoppedTitle;
 
   /// Rounds completed stat on the table session summary screen
   ///
@@ -1094,17 +1525,59 @@ abstract class AppLocalizations {
   /// **'30d avg'**
   String get progressStatAvg30d;
 
-  /// Label for the current streak stat card on the Progress screen
+  /// Heading on the retest-your-max prompt card on Progress (RESEARCH_ALIGNMENT.md §5)
   ///
   /// In en, this message translates to:
-  /// **'Streak'**
-  String get progressStatStreak;
+  /// **'Time to retest'**
+  String get retestPromptTitle;
 
-  /// Placeholder value for a stat card when there is not enough history yet
+  /// Body of the retest prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Your last max hold was {weeks, plural, =1{a week} other{{weeks} weeks}} ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.'**
+  String retestPromptBody(int weeks);
+
+  /// Tooltip on the retest prompt's dismiss button
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get retestPromptDismiss;
+
+  /// Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)
+  ///
+  /// In en, this message translates to:
+  /// **'Progress has stalled'**
+  String get plateauTitle;
+
+  /// Body of the deload card, stating the two figures being compared
+  ///
+  /// In en, this message translates to:
+  /// **'Your best Full-lung hold over the last four weeks ({recent}) hasn\'t beaten the four weeks before ({previous}).'**
+  String plateauBody(String recent, String previous);
+
+  /// Advice line on the deload card — the research's own recommendation (RESEARCH_ALIGNMENT.md §3.2)
+  ///
+  /// In en, this message translates to:
+  /// **'The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.'**
+  String get plateauAdvice;
+
+  /// Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)
+  ///
+  /// In en, this message translates to:
+  /// **'Weeks trained'**
+  String get progressStatWeeksTrained;
+
+  /// Stands in for a duration that has no value yet. Shaped like mm:ss so the row keeps its rhythm — zero is a measurement, absence is not, so this is never 00:00
+  ///
+  /// In en, this message translates to:
+  /// **'——:——'**
+  String get statAbsentDuration;
+
+  /// Stands in for a count that has no value yet
   ///
   /// In en, this message translates to:
   /// **'—'**
-  String get progressStatNoData;
+  String get statAbsentCount;
 
   /// Section header above the calendar heatmap on the Progress screen
   ///
@@ -1127,14 +1600,44 @@ abstract class AppLocalizations {
   /// Summary stat shown to the right of the heatmap legend
   ///
   /// In en, this message translates to:
-  /// **'{sessions} sessions · best week: {days} days'**
+  /// **'{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}'**
   String progressHeatmapStat(int sessions, int days);
+
+  /// Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md §2, tier A)
+  ///
+  /// In en, this message translates to:
+  /// **'Early on, the gain shows up in the struggle phase rather than in your total time.'**
+  String get progressChartEmptyWhy;
+
+  /// Shown over the dimmed heatmap grid before there is anything to plot
+  ///
+  /// In en, this message translates to:
+  /// **'Twelve weeks of training will fill this in.'**
+  String get progressHeatmapEmpty;
+
+  /// The one action that ends an empty state on the Progress screen; jumps to the Timer tab
+  ///
+  /// In en, this message translates to:
+  /// **'Start a hold'**
+  String get progressEmptyAction;
 
   /// Empty state shown in place of the progress chart when there is no data in the selected range
   ///
   /// In en, this message translates to:
-  /// **'Not enough holds yet to show a trend.'**
+  /// **'A line needs points — four sessions and the trend starts here.'**
   String get progressChartEmpty;
+
+  /// Legend label for the faint struggle-phase line on the progress chart (RESEARCH_ALIGNMENT.md §2), shown only in single-volume view
+  ///
+  /// In en, this message translates to:
+  /// **'Struggle phase'**
+  String get progressChartStruggleLegend;
+
+  /// Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get progressChartAverageLegend;
 
   /// Lung volume filter chip label showing all volumes overlaid on the progress chart; also reused for the All time range pill
   ///
@@ -1165,6 +1668,420 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View all'**
   String get progressViewAllHistory;
+
+  /// Menu item / tooltip that opens the IMST logging screen from the Timer screen
+  ///
+  /// In en, this message translates to:
+  /// **'Log an IMST session'**
+  String get imstLogOpen;
+
+  /// Tooltip on the Timer app-bar button that opens the log-a-session menu (IMST, rest, stretch)
+  ///
+  /// In en, this message translates to:
+  /// **'Log a session'**
+  String get logMenuTooltip;
+
+  /// Menu item to log a rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get logRestMenuItem;
+
+  /// Menu item to log a chest-wall stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get logStretchMenuItem;
+
+  /// Title of the rest-day logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log a rest day'**
+  String get logRestTitle;
+
+  /// Title of the stretching-session logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log stretching'**
+  String get logStretchTitle;
+
+  /// Explains why a rest day is a positive logged event (RESEARCH_ALIGNMENT.md §3)
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery is training. A logged rest day counts toward your week\'s structure rather than breaking a streak.'**
+  String get logRestBlurb;
+
+  /// States the weak evidence and small effect size for stretching (RESEARCH_ALIGNMENT.md §2)
+  ///
+  /// In en, this message translates to:
+  /// **'Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.'**
+  String get logStretchBlurb;
+
+  /// Confirm button on the rest/stretch logging sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Log it'**
+  String get logSessionConfirm;
+
+  /// Confirmation snackbar after logging a rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day logged'**
+  String get logRestSaved;
+
+  /// Confirmation snackbar after logging a stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching session logged'**
+  String get logStretchSaved;
+
+  /// History and heatmap-day-sheet row label for a logged rest day
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get historyRestRow;
+
+  /// History and heatmap-day-sheet row label for a logged stretching session
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get historyStretchRow;
+
+  /// Title of the IMST session logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'IMST session'**
+  String get imstLogTitle;
+
+  /// Section header above the breath counter on the IMST logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'Breaths'**
+  String get imstLogBreathsLabel;
+
+  /// Sub-label under the breath count showing the daily target
+  ///
+  /// In en, this message translates to:
+  /// **'of {target} target'**
+  String imstLogBreathsOfTarget(int target);
+
+  /// Label for the per-session resistance level stepper, seeded from Settings
+  ///
+  /// In en, this message translates to:
+  /// **'Resistance level'**
+  String get imstLogLevelLabel;
+
+  /// Tier note on the IMST logging screen — RESEARCH_ALIGNMENT.md §2 requires stating the direct breath-hold evidence is modest
+  ///
+  /// In en, this message translates to:
+  /// **'IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.'**
+  String get imstLogEvidenceNote;
+
+  /// Save button on the IMST logging screen
+  ///
+  /// In en, this message translates to:
+  /// **'Save session'**
+  String get imstLogSave;
+
+  /// Confirmation snackbar after saving an IMST session
+  ///
+  /// In en, this message translates to:
+  /// **'IMST session saved'**
+  String get imstLogSaved;
+
+  /// Error snackbar when saving an IMST session fails
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the session'**
+  String get imstLogSaveFailed;
+
+  /// Row label for an IMST session in the heatmap day sheet and history list
+  ///
+  /// In en, this message translates to:
+  /// **'IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}}'**
+  String imstDayRow(int breaths);
+
+  /// History list row for an IMST session that records the resistance level used
+  ///
+  /// In en, this message translates to:
+  /// **'IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}} · level {level}'**
+  String imstHistoryRow(int breaths, int level);
+
+  /// History type filter chip for IMST sessions
+  ///
+  /// In en, this message translates to:
+  /// **'IMST'**
+  String get historyFilterImst;
+
+  /// Label for the IMST configuration group inside Settings → Training
+  ///
+  /// In en, this message translates to:
+  /// **'Inspiratory muscle training (IMST)'**
+  String get settingsImstGroupLabel;
+
+  /// One-line explainer under the IMST settings group heading
+  ///
+  /// In en, this message translates to:
+  /// **'Craighead\'s protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can\'t take.'**
+  String get settingsImstIntro;
+
+  /// Label for the free-text IMST device name field
+  ///
+  /// In en, this message translates to:
+  /// **'Trainer'**
+  String get settingsImstDeviceNameLabel;
+
+  /// Placeholder for the IMST trainer name field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. POWERbreathe Plus'**
+  String get settingsImstDeviceNameHint;
+
+  /// Label for the IMST resistance dial position stepper
+  ///
+  /// In en, this message translates to:
+  /// **'Resistance level'**
+  String get settingsImstLevelLabel;
+
+  /// Label for the IMST target-breaths-per-day stepper (default 30)
+  ///
+  /// In en, this message translates to:
+  /// **'Daily breath target'**
+  String get settingsImstTargetLabel;
+
+  /// Label for the optional measured maximal inspiratory pressure stepper; shows an em dash when unset
+  ///
+  /// In en, this message translates to:
+  /// **'PImax (cmH₂O, optional)'**
+  String get settingsImstPimaxLabel;
+
+  /// Helper text under the PImax field, per PHASE_3D_research.md — honest beats precise-looking
+  ///
+  /// In en, this message translates to:
+  /// **'A numbered dial can\'t be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.'**
+  String get settingsImstPimaxNote;
+
+  /// Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)
+  ///
+  /// In en, this message translates to:
+  /// **'For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).'**
+  String get tablesEvidenceNote;
+
+  /// Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'
+  ///
+  /// In en, this message translates to:
+  /// **'Evidence'**
+  String get evidenceTierBadgePrefix;
+
+  /// Tier A label (RESEARCH_ALIGNMENT.md §1): controlled trials measure the claimed outcome
+  ///
+  /// In en, this message translates to:
+  /// **'Strong evidence'**
+  String get evidenceTierStrong;
+
+  /// Tier B label: the physiology follows but superiority over simpler options is unproven
+  ///
+  /// In en, this message translates to:
+  /// **'Mechanistically sound'**
+  String get evidenceTierMechanistic;
+
+  /// Tier C label: widely practised and face-valid, no controlled trials for this outcome
+  ///
+  /// In en, this message translates to:
+  /// **'Practice convention'**
+  String get evidenceTierConvention;
+
+  /// Tier X label: dangerous in the way the app is used; only ever shown as a warning
+  ///
+  /// In en, this message translates to:
+  /// **'Contraindicated'**
+  String get evidenceTierContraindicated;
+
+  /// One-line meaning of tier A, for the badge tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Controlled trials measured the outcome this mode claims to improve.'**
+  String get evidenceTierStrongDesc;
+
+  /// One-line meaning of tier B
+  ///
+  /// In en, this message translates to:
+  /// **'The physiology is understood, but its advantage over simpler training is unproven.'**
+  String get evidenceTierMechanisticDesc;
+
+  /// One-line meaning of tier C. Must not imply the mode is worse, only less proven
+  ///
+  /// In en, this message translates to:
+  /// **'Widely practised and reasonable, but not tested in controlled trials for this.'**
+  String get evidenceTierConventionDesc;
+
+  /// One-line meaning of tier X
+  ///
+  /// In en, this message translates to:
+  /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
+  String get evidenceTierContraindicatedDesc;
+
+  /// Settings > Data button that starts QR-paired LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Sync over Wi-Fi'**
+  String get lanSyncEntryButton;
+
+  /// Title of both the host (QR) and scan screens
+  ///
+  /// In en, this message translates to:
+  /// **'Sync over Wi-Fi'**
+  String get lanSyncTitle;
+
+  /// Shown on the host screen while the local server binds
+  ///
+  /// In en, this message translates to:
+  /// **'Starting…'**
+  String get lanSyncHostStarting;
+
+  /// Instruction above the QR code on the host screen
+  ///
+  /// In en, this message translates to:
+  /// **'Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.'**
+  String get lanSyncHostInstruction;
+
+  /// Honest limitation notice on the host screen — the exchange is not encrypted
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone on this Wi-Fi network can see the transfer while it runs.'**
+  String get lanSyncPlaintextNotice;
+
+  /// Warns the Windows user to expect the firewall prompt on first listen
+  ///
+  /// In en, this message translates to:
+  /// **'Windows may ask to allow BreathLab through the firewall — allow it.'**
+  String get lanSyncFirewallHint;
+
+  /// Shown on both screens while the merge is in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing…'**
+  String get lanSyncExchanging;
+
+  /// Heading of the success state after a LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Sync complete'**
+  String get lanSyncDoneTitle;
+
+  /// Button that restarts a failed LAN sync
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get lanSyncRetry;
+
+  /// Fallback error message for a LAN sync that failed without a specific reason
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed. Try again.'**
+  String get lanSyncFailedGeneric;
+
+  /// Instruction on the Android scan screen viewfinder
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the code shown on your PC.'**
+  String get lanSyncScanInstruction;
+
+  /// Shown when the scanned QR is valid but not a BreathLab pairing code
+  ///
+  /// In en, this message translates to:
+  /// **'That code isn\'t a BreathLab pairing code.'**
+  String get lanSyncScanNotRecognised;
+
+  /// Heading when camera permission is required to scan
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access needed'**
+  String get lanSyncCameraPermissionTitle;
+
+  /// Rationale shown when camera permission is denied
+  ///
+  /// In en, this message translates to:
+  /// **'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.'**
+  String get lanSyncCameraPermissionBody;
+
+  /// Title of the poster viewer screen and its Settings entry point
+  ///
+  /// In en, this message translates to:
+  /// **'Training system'**
+  String get posterScreenTitle;
+
+  /// Picker label for the overview poster — the week, technique, progression, safety
+  ///
+  /// In en, this message translates to:
+  /// **'Full system'**
+  String get posterFullSystem;
+
+  /// Picker label for the step-by-step hold walkthrough poster
+  ///
+  /// In en, this message translates to:
+  /// **'Doing a hold'**
+  String get posterDoingAHold;
+
+  /// Picker label for the progression-expectations poster
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get posterTimeline;
+
+  /// Action that shares the current poster as a PNG image
+  ///
+  /// In en, this message translates to:
+  /// **'Share this poster'**
+  String get posterShareImage;
+
+  /// Action that shares the whole poster set as one PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Share all three as PDF'**
+  String get posterSharePdf;
+
+  /// Shown when sharing a poster image or PDF fails
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share the poster.'**
+  String get posterShareFailed;
+
+  /// Link on a contextual tip that opens the research reader at the relevant section
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get contextualTipReadMore;
+
+  /// Settings → About row that opens the in-app research reader
+  ///
+  /// In en, this message translates to:
+  /// **'Research summary'**
+  String get settingsResearchSummaryLink;
+
+  /// App-bar title of the in-app research reader screen
+  ///
+  /// In en, this message translates to:
+  /// **'Research summary'**
+  String get reportReaderTitle;
+
+  /// Header of the reader's section index
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to section'**
+  String get reportReaderJumpTo;
+
+  /// Notice at the top of the reader — the report itself is not translated, only the app around it (RESEARCH_ALIGNMENT.md §5)
+  ///
+  /// In en, this message translates to:
+  /// **'This summary is available in English only.'**
+  String get reportReaderLanguageNotice;
+
+  /// Shown if the bundled report asset fails to load or parse
+  ///
+  /// In en, this message translates to:
+  /// **'The research summary could not be loaded.'**
+  String get reportReaderLoadFailed;
 }
 
 class _AppLocalizationsDelegate

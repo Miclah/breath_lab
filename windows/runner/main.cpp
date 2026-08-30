@@ -25,12 +25,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
 
   FlutterWindow window(project);
+
+  // Design Revision §4's default: wide enough for the two-column composition
+  // and tall enough that the Timer screen centres rather than scrolls.
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
+  Win32Window::Size size(1280, 860);
+  bool maximized = false;
+  const bool restored =
+      Win32Window::RestoreGeometry(&origin, &size, &maximized);
+
   if (!window.Create(L"breath_lab", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
+
+  if (restored && maximized) {
+    ::ShowWindow(window.GetHandle(), SW_SHOWMAXIMIZED);
+  }
 
   ::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {

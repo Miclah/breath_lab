@@ -1,9 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
+import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/models/imst_session.dart';
 import '../../domain/models/table_session.dart';
+import '../../domain/services/adherence_service.dart';
+import '../../domain/services/plateau_service.dart';
 import '../../domain/services/stats_service.dart';
 
 /// The single longest max hold ever recorded.
@@ -18,11 +23,86 @@ final avg30dProvider = Provider<Duration?>((ref) {
   return StatsService.averageWithinDays(holds, 30);
 });
 
-/// Consecutive training days ending today (or yesterday).
-final currentStreakProvider = Provider<int>((ref) {
+/// Distinct training weeks — the demoted "streak" (`RESEARCH_ALIGNMENT.md`
+/// §3.1), which no longer punishes a rest day.
+final trainingWeeksProvider = Provider<int>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  return StatsService.currentStreak(holds, tables);
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return StatsService.trainingWeeks(holds, tables, imst: imst);
+});
+
+/// This week's structure adherence — the headline metric that replaces the
+/// consecutive-days streak on the Timer screen.
+final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return AdherenceService.currentWeek(holds: holds, tables: tables, imst: imst);
+});
+
+/// Whether the last 28 days of Full-lung max holds have failed to beat the
+/// 28 before — surfaces the deload card on Progress (`RESEARCH_ALIGNMENT.md`
+/// §3.2).
+final plateauStatusProvider = Provider<PlateauStatus>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  return PlateauService.detect(holds);
+});
+
+/// Whether to nudge the user to retest their max (`RESEARCH_ALIGNMENT.md`
+/// §5: every 2–4 weeks) and how long it has been.
+class RetestPrompt {
+  const RetestPrompt({required this.show, this.weeksSinceLastMax = 0});
+
+  static const hidden = RetestPrompt(show: false);
+
+  final bool show;
+  final int weeksSinceLastMax;
+}
+
+/// Research names 2–4 weeks; nudge at three.
+const _retestAfterDays = 21;
+
+/// A dismissal quiets the prompt for a week — long enough not to nag, short
+/// enough that an ignored retest comes back.
+const _retestDismissalDays = 7;
+
+RetestPrompt computeRetestPrompt(
+  List<Hold> holds, {
+  int? dismissedAtMs,
+  DateTime? now,
+}) {
+  final today = _dateOnly(now ?? DateTime.now());
+  DateTime? lastMax;
+  for (final hold in holds) {
+    if (hold.type != HoldType.max) continue;
+    final day = _dateOnly(hold.createdAt);
+    if (lastMax == null || day.isAfter(lastMax)) lastMax = day;
+  }
+  if (lastMax == null) return RetestPrompt.hidden;
+
+  final daysSince = today.difference(lastMax).inDays;
+  if (daysSince < _retestAfterDays) return RetestPrompt.hidden;
+
+  if (dismissedAtMs != null) {
+    final dismissed = _dateOnly(
+      DateTime.fromMillisecondsSinceEpoch(dismissedAtMs),
+    );
+    if (dismissed.isAfter(lastMax) &&
+        today.difference(dismissed).inDays < _retestDismissalDays) {
+      return RetestPrompt.hidden;
+    }
+  }
+
+  return RetestPrompt(show: true, weeksSinceLastMax: daysSince ~/ 7);
+}
+
+final retestPromptProvider = FutureProvider<RetestPrompt>((ref) async {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final dismissedAt = await ref
+      .watch(settingsRepositoryProvider)
+      .getRetestPromptDismissedAt();
+  return computeRetestPrompt(holds, dismissedAtMs: dismissedAt);
 });
 
 /// Per-day session counts (holds + table sessions) for the calendar
@@ -43,7 +123,8 @@ class HeatmapData {
 final heatmapDataProvider = Provider<HeatmapData>((ref) {
   final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
   final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  return computeHeatmapData(holds, tables);
+  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  return computeHeatmapData(holds, tables, imst: imst);
 });
 
 /// Windows [holds]/[tables] down to the last 12 Monday-start weeks
@@ -51,6 +132,7 @@ final heatmapDataProvider = Provider<HeatmapData>((ref) {
 HeatmapData computeHeatmapData(
   List<Hold> holds,
   List<TableSession> tables, {
+  List<ImstSession> imst = const [],
   DateTime? now,
 }) {
   final today = _dateOnly(now ?? DateTime.now());
@@ -63,11 +145,15 @@ HeatmapData computeHeatmapData(
   final windowTables = tables
       .where((t) => !_dateOnly(t.createdAt).isBefore(windowStart))
       .toList();
+  final windowImst = imst
+      .where((s) => !_dateOnly(s.createdAt).isBefore(windowStart))
+      .toList();
 
   final counts = <DateTime, int>{};
   for (final createdAt in [
     ...windowHolds.map((h) => h.createdAt),
     ...windowTables.map((t) => t.createdAt),
+    ...windowImst.map((s) => s.createdAt),
   ]) {
     final date = _dateOnly(createdAt);
     counts[date] = (counts[date] ?? 0) + 1;
@@ -76,7 +162,11 @@ HeatmapData computeHeatmapData(
   return HeatmapData(
     countsByDate: counts,
     totalSessions: counts.values.fold(0, (sum, n) => sum + n),
-    bestWeekDays: StatsService.bestWeek(windowHolds, windowTables),
+    bestWeekDays: StatsService.bestWeek(
+      windowHolds,
+      windowTables,
+      imst: windowImst,
+    ),
   );
 }
 
@@ -89,6 +179,7 @@ class DailyHoldStat {
     required this.dayIndex,
     required this.best,
     required this.average,
+    required this.bestStruggle,
     required this.hasPb,
   });
 
@@ -100,6 +191,13 @@ class DailyHoldStat {
   final int dayIndex;
   final Duration best;
   final Duration average;
+
+  /// The longest struggle phase (total − time-to-first-contraction) among
+  /// the day's holds that had a contraction marked. `Duration.zero` when no
+  /// hold that day carried a marker — `RESEARCH_ALIGNMENT.md` §2 puts most
+  /// of a novice's measured gain here, not in [best].
+  final Duration bestStruggle;
+
   final bool hasPb;
 }
 
@@ -128,11 +226,19 @@ List<DailyHoldStat> computeDailyHoldStats(
       0,
       (sum, h) => sum + h.duration.inMilliseconds,
     );
+    final struggles = [
+      for (final h in dayHolds)
+        if (h.contractionTime != null && h.duration > h.contractionTime!)
+          h.duration - h.contractionTime!,
+    ];
     return DailyHoldStat(
       date: entry.key,
       dayIndex: entry.key.difference(windowStart).inDays,
       best: dayHolds.map((h) => h.duration).reduce((a, b) => a > b ? a : b),
       average: Duration(milliseconds: totalMs ~/ dayHolds.length),
+      bestStruggle: struggles.isEmpty
+          ? Duration.zero
+          : struggles.reduce((a, b) => a > b ? a : b),
       hasPb: dayHolds.any((h) => h.isPb),
     );
   }).toList();

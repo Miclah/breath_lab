@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/models/table_session.dart';
@@ -35,16 +36,23 @@ class HeatmapDaySheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final holds = (ref.watch(allHoldsProvider).valueOrNull ?? const [])
+    final dayHolds = (ref.watch(allHoldsProvider).valueOrNull ?? const [])
+        .where((h) => _isSameDay(h.createdAt, date))
+        .toList();
+    final holds = dayHolds
         .where(
           (h) =>
-              _isSameDay(h.createdAt, date) &&
               h.type != HoldType.co2 &&
-              h.type != HoldType.o2,
+              h.type != HoldType.o2 &&
+              !h.type.isEvent,
         )
         .toList();
+    final events = dayHolds.where((h) => h.type.isEvent).toList();
     final tables = (ref.watch(allTableSessionsProvider).valueOrNull ?? const [])
         .where((t) => _isSameDay(t.createdAt, date))
+        .toList();
+    final imst = (ref.watch(allImstSessionsProvider).valueOrNull ?? const [])
+        .where((s) => _isSameDay(s.createdAt, date))
         .toList();
 
     return SafeArea(
@@ -74,6 +82,18 @@ class HeatmapDaySheet extends ConsumerWidget {
                   TableType.co2 => l10n.tablesCo2Toggle,
                   TableType.o2 => l10n.tablesO2Toggle,
                 },
+              ),
+            for (final session in imst)
+              _DayTableTile(
+                time: DateFormat('HH:mm').format(session.createdAt),
+                label: l10n.imstDayRow(session.breaths),
+              ),
+            for (final event in events)
+              _DayTableTile(
+                time: DateFormat('HH:mm').format(event.createdAt),
+                label: event.type == HoldType.stretch
+                    ? l10n.historyStretchRow
+                    : l10n.historyRestRow,
               ),
             const SizedBox(height: Spacing.lg),
             SizedBox(

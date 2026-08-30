@@ -26,6 +26,35 @@ constexpr const wchar_t kGetPreferredBrightnessRegKey[] =
   L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 constexpr const wchar_t kGetPreferredBrightnessRegValue[] = L"AppsUseLightTheme";
 
+/// Where the window's last size, position and maximised state are kept.
+///
+/// Design Revision §4 asks for three things: a floor under the window size,
+/// a sensible default, and geometry that survives a restart. The registry
+/// does all three without adding a plugin dependency, which is what the phase
+/// asked for in preference to one.
+constexpr const wchar_t kWindowGeometryRegKey[] = L"Software\\BreathLab";
+constexpr const wchar_t kGeometryValueX[] = L"WindowX";
+constexpr const wchar_t kGeometryValueY[] = L"WindowY";
+constexpr const wchar_t kGeometryValueWidth[] = L"WindowWidth";
+constexpr const wchar_t kGeometryValueHeight[] = L"WindowHeight";
+constexpr const wchar_t kGeometryValueMaximized[] = L"WindowMaximized";
+
+/// Below this the compact layout has nowhere left to go. Logical pixels;
+/// scaled to the window's DPI before the OS is told about it.
+constexpr int kMinimumWidth = 400;
+constexpr int kMinimumHeight = 640;
+
+void WriteGeometryValue(HKEY key, const wchar_t* name, DWORD value) {
+  RegSetValueExW(key, name, 0, REG_DWORD,
+                 reinterpret_cast<const BYTE*>(&value), sizeof(value));
+}
+
+bool ReadGeometryValue(const wchar_t* name, DWORD* out) {
+  DWORD size = sizeof(DWORD);
+  return RegGetValueW(HKEY_CURRENT_USER, kWindowGeometryRegKey, name,
+                      RRF_RT_REG_DWORD, nullptr, out, &size) == ERROR_SUCCESS;
+}
+
 // The number of Win32Window objects that currently exist.
 static int g_active_window_count = 0;
 
@@ -179,7 +208,22 @@ Win32Window::MessageHandler(HWND hwnd,
                             WPARAM const wparam,
                             LPARAM const lparam) noexcept {
   switch (message) {
+    // The floor. Without it nothing stopped the window being dragged down to
+    // a width the compact layout cannot render.
+    case WM_GETMINMAXINFO: {
+      auto info = reinterpret_cast<MINMAXINFO*>(lparam);
+      const double scale_factor = GetDpiForWindow(hwnd) / 96.0;
+      info->ptMinTrackSize.x = Scale(kMinimumWidth, scale_factor);
+      info->ptMinTrackSize.y = Scale(kMinimumHeight, scale_factor);
+      // Deliberately no ptMaxTrackSize: Design Revision §4 rules out a
+      // maximum, because capping the window fights the maximise button and
+      // Snap Layouts, and the dead canvas it would be treating came from
+      // top-anchored content rather than from a large window.
+      return 0;
+    }
+
     case WM_DESTROY:
+      SaveGeometry(hwnd);
       window_handle_ = nullptr;
       Destroy();
       if (quit_on_close_) {
@@ -219,6 +263,63 @@ Win32Window::MessageHandler(HWND hwnd,
   }
 
   return DefWindowProc(window_handle_, message, wparam, lparam);
+}
+
+void Win32Window::SaveGeometry(HWND hwnd) {
+  WINDOWPLACEMENT placement{};
+  placement.length = sizeof(WINDOWPLACEMENT);
+  if (!GetWindowPlacement(hwnd, &placement)) {
+    return;
+  }
+
+  // rcNormalPosition rather than the current rect: a window closed while
+  // maximised should reopen maximised *and* remember what it restores to.
+  const RECT& rect = placement.rcNormalPosition;
+  const double scale_factor = GetDpiForWindow(hwnd) / 96.0;
+  if (scale_factor <= 0) {
+    return;
+  }
+
+  // Stored in logical pixels, because Create scales what it is given. Storing
+  // physical pixels would scale them a second time on a HiDPI monitor and the
+  // window would grow on every launch.
+  HKEY key = nullptr;
+  if (RegCreateKeyExW(HKEY_CURRENT_USER, kWindowGeometryRegKey, 0, nullptr, 0,
+                      KEY_WRITE, nullptr, &key, nullptr) != ERROR_SUCCESS) {
+    return;
+  }
+  WriteGeometryValue(key, kGeometryValueX,
+                     static_cast<DWORD>(rect.left / scale_factor));
+  WriteGeometryValue(key, kGeometryValueY,
+                     static_cast<DWORD>(rect.top / scale_factor));
+  WriteGeometryValue(key, kGeometryValueWidth,
+                     static_cast<DWORD>((rect.right - rect.left) / scale_factor));
+  WriteGeometryValue(key, kGeometryValueHeight,
+                     static_cast<DWORD>((rect.bottom - rect.top) / scale_factor));
+  WriteGeometryValue(key, kGeometryValueMaximized,
+                     placement.showCmd == SW_SHOWMAXIMIZED ? 1 : 0);
+  RegCloseKey(key);
+}
+
+// static
+bool Win32Window::RestoreGeometry(Point* origin, Size* size, bool* maximized) {
+  DWORD x = 0, y = 0, width = 0, height = 0, was_maximized = 0;
+  if (!ReadGeometryValue(kGeometryValueWidth, &width) ||
+      !ReadGeometryValue(kGeometryValueHeight, &height)) {
+    return false;
+  }
+  if (static_cast<int>(width) < kMinimumWidth ||
+      static_cast<int>(height) < kMinimumHeight) {
+    return false;
+  }
+  ReadGeometryValue(kGeometryValueX, &x);
+  ReadGeometryValue(kGeometryValueY, &y);
+  ReadGeometryValue(kGeometryValueMaximized, &was_maximized);
+
+  *origin = Point(x, y);
+  *size = Size(width, height);
+  *maximized = was_maximized != 0;
+  return true;
 }
 
 void Win32Window::Destroy() {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/repositories/holds_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../tables/providers.dart'
@@ -45,6 +46,10 @@ class TimerNotifier extends Notifier<TimerState> {
       holdElapsed: _holdStopwatch.elapsed,
     );
     ref.read(hapticsServiceProvider).holdStop();
+    // The hold is over, so nothing needs the screen kept awake any more.
+    // Waiting for reset() would hold the wakelock for as long as the result
+    // screen sits unanswered.
+    ref.read(wakelockServiceProvider).disable();
   }
 
   /// Record first contraction timestamp relative to hold start.
@@ -99,3 +104,48 @@ final selectedTagIdsProvider = StateProvider<Set<String>>((ref) => const {});
 final pendingCustomTagsProvider = StateProvider<List<String>>(
   (ref) => const [],
 );
+
+/// Today's max holds, oldest first — the session the user is in the middle
+/// of, in the order they did it.
+///
+/// Table rounds are excluded: eight co2 rounds would swamp the row and they
+/// are not what "today's holds" means on the timer screen.
+final todaysHoldsProvider = Provider<List<Hold>>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  return todaysHolds(holds);
+});
+
+/// Free text typed into the result screen's note field, before the hold is
+/// saved. Empty means no note — `Hold.notes` stays null rather than storing
+/// a blank string.
+final pendingNoteProvider = StateProvider<String>((ref) => '');
+
+/// The most recent saved max hold — the "last" a fresh result is compared
+/// against. Null before the very first one.
+///
+/// [allHoldsProvider] is newest-first, and the hold on the result screen is
+/// not saved yet, so the head of that list is genuinely the previous one.
+final lastMaxHoldProvider = Provider<Hold?>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  for (final hold in holds) {
+    if (hold.type == HoldType.max) return hold;
+  }
+  return null;
+});
+
+/// Pure form of [todaysHoldsProvider], with an injectable clock.
+List<Hold> todaysHolds(List<Hold> holds, {DateTime? now}) {
+  final today = now ?? DateTime.now();
+  final result =
+      holds
+          .where(
+            (h) =>
+                h.type == HoldType.max &&
+                h.createdAt.year == today.year &&
+                h.createdAt.month == today.month &&
+                h.createdAt.day == today.day,
+          )
+          .toList()
+        ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  return result;
+}

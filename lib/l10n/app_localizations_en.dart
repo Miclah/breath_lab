@@ -37,6 +37,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safetyRule2 => 'Never hyperventilate before a breath hold.';
 
   @override
+  String get recoveryTitle => 'Recovery breaths';
+
+  @override
+  String get recoveryBlurb =>
+      'Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.';
+
+  @override
+  String get recoveryStart => 'Guide me';
+
+  @override
+  String get recoveryDone => 'Done — take it easy for a minute.';
+
+  @override
+  String get recoveryCueInhale => 'Breathe in';
+
+  @override
+  String get recoveryCueHook => 'Hook — hold';
+
+  @override
+  String get recoveryCueExhale => 'Out';
+
+  @override
+  String recoveryProgress(String cue, int breath, int total) {
+    return '$cue · $breath/$total';
+  }
+
+  @override
+  String get sambaResponseTitle => 'Stop training for today';
+
+  @override
+  String get sambaResponseBody =>
+      'A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don\'t hold your breath again today, and take it easier next session.';
+
+  @override
+  String get sambaResponseSafety => 'Safety notes';
+
+  @override
+  String get sambaResponseAcknowledge => 'Got it';
+
+  @override
+  String get safetyRuleBuddy =>
+      'Have someone with you who can help. One person holds while another stays alert — never both at once.';
+
+  @override
+  String get safetyRuleMedical =>
+      'Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.';
+
+  @override
+  String get safetyRulePacking =>
+      'Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.';
+
+  @override
   String get safetyRule3 =>
       'Stop immediately if you feel dizzy, tingling, or loss of control.';
 
@@ -77,6 +129,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Exhale';
 
   @override
+  String get settingsBreathingRatioRule =>
+      'Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.';
+
+  @override
+  String get settingsBreathingRatioTooFast =>
+      'Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.';
+
+  @override
+  String get settingsBreathingRatioExhaleShort =>
+      'Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.';
+
+  @override
   String get settingsCo2Section => 'CO₂ table';
 
   @override
@@ -99,6 +163,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTablePreviewTitle => 'Preview';
+
+  @override
+  String settingsTablePreviewRoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rounds',
+      one: '1 round',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get ttsMilestoneOneMinute => 'One minute';
@@ -209,6 +284,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.';
 
   @override
+  String get settingsFocusModeExplanationDesktop =>
+      'BreathLab will silence its own non-critical notifications during a session.';
+
+  @override
   String get settingsSoundHapticsSection => 'Sound & haptics';
 
   @override
@@ -254,6 +333,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetLabel => 'Reset all data';
 
   @override
+  String get settingsResetSubtitle =>
+      'Deletes every hold, table session and setting on this device.';
+
+  @override
   String get settingsResetConfirmTitle => 'Reset all data?';
 
   @override
@@ -262,6 +345,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsResetButton => 'Reset';
+
+  @override
+  String get settingsDataSection => 'Data';
+
+  @override
+  String get settingsDeviceNameLabel => 'Device name';
+
+  @override
+  String get settingsLastSyncNever => 'Never synced';
+
+  @override
+  String settingsLastSyncWith(String when, String device) {
+    return 'Last synced $when with $device';
+  }
+
+  @override
+  String get settingsExportButton => 'Export';
+
+  @override
+  String get settingsShareButton => 'Share';
+
+  @override
+  String get settingsImportButton => 'Import';
+
+  @override
+  String get settingsExportSuccess => 'Backup saved.';
+
+  @override
+  String get settingsExportFailed => 'Couldn\'t save the backup.';
+
+  @override
+  String get settingsImportFailedTitle => 'Import failed';
+
+  @override
+  String get settingsImportFailedMalformed =>
+      'This file isn\'t a valid BreathLab backup.';
+
+  @override
+  String get settingsImportFailedFormat =>
+      'This file isn\'t a BreathLab backup, or was made by an incompatible version.';
+
+  @override
+  String get settingsImportFailedSchema =>
+      'This backup was made by a newer version of BreathLab. Update the app on this device first.';
+
+  @override
+  String get settingsImportFailedGeneric =>
+      'Something went wrong reading this file.';
+
+  @override
+  String get settingsImportSummaryTitle => 'Import complete';
+
+  @override
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  ) {
+    return 'Added $holdsAdded holds, $sessionsAdded sessions. Updated $holdsUpdated holds. Synced with $device.';
+  }
+
+  @override
+  String get tagAddConfirm => 'Add';
+
+  @override
+  String get tagAddCancel => 'Cancel';
+
+  @override
+  String get settingsSaveFailed => 'Couldn\'t save that setting.';
+
+  @override
+  String get resultSaveFailed => 'Couldn\'t save that hold. Try again.';
 
   @override
   String get settingsThemeLabel => 'Theme';
@@ -307,6 +463,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prepGoLabel => 'Go!';
 
   @override
+  String get prepGetReadyLabel => 'Get ready';
+
+  @override
+  String get prepCancel => 'Cancel';
+
+  @override
   String get prepBreatheIn => 'Breathe in...';
 
   @override
@@ -348,6 +510,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timerStateLabelDone => 'done';
 
   @override
+  String timerStatusAdherence(int percent) {
+    return '$percent% this week';
+  }
+
+  @override
+  String get settingsJumpTo => 'Jump to';
+
+  @override
+  String tablesEstimatedDuration(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'About $minutes minutes in total',
+      one: 'About 1 minute in total',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesSessionSummaryTitle => 'This session';
+
+  @override
+  String get timerSideLastSession => 'Last session';
+
+  @override
+  String timerSideSessionHolds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count holds',
+      one: '1 hold',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timerSideNoHistory =>
+      'Nothing logged yet. Your first hold sets the baseline.';
+
+  @override
+  String get timerSideShortcuts => 'Shortcuts';
+
+  @override
+  String get timerSideShortcutStart => 'Start / stop hold';
+
+  @override
+  String get timerSideShortcutContraction => 'Mark contraction';
+
+  @override
+  String get timerSideShortcutCancel => 'Cancel';
+
+  @override
+  String get resultAddNote => 'Add a note';
+
+  @override
+  String get resultNoteHint => 'How did it feel?';
+
+  @override
+  String get resultRemoveNote => 'Remove note';
+
+  @override
+  String get resultNewPbBadge => 'NEW PB';
+
+  @override
+  String resultVsLast(String delta) {
+    return '$delta vs last';
+  }
+
+  @override
+  String resultVsPb(String delta) {
+    return '$delta vs PB';
+  }
+
+  @override
+  String get resultFirstHold =>
+      'Your first hold — this is the baseline everything else is measured from.';
+
+  @override
+  String get resultTotal => 'Total';
+
+  @override
+  String get resultStruggleNote =>
+      'Struggle phase is where most of the measured improvement in novices shows up.';
+
+  @override
+  String get resultNoContractionTitle => 'No contraction marked';
+
+  @override
+  String get resultNoContractionHintTouch =>
+      'Double-tap the ring during a hold to mark your first contraction.';
+
+  @override
+  String get resultNoContractionHintKeyboard =>
+      'Press C during a hold to mark your first contraction.';
+
+  @override
+  String get resultNoContractionWhy =>
+      'The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.';
+
+  @override
   String get resultSaveButton => 'Save';
 
   @override
@@ -369,13 +631,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lungVolEmpty => 'Empty';
 
   @override
-  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+  String get lungVolFullHint => 'Full lungs';
 
   @override
-  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+  String get lungVolFrcHint => 'Passive exhale';
 
   @override
-  String get lungVolEmptyHint => 'Po výdychu · After exhale';
+  String get lungVolEmptyHint => 'After exhale';
 
   @override
   String get tagTired => 'Tired';
@@ -421,6 +683,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyFilterMax => 'Max';
+
+  @override
+  String historyTagCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tags',
+      one: '1 tag',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get historyFilterTags => 'Tags';
@@ -496,7 +769,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tablesPhaseLabelRest => 'rest';
 
   @override
+  String get tablesSkipRoundButton => 'Skip round';
+
+  @override
+  String get tablesEndSessionButton => 'End session';
+
+  @override
   String get tablesSummaryTitle => 'Session complete';
+
+  @override
+  String get tablesSummaryStoppedTitle => 'Session stopped';
 
   @override
   String tablesSummaryRounds(int completed, int total) {
@@ -530,10 +812,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressStatAvg30d => '30d avg';
 
   @override
-  String get progressStatStreak => 'Streak';
+  String get retestPromptTitle => 'Time to retest';
 
   @override
-  String get progressStatNoData => '—';
+  String retestPromptBody(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: '$weeks weeks',
+      one: 'a week',
+    );
+    return 'Your last max hold was $_temp0 ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.';
+  }
+
+  @override
+  String get retestPromptDismiss => 'Dismiss';
+
+  @override
+  String get plateauTitle => 'Progress has stalled';
+
+  @override
+  String plateauBody(String recent, String previous) {
+    return 'Your best Full-lung hold over the last four weeks ($recent) hasn\'t beaten the four weeks before ($previous).';
+  }
+
+  @override
+  String get plateauAdvice =>
+      'The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.';
+
+  @override
+  String get progressStatWeeksTrained => 'Weeks trained';
+
+  @override
+  String get statAbsentDuration => '——:——';
+
+  @override
+  String get statAbsentCount => '—';
 
   @override
   String get progressHeatmapTitle => 'Last 12 weeks';
@@ -546,11 +860,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String progressHeatmapStat(int sessions, int days) {
-    return '$sessions sessions · best week: $days days';
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions sessions',
+      one: '1 session',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return '$_temp0 · best week: $_temp1';
   }
 
   @override
-  String get progressChartEmpty => 'Not enough holds yet to show a trend.';
+  String get progressChartEmptyWhy =>
+      'Early on, the gain shows up in the struggle phase rather than in your total time.';
+
+  @override
+  String get progressHeatmapEmpty =>
+      'Twelve weeks of training will fill this in.';
+
+  @override
+  String get progressEmptyAction => 'Start a hold';
+
+  @override
+  String get progressChartEmpty =>
+      'A line needs points — four sessions and the trend starts here.';
+
+  @override
+  String get progressChartStruggleLegend => 'Struggle phase';
+
+  @override
+  String get progressChartAverageLegend => 'Average';
 
   @override
   String get progressChartFilterAll => 'All';
@@ -566,4 +910,247 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressViewAllHistory => 'View all';
+
+  @override
+  String get imstLogOpen => 'Log an IMST session';
+
+  @override
+  String get logMenuTooltip => 'Log a session';
+
+  @override
+  String get logRestMenuItem => 'Rest day';
+
+  @override
+  String get logStretchMenuItem => 'Stretching';
+
+  @override
+  String get logRestTitle => 'Log a rest day';
+
+  @override
+  String get logStretchTitle => 'Log stretching';
+
+  @override
+  String get logRestBlurb =>
+      'Recovery is training. A logged rest day counts toward your week\'s structure rather than breaking a streak.';
+
+  @override
+  String get logStretchBlurb =>
+      'Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.';
+
+  @override
+  String get logSessionConfirm => 'Log it';
+
+  @override
+  String get logRestSaved => 'Rest day logged';
+
+  @override
+  String get logStretchSaved => 'Stretching session logged';
+
+  @override
+  String get historyRestRow => 'Rest day';
+
+  @override
+  String get historyStretchRow => 'Stretching';
+
+  @override
+  String get imstLogTitle => 'IMST session';
+
+  @override
+  String get imstLogBreathsLabel => 'Breaths';
+
+  @override
+  String imstLogBreathsOfTarget(int target) {
+    return 'of $target target';
+  }
+
+  @override
+  String get imstLogLevelLabel => 'Resistance level';
+
+  @override
+  String get imstLogEvidenceNote =>
+      'IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.';
+
+  @override
+  String get imstLogSave => 'Save session';
+
+  @override
+  String get imstLogSaved => 'IMST session saved';
+
+  @override
+  String get imstLogSaveFailed => 'Couldn\'t save the session';
+
+  @override
+  String imstDayRow(int breaths) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths breaths',
+      one: '1 breath',
+    );
+    return 'IMST · $_temp0';
+  }
+
+  @override
+  String imstHistoryRow(int breaths, int level) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths breaths',
+      one: '1 breath',
+    );
+    return 'IMST · $_temp0 · level $level';
+  }
+
+  @override
+  String get historyFilterImst => 'IMST';
+
+  @override
+  String get settingsImstGroupLabel => 'Inspiratory muscle training (IMST)';
+
+  @override
+  String get settingsImstIntro =>
+      'Craighead\'s protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can\'t take.';
+
+  @override
+  String get settingsImstDeviceNameLabel => 'Trainer';
+
+  @override
+  String get settingsImstDeviceNameHint => 'e.g. POWERbreathe Plus';
+
+  @override
+  String get settingsImstLevelLabel => 'Resistance level';
+
+  @override
+  String get settingsImstTargetLabel => 'Daily breath target';
+
+  @override
+  String get settingsImstPimaxLabel => 'PImax (cmH₂O, optional)';
+
+  @override
+  String get settingsImstPimaxNote =>
+      'A numbered dial can\'t be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.';
+
+  @override
+  String get tablesEvidenceNote =>
+      'For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).';
+
+  @override
+  String get evidenceTierBadgePrefix => 'Evidence';
+
+  @override
+  String get evidenceTierStrong => 'Strong evidence';
+
+  @override
+  String get evidenceTierMechanistic => 'Mechanistically sound';
+
+  @override
+  String get evidenceTierConvention => 'Practice convention';
+
+  @override
+  String get evidenceTierContraindicated => 'Contraindicated';
+
+  @override
+  String get evidenceTierStrongDesc =>
+      'Controlled trials measured the outcome this mode claims to improve.';
+
+  @override
+  String get evidenceTierMechanisticDesc =>
+      'The physiology is understood, but its advantage over simpler training is unproven.';
+
+  @override
+  String get evidenceTierConventionDesc =>
+      'Widely practised and reasonable, but not tested in controlled trials for this.';
+
+  @override
+  String get evidenceTierContraindicatedDesc =>
+      'Unsafe in the way this app is used. Shown only to warn against it.';
+
+  @override
+  String get lanSyncEntryButton => 'Sync over Wi-Fi';
+
+  @override
+  String get lanSyncTitle => 'Sync over Wi-Fi';
+
+  @override
+  String get lanSyncHostStarting => 'Starting…';
+
+  @override
+  String get lanSyncHostInstruction =>
+      'Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.';
+
+  @override
+  String get lanSyncPlaintextNotice =>
+      'Anyone on this Wi-Fi network can see the transfer while it runs.';
+
+  @override
+  String get lanSyncFirewallHint =>
+      'Windows may ask to allow BreathLab through the firewall — allow it.';
+
+  @override
+  String get lanSyncExchanging => 'Syncing…';
+
+  @override
+  String get lanSyncDoneTitle => 'Sync complete';
+
+  @override
+  String get lanSyncRetry => 'Try again';
+
+  @override
+  String get lanSyncFailedGeneric => 'Sync failed. Try again.';
+
+  @override
+  String get lanSyncScanInstruction =>
+      'Point the camera at the code shown on your PC.';
+
+  @override
+  String get lanSyncScanNotRecognised =>
+      'That code isn\'t a BreathLab pairing code.';
+
+  @override
+  String get lanSyncCameraPermissionTitle => 'Camera access needed';
+
+  @override
+  String get lanSyncCameraPermissionBody =>
+      'BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.';
+
+  @override
+  String get posterScreenTitle => 'Training system';
+
+  @override
+  String get posterFullSystem => 'Full system';
+
+  @override
+  String get posterDoingAHold => 'Doing a hold';
+
+  @override
+  String get posterTimeline => 'Timeline';
+
+  @override
+  String get posterShareImage => 'Share this poster';
+
+  @override
+  String get posterSharePdf => 'Share all three as PDF';
+
+  @override
+  String get posterShareFailed => 'Could not share the poster.';
+
+  @override
+  String get contextualTipReadMore => 'Read more';
+
+  @override
+  String get settingsResearchSummaryLink => 'Research summary';
+
+  @override
+  String get reportReaderTitle => 'Research summary';
+
+  @override
+  String get reportReaderJumpTo => 'Jump to section';
+
+  @override
+  String get reportReaderLanguageNotice =>
+      'This summary is available in English only.';
+
+  @override
+  String get reportReaderLoadFailed =>
+      'The research summary could not be loaded.';
 }

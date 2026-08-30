@@ -1,13 +1,15 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
+import '../../domain/services/tts_service.dart' show TtsLanguageSupport;
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/segment_label.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart' show ttsServiceProvider;
-import 'section_header.dart';
 
 /// Settings → Ambient mode section. Spoken callouts, TTS voice language,
 /// persistent notification, PiP, OLED hold screen, and focus mode toggles.
@@ -36,7 +38,6 @@ class AmbientSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsAmbientSection),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,
@@ -82,12 +83,9 @@ class AmbientSection extends ConsumerWidget {
                 ],
                 selected: {calloutsMode},
                 showSelectedIcon: false,
-                onSelectionChanged: (value) async {
-                  await ref
-                      .read(settingsRepositoryProvider)
-                      .setSpokenCalloutsMode(value.first);
-                  ref.invalidate(spokenCalloutsModeProvider);
-                },
+                onSelectionChanged: (value) => ref
+                    .read(spokenCalloutsModeProvider.notifier)
+                    .set(value.first),
               ),
               const SizedBox(height: Spacing.xl),
               Text(
@@ -111,59 +109,56 @@ class AmbientSection extends ConsumerWidget {
                   ),
                 ],
                 selected: {ttsLanguage},
+                showSelectedIcon: false,
                 onSelectionChanged: (value) async {
-                  await ref
-                      .read(settingsRepositoryProvider)
-                      .setTtsLanguage(value.first);
-                  ref.invalidate(ttsLanguageProvider);
-                  if (value.first == 'sk' &&
-                      !await ref
-                          .read(ttsServiceProvider)
-                          .isLanguageAvailable('sk-SK')) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.settingsTtsVoiceMissing)),
-                    );
-                  }
+                  await ref.read(ttsLanguageProvider.notifier).set(value.first);
+                  if (value.first != 'sk') return;
+                  // Warn only when the engine actually told us the voice is
+                  // missing. `unknown` means the platform gave us no way to
+                  // ask (flutter_tts has no Windows binding for the check) —
+                  // warning then would show a false alarm on every Windows
+                  // machine, including ones with a Slovak voice installed.
+                  final support = await ref
+                      .read(ttsServiceProvider)
+                      .languageSupport('sk-SK');
+                  if (support != TtsLanguageSupport.unavailable) return;
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.settingsTtsVoiceMissing)),
+                  );
                 },
               ),
               const SizedBox(height: Spacing.md),
             ],
           ),
         ),
-        _AmbientToggleRow(
-          icon: Icons.notifications_active_outlined,
-          label: l10n.settingsAmbientPersistentNotifLabel,
-          subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
-          value: persistentNotifEnabled,
-          onChanged: (v) async {
-            await ref
-                .read(settingsRepositoryProvider)
-                .setAmbientPersistentNotifEnabled(v);
-            ref.invalidate(ambientPersistentNotifEnabledProvider);
-          },
-        ),
-        _AmbientToggleRow(
-          icon: Icons.picture_in_picture_alt_outlined,
-          label: l10n.settingsAmbientPipLabel,
-          subtitle: l10n.settingsAmbientPipSubtitle,
-          value: pipEnabled,
-          onChanged: (v) async {
-            await ref.read(settingsRepositoryProvider).setAmbientPipEnabled(v);
-            ref.invalidate(ambientPipEnabledProvider);
-          },
-        ),
+        // Persistent notification and PiP are backed by Android-only
+        // services (NotificationService, PipService — both no-op off
+        // Android), so on Windows these toggles would control nothing.
+        if (Platform.isAndroid) ...[
+          _AmbientToggleRow(
+            icon: Icons.notifications_active_outlined,
+            label: l10n.settingsAmbientPersistentNotifLabel,
+            subtitle: l10n.settingsAmbientPersistentNotifSubtitle,
+            value: persistentNotifEnabled,
+            onChanged: ref
+                .read(ambientPersistentNotifEnabledProvider.notifier)
+                .set,
+          ),
+          _AmbientToggleRow(
+            icon: Icons.picture_in_picture_alt_outlined,
+            label: l10n.settingsAmbientPipLabel,
+            subtitle: l10n.settingsAmbientPipSubtitle,
+            value: pipEnabled,
+            onChanged: ref.read(ambientPipEnabledProvider.notifier).set,
+          ),
+        ],
         _AmbientToggleRow(
           icon: Icons.brightness_1_outlined,
           label: l10n.settingsAmbientOledHoldLabel,
           subtitle: l10n.settingsAmbientOledHoldSubtitle,
           value: oledHoldEnabled,
-          onChanged: (v) async {
-            await ref
-                .read(settingsRepositoryProvider)
-                .setAmbientOledHoldEnabled(v);
-            ref.invalidate(ambientOledHoldEnabledProvider);
-          },
+          onChanged: ref.read(ambientOledHoldEnabledProvider.notifier).set,
         ),
         if (oledHoldEnabled)
           Padding(
@@ -199,12 +194,10 @@ class AmbientSection extends ConsumerWidget {
                     ),
                   ],
                   selected: {brightnessOverride},
-                  onSelectionChanged: (value) async {
-                    await ref
-                        .read(settingsRepositoryProvider)
-                        .setAmbientBrightnessOverride(value.first);
-                    ref.invalidate(ambientBrightnessOverrideProvider);
-                  },
+                  showSelectedIcon: false,
+                  onSelectionChanged: (value) => ref
+                      .read(ambientBrightnessOverrideProvider.notifier)
+                      .set(value.first),
                 ),
               ],
             ),
@@ -214,10 +207,7 @@ class AmbientSection extends ConsumerWidget {
           label: l10n.settingsFocusModeLabel,
           subtitle: '',
           value: focusModeEnabled,
-          onChanged: (v) async {
-            await ref.read(settingsRepositoryProvider).setFocusModeEnabled(v);
-            ref.invalidate(focusModeEnabledProvider);
-          },
+          onChanged: ref.read(focusModeEnabledProvider.notifier).set,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -227,7 +217,9 @@ class AmbientSection extends ConsumerWidget {
             Spacing.md,
           ),
           child: Text(
-            l10n.settingsFocusModeExplanation,
+            Platform.isAndroid
+                ? l10n.settingsFocusModeExplanation
+                : l10n.settingsFocusModeExplanationDesktop,
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(color: c.textTertiary),

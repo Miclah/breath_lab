@@ -7,12 +7,16 @@ import '../../domain/services/co2_table_calculator.dart';
 import '../../domain/services/o2_table_calculator.dart';
 import '../../domain/services/table_session_state.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/bottom_scroll_fade.dart';
+import '../../shared/widgets/adaptive_page.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import 'providers.dart';
 import 'round_list_item.dart';
 import 'session_summary_view.dart';
+import 'table_info_panel.dart';
 import 'table_session_notifier.dart';
+import '../../shared/widgets/primary_action.dart';
 
 List<TableRoundPlan> _computeRounds(
   TableType type,
@@ -51,6 +55,55 @@ class TablesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navTables)),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Asked of the page, not the window: the navigation rail takes its
+          // share before this screen sees any.
+          final split = AdaptivePage.showsSide(
+            constraints.maxWidth,
+            maxWidth: ContentWidth.list,
+          );
+          return _body(context, ref, l10n, split);
+        },
+      ),
+    );
+  }
+
+  Widget _roundRow(
+    WidgetRef ref,
+    AppLocalizations l10n,
+    TableSessionState session,
+    bool sessionActive,
+    List<TableRoundPlan> rounds,
+    int i,
+  ) {
+    final itemState = _stateFor(session, sessionActive, i);
+    final isActive = itemState == RoundItemState.active;
+    return RoundListItem(
+      number: i + 1,
+      round: rounds[i],
+      state: itemState,
+      elapsedMs: isActive ? session.elapsed.inMilliseconds : null,
+      phaseLabel: !isActive
+          ? null
+          : session.isHolding
+          ? l10n.tablesPhaseLabelHold
+          : l10n.tablesPhaseLabelRest,
+      onStopHold: isActive && session.isHolding
+          ? () => ref.read(tableSessionProvider.notifier).stopHoldEarly()
+          : null,
+    );
+  }
+
+  Widget _body(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    bool split,
+  ) {
     final selectedType = ref.watch(selectedTableTypeProvider);
     final maxMsAsync = ref.watch(currentMaxMsProvider);
     final co2Config =
@@ -60,12 +113,36 @@ class TablesScreen extends ConsumerWidget {
     final session = ref.watch(tableSessionProvider);
     final sessionActive = !session.isIdle;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navTables)),
-      body: Column(
+    // Design §Layout caps the round list at 480. Eight short rows do not get
+    // easier to read wider — they get further from the label that says which
+    // column is which.
+    //
+    // Page padding is the page's now; what the rows below still carry is row
+    // inset, which is meant to add to it rather than replace it.
+    return AdaptivePage(
+      maxWidth: ContentWidth.list,
+      // Gone once the session is done: the summary view is the primary panel
+      // then, and Design Revision §2 allows a screen exactly one. Two panels
+      // both claiming to be the subject is a screen with two subjects.
+      side: !split || session.isDone
+          ? null
+          : _TablesSide(
+              maxMs: maxMsAsync.valueOrNull,
+              rounds: sessionActive
+                  ? session.rounds
+                  : maxMsAsync.valueOrNull == null
+                  ? const []
+                  : _computeRounds(
+                      selectedType,
+                      maxMsAsync.value!,
+                      co2Config: co2Config,
+                      o2Config: o2Config,
+                    ),
+            ),
+      child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(Spacing.lg),
+            padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
             child: _TablePillToggle(enabled: !sessionActive),
           ),
           Expanded(
@@ -100,62 +177,46 @@ class TablesScreen extends ConsumerWidget {
                     if (session.isDone)
                       Expanded(child: SessionSummaryView(session: session))
                     else ...[
-                      _InfoCard(maxMs: maxMs, l10n: l10n),
+                      // Inline only where there is no side column to hold
+                      // it — otherwise the same fact would appear twice.
+                      if (!split)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: Spacing.lg),
+                          child: TableInfoPanel(maxMs: maxMs, rounds: rounds),
+                        ),
                       Expanded(
-                        child: ListView.separated(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Spacing.lg,
+                        child: BottomScrollFade(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.only(bottom: Spacing.xl),
+                            child: RoundList(
+                              rows: [
+                                for (var i = 0; i < rounds.length; i++)
+                                  _roundRow(
+                                    ref,
+                                    l10n,
+                                    session,
+                                    sessionActive,
+                                    rounds,
+                                    i,
+                                  ),
+                              ],
+                            ),
                           ),
-                          itemCount: rounds.length,
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: Spacing.sm),
-                          itemBuilder: (context, i) {
-                            final itemState = _stateFor(
-                              session,
-                              sessionActive,
-                              i,
-                            );
-                            final isActive = itemState == RoundItemState.active;
-                            return RoundListItem(
-                              number: i + 1,
-                              round: rounds[i],
-                              state: itemState,
-                              elapsedMs: isActive
-                                  ? session.elapsed.inMilliseconds
-                                  : null,
-                              phaseLabel: !isActive
-                                  ? null
-                                  : session.isHolding
-                                  ? l10n.tablesPhaseLabelHold
-                                  : l10n.tablesPhaseLabelRest,
-                              onStopHold: isActive && session.isHolding
-                                  ? () => ref
-                                        .read(tableSessionProvider.notifier)
-                                        .stopHoldEarly()
-                                  : null,
-                            );
-                          },
                         ),
                       ),
                     ],
                     const SizedBox(height: Spacing.lg),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.lg,
-                      ),
-                      child: _SessionActionButton(
-                        sessionActive: sessionActive,
-                        isDone: session.isDone,
-                        l10n: l10n,
-                        onStart: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .start(selectedType, rounds, maxMs),
-                        onReset: () =>
-                            ref.read(tableSessionProvider.notifier).reset(),
-                        onStop: () => ref
-                            .read(tableSessionProvider.notifier)
-                            .stopSession(),
-                      ),
+                    _SessionActionButton(
+                      sessionActive: sessionActive,
+                      isDone: session.isDone,
+                      l10n: l10n,
+                      onStart: () => ref
+                          .read(tableSessionProvider.notifier)
+                          .start(selectedType, rounds, maxMs),
+                      onReset: () =>
+                          ref.read(tableSessionProvider.notifier).reset(),
+                      onStop: () =>
+                          ref.read(tableSessionProvider.notifier).stopSession(),
                     ),
                     const SizedBox(height: Spacing.lg),
                   ],
@@ -191,28 +252,24 @@ class _SessionActionButton extends StatelessWidget {
     final c = context.appColors;
 
     if (sessionActive && !isDone) {
-      return SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: c.danger,
-            foregroundColor: c.textOnDanger,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radius.lg),
-            ),
+      // Same reasoning as the hold Stop button: this one is on screen for
+      // the whole ~15-minute session, so it cannot be a red slab either.
+      return PrimaryAction(
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: c.dangerText,
+            side: BorderSide(color: c.danger, width: 0.5),
           ),
           onPressed: onStop,
-          child: Text(l10n.timerStopButton),
+          child: Text(l10n.tablesEndSessionButton),
         ),
       );
     }
 
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
+    return PrimaryAction(
       child: FilledButton(
         style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Radius.lg),
           ),
@@ -298,9 +355,10 @@ class _PillSegment extends StatelessWidget {
         ),
         child: Text(
           label,
+          // Design caps weight at 500 — w600 reads as assertive, which is
+          // the opposite of the brief for this app.
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: selected ? c.textOnPrimary : c.textTertiary,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -308,31 +366,18 @@ class _PillSegment extends StatelessWidget {
   }
 }
 
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({required this.maxMs, required this.l10n});
+class _TablesSide extends StatelessWidget {
+  const _TablesSide({required this.maxMs, required this.rounds});
 
-  final int maxMs;
-  final AppLocalizations l10n;
+  final int? maxMs;
+  final List<TableRoundPlan> rounds;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.appColors;
+    if (maxMs == null) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Spacing.lg, 0, Spacing.lg, Spacing.lg),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(Spacing.md),
-        decoration: BoxDecoration(
-          color: c.surfaceElevated,
-          borderRadius: BorderRadius.circular(Radius.md),
-        ),
-        child: Text(
-          l10n.tablesBasedOnMax(formatRoundMs(maxMs)),
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
-        ),
-      ),
+      padding: const EdgeInsets.only(top: Spacing.lg),
+      child: TableInfoPanel(maxMs: maxMs!, rounds: rounds, stacked: true),
     );
   }
 }

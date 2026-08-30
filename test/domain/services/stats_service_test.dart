@@ -205,4 +205,27 @@ void main() {
       expect(StatsService.bestWeek([], []), 0);
     });
   });
+
+  group('trainingWeeks', () {
+    test('counts distinct Monday-start weeks with any session', () {
+      final monday = DateTime(2026, 7, 13);
+      final holds = [
+        _hold(duration: const Duration(minutes: 1), createdAt: monday),
+        _hold(
+          duration: const Duration(minutes: 1),
+          createdAt: monday.add(const Duration(days: 2)),
+        ),
+        _hold(
+          duration: const Duration(minutes: 1),
+          createdAt: monday.subtract(const Duration(days: 7)),
+        ),
+      ];
+      // Two sessions in one week, one in another → two weeks.
+      expect(StatsService.trainingWeeks(holds, []), 2);
+    });
+
+    test('is zero for empty history', () {
+      expect(StatsService.trainingWeeks([], []), 0);
+    });
+  });
 }

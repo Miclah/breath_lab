@@ -31,7 +31,9 @@ class PipContent extends ConsumerWidget {
         children: [
           Text(
             _fmtDuration(elapsed),
-            style: BreathLabTypography.timerDisplay.copyWith(
+            style: BreathLabTypography.displayLg.copyWith(
+              // The PiP window is small and the caller resizes it; 64 is the
+              // size that fits, not a scale step.
               fontSize: 64,
               color: c.primary,
             ),
@@ -51,7 +53,7 @@ class PipContent extends ConsumerWidget {
               const SizedBox(width: Spacing.xs),
               Text(
                 AppLocalizations.of(context)!.appTitle,
-                style: BreathLabTypography.caption.copyWith(
+                style: BreathLabTypography.micro.copyWith(
                   color: c.textSecondary,
                 ),
               ),

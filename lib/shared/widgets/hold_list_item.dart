@@ -7,6 +7,7 @@ import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 
 String fmtHoldDuration(Duration d) {
   final m = d.inMinutes.toString().padLeft(2, '0');
@@ -46,11 +47,9 @@ class PbBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          color: c.primaryText,
-        ),
+        // Was 10 px at w600: below the scale's 11 px floor and above its
+        // 500 weight cap, in one style. `micro` is where badges land.
+        style: BreathLabTypography.micro.copyWith(color: c.primaryText),
       ),
     );
   }
@@ -82,7 +81,7 @@ class HoldListItem extends ConsumerWidget {
         children: [
           Text(
             fmtHoldDuration(hold.duration),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: BreathLabTypography.numericMd.copyWith(color: c.textPrimary),
           ),
           if (hold.isPb) ...[
             const SizedBox(width: Spacing.xs),
@@ -101,12 +100,12 @@ class HoldListItem extends ConsumerWidget {
         children: [
           Text(
             lungVolumeLabel(hold.lungVolume, l10n),
-            style: TextStyle(fontSize: 12, color: c.textTertiary),
+            style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
           ),
           if (hold.contractionTime != null) ...[
             Text(
               '  ·  ',
-              style: TextStyle(fontSize: 12, color: c.textTertiary),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             ),
             Container(
               width: 5,
@@ -119,31 +118,20 @@ class HoldListItem extends ConsumerWidget {
             ),
             Text(
               fmtHoldDuration(hold.contractionTime!),
-              style: TextStyle(fontSize: 12, color: c.textSecondary),
+              style: BreathLabTypography.numericSm.copyWith(
+                color: c.textSecondary,
+              ),
             ),
           ],
           if (tagCount > 0) ...[
             Text(
               '  ·  ',
-              style: TextStyle(fontSize: 12, color: c.textTertiary),
+              style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
             ),
-            for (var i = 0; i < tagCount.clamp(0, 4); i++)
-              Padding(
-                padding: const EdgeInsets.only(right: 3),
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: c.primary,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            if (tagCount > 4)
-              Text(
-                '+${tagCount - 4}',
-                style: TextStyle(fontSize: 10, color: c.textTertiary),
-              ),
+            Text(
+              l10n.historyTagCount(tagCount),
+              style: BreathLabTypography.micro.copyWith(color: c.textSecondary),
+            ),
           ],
         ],
       ),

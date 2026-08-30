@@ -47,7 +47,7 @@ class LungVolumeFilterChip extends ConsumerWidget {
         ),
         child: Text(
           label,
-          style: BreathLabTypography.badge.copyWith(color: c.textSecondary),
+          style: BreathLabTypography.micro.copyWith(color: c.textSecondary),
         ),
       ),
     );

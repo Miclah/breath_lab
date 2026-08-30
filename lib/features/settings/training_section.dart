@@ -4,8 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../shared/widgets/segment_label.dart';
+import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
+import 'imst_settings_group.dart';
 
 /// Settings → Training section: current max, default prep mode, default
 /// lung volume. All values are read from and written straight to
@@ -40,6 +44,8 @@ class TrainingSection extends StatelessWidget {
           ),
           const SizedBox(height: Spacing.sm),
           const _DefaultLungVolumeSelector(),
+          const SizedBox(height: Spacing.xxl),
+          const ImstSettingsGroup(),
         ],
       ),
     );
@@ -80,12 +86,7 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
     super.dispose();
   }
 
-  String _format(int ms) {
-    final d = Duration(milliseconds: ms);
-    final m = d.inMinutes;
-    final s = d.inSeconds % 60;
-    return '$m:${s.toString().padLeft(2, '0')}';
-  }
+  String _format(int ms) => formatMmSs(Duration(milliseconds: ms));
 
   Future<void> _submit() async {
     final match = _pattern.firstMatch(_controller.text.trim());
@@ -100,8 +101,7 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
     final ms = (minutes * 60 + seconds) * 1000;
 
     setState(() => _error = null);
-    await ref.read(settingsRepositoryProvider).setCurrentMaxMs(ms);
-    ref.invalidate(currentMaxMsProvider);
+    await ref.read(currentMaxMsProvider.notifier).set(ms);
   }
 
   @override
@@ -116,16 +116,58 @@ class _CurrentMaxFieldState extends ConsumerState<_CurrentMaxField> {
       }
     });
 
-    return TextField(
-      controller: _controller,
-      focusNode: _focusNode,
-      keyboardType: TextInputType.datetime,
-      decoration: InputDecoration(
-        labelText: l10n.settingsCurrentMaxLabel,
-        hintText: 'mm:ss',
-        errorText: _error,
-      ),
-      onSubmitted: (_) => _submit(),
+    final c = context.appColors;
+    // Design §`input-text`: a filled box with a hairline border, and the
+    // primary colour on focus. With Material's bare underline this read as a
+    // label with some text beside it — the one editable number on the screen
+    // did not look editable, and it is the number every table is computed
+    // from.
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(Radius.sm),
+      borderSide: BorderSide(color: c.border, width: 0.5),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.settingsCurrentMaxLabel,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        const SizedBox(height: Spacing.sm),
+        TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          keyboardType: TextInputType.datetime,
+          style: BreathLabTypography.numericMd.copyWith(color: c.textPrimary),
+          decoration: InputDecoration(
+            hintText: 'mm:ss',
+            hintStyle: BreathLabTypography.numericMd.copyWith(
+              color: c.textTertiary,
+            ),
+            errorText: _error,
+            filled: true,
+            fillColor: c.insetFill,
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: Spacing.md,
+              vertical: Spacing.md,
+            ),
+            border: border,
+            enabledBorder: border,
+            focusedBorder: border.copyWith(
+              borderSide: BorderSide(color: c.primary, width: 0.5),
+            ),
+            suffixIcon: Icon(
+              Icons.edit_outlined,
+              size: 16,
+              color: c.textTertiary,
+            ),
+            suffixIconConstraints: const BoxConstraints(minWidth: 36),
+          ),
+          onSubmitted: (_) => _submit(),
+        ),
+      ],
     );
   }
 }
@@ -163,12 +205,9 @@ class _DefaultPrepModeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
-      onSelectionChanged: (value) async {
-        await ref
-            .read(settingsRepositoryProvider)
-            .setDefaultPrepMode(value.first);
-        ref.invalidate(defaultPrepModeProvider);
-      },
+      showSelectedIcon: false,
+      onSelectionChanged: (value) =>
+          ref.read(defaultPrepModeProvider.notifier).set(value.first),
     );
   }
 }
@@ -202,12 +241,9 @@ class _DefaultLungVolumeSelector extends ConsumerWidget {
         ),
       ],
       selected: {selected},
-      onSelectionChanged: (value) async {
-        await ref
-            .read(settingsRepositoryProvider)
-            .setDefaultLungVolume(value.first);
-        ref.invalidate(defaultLungVolumeProvider);
-      },
+      showSelectedIcon: false,
+      onSelectionChanged: (value) =>
+          ref.read(defaultLungVolumeProvider.notifier).set(value.first),
     );
   }
 }

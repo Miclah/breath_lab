@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
-import '../../domain/models/hold.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
-import 'section_header.dart';
+import '../../theme/colors.dart';
+import '../../theme/typography.dart';
 
 enum _RatioPreset { fourSix, fourFour, fourEight, custom }
 
@@ -24,15 +24,9 @@ class TimerSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final mode = ref.watch(defaultPrepModeProvider).valueOrNull;
-    if (mode != PrepMode.short && mode != PrepMode.full) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsTimerSection),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,
@@ -79,12 +73,8 @@ class _PrepDurationStepper extends ConsumerWidget {
     return '$m:${s.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _update(WidgetRef ref, int seconds) async {
-    await ref
-        .read(settingsRepositoryProvider)
-        .setPrepBreathingDurationSeconds(seconds);
-    ref.invalidate(prepBreathingDurationSecondsProvider);
-  }
+  Future<void> _update(WidgetRef ref, int seconds) =>
+      ref.read(prepBreathingDurationSecondsProvider.notifier).set(seconds);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,7 +93,9 @@ class _PrepDurationStepper extends ConsumerWidget {
           child: Text(
             _format(seconds),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: BreathLabTypography.numericMd.copyWith(
+              color: context.appColors.textPrimary,
+            ),
           ),
         ),
         IconButton.filledTonal(
@@ -158,14 +150,11 @@ class _BreathingRatioSelector extends ConsumerWidget {
             ),
           ],
           selected: {preset},
-          onSelectionChanged: (value) async {
-            final selected = value.first;
-            final presetValue = _ratioPresetValues[selected];
+          showSelectedIcon: false,
+          onSelectionChanged: (value) {
+            final presetValue = _ratioPresetValues[value.first];
             if (presetValue == null) return;
-            await ref
-                .read(settingsRepositoryProvider)
-                .setBreathingRatio(presetValue.$1, presetValue.$2);
-            ref.invalidate(breathingRatioProvider);
+            ref.read(breathingRatioProvider.notifier).set(presetValue);
           },
         ),
         if (preset == _RatioPreset.custom) ...[
@@ -177,7 +166,7 @@ class _BreathingRatioSelector extends ConsumerWidget {
   }
 }
 
-class _CustomRatioInputs extends ConsumerWidget {
+class _CustomRatioInputs extends ConsumerStatefulWidget {
   const _CustomRatioInputs({
     required this.inhaleSeconds,
     required this.exhaleSeconds,
@@ -190,31 +179,60 @@ class _CustomRatioInputs extends ConsumerWidget {
   static const _maxSeconds = 15;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_CustomRatioInputs> createState() => _CustomRatioInputsState();
+}
+
+class _CustomRatioInputsState extends ConsumerState<_CustomRatioInputs> {
+  /// Which safety rule the last attempt broke, or null. Not a silent clamp:
+  /// the app refuses the change and says why (`RESEARCH_ALIGNMENT.md` §4 S2).
+  String? _refusal;
+
+  void _attempt(int inhale, int exhale) {
     final l10n = AppLocalizations.of(context)!;
-
-    Future<void> update(int inhale, int exhale) async {
-      await ref
-          .read(settingsRepositoryProvider)
-          .setBreathingRatio(inhale, exhale);
-      ref.invalidate(breathingRatioProvider);
+    if (inhale + exhale < SettingsRepository.minBreathingCycleSeconds) {
+      setState(() => _refusal = l10n.settingsBreathingRatioTooFast);
+      return;
     }
+    if (exhale < inhale) {
+      setState(() => _refusal = l10n.settingsBreathingRatioExhaleShort);
+      return;
+    }
+    setState(() => _refusal = null);
+    ref.read(breathingRatioProvider.notifier).set((inhale, exhale));
+  }
 
-    return Row(
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final c = context.appColors;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _RatioValueStepper(
-            label: l10n.settingsBreathingRatioInhaleLabel,
-            seconds: inhaleSeconds,
-            onChanged: (v) => update(v, exhaleSeconds),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _RatioValueStepper(
+                label: l10n.settingsBreathingRatioInhaleLabel,
+                seconds: widget.inhaleSeconds,
+                onChanged: (v) => _attempt(v, widget.exhaleSeconds),
+              ),
+            ),
+            const SizedBox(width: Spacing.lg),
+            Expanded(
+              child: _RatioValueStepper(
+                label: l10n.settingsBreathingRatioExhaleLabel,
+                seconds: widget.exhaleSeconds,
+                onChanged: (v) => _attempt(widget.inhaleSeconds, v),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: Spacing.lg),
-        Expanded(
-          child: _RatioValueStepper(
-            label: l10n.settingsBreathingRatioExhaleLabel,
-            seconds: exhaleSeconds,
-            onChanged: (v) => update(inhaleSeconds, v),
+        const SizedBox(height: Spacing.xs),
+        Text(
+          _refusal ?? l10n.settingsBreathingRatioRule,
+          style: BreathLabTypography.micro.copyWith(
+            color: _refusal == null ? c.textTertiary : c.dangerText,
           ),
         ),
       ],
@@ -252,7 +270,9 @@ class _RatioValueStepper extends StatelessWidget {
               child: Text(
                 '${seconds}s',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: BreathLabTypography.numericMd.copyWith(
+                  color: context.appColors.textPrimary,
+                ),
               ),
             ),
             IconButton.filledTonal(

@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../db/app_database.dart' as db;
 import '../db/database_provider.dart';
 import '../../domain/models/hold.dart';
+import '../../domain/services/device_name_service.dart';
+import 'setting_notifier.dart';
 
 enum HapticIntensity {
   off,
@@ -136,20 +138,93 @@ class SettingsRepository {
   Future<void> setPrepBreathingDurationSeconds(int seconds) =>
       _set('prep_breathing_duration_s', seconds.toString());
 
-  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6.
+  static const _defaultBreathingRatio = (4, 6);
+
+  /// The prep breathing guide must never be able to coach hyperventilation —
+  /// the exact mechanism the first safety screen warns about, and the leading
+  /// cause of hypoxic blackout (`RESEARCH_ALIGNMENT.md` §4 S2). A ratio is
+  /// only allowed if the exhale is at least as long as the inhale and the
+  /// whole cycle runs 6 seconds or longer.
+  static const minBreathingCycleSeconds = 6;
+
+  static bool isValidBreathingRatio(int inhaleSeconds, int exhaleSeconds) =>
+      exhaleSeconds >= inhaleSeconds &&
+      inhaleSeconds + exhaleSeconds >= minBreathingCycleSeconds;
+
+  /// Breathing ratio as (inhaleSeconds, exhaleSeconds). Defaults to 4:6, and
+  /// a stored value that fails [isValidBreathingRatio] — from an older build
+  /// or a hand-edited database — reads back as the default rather than
+  /// driving the pacer.
   Future<(int, int)> getBreathingRatio() async {
     final inhale = await _get('breathing_ratio_inhale_s');
     final exhale = await _get('breathing_ratio_exhale_s');
-    return (
-      inhale == null ? 4 : int.parse(inhale),
-      exhale == null ? 6 : int.parse(exhale),
+    final ratio = (
+      inhale == null ? _defaultBreathingRatio.$1 : int.parse(inhale),
+      exhale == null ? _defaultBreathingRatio.$2 : int.parse(exhale),
     );
+    return isValidBreathingRatio(ratio.$1, ratio.$2)
+        ? ratio
+        : _defaultBreathingRatio;
   }
 
+  /// Persists a ratio. Invalid ratios are refused outright — the UI is
+  /// responsible for explaining why rather than relying on a silent clamp.
   Future<void> setBreathingRatio(int inhaleSeconds, int exhaleSeconds) async {
+    if (!isValidBreathingRatio(inhaleSeconds, exhaleSeconds)) return;
     await _set('breathing_ratio_inhale_s', inhaleSeconds.toString());
     await _set('breathing_ratio_exhale_s', exhaleSeconds.toString());
   }
+
+  // --- IMST (inspiratory muscle strength training) ---------------------------
+
+  /// The trainer's name the user typed, e.g. "POWERbreathe Plus". Null until
+  /// set; an empty string clears it.
+  Future<String?> getImstDeviceName() => _get('imst_device_name');
+
+  Future<void> setImstDeviceName(String? name) => name == null || name.isEmpty
+      ? _delete('imst_device_name')
+      : _set('imst_device_name', name);
+
+  /// The numbered resistance position on the trainer — a dial position, never
+  /// converted to % PImax (see `PHASE_3D_research.md`). Defaults to 3.
+  Future<int> getImstDeviceLevel() async {
+    final value = await _get('imst_device_level');
+    return value == null ? 3 : int.parse(value);
+  }
+
+  Future<void> setImstDeviceLevel(int level) =>
+      _set('imst_device_level', level.toString());
+
+  /// Measured maximal inspiratory pressure in cmH₂O, for the minority who
+  /// have a real figure. Null otherwise — never inferred from the dial.
+  Future<int?> getImstPimaxCmH2O() async {
+    final value = await _get('imst_pimax_cmh2o');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  Future<void> setImstPimaxCmH2O(int? value) => value == null
+      ? _delete('imst_pimax_cmh2o')
+      : _set('imst_pimax_cmh2o', value.toString());
+
+  /// When the user last dismissed the "retest your max" prompt, epoch ms.
+  /// Null if never dismissed. The prompt re-appears a week after a dismissal
+  /// (or as soon as a fresh max hold makes it moot).
+  Future<int?> getRetestPromptDismissedAt() async {
+    final value = await _get('retest_prompt_dismissed_at');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  Future<void> setRetestPromptDismissedAt(int atMs) =>
+      _set('retest_prompt_dismissed_at', atMs.toString());
+
+  /// Target resisted breaths per day. Craighead's protocol is 30.
+  Future<int> getImstTargetBreaths() async {
+    final value = await _get('imst_target_breaths');
+    return value == null ? 30 : int.parse(value);
+  }
+
+  Future<void> setImstTargetBreaths(int breaths) =>
+      _set('imst_target_breaths', breaths.toString());
 
   /// CO₂ table config as (rounds, holdPercent 0-100, restDecrementSeconds).
   /// Defaults per PRD: 7 rounds, 50% hold, 15s rest decrement.
@@ -297,6 +372,29 @@ class SettingsRepository {
 
   Future<void> setFocusModeEnabled(bool enabled) =>
       _set('focus_mode_enabled', enabled ? '1' : '0');
+
+  /// This device's human-readable sync name, or null if never set.
+  Future<String?> getDeviceName() => _get('device_name');
+
+  Future<void> setDeviceName(String name) => _set('device_name', name);
+
+  /// When the most recent successful sync (export or import) happened,
+  /// in epoch milliseconds. Null if this device has never synced.
+  Future<int?> getLastSyncAtMs() async {
+    final value = await _get('last_sync_at');
+    return value == null ? null : int.tryParse(value);
+  }
+
+  /// The other device's name as of the most recent sync.
+  Future<String?> getLastSyncPeerName() => _get('last_sync_peer_name');
+
+  Future<void> setLastSync({
+    required int atMs,
+    required String peerDeviceName,
+  }) async {
+    await _set('last_sync_at', atMs.toString());
+    await _set('last_sync_peer_name', peerDeviceName);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -307,78 +405,293 @@ final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepository(ref.watch(databaseProvider));
 });
 
-/// Current default prep mode. Invalidate after writing to refresh.
-final defaultPrepModeProvider = FutureProvider<PrepMode>((ref) {
-  return ref.watch(settingsRepositoryProvider).getDefaultPrepMode();
-});
+/// Convenience base binding a [SettingNotifier] to [SettingsRepository].
+abstract class _RepoSetting<T> extends SettingNotifier<T> {
+  /// Read, not watched — [write] runs outside the build phase.
+  SettingsRepository get repo => ref.read(settingsRepositoryProvider);
 
-/// Current default lung volume. Invalidate after writing to refresh.
-final defaultLungVolumeProvider = FutureProvider<LungVolume>((ref) {
-  return ref.watch(settingsRepositoryProvider).getDefaultLungVolume();
-});
+  @override
+  Future<T> build() {
+    // Depend on the repository so that invalidating it — which is how a
+    // full data reset announces that the stored values are gone — makes
+    // every setting re-read instead of keeping its now-stale cached value.
+    ref.watch(settingsRepositoryProvider);
+    return super.build();
+  }
+}
+
+/// Current default prep mode.
+class DefaultPrepModeNotifier extends _RepoSetting<PrepMode> {
+  @override
+  Future<PrepMode> read() => repo.getDefaultPrepMode();
+
+  @override
+  Future<void> write(PrepMode value) => repo.setDefaultPrepMode(value);
+}
+
+final defaultPrepModeProvider =
+    AsyncNotifierProvider<DefaultPrepModeNotifier, PrepMode>(
+      DefaultPrepModeNotifier.new,
+    );
+
+/// Current default lung volume.
+class DefaultLungVolumeNotifier extends _RepoSetting<LungVolume> {
+  @override
+  Future<LungVolume> read() => repo.getDefaultLungVolume();
+
+  @override
+  Future<void> write(LungVolume value) => repo.setDefaultLungVolume(value);
+}
+
+final defaultLungVolumeProvider =
+    AsyncNotifierProvider<DefaultLungVolumeNotifier, LungVolume>(
+      DefaultLungVolumeNotifier.new,
+    );
 
 /// All-time PB in milliseconds, null if no hold saved yet.
-final currentMaxMsProvider = FutureProvider<int?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getCurrentMaxMs();
-});
+class CurrentMaxMsNotifier extends _RepoSetting<int?> {
+  @override
+  Future<int?> read() => repo.getCurrentMaxMs();
 
-/// Prep breathing duration in seconds. Invalidate after writing to refresh.
-final prepBreathingDurationSecondsProvider = FutureProvider<int>((ref) async {
-  final mode = await ref.watch(defaultPrepModeProvider.future);
-  return ref
-      .watch(settingsRepositoryProvider)
-      .getPrepBreathingDurationSeconds(mode);
-});
+  @override
+  Future<void> write(int? value) async {
+    if (value != null) await repo.setCurrentMaxMs(value);
+  }
+}
 
-/// Breathing ratio as (inhaleSeconds, exhaleSeconds). Invalidate after
-/// writing to refresh.
-final breathingRatioProvider = FutureProvider<(int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getBreathingRatio();
-});
+final currentMaxMsProvider = AsyncNotifierProvider<CurrentMaxMsNotifier, int?>(
+  CurrentMaxMsNotifier.new,
+);
+
+/// Prep breathing duration in seconds. Rebuilds when the default prep mode
+/// changes so the mode-appropriate default is re-suggested.
+class PrepBreathingDurationNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() async {
+    final mode = await ref.watch(defaultPrepModeProvider.future);
+    return repo.getPrepBreathingDurationSeconds(mode);
+  }
+
+  @override
+  Future<void> write(int value) => repo.setPrepBreathingDurationSeconds(value);
+}
+
+final prepBreathingDurationSecondsProvider =
+    AsyncNotifierProvider<PrepBreathingDurationNotifier, int>(
+      PrepBreathingDurationNotifier.new,
+    );
+
+/// Breathing ratio as (inhaleSeconds, exhaleSeconds).
+class BreathingRatioNotifier extends _RepoSetting<(int, int)> {
+  @override
+  Future<(int, int)> read() => repo.getBreathingRatio();
+
+  @override
+  Future<void> write((int, int) value) =>
+      repo.setBreathingRatio(value.$1, value.$2);
+}
+
+final breathingRatioProvider =
+    AsyncNotifierProvider<BreathingRatioNotifier, (int, int)>(
+      BreathingRatioNotifier.new,
+    );
+
+/// IMST trainer name (null until set).
+class ImstDeviceNameNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getImstDeviceName();
+
+  @override
+  Future<void> write(String? value) => repo.setImstDeviceName(value);
+}
+
+final imstDeviceNameProvider =
+    AsyncNotifierProvider<ImstDeviceNameNotifier, String?>(
+      ImstDeviceNameNotifier.new,
+    );
+
+/// IMST resistance dial position.
+class ImstDeviceLevelNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getImstDeviceLevel();
+
+  @override
+  Future<void> write(int value) => repo.setImstDeviceLevel(value);
+}
+
+final imstDeviceLevelProvider =
+    AsyncNotifierProvider<ImstDeviceLevelNotifier, int>(
+      ImstDeviceLevelNotifier.new,
+    );
+
+/// Optional measured PImax in cmH₂O (null when unknown).
+class ImstPimaxNotifier extends _RepoSetting<int?> {
+  @override
+  Future<int?> read() => repo.getImstPimaxCmH2O();
+
+  @override
+  Future<void> write(int? value) => repo.setImstPimaxCmH2O(value);
+}
+
+final imstPimaxCmH2OProvider = AsyncNotifierProvider<ImstPimaxNotifier, int?>(
+  ImstPimaxNotifier.new,
+);
+
+/// Target resisted breaths per day (default 30).
+class ImstTargetBreathsNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getImstTargetBreaths();
+
+  @override
+  Future<void> write(int value) => repo.setImstTargetBreaths(value);
+}
+
+final imstTargetBreathsProvider =
+    AsyncNotifierProvider<ImstTargetBreathsNotifier, int>(
+      ImstTargetBreathsNotifier.new,
+    );
 
 /// CO₂ table config as (rounds, holdPercent, restDecrementSeconds).
-/// Invalidate after writing to refresh.
-final co2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getCo2TableConfig();
-});
+class Co2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
+  @override
+  Future<(int, int, int)> read() => repo.getCo2TableConfig();
+
+  @override
+  Future<void> write((int, int, int) value) async {
+    await repo.setCo2Rounds(value.$1);
+    await repo.setCo2HoldPercent(value.$2);
+    await repo.setCo2RestDecrementSeconds(value.$3);
+  }
+
+  Future<void> setRounds(int rounds) => _update(rounds: rounds);
+
+  Future<void> setHoldPercent(int percent) => _update(holdPercent: percent);
+
+  Future<void> setRestDecrementSeconds(int seconds) =>
+      _update(restDecrementS: seconds);
+
+  Future<void> _update({int? rounds, int? holdPercent, int? restDecrementS}) {
+    final (r, h, d) = state.valueOrNull ?? (7, 50, 15);
+    return set((rounds ?? r, holdPercent ?? h, restDecrementS ?? d));
+  }
+}
+
+final co2TableConfigProvider =
+    AsyncNotifierProvider<Co2TableConfigNotifier, (int, int, int)>(
+      Co2TableConfigNotifier.new,
+    );
 
 /// O₂ table config as (rounds, maxHoldPercent, fixedRestSeconds).
-/// Invalidate after writing to refresh.
-final o2TableConfigProvider = FutureProvider<(int, int, int)>((ref) {
-  return ref.watch(settingsRepositoryProvider).getO2TableConfig();
-});
+class O2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
+  @override
+  Future<(int, int, int)> read() => repo.getO2TableConfig();
 
-/// Whether sound cues are enabled. Invalidate after writing to refresh.
-final soundEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSoundEnabled();
-});
+  @override
+  Future<void> write((int, int, int) value) async {
+    await repo.setO2Rounds(value.$1);
+    await repo.setO2MaxHoldPercent(value.$2);
+    await repo.setO2RestSeconds(value.$3);
+  }
 
-/// Sound volume as a percentage 0-100. Invalidate after writing to refresh.
-final soundVolumeProvider = FutureProvider<int>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSoundVolume();
-});
+  Future<void> setRounds(int rounds) => _update(rounds: rounds);
 
-/// Haptic intensity. Invalidate after writing to refresh.
-final hapticIntensityProvider = FutureProvider<HapticIntensity>((ref) {
-  return ref.watch(settingsRepositoryProvider).getHapticIntensity();
-});
+  Future<void> setMaxHoldPercent(int percent) =>
+      _update(maxHoldPercent: percent);
+
+  Future<void> setRestSeconds(int seconds) => _update(restS: seconds);
+
+  Future<void> _update({int? rounds, int? maxHoldPercent, int? restS}) {
+    final (r, h, s) = state.valueOrNull ?? (8, 80, 120);
+    return set((rounds ?? r, maxHoldPercent ?? h, restS ?? s));
+  }
+}
+
+final o2TableConfigProvider =
+    AsyncNotifierProvider<O2TableConfigNotifier, (int, int, int)>(
+      O2TableConfigNotifier.new,
+    );
+
+/// Whether sound cues are enabled.
+class SoundEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getSoundEnabled();
+
+  @override
+  Future<void> write(bool value) => repo.setSoundEnabled(value);
+}
+
+final soundEnabledProvider = AsyncNotifierProvider<SoundEnabledNotifier, bool>(
+  SoundEnabledNotifier.new,
+);
+
+/// Sound volume as a percentage 0-100.
+class SoundVolumeNotifier extends _RepoSetting<int> {
+  @override
+  Future<int> read() => repo.getSoundVolume();
+
+  @override
+  Future<void> write(int value) => repo.setSoundVolume(value);
+}
+
+final soundVolumeProvider = AsyncNotifierProvider<SoundVolumeNotifier, int>(
+  SoundVolumeNotifier.new,
+);
+
+/// Haptic intensity.
+class HapticIntensityNotifier extends _RepoSetting<HapticIntensity> {
+  @override
+  Future<HapticIntensity> read() => repo.getHapticIntensity();
+
+  @override
+  Future<void> write(HapticIntensity value) => repo.setHapticIntensity(value);
+}
+
+final hapticIntensityProvider =
+    AsyncNotifierProvider<HapticIntensityNotifier, HapticIntensity>(
+      HapticIntensityNotifier.new,
+    );
 
 /// App UI language code ('sk' | 'en'), or null to follow the system locale.
-/// Invalidate after writing to refresh.
-final appLanguageProvider = FutureProvider<String?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAppLanguage();
-});
+class AppLanguageNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getAppLanguage();
 
-/// Spoken callouts mode. Invalidate after writing to refresh.
-final spokenCalloutsModeProvider = FutureProvider<SpokenCalloutsMode>((ref) {
-  return ref.watch(settingsRepositoryProvider).getSpokenCalloutsMode();
-});
+  @override
+  Future<void> write(String? value) => repo.setAppLanguage(value);
+}
+
+final appLanguageProvider = AsyncNotifierProvider<AppLanguageNotifier, String?>(
+  AppLanguageNotifier.new,
+);
+
+/// Spoken callouts mode.
+class SpokenCalloutsModeNotifier extends _RepoSetting<SpokenCalloutsMode> {
+  @override
+  Future<SpokenCalloutsMode> read() => repo.getSpokenCalloutsMode();
+
+  @override
+  Future<void> write(SpokenCalloutsMode value) =>
+      repo.setSpokenCalloutsMode(value);
+}
+
+final spokenCalloutsModeProvider =
+    AsyncNotifierProvider<SpokenCalloutsModeNotifier, SpokenCalloutsMode>(
+      SpokenCalloutsModeNotifier.new,
+    );
 
 /// TTS voice language code ('sk' | 'en'), or null to follow the app UI
-/// language. Invalidate after writing to refresh.
-final ttsLanguageProvider = FutureProvider<String?>((ref) {
-  return ref.watch(settingsRepositoryProvider).getTtsLanguage();
-});
+/// language.
+class TtsLanguageNotifier extends _RepoSetting<String?> {
+  @override
+  Future<String?> read() => repo.getTtsLanguage();
+
+  @override
+  Future<void> write(String? value) => repo.setTtsLanguage(value);
+}
+
+final ttsLanguageProvider = AsyncNotifierProvider<TtsLanguageNotifier, String?>(
+  TtsLanguageNotifier.new,
+);
 
 /// Effective TTS voice language: the explicit override if set, else the
 /// app UI language, else English.
@@ -389,34 +702,116 @@ final effectiveTtsLanguageProvider = FutureProvider<String>((ref) async {
   return appLanguage ?? 'en';
 });
 
-/// Whether the persistent hold notification is enabled. Invalidate after
-/// writing to refresh.
-final ambientPersistentNotifEnabledProvider = FutureProvider<bool>((ref) {
-  return ref
-      .watch(settingsRepositoryProvider)
-      .getAmbientPersistentNotifEnabled();
-});
+/// Whether the persistent hold notification is enabled.
+class AmbientPersistentNotifNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientPersistentNotifEnabled();
 
-/// Whether ambient PiP is enabled. Invalidate after writing to refresh.
-final ambientPipEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAmbientPipEnabled();
-});
+  @override
+  Future<void> write(bool value) =>
+      repo.setAmbientPersistentNotifEnabled(value);
+}
 
-/// Whether the OLED-friendly hold screen is enabled. Invalidate after
-/// writing to refresh.
-final ambientOledHoldEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getAmbientOledHoldEnabled();
-});
+final ambientPersistentNotifEnabledProvider =
+    AsyncNotifierProvider<AmbientPersistentNotifNotifier, bool>(
+      AmbientPersistentNotifNotifier.new,
+    );
 
-/// Brightness override during the OLED hold screen. Invalidate after
-/// writing to refresh.
-final ambientBrightnessOverrideProvider = FutureProvider<BrightnessOverride>((
-  ref,
-) {
-  return ref.watch(settingsRepositoryProvider).getAmbientBrightnessOverride();
-});
+/// Whether ambient PiP is enabled.
+class AmbientPipEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientPipEnabled();
 
-/// Whether focus mode is enabled. Invalidate after writing to refresh.
-final focusModeEnabledProvider = FutureProvider<bool>((ref) {
-  return ref.watch(settingsRepositoryProvider).getFocusModeEnabled();
+  @override
+  Future<void> write(bool value) => repo.setAmbientPipEnabled(value);
+}
+
+final ambientPipEnabledProvider =
+    AsyncNotifierProvider<AmbientPipEnabledNotifier, bool>(
+      AmbientPipEnabledNotifier.new,
+    );
+
+/// Whether the OLED-friendly hold screen is enabled.
+class AmbientOledHoldEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getAmbientOledHoldEnabled();
+
+  @override
+  Future<void> write(bool value) => repo.setAmbientOledHoldEnabled(value);
+}
+
+final ambientOledHoldEnabledProvider =
+    AsyncNotifierProvider<AmbientOledHoldEnabledNotifier, bool>(
+      AmbientOledHoldEnabledNotifier.new,
+    );
+
+/// Brightness override during the OLED hold screen.
+class AmbientBrightnessOverrideNotifier
+    extends _RepoSetting<BrightnessOverride> {
+  @override
+  Future<BrightnessOverride> read() => repo.getAmbientBrightnessOverride();
+
+  @override
+  Future<void> write(BrightnessOverride value) =>
+      repo.setAmbientBrightnessOverride(value);
+}
+
+final ambientBrightnessOverrideProvider =
+    AsyncNotifierProvider<
+      AmbientBrightnessOverrideNotifier,
+      BrightnessOverride
+    >(AmbientBrightnessOverrideNotifier.new);
+
+/// Whether focus mode is enabled.
+class FocusModeEnabledNotifier extends _RepoSetting<bool> {
+  @override
+  Future<bool> read() => repo.getFocusModeEnabled();
+
+  @override
+  Future<void> write(bool value) => repo.setFocusModeEnabled(value);
+}
+
+final focusModeEnabledProvider =
+    AsyncNotifierProvider<FocusModeEnabledNotifier, bool>(
+      FocusModeEnabledNotifier.new,
+    );
+
+/// This device's editable sync name. The first read seeds it from the
+/// platform (hostname on Windows, device model on Android) and persists
+/// that suggestion, so it survives even if the platform lookup is slow or
+/// briefly unavailable on a later read.
+class DeviceNameNotifier extends _RepoSetting<String> {
+  @override
+  Future<String> read() async {
+    final stored = await repo.getDeviceName();
+    if (stored != null && stored.isNotEmpty) return stored;
+    final suggested = await suggestedDeviceName();
+    if (suggested != null) await repo.setDeviceName(suggested);
+    return suggested ?? 'This device';
+  }
+
+  @override
+  Future<void> write(String value) => repo.setDeviceName(value);
+}
+
+final deviceNameProvider = AsyncNotifierProvider<DeviceNameNotifier, String>(
+  DeviceNameNotifier.new,
+);
+
+/// When BreathLab last exported or imported data, and which device it
+/// synced with.
+class LastSyncInfo {
+  const LastSyncInfo({required this.atMs, required this.peerDeviceName});
+
+  final int atMs;
+  final String peerDeviceName;
+}
+
+/// Null if this device has never synced.
+final lastSyncInfoProvider = FutureProvider<LastSyncInfo?>((ref) async {
+  final repo = ref.watch(settingsRepositoryProvider);
+  final atMs = await repo.getLastSyncAtMs();
+  if (atMs == null) return null;
+  final peerDeviceName = await repo.getLastSyncPeerName();
+  return LastSyncInfo(atMs: atMs, peerDeviceName: peerDeviceName ?? '');
 });

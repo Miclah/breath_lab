@@ -1,27 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../tables/providers.dart' show brightnessServiceProvider;
 import 'providers.dart';
 
-String _fmtDuration(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
-
 /// OLED-friendly hold screen, per Design Additions §4: pure black, enlarged
 /// mono timer, no ring decoration, borderless Stop. Uses the dark color
 /// scheme regardless of app theme — same reasoning as [PipContent].
-class OledHoldView extends ConsumerWidget {
+class OledHoldView extends ConsumerStatefulWidget {
   const OledHoldView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OledHoldView> createState() => _OledHoldViewState();
+}
+
+class _OledHoldViewState extends ConsumerState<OledHoldView> {
+  @override
+  void initState() {
+    super.initState();
+    // The whole point of this screen is an unlit OLED panel — system status
+    // bar and nav bar icons defeat that and are needless glow next to
+    // closed or dazzled eyes.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = BreathLabColors.dark;
     final elapsed = ref.watch(timerProvider).holdElapsed;
@@ -33,9 +49,10 @@ class OledHoldView extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
+              flex: 2,
               child: Center(
                 child: Text(
-                  _fmtDuration(elapsed),
+                  formatMmSs(elapsed),
                   style: TextStyle(
                     fontFamily: 'JetBrainsMono',
                     fontSize: isDesktop ? 128 : 96,
@@ -51,20 +68,28 @@ class OledHoldView extends ConsumerWidget {
                 context,
               ).textTheme.bodySmall?.copyWith(color: c.textSecondary),
             ),
-            const SizedBox(height: Spacing.lg),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Spacing.xl),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: TextButton(
-                  onPressed: () => ref.read(timerProvider.notifier).stop(),
-                  style: TextButton.styleFrom(foregroundColor: c.danger),
-                  child: Text(l10n.timerStopButton),
+            const SizedBox(height: Spacing.sm),
+            // The whole bottom third is the Stop target, not just the text
+            // — at a dazzled glance or with eyes closed, a 56dp button is
+            // hard to land on.
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => ref.read(timerProvider.notifier).stop(),
+                child: Center(
+                  child: Text(
+                    l10n.timerStopButton,
+                    // Borderless here, per Design Additions §4 — but the
+                    // text token, not the fill token. Saturated `danger` on
+                    // pure black was the brightest thing on a screen whose
+                    // entire purpose is to be dark.
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium?.copyWith(color: c.dangerText),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: Spacing.xl),
           ],
         ),
       ),

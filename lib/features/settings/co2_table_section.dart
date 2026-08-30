@@ -5,7 +5,7 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/tokens.dart';
-import 'section_header.dart';
+import 'settings_slider.dart';
 import 'settings_stepper.dart';
 import 'table_preview.dart';
 
@@ -37,24 +37,11 @@ class Co2TableSection extends ConsumerWidget {
             restDecrementS: restDecrementS,
           );
 
-    Future<void> update({
-      int? rounds,
-      int? holdPercent,
-      int? restDecrementS,
-    }) async {
-      final repo = ref.read(settingsRepositoryProvider);
-      if (rounds != null) await repo.setCo2Rounds(rounds);
-      if (holdPercent != null) await repo.setCo2HoldPercent(holdPercent);
-      if (restDecrementS != null) {
-        await repo.setCo2RestDecrementSeconds(restDecrementS);
-      }
-      ref.invalidate(co2TableConfigProvider);
-    }
+    final config = ref.read(co2TableConfigProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: l10n.settingsCo2Section),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.lg,
@@ -63,45 +50,34 @@ class Co2TableSection extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.settingsRoundsLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsRoundsLabel,
                 value: rounds,
                 min: _minRounds,
                 max: _maxRounds,
                 step: 1,
                 format: (v) => '$v',
-                onChanged: (v) => update(rounds: v),
+                onChanged: config.setRounds,
               ),
               const SizedBox(height: Spacing.xl),
-              Text(
-                l10n.settingsCo2HoldPercentLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              Slider(
-                value: holdPercent.toDouble(),
-                min: _minHoldPercent.toDouble(),
-                max: _maxHoldPercent.toDouble(),
+              SettingsSlider(
+                label: l10n.settingsCo2HoldPercentLabel,
+                value: holdPercent,
+                min: _minHoldPercent,
+                max: _maxHoldPercent,
                 divisions: (_maxHoldPercent - _minHoldPercent) ~/ 5,
-                label: '$holdPercent%',
-                onChanged: (v) => update(holdPercent: v.round()),
+                labelBuilder: (v) => '$v%',
+                onCommit: config.setHoldPercent,
               ),
               const SizedBox(height: Spacing.md),
-              Text(
-                l10n.settingsCo2RestDecrementLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: Spacing.sm),
               SettingsStepper(
+                label: l10n.settingsCo2RestDecrementLabel,
                 value: restDecrementS,
                 min: _minRestDecrementS,
                 max: _maxRestDecrementS,
                 step: 5,
                 format: (v) => '${v}s',
-                onChanged: (v) => update(restDecrementS: v),
+                onChanged: config.setRestDecrementSeconds,
               ),
               const SizedBox(height: Spacing.xl),
               if (preview != null)

@@ -37,6 +37,58 @@ class AppLocalizationsSk extends AppLocalizations {
   String get safetyRule2 => 'Nikdy nehyperventiluj pred zadržaním dychu.';
 
   @override
+  String get recoveryTitle => 'Zotavovacie dychy';
+
+  @override
+  String get recoveryBlurb =>
+      'Tri „hook“ dychy — potápačský zvyk pre prvú polminútu po zadržaní. Nepreukázalo sa, že zlepšujú výkon.';
+
+  @override
+  String get recoveryStart => 'Naviguj ma';
+
+  @override
+  String get recoveryDone => 'Hotovo — minútu to ber pokojne.';
+
+  @override
+  String get recoveryCueInhale => 'Nádych';
+
+  @override
+  String get recoveryCueHook => 'Hook — zadrž';
+
+  @override
+  String get recoveryCueExhale => 'Von';
+
+  @override
+  String recoveryProgress(String cue, int breath, int total) {
+    return '$cue · $breath/$total';
+  }
+
+  @override
+  String get sambaResponseTitle => 'Dnes už netrénuj';
+
+  @override
+  String get sambaResponseBody =>
+      'Samba — strata kontroly nad pohybmi — je takmer odpadnutie. Tvoj mozog mal málo kyslíka. Dnes už dych nezadržiavaj a najbližší tréning ber miernejšie.';
+
+  @override
+  String get sambaResponseSafety => 'Bezpečnostné informácie';
+
+  @override
+  String get sambaResponseAcknowledge => 'Rozumiem';
+
+  @override
+  String get safetyRuleBuddy =>
+      'Maj pri sebe niekoho, kto vie pomôcť. Jeden zadržiava dych, druhý zostáva pozorný — nikdy nie obaja naraz.';
+
+  @override
+  String get safetyRuleMedical =>
+      'Najprv sa poraď s lekárom, ak máš srdcové ochorenie, arytmiu, neliečený vysoký tlak, epilepsiu alebo záchvaty v anamnéze, si tehotná, alebo si niekedy odpadol/odpadla.';
+
+  @override
+  String get safetyRulePacking =>
+      'Nikdy si nepakuj pľúca — nevtláčaj vzduch nasilu po plnom nádychu. Môže to spôsobiť odpadnutie, poranenie pľúc a vzduchovú embóliu.';
+
+  @override
   String get safetyRule3 =>
       'Okamžite prestaň, ak pocítiš závraty, mravčenie alebo stratu kontroly.';
 
@@ -77,6 +129,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsBreathingRatioExhaleLabel => 'Výdych';
 
   @override
+  String get settingsBreathingRatioRule =>
+      'Výdych aspoň taký dlhý ako nádych a celý cyklus 6 sekúnd alebo viac.';
+
+  @override
+  String get settingsBreathingRatioTooFast =>
+      'Ponechané: cyklus kratší než 6 sekúnd je hyperventilácia. Maskuje nízky kyslík namiesto tréningu tolerancie naň — mechanizmus za väčšinou odpadnutí pri zadržaní dychu.';
+
+  @override
+  String get settingsBreathingRatioExhaleShort =>
+      'Ponechané: nasilu kratší výdych spôsobuje tú istú hyperventiláciu, pred ktorou varuje prvá bezpečnostná obrazovka. Výdych nechaj aspoň taký dlhý ako nádych.';
+
+  @override
   String get settingsCo2Section => 'CO₂ tabuľka';
 
   @override
@@ -99,6 +163,18 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsTablePreviewTitle => 'Náhľad';
+
+  @override
+  String settingsTablePreviewRoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kôl',
+      few: '$count kolá',
+      one: '1 kolo',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get ttsMilestoneOneMinute => 'Jedna minúta';
@@ -209,6 +285,10 @@ class AppLocalizationsSk extends AppLocalizations {
       'BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie. Ak chceš úplne tichý tréning, môžeš si v nastaveniach Androidu sám zapnúť režim priority — BreathLab nikdy nezasiahne do tvojho systémového nerušiť.';
 
   @override
+  String get settingsFocusModeExplanationDesktop =>
+      'BreathLab počas tréningu stíši svoje vlastné nedôležité notifikácie.';
+
+  @override
   String get settingsSoundHapticsSection => 'Zvuk a vibrácie';
 
   @override
@@ -254,6 +334,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsResetLabel => 'Vymazať všetky dáta';
 
   @override
+  String get settingsResetSubtitle =>
+      'Vymaže všetky zadržania, tabuľkové sedenia a nastavenia na tomto zariadení.';
+
+  @override
   String get settingsResetConfirmTitle => 'Vymazať všetky dáta?';
 
   @override
@@ -262,6 +346,79 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsResetButton => 'Vymazať';
+
+  @override
+  String get settingsDataSection => 'Dáta';
+
+  @override
+  String get settingsDeviceNameLabel => 'Názov zariadenia';
+
+  @override
+  String get settingsLastSyncNever => 'Zatiaľ nesynchronizované';
+
+  @override
+  String settingsLastSyncWith(String when, String device) {
+    return 'Naposledy synchronizované $when so zariadením $device';
+  }
+
+  @override
+  String get settingsExportButton => 'Exportovať';
+
+  @override
+  String get settingsShareButton => 'Zdieľať';
+
+  @override
+  String get settingsImportButton => 'Importovať';
+
+  @override
+  String get settingsExportSuccess => 'Záloha uložená.';
+
+  @override
+  String get settingsExportFailed => 'Zálohu sa nepodarilo uložiť.';
+
+  @override
+  String get settingsImportFailedTitle => 'Import zlyhal';
+
+  @override
+  String get settingsImportFailedMalformed =>
+      'Tento súbor nie je platná záloha BreathLab.';
+
+  @override
+  String get settingsImportFailedFormat =>
+      'Tento súbor nie je záloha BreathLab, alebo bol vytvorený nekompatibilnou verziou.';
+
+  @override
+  String get settingsImportFailedSchema =>
+      'Táto záloha bola vytvorená novšou verziou BreathLab. Najprv aktualizuj aplikáciu na tomto zariadení.';
+
+  @override
+  String get settingsImportFailedGeneric =>
+      'Pri čítaní tohto súboru sa niečo pokazilo.';
+
+  @override
+  String get settingsImportSummaryTitle => 'Import dokončený';
+
+  @override
+  String settingsImportSummaryBody(
+    int holdsAdded,
+    int sessionsAdded,
+    int holdsUpdated,
+    String device,
+  ) {
+    return 'Pridaných $holdsAdded pokusov, $sessionsAdded sérií. Aktualizovaných $holdsUpdated pokusov. Synchronizované so zariadením $device.';
+  }
+
+  @override
+  String get tagAddConfirm => 'Pridať';
+
+  @override
+  String get tagAddCancel => 'Zrušiť';
+
+  @override
+  String get settingsSaveFailed => 'Nastavenie sa nepodarilo uložiť.';
+
+  @override
+  String get resultSaveFailed => 'Hold sa nepodarilo uložiť. Skús to znova.';
 
   @override
   String get settingsThemeLabel => 'Téma';
@@ -308,6 +465,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get prepGoLabel => 'Štart!';
 
   @override
+  String get prepGetReadyLabel => 'Priprav sa';
+
+  @override
+  String get prepCancel => 'Zrušiť';
+
+  @override
   String get prepBreatheIn => 'Nádych...';
 
   @override
@@ -349,6 +512,108 @@ class AppLocalizationsSk extends AppLocalizations {
   String get timerStateLabelDone => 'hotovo';
 
   @override
+  String timerStatusAdherence(int percent) {
+    return '$percent % tento týždeň';
+  }
+
+  @override
+  String get settingsJumpTo => 'Prejsť na';
+
+  @override
+  String tablesEstimatedDuration(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Spolu približne $minutes minút',
+      few: 'Spolu približne $minutes minúty',
+      one: 'Spolu približne 1 minúta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tablesSessionSummaryTitle => 'Toto sedenie';
+
+  @override
+  String get timerSideLastSession => 'Posledné sedenie';
+
+  @override
+  String timerSideSessionHolds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count zadržaní',
+      few: '$count zadržania',
+      one: '1 zadržanie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get timerSideNoHistory =>
+      'Zatiaľ nič zaznamenané. Prvé zadržanie určí základ.';
+
+  @override
+  String get timerSideShortcuts => 'Klávesové skratky';
+
+  @override
+  String get timerSideShortcutStart => 'Spustiť / zastaviť zadržanie';
+
+  @override
+  String get timerSideShortcutContraction => 'Označiť kontrakciu';
+
+  @override
+  String get timerSideShortcutCancel => 'Zrušiť';
+
+  @override
+  String get resultAddNote => 'Pridať poznámku';
+
+  @override
+  String get resultNoteHint => 'Aké to bolo?';
+
+  @override
+  String get resultRemoveNote => 'Odstrániť poznámku';
+
+  @override
+  String get resultNewPbBadge => 'NOVÝ REKORD';
+
+  @override
+  String resultVsLast(String delta) {
+    return '$delta oproti poslednému';
+  }
+
+  @override
+  String resultVsPb(String delta) {
+    return '$delta oproti rekordu';
+  }
+
+  @override
+  String get resultFirstHold =>
+      'Tvoje prvé zadržanie — základ, od ktorého sa všetko ďalšie meria.';
+
+  @override
+  String get resultTotal => 'Celkovo';
+
+  @override
+  String get resultStruggleNote =>
+      'Fáza boja je miesto, kde sa u začiatočníkov prejaví väčšina nameraného zlepšenia.';
+
+  @override
+  String get resultNoContractionTitle => 'Kontrakcia neoznačená';
+
+  @override
+  String get resultNoContractionHintTouch =>
+      'Dvojitým ťuknutím na kruh počas zadržania označíš prvú kontrakciu.';
+
+  @override
+  String get resultNoContractionHintKeyboard =>
+      'Stlačením C počas zadržania označíš prvú kontrakciu.';
+
+  @override
+  String get resultNoContractionWhy =>
+      'Čas odtiaľ do konca zadržania je tvoja fáza boja — tá časť, ktorá najvernejšie sleduje tvoj pokrok.';
+
+  @override
   String get resultSaveButton => 'Uložiť';
 
   @override
@@ -370,13 +635,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get lungVolEmpty => 'Empty';
 
   @override
-  String get lungVolFullHint => 'Plné pľúca · Full lungs';
+  String get lungVolFullHint => 'Plné pľúca';
 
   @override
-  String get lungVolFrcHint => 'Pasívny výdych · Passive exhale';
+  String get lungVolFrcHint => 'Pasívny výdych';
 
   @override
-  String get lungVolEmptyHint => 'Po výdychu · After exhale';
+  String get lungVolEmptyHint => 'Po výdychu';
 
   @override
   String get tagTired => 'Unavený';
@@ -422,6 +687,18 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get historyFilterMax => 'Max';
+
+  @override
+  String historyTagCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tagov',
+      few: '$count tagy',
+      one: '1 tag',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get historyFilterTags => 'Tagy';
@@ -498,7 +775,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tablesPhaseLabelRest => 'oddych';
 
   @override
+  String get tablesSkipRoundButton => 'Preskočiť kolo';
+
+  @override
+  String get tablesEndSessionButton => 'Ukončiť session';
+
+  @override
   String get tablesSummaryTitle => 'Séria dokončená';
+
+  @override
+  String get tablesSummaryStoppedTitle => 'Séria zastavená';
 
   @override
   String tablesSummaryRounds(int completed, int total) {
@@ -532,10 +818,43 @@ class AppLocalizationsSk extends AppLocalizations {
   String get progressStatAvg30d => '30d priemer';
 
   @override
-  String get progressStatStreak => 'Séria';
+  String get retestPromptTitle => 'Čas na pretestovanie';
 
   @override
-  String get progressStatNoData => '—';
+  String retestPromptBody(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: '$weeks týždňami',
+      few: '$weeks týždňami',
+      one: 'týždňom',
+    );
+    return 'Tvoje posledné maximálne zadržanie bolo pred $_temp0. Pretestuj ho, aby tvoje CO₂ a O₂ tabuľky vychádzali z aktuálneho čísla.';
+  }
+
+  @override
+  String get retestPromptDismiss => 'Zavrieť';
+
+  @override
+  String get plateauTitle => 'Pokrok sa zastavil';
+
+  @override
+  String plateauBody(String recent, String previous) {
+    return 'Tvoje najlepšie zadržanie s plnými pľúcami za posledné štyri týždne ($recent) neprekonalo predchádzajúce štyri týždne ($previous).';
+  }
+
+  @override
+  String get plateauAdvice =>
+      'Výskum tu odporúča regeneráciu a naťahovanie hrudníka namiesto väčšieho objemu. Jedno- až dvojtýždňový deload to často pohne.';
+
+  @override
+  String get progressStatWeeksTrained => 'Odtrénované týždne';
+
+  @override
+  String get statAbsentDuration => '——:——';
+
+  @override
+  String get statAbsentCount => '—';
 
   @override
   String get progressHeatmapTitle => 'Posledných 12 týždňov';
@@ -548,12 +867,42 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String progressHeatmapStat(int sessions, int days) {
-    return '$sessions tréningov · najlepší týždeň: $days dní';
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions tréningov',
+      few: '$sessions tréningy',
+      one: '1 tréning',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days dní',
+      few: '$days dni',
+      one: '1 deň',
+    );
+    return '$_temp0 · najlepší týždeň: $_temp1';
   }
 
   @override
+  String get progressChartEmptyWhy =>
+      'Na začiatku sa zlepšenie prejaví vo fáze boja, nie v celkovom čase.';
+
+  @override
+  String get progressHeatmapEmpty => 'Dvanásť týždňov tréningu toto vyplní.';
+
+  @override
+  String get progressEmptyAction => 'Začať zadržanie';
+
+  @override
   String get progressChartEmpty =>
-      'Zatiaľ nedostatok pokusov na zobrazenie trendu.';
+      'Čiara potrebuje body — po štyroch tréningoch sa tu objaví trend.';
+
+  @override
+  String get progressChartStruggleLegend => 'Fáza boja';
+
+  @override
+  String get progressChartAverageLegend => 'Priemer';
 
   @override
   String get progressChartFilterAll => 'Všetky';
@@ -569,4 +918,248 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get progressViewAllHistory => 'Zobraziť všetko';
+
+  @override
+  String get imstLogOpen => 'Zaznamenať IMST tréning';
+
+  @override
+  String get logMenuTooltip => 'Zaznamenať tréning';
+
+  @override
+  String get logRestMenuItem => 'Deň odpočinku';
+
+  @override
+  String get logStretchMenuItem => 'Naťahovanie';
+
+  @override
+  String get logRestTitle => 'Zaznamenať deň odpočinku';
+
+  @override
+  String get logStretchTitle => 'Zaznamenať naťahovanie';
+
+  @override
+  String get logRestBlurb =>
+      'Regenerácia je tréning. Zaznamenaný deň odpočinku sa počíta do štruktúry týždňa, nenaruší sériu.';
+
+  @override
+  String get logStretchBlurb =>
+      'Naťahovanie hrudníka je jediná cesta k miernemu nárastu vitálnej kapacity — jednotky percent počas mesiacov, nie pol litra z mýtov.';
+
+  @override
+  String get logSessionConfirm => 'Zaznamenať';
+
+  @override
+  String get logRestSaved => 'Deň odpočinku zaznamenaný';
+
+  @override
+  String get logStretchSaved => 'Naťahovanie zaznamenané';
+
+  @override
+  String get historyRestRow => 'Deň odpočinku';
+
+  @override
+  String get historyStretchRow => 'Naťahovanie';
+
+  @override
+  String get imstLogTitle => 'IMST tréning';
+
+  @override
+  String get imstLogBreathsLabel => 'Nádychy';
+
+  @override
+  String imstLogBreathsOfTarget(int target) {
+    return 'z cieľa $target';
+  }
+
+  @override
+  String get imstLogLevelLabel => 'Úroveň odporu';
+
+  @override
+  String get imstLogEvidenceNote =>
+      'IMST má silnú evidenciu pre krvný tlak a cievne funkcie; jeho priamy vplyv na dĺžku zadržania dychu je mierny.';
+
+  @override
+  String get imstLogSave => 'Uložiť tréning';
+
+  @override
+  String get imstLogSaved => 'IMST tréning uložený';
+
+  @override
+  String get imstLogSaveFailed => 'Tréning sa nepodarilo uložiť';
+
+  @override
+  String imstDayRow(int breaths) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths nádychov',
+      few: '$breaths nádychy',
+      one: '1 nádych',
+    );
+    return 'IMST · $_temp0';
+  }
+
+  @override
+  String imstHistoryRow(int breaths, int level) {
+    String _temp0 = intl.Intl.pluralLogic(
+      breaths,
+      locale: localeName,
+      other: '$breaths nádychov',
+      few: '$breaths nádychy',
+      one: '1 nádych',
+    );
+    return 'IMST · $_temp0 · úroveň $level';
+  }
+
+  @override
+  String get historyFilterImst => 'IMST';
+
+  @override
+  String get settingsImstGroupLabel => 'Tréning nádychových svalov (IMST)';
+
+  @override
+  String get settingsImstIntro =>
+      'Craigheadov protokol: 30 nádychov proti odporu denne, 5–6 dní v týždni. Zaznamenáš, ako si trénoval, nie meranie, ktoré appka nevie spraviť.';
+
+  @override
+  String get settingsImstDeviceNameLabel => 'Tréner';
+
+  @override
+  String get settingsImstDeviceNameHint => 'napr. POWERbreathe Plus';
+
+  @override
+  String get settingsImstLevelLabel => 'Úroveň odporu';
+
+  @override
+  String get settingsImstTargetLabel => 'Denný cieľ nádychov';
+
+  @override
+  String get settingsImstPimaxLabel => 'PImax (cmH₂O, voliteľné)';
+
+  @override
+  String get settingsImstPimaxNote =>
+      'Číselný ciferník sa nedá previesť na percento PImax. Ak máš PImax odmerané, 50 % → 75 % PImax je postup podložený evidenciou.';
+
+  @override
+  String get tablesEvidenceNote =>
+      'U začiatočníkov sa nepreukázalo, že by tabuľky pridávali hypoxickú alebo hyperkapnickú záťaž oproti bežným maximálnym zadržaniam (Declercq a Bouten, 2024).';
+
+  @override
+  String get evidenceTierBadgePrefix => 'Evidencia';
+
+  @override
+  String get evidenceTierStrong => 'Silná evidencia';
+
+  @override
+  String get evidenceTierMechanistic => 'Mechanicky podložené';
+
+  @override
+  String get evidenceTierConvention => 'Zaužívaná prax';
+
+  @override
+  String get evidenceTierContraindicated => 'Kontraindikované';
+
+  @override
+  String get evidenceTierStrongDesc =>
+      'Kontrolované štúdie merali práve ten účinok, ktorý tento režim sľubuje.';
+
+  @override
+  String get evidenceTierMechanisticDesc =>
+      'Fyziológia je známa, ale výhoda oproti jednoduchšiemu tréningu nie je dokázaná.';
+
+  @override
+  String get evidenceTierConventionDesc =>
+      'Bežne sa používa a dáva zmysel, no pre tento účel nebola overená v štúdiách.';
+
+  @override
+  String get evidenceTierContraindicatedDesc =>
+      'Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie.';
+
+  @override
+  String get lanSyncEntryButton => 'Synchronizovať cez Wi-Fi';
+
+  @override
+  String get lanSyncTitle => 'Synchronizácia cez Wi-Fi';
+
+  @override
+  String get lanSyncHostStarting => 'Spúšťa sa…';
+
+  @override
+  String get lanSyncHostInstruction =>
+      'Na telefóne otvor BreathLab, zvoľ Synchronizovať cez Wi-Fi a naskenuj tento kód.';
+
+  @override
+  String get lanSyncPlaintextNotice =>
+      'Počas prenosu ho môže vidieť ktokoľvek v tejto Wi-Fi sieti.';
+
+  @override
+  String get lanSyncFirewallHint =>
+      'Windows sa môže spýtať, či povoliť BreathLab cez firewall — povoľ to.';
+
+  @override
+  String get lanSyncExchanging => 'Synchronizuje sa…';
+
+  @override
+  String get lanSyncDoneTitle => 'Synchronizácia dokončená';
+
+  @override
+  String get lanSyncRetry => 'Skúsiť znova';
+
+  @override
+  String get lanSyncFailedGeneric => 'Synchronizácia zlyhala. Skús to znova.';
+
+  @override
+  String get lanSyncScanInstruction =>
+      'Namier fotoaparát na kód zobrazený na počítači.';
+
+  @override
+  String get lanSyncScanNotRecognised =>
+      'Tento kód nie je párovací kód BreathLab.';
+
+  @override
+  String get lanSyncCameraPermissionTitle => 'Potrebný prístup k fotoaparátu';
+
+  @override
+  String get lanSyncCameraPermissionBody =>
+      'BreathLab potrebuje fotoaparát na naskenovanie párovacieho kódu na počítači. Na nič iné sa nepoužíva.';
+
+  @override
+  String get posterScreenTitle => 'Tréningový systém';
+
+  @override
+  String get posterFullSystem => 'Celý systém';
+
+  @override
+  String get posterDoingAHold => 'Ako zadržať dych';
+
+  @override
+  String get posterTimeline => 'Časová os';
+
+  @override
+  String get posterShareImage => 'Zdieľať tento plagát';
+
+  @override
+  String get posterSharePdf => 'Zdieľať všetky tri ako PDF';
+
+  @override
+  String get posterShareFailed => 'Plagát sa nepodarilo zdieľať.';
+
+  @override
+  String get contextualTipReadMore => 'Čítať viac';
+
+  @override
+  String get settingsResearchSummaryLink => 'Prehľad výskumu';
+
+  @override
+  String get reportReaderTitle => 'Prehľad výskumu';
+
+  @override
+  String get reportReaderJumpTo => 'Preskočiť na časť';
+
+  @override
+  String get reportReaderLanguageNotice =>
+      'Tento prehľad je dostupný iba v angličtine.';
+
+  @override
+  String get reportReaderLoadFailed => 'Prehľad výskumu sa nepodarilo načítať.';
 }

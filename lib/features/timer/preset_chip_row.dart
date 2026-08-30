@@ -19,8 +19,6 @@ class PresetChipRow extends ConsumerWidget {
         ref.watch(defaultPrepModeProvider).valueOrNull ?? PrepMode.threeSeconds;
     final selected = explicitChoice ?? defaultMode;
 
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-
     final chips = [
       (PrepMode.none, l10n.presetQuickMax, l10n.presetQuickMaxTooltip),
       (PrepMode.threeSeconds, l10n.presetStandard, l10n.presetStandardTooltip),
@@ -36,19 +34,11 @@ class PresetChipRow extends ConsumerWidget {
       );
     }
 
-    if (isDesktop) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (final (i, entry) in chips.indexed) ...[
-            if (i > 0) const SizedBox(width: Spacing.md),
-            buildChip(entry.$1, entry.$2, entry.$3),
-          ],
-        ],
-      );
-    }
-
-    // Mobile: equal-width chips
+    // Equal thirds at every width. The desktop branch used to size the chips
+    // to their labels, which overflows the row as soon as the content column
+    // is narrower than the three natural widths plus their gaps — and the
+    // column is narrower than the window by the navigation rail, so a window
+    // comfortably past the desktop breakpoint could still be too narrow.
     return Row(
       children: [
         for (final (i, entry) in chips.indexed) ...[
@@ -84,17 +74,24 @@ class _PresetChip extends StatelessWidget {
         child: AnimatedContainer(
           duration: Durations.fast,
           height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
           decoration: BoxDecoration(
-            color: isSelected ? c.primarySurface : c.surfaceElevated,
+            // Matches the selected/unselected pattern _TagChip already
+            // uses — surfaceElevated read as more prominent than the
+            // primary-tinted fill, so the selected chip looked weaker
+            // than the other two instead of standing out.
+            color: isSelected ? c.primarySurface : Colors.transparent,
             borderRadius: BorderRadius.circular(Radius.lg),
             border: Border.all(
-              color: isSelected ? c.primary : Colors.transparent,
+              color: isSelected ? c.primary : c.border,
               width: 0.5,
             ),
           ),
           alignment: Alignment.center,
           child: Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: isSelected ? c.primaryText : c.textPrimary,
             ),

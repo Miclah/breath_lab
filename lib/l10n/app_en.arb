@@ -36,6 +36,65 @@
   "@safetyRule2": {
     "description": "Safety rule 2 — no hyperventilation"
   },
+  "recoveryTitle": "Recovery breaths",
+  "@recoveryTitle": {
+    "description": "Header of the guided hook-breath recovery prompt on the result screen (RESEARCH_ALIGNMENT.md §2, tier C)"
+  },
+  "recoveryBlurb": "Three hook breaths — a diving habit for the first half-minute after a hold. Not shown to improve performance.",
+  "@recoveryBlurb": {
+    "description": "Framing text for recovery breaths — practice, not evidence"
+  },
+  "recoveryStart": "Guide me",
+  "@recoveryStart": {
+    "description": "Button that starts the guided recovery-breath sequence"
+  },
+  "recoveryDone": "Done — take it easy for a minute.",
+  "@recoveryDone": {
+    "description": "Shown after the recovery-breath sequence finishes"
+  },
+  "recoveryCueInhale": "Breathe in",
+  "@recoveryCueInhale": { "description": "Recovery breath cue: inhale phase" },
+  "recoveryCueHook": "Hook — hold",
+  "@recoveryCueHook": { "description": "Recovery breath cue: the brief hooked hold" },
+  "recoveryCueExhale": "Out",
+  "@recoveryCueExhale": { "description": "Recovery breath cue: passive exhale" },
+  "recoveryProgress": "{cue} · {breath}/{total}",
+  "@recoveryProgress": {
+    "description": "Live cue plus breath counter during the guided recovery sequence",
+    "placeholders": {
+      "cue": { "type": "String" },
+      "breath": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "sambaResponseTitle": "Stop training for today",
+  "@sambaResponseTitle": {
+    "description": "Title of the dialog shown when a samba / loss-of-motor-control tag is applied (RESEARCH_ALIGNMENT.md §4 S3)"
+  },
+  "sambaResponseBody": "A samba — loss of motor control — is a near-blackout. Your brain was short of oxygen. Don't hold your breath again today, and take it easier next session.",
+  "@sambaResponseBody": {
+    "description": "Body of the samba safety-response dialog"
+  },
+  "sambaResponseSafety": "Safety notes",
+  "@sambaResponseSafety": {
+    "description": "Button on the samba dialog that opens the safety screen"
+  },
+  "sambaResponseAcknowledge": "Got it",
+  "@sambaResponseAcknowledge": {
+    "description": "Dismiss button on the samba safety-response dialog"
+  },
+  "safetyRuleBuddy": "Have someone with you who can help. One person holds while another stays alert — never both at once.",
+  "@safetyRuleBuddy": {
+    "description": "Safety rule: the buddy / one-up-one-down rule (RESEARCH_ALIGNMENT.md §4 S1)"
+  },
+  "safetyRuleMedical": "Get medical clearance first if you have heart disease, an arrhythmia, uncontrolled high blood pressure, epilepsy or a seizure history, are pregnant, or have ever blacked out.",
+  "@safetyRuleMedical": {
+    "description": "Safety rule: medical clearance for known contraindications (RESEARCH_ALIGNMENT.md §4 S1, research §6)"
+  },
+  "safetyRulePacking": "Never pack your lungs — forcing extra air in past a full breath. It can cause fainting, lung injury, and gas embolism.",
+  "@safetyRulePacking": {
+    "description": "Safety rule: the prohibition on lung packing / glossopharyngeal insufflation for beginners (RESEARCH_ALIGNMENT.md §2, §4 S1)"
+  },
   "safetyRule3": "Stop immediately if you feel dizzy, tingling, or loss of control.",
   "@safetyRule3": {
     "description": "Safety rule 3 — stop on warning signs"
@@ -88,6 +147,18 @@
   "@settingsBreathingRatioExhaleLabel": {
     "description": "Label for the custom exhale-duration stepper"
   },
+  "settingsBreathingRatioRule": "Exhale at least as long as the inhale, and a full cycle of 6 seconds or more.",
+  "@settingsBreathingRatioRule": {
+    "description": "Standing hint under the custom breathing ratio steppers stating the safety bounds (RESEARCH_ALIGNMENT.md §4 S2)"
+  },
+  "settingsBreathingRatioTooFast": "Kept as is: a cycle under 6 seconds is hyperventilation. It masks low oxygen instead of training your tolerance for it — the mechanism behind most breath-hold blackouts.",
+  "@settingsBreathingRatioTooFast": {
+    "description": "Shown when the user tries to set a breathing cycle shorter than 6 seconds — an explanation, not a silent clamp"
+  },
+  "settingsBreathingRatioExhaleShort": "Kept as is: a forced, shorter exhale drives the same hyperventilation the first safety screen warns about. Keep the exhale at least as long as the inhale.",
+  "@settingsBreathingRatioExhaleShort": {
+    "description": "Shown when the user tries to set an exhale shorter than the inhale"
+  },
   "settingsCo2Section": "CO₂ table",
   "@settingsCo2Section": {
     "description": "Settings section header for CO₂ table configuration"
@@ -117,6 +188,15 @@
     "description": "Label for the O₂ table fixed-rest stepper"
   },
   "settingsTablePreviewTitle": "Preview",
+  "settingsTablePreviewRoundCount": "{count, plural, =1{1 round} other{{count} rounds}}",
+  "@settingsTablePreviewRoundCount": {
+    "description": "Shown on the collapsed table preview header so the section still says how many rounds it will produce",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "@settingsTablePreviewTitle": {
     "description": "Heading above the live-computed round preview at the bottom of a table settings section"
   },
@@ -254,7 +334,11 @@
   },
   "settingsFocusModeExplanation": "BreathLab will silence its own non-critical notifications during a session. For a fully quiet session, you can enable Priority Mode in Android Settings yourself — BreathLab will never touch your system Do Not Disturb.",
   "@settingsFocusModeExplanation": {
-    "description": "Longer explanatory body shown below the focus mode toggle, per Design Additions §7"
+    "description": "Longer explanatory body shown below the focus mode toggle on Android, per Design Additions §7"
+  },
+  "settingsFocusModeExplanationDesktop": "BreathLab will silence its own non-critical notifications during a session.",
+  "@settingsFocusModeExplanationDesktop": {
+    "description": "Explanatory body shown below the focus mode toggle on non-Android platforms — omits the Android Priority Mode/Do Not Disturb references"
   },
   "settingsSoundHapticsSection": "Sound & haptics",
   "@settingsSoundHapticsSection": {
@@ -313,6 +397,10 @@
     "description": "Row showing the app version and build number"
   },
   "settingsResetLabel": "Reset all data",
+  "settingsResetSubtitle": "Deletes every hold, table session and setting on this device.",
+  "@settingsResetSubtitle": {
+    "description": "Subtitle under the Reset all data row, saying plainly what it destroys"
+  },
   "@settingsResetLabel": {
     "description": "Row that opens the reset-all-data confirmation dialog"
   },
@@ -327,6 +415,108 @@
   "settingsResetButton": "Reset",
   "@settingsResetButton": {
     "description": "Confirm button in the reset-all-data confirmation dialog"
+  },
+  "settingsDataSection": "Data",
+  "@settingsDataSection": {
+    "description": "Settings section header for device name, export, import, and last sync status"
+  },
+  "settingsDeviceNameLabel": "Device name",
+  "@settingsDeviceNameLabel": {
+    "description": "Label on the editable device name text field, shown to the other device after a sync"
+  },
+  "settingsLastSyncNever": "Never synced",
+  "@settingsLastSyncNever": {
+    "description": "Last-sync status line shown when this device has never exported or imported"
+  },
+  "settingsLastSyncWith": "Last synced {when} with {device}",
+  "@settingsLastSyncWith": {
+    "description": "Last-sync status line shown after at least one export or import",
+    "placeholders": {
+      "when": {
+        "type": "String"
+      },
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsExportButton": "Export",
+  "@settingsExportButton": {
+    "description": "Button that opens a save dialog to write a .blab backup file"
+  },
+  "settingsShareButton": "Share",
+  "@settingsShareButton": {
+    "description": "Android-only button that hands the backup straight to the share sheet"
+  },
+  "settingsImportButton": "Import",
+  "@settingsImportButton": {
+    "description": "Button that opens a file picker to merge in a .blab backup file"
+  },
+  "settingsExportSuccess": "Backup saved.",
+  "@settingsExportSuccess": {
+    "description": "Snackbar shown after a successful export"
+  },
+  "settingsExportFailed": "Couldn't save the backup.",
+  "@settingsExportFailed": {
+    "description": "Snackbar shown when export or share fails"
+  },
+  "settingsImportFailedTitle": "Import failed",
+  "@settingsImportFailedTitle": {
+    "description": "Title of the dialog shown when import fails"
+  },
+  "settingsImportFailedMalformed": "This file isn't a valid BreathLab backup.",
+  "@settingsImportFailedMalformed": {
+    "description": "Import error: the file isn't valid JSON or is missing required fields"
+  },
+  "settingsImportFailedFormat": "This file isn't a BreathLab backup, or was made by an incompatible version.",
+  "@settingsImportFailedFormat": {
+    "description": "Import error: the file's format or formatVersion isn't recognized"
+  },
+  "settingsImportFailedSchema": "This backup was made by a newer version of BreathLab. Update the app on this device first.",
+  "@settingsImportFailedSchema": {
+    "description": "Import error: the file's schemaVersion is newer than this device's database"
+  },
+  "settingsImportFailedGeneric": "Something went wrong reading this file.",
+  "@settingsImportFailedGeneric": {
+    "description": "Import error: an unexpected failure not covered by a more specific message"
+  },
+  "settingsImportSummaryTitle": "Import complete",
+  "@settingsImportSummaryTitle": {
+    "description": "Title of the dialog shown after a successful import"
+  },
+  "settingsImportSummaryBody": "Added {holdsAdded} holds, {sessionsAdded} sessions. Updated {holdsUpdated} holds. Synced with {device}.",
+  "@settingsImportSummaryBody": {
+    "description": "Body of the post-import summary dialog",
+    "placeholders": {
+      "holdsAdded": {
+        "type": "int"
+      },
+      "sessionsAdded": {
+        "type": "int"
+      },
+      "holdsUpdated": {
+        "type": "int"
+      },
+      "device": {
+        "type": "String"
+      }
+    }
+  },
+  "tagAddConfirm": "Add",
+  "@tagAddConfirm": {
+    "description": "Confirm button in the add-custom-tag dialog"
+  },
+  "tagAddCancel": "Cancel",
+  "@tagAddCancel": {
+    "description": "Cancel button in the add-custom-tag dialog"
+  },
+  "settingsSaveFailed": "Couldn't save that setting.",
+  "@settingsSaveFailed": {
+    "description": "Snackbar shown when persisting a setting change fails and the control reverts"
+  },
+  "resultSaveFailed": "Couldn't save that hold. Try again.",
+  "@resultSaveFailed": {
+    "description": "Snackbar shown when saving a completed hold to the database fails"
   },
   "settingsThemeLabel": "Theme",
   "@settingsThemeLabel": {
@@ -384,6 +574,14 @@
   "@prepGoLabel": {
     "description": "Label shown at the end of the 3-second prep countdown before the hold begins"
   },
+  "prepGetReadyLabel": "Get ready",
+  "@prepGetReadyLabel": {
+    "description": "Label shown above the number during the 3-second prep countdown"
+  },
+  "prepCancel": "Cancel",
+  "@prepCancel": {
+    "description": "Button that aborts the 3-second prep countdown and returns to idle"
+  },
   "prepBreatheIn": "Breathe in...",
   "@prepBreatheIn": {
     "description": "Text shown inside the breathing circle during the inhale phase"
@@ -436,6 +634,127 @@
   "@timerStateLabelDone": {
     "description": "State label shown below the timer number after a hold is stopped"
   },
+  "timerStatusAdherence": "{percent}% this week",
+  "@timerStatusAdherence": {
+    "description": "This week's structure adherence, shown in the timer status row above the preset chips (RESEARCH_ALIGNMENT.md §3.1)",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsJumpTo": "Jump to",
+  "@settingsJumpTo": {
+    "description": "Heading of the settings section index in the side column"
+  },
+  "tablesEstimatedDuration": "{minutes, plural, =1{About 1 minute in total} other{About {minutes} minutes in total}}",
+  "@tablesEstimatedDuration": {
+    "description": "Estimated wall-clock length of the whole table session, shown under the based-on-max line. Rounded to whole minutes — the point is the order of magnitude of the commitment, not a countdown",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "tablesSessionSummaryTitle": "This session",
+  "@tablesSessionSummaryTitle": {
+    "description": "Heading of the tables side panel summarising the session that is about to run"
+  },
+  "timerSideLastSession": "Last session",
+  "@timerSideLastSession": {
+    "description": "Heading of the timer side panel card summarising the previous training day"
+  },
+  "timerSideSessionHolds": "{count, plural, =1{1 hold} other{{count} holds}}",
+  "@timerSideSessionHolds": {
+    "description": "How many holds the previous session contained, shown beside its best time",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timerSideNoHistory": "Nothing logged yet. Your first hold sets the baseline.",
+  "@timerSideNoHistory": {
+    "description": "Empty state of the timer side panel's last-session card"
+  },
+  "timerSideShortcuts": "Shortcuts",
+  "@timerSideShortcuts": {
+    "description": "Heading of the keyboard shortcuts card in the timer side panel"
+  },
+  "timerSideShortcutStart": "Start / stop hold",
+  "@timerSideShortcutStart": {
+    "description": "What the Space key does on the timer screen"
+  },
+  "timerSideShortcutContraction": "Mark contraction",
+  "@timerSideShortcutContraction": {
+    "description": "What the C key does during an active hold"
+  },
+  "timerSideShortcutCancel": "Cancel",
+  "@timerSideShortcutCancel": {
+    "description": "What the Escape key does during prep, a hold, or on the result screen"
+  },
+  "resultAddNote": "Add a note",
+  "@resultAddNote": {
+    "description": "Collapsed affordance on the result screen that expands into the notes field"
+  },
+  "resultNoteHint": "How did it feel?",
+  "@resultNoteHint": {
+    "description": "Placeholder inside the result screen notes field"
+  },
+  "resultRemoveNote": "Remove note",
+  "@resultRemoveNote": {
+    "description": "Tooltip on the button that collapses the notes field and discards what was typed"
+  },
+  "resultNewPbBadge": "NEW PB",
+  "@resultNewPbBadge": {
+    "description": "Pill shown above the duration on the result screen when the hold beat the previous best"
+  },
+  "resultVsLast": "{delta} vs last",
+  "@resultVsLast": {
+    "description": "Comparison of this hold against the previous saved max hold; delta arrives pre-formatted as +mm:ss or −mm:ss",
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "resultVsPb": "{delta} vs PB",
+  "@resultVsPb": {
+    "description": "Comparison of this hold against the personal best it is measured from; delta arrives pre-formatted as +mm:ss or −mm:ss",
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "resultFirstHold": "Your first hold — this is the baseline everything else is measured from.",
+  "@resultFirstHold": {
+    "description": "Shown in place of the comparison line when there is no earlier hold to compare against"
+  },
+  "resultTotal": "Total",
+  "@resultTotal": {
+    "description": "Label for the total hold duration on the result screen metrics row"
+  },
+  "resultStruggleNote": "Struggle phase is where most of the measured improvement in novices shows up.",
+  "@resultStruggleNote": {
+    "description": "Caption below the result metrics explaining why struggle-phase duration is tracked (RESEARCH_ALIGNMENT.md §2, tier A)"
+  },
+  "resultNoContractionTitle": "No contraction marked",
+  "@resultNoContractionTitle": {
+    "description": "Heading of the result-screen card shown when the hold had no contraction marker"
+  },
+  "resultNoContractionHintTouch": "Double-tap the ring during a hold to mark your first contraction.",
+  "@resultNoContractionHintTouch": {
+    "description": "How to mark a contraction, on a touch device"
+  },
+  "resultNoContractionHintKeyboard": "Press C during a hold to mark your first contraction.",
+  "@resultNoContractionHintKeyboard": {
+    "description": "How to mark a contraction, on a device with a keyboard"
+  },
+  "resultNoContractionWhy": "The time from there to the end of the hold is your struggle phase — the part that tracks your progress most closely.",
+  "@resultNoContractionWhy": {
+    "description": "Why marking the contraction matters, shown below the how-to line"
+  },
   "resultSaveButton": "Save",
   "@resultSaveButton": {
     "description": "Save button on the result screen"
@@ -464,17 +783,17 @@
   "@lungVolEmpty": {
     "description": "Lung volume selector segment label for empty lungs — kept as training term in both languages"
   },
-  "lungVolFullHint": "Plné pľúca · Full lungs",
+  "lungVolFullHint": "Full lungs",
   "@lungVolFullHint": {
-    "description": "Helper line below the lung volume selector when Full is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when Full is selected"
   },
-  "lungVolFrcHint": "Pasívny výdych · Passive exhale",
+  "lungVolFrcHint": "Passive exhale",
   "@lungVolFrcHint": {
-    "description": "Helper line below the lung volume selector when FRC is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when FRC is selected"
   },
-  "lungVolEmptyHint": "Po výdychu · After exhale",
+  "lungVolEmptyHint": "After exhale",
   "@lungVolEmptyHint": {
-    "description": "Helper line below the lung volume selector when Empty is selected — intentionally bilingual per design spec"
+    "description": "Helper line below the lung volume selector when Empty is selected"
   },
   "tagTired": "Tired",
   "@tagTired": {
@@ -535,6 +854,15 @@
   "historyFilterMax": "Max",
   "@historyFilterMax": {
     "description": "Type filter chip on the History screen showing standalone max holds"
+  },
+  "historyTagCount": "{count, plural, =1{1 tag} other{{count} tags}}",
+  "@historyTagCount": {
+    "description": "Tag count shown on a hold row in place of unlabeled dots, e.g. '2 tags'",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "historyFilterTags": "Tags",
   "@historyFilterTags": {
@@ -639,9 +967,21 @@
   "@tablesPhaseLabelRest": {
     "description": "State label shown below the live timer on the active table round during rest"
   },
+  "tablesSkipRoundButton": "Skip round",
+  "@tablesSkipRoundButton": {
+    "description": "Button on the active round card that ends its current hold/rest phase early and moves to the next round"
+  },
+  "tablesEndSessionButton": "End session",
+  "@tablesEndSessionButton": {
+    "description": "Full-width button that ends the entire table session, as opposed to skipping just the current round"
+  },
   "tablesSummaryTitle": "Session complete",
   "@tablesSummaryTitle": {
-    "description": "Title of the table session summary screen"
+    "description": "Title of the table session summary screen when every planned round was completed"
+  },
+  "tablesSummaryStoppedTitle": "Session stopped",
+  "@tablesSummaryStoppedTitle": {
+    "description": "Title of the table session summary screen when it ended early, with rounds still remaining"
   },
   "tablesSummaryRounds": "{completed} of {total} rounds completed",
   "@tablesSummaryRounds": {
@@ -705,13 +1045,48 @@
   "@progressStatAvg30d": {
     "description": "Label for the 30-day average hold stat card on the Progress screen"
   },
-  "progressStatStreak": "Streak",
-  "@progressStatStreak": {
-    "description": "Label for the current streak stat card on the Progress screen"
+  "retestPromptTitle": "Time to retest",
+  "@retestPromptTitle": {
+    "description": "Heading on the retest-your-max prompt card on Progress (RESEARCH_ALIGNMENT.md §5)"
   },
-  "progressStatNoData": "—",
-  "@progressStatNoData": {
-    "description": "Placeholder value for a stat card when there is not enough history yet"
+  "retestPromptBody": "Your last max hold was {weeks, plural, =1{a week} other{{weeks} weeks}} ago. Retest it so your CO₂ and O₂ tables stay based on a current figure.",
+  "@retestPromptBody": {
+    "description": "Body of the retest prompt",
+    "placeholders": {
+      "weeks": { "type": "int" }
+    }
+  },
+  "retestPromptDismiss": "Dismiss",
+  "@retestPromptDismiss": {
+    "description": "Tooltip on the retest prompt's dismiss button"
+  },
+  "plateauTitle": "Progress has stalled",
+  "@plateauTitle": {
+    "description": "Heading on the deload card shown when a plateau is detected (RESEARCH_ALIGNMENT.md §3.2)"
+  },
+  "plateauBody": "Your best Full-lung hold over the last four weeks ({recent}) hasn't beaten the four weeks before ({previous}).",
+  "@plateauBody": {
+    "description": "Body of the deload card, stating the two figures being compared",
+    "placeholders": {
+      "recent": { "type": "String" },
+      "previous": { "type": "String" }
+    }
+  },
+  "plateauAdvice": "The research points to recovery and chest-wall stretching over more volume here. A one- to two-week deload is often what breaks it.",
+  "@plateauAdvice": {
+    "description": "Advice line on the deload card — the research's own recommendation (RESEARCH_ALIGNMENT.md §3.2)"
+  },
+  "progressStatWeeksTrained": "Weeks trained",
+  "@progressStatWeeksTrained": {
+    "description": "Label for the training-weeks stat card on the Progress screen — the demoted streak (RESEARCH_ALIGNMENT.md §3.1)"
+  },
+  "statAbsentDuration": "\u2014\u2014:\u2014\u2014",
+  "@statAbsentDuration": {
+    "description": "Stands in for a duration that has no value yet. Shaped like mm:ss so the row keeps its rhythm — zero is a measurement, absence is not, so this is never 00:00"
+  },
+  "statAbsentCount": "\u2014",
+  "@statAbsentCount": {
+    "description": "Stands in for a count that has no value yet"
   },
   "progressHeatmapTitle": "Last 12 weeks",
   "@progressHeatmapTitle": {
@@ -725,7 +1100,7 @@
   "@progressHeatmapLegendMore": {
     "description": "Right-hand label of the heatmap color-intensity legend"
   },
-  "progressHeatmapStat": "{sessions} sessions · best week: {days} days",
+  "progressHeatmapStat": "{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}",
   "@progressHeatmapStat": {
     "description": "Summary stat shown to the right of the heatmap legend",
     "placeholders": {
@@ -737,9 +1112,29 @@
       }
     }
   },
-  "progressChartEmpty": "Not enough holds yet to show a trend.",
+  "progressChartEmptyWhy": "Early on, the gain shows up in the struggle phase rather than in your total time.",
+  "@progressChartEmptyWhy": {
+    "description": "Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md \u00a72, tier A)"
+  },
+  "progressHeatmapEmpty": "Twelve weeks of training will fill this in.",
+  "@progressHeatmapEmpty": {
+    "description": "Shown over the dimmed heatmap grid before there is anything to plot"
+  },
+  "progressEmptyAction": "Start a hold",
+  "@progressEmptyAction": {
+    "description": "The one action that ends an empty state on the Progress screen; jumps to the Timer tab"
+  },
+  "progressChartEmpty": "A line needs points — four sessions and the trend starts here.",
   "@progressChartEmpty": {
     "description": "Empty state shown in place of the progress chart when there is no data in the selected range"
+  },
+  "progressChartStruggleLegend": "Struggle phase",
+  "@progressChartStruggleLegend": {
+    "description": "Legend label for the faint struggle-phase line on the progress chart (RESEARCH_ALIGNMENT.md §2), shown only in single-volume view"
+  },
+  "progressChartAverageLegend": "Average",
+  "@progressChartAverageLegend": {
+    "description": "Legend label for the dashed daily-average line on the progress chart, shown only when a single lung volume is selected"
   },
   "progressChartFilterAll": "All",
   "@progressChartFilterAll": {
@@ -760,5 +1155,299 @@
   "progressViewAllHistory": "View all",
   "@progressViewAllHistory": {
     "description": "Link below the recent holds list that pushes the full history screen"
+  },
+  "imstLogOpen": "Log an IMST session",
+  "@imstLogOpen": {
+    "description": "Menu item / tooltip that opens the IMST logging screen from the Timer screen"
+  },
+  "logMenuTooltip": "Log a session",
+  "@logMenuTooltip": {
+    "description": "Tooltip on the Timer app-bar button that opens the log-a-session menu (IMST, rest, stretch)"
+  },
+  "logRestMenuItem": "Rest day",
+  "@logRestMenuItem": {
+    "description": "Menu item to log a rest day"
+  },
+  "logStretchMenuItem": "Stretching",
+  "@logStretchMenuItem": {
+    "description": "Menu item to log a chest-wall stretching session"
+  },
+  "logRestTitle": "Log a rest day",
+  "@logRestTitle": {
+    "description": "Title of the rest-day logging sheet"
+  },
+  "logStretchTitle": "Log stretching",
+  "@logStretchTitle": {
+    "description": "Title of the stretching-session logging sheet"
+  },
+  "logRestBlurb": "Recovery is training. A logged rest day counts toward your week's structure rather than breaking a streak.",
+  "@logRestBlurb": {
+    "description": "Explains why a rest day is a positive logged event (RESEARCH_ALIGNMENT.md §3)"
+  },
+  "logStretchBlurb": "Chest-wall stretching is the one route to a modest vital-capacity gain — single-digit percent, over months, not the half-litre of folklore.",
+  "@logStretchBlurb": {
+    "description": "States the weak evidence and small effect size for stretching (RESEARCH_ALIGNMENT.md §2)"
+  },
+  "logSessionConfirm": "Log it",
+  "@logSessionConfirm": {
+    "description": "Confirm button on the rest/stretch logging sheet"
+  },
+  "logRestSaved": "Rest day logged",
+  "@logRestSaved": {
+    "description": "Confirmation snackbar after logging a rest day"
+  },
+  "logStretchSaved": "Stretching session logged",
+  "@logStretchSaved": {
+    "description": "Confirmation snackbar after logging a stretching session"
+  },
+  "historyRestRow": "Rest day",
+  "@historyRestRow": {
+    "description": "History and heatmap-day-sheet row label for a logged rest day"
+  },
+  "historyStretchRow": "Stretching",
+  "@historyStretchRow": {
+    "description": "History and heatmap-day-sheet row label for a logged stretching session"
+  },
+  "imstLogTitle": "IMST session",
+  "@imstLogTitle": {
+    "description": "Title of the IMST session logging screen"
+  },
+  "imstLogBreathsLabel": "Breaths",
+  "@imstLogBreathsLabel": {
+    "description": "Section header above the breath counter on the IMST logging screen"
+  },
+  "imstLogBreathsOfTarget": "of {target} target",
+  "@imstLogBreathsOfTarget": {
+    "description": "Sub-label under the breath count showing the daily target",
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "imstLogLevelLabel": "Resistance level",
+  "@imstLogLevelLabel": {
+    "description": "Label for the per-session resistance level stepper, seeded from Settings"
+  },
+  "imstLogEvidenceNote": "IMST has strong evidence for blood pressure and vascular function; its direct effect on breath-hold time is modest.",
+  "@imstLogEvidenceNote": {
+    "description": "Tier note on the IMST logging screen — RESEARCH_ALIGNMENT.md §2 requires stating the direct breath-hold evidence is modest"
+  },
+  "imstLogSave": "Save session",
+  "@imstLogSave": {
+    "description": "Save button on the IMST logging screen"
+  },
+  "imstLogSaved": "IMST session saved",
+  "@imstLogSaved": {
+    "description": "Confirmation snackbar after saving an IMST session"
+  },
+  "imstLogSaveFailed": "Couldn't save the session",
+  "@imstLogSaveFailed": {
+    "description": "Error snackbar when saving an IMST session fails"
+  },
+  "imstDayRow": "IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}}",
+  "@imstDayRow": {
+    "description": "Row label for an IMST session in the heatmap day sheet and history list",
+    "placeholders": {
+      "breaths": {
+        "type": "int"
+      }
+    }
+  },
+  "imstHistoryRow": "IMST · {breaths, plural, =1{1 breath} other{{breaths} breaths}} · level {level}",
+  "@imstHistoryRow": {
+    "description": "History list row for an IMST session that records the resistance level used",
+    "placeholders": {
+      "breaths": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "historyFilterImst": "IMST",
+  "@historyFilterImst": {
+    "description": "History type filter chip for IMST sessions"
+  },
+  "settingsImstGroupLabel": "Inspiratory muscle training (IMST)",
+  "@settingsImstGroupLabel": {
+    "description": "Label for the IMST configuration group inside Settings → Training"
+  },
+  "settingsImstIntro": "Craighead's protocol: 30 resisted breaths a day, 5–6 days a week. Record how you trained, not a measurement the app can't take.",
+  "@settingsImstIntro": {
+    "description": "One-line explainer under the IMST settings group heading"
+  },
+  "settingsImstDeviceNameLabel": "Trainer",
+  "@settingsImstDeviceNameLabel": {
+    "description": "Label for the free-text IMST device name field"
+  },
+  "settingsImstDeviceNameHint": "e.g. POWERbreathe Plus",
+  "@settingsImstDeviceNameHint": {
+    "description": "Placeholder for the IMST trainer name field"
+  },
+  "settingsImstLevelLabel": "Resistance level",
+  "@settingsImstLevelLabel": {
+    "description": "Label for the IMST resistance dial position stepper"
+  },
+  "settingsImstTargetLabel": "Daily breath target",
+  "@settingsImstTargetLabel": {
+    "description": "Label for the IMST target-breaths-per-day stepper (default 30)"
+  },
+  "settingsImstPimaxLabel": "PImax (cmH₂O, optional)",
+  "@settingsImstPimaxLabel": {
+    "description": "Label for the optional measured maximal inspiratory pressure stepper; shows an em dash when unset"
+  },
+  "settingsImstPimaxNote": "A numbered dial can't be converted to a percentage of PImax. If you have measured yours, 50% → 75% PImax is the evidence-based ramp.",
+  "@settingsImstPimaxNote": {
+    "description": "Helper text under the PImax field, per PHASE_3D_research.md — honest beats precise-looking"
+  },
+  "tablesEvidenceNote": "For novices, tables were not shown to add hypoxic or hypercapnic stress beyond plain maximal holds (Declercq & Bouten, 2024).",
+  "@tablesEvidenceNote": {
+    "description": "Plain-language statement of the tier-B finding on CO2/O2 tables, shown under the tier badge in the session info panel (RESEARCH_ALIGNMENT.md §2)"
+  },
+  "evidenceTierBadgePrefix": "Evidence",
+  "@evidenceTierBadgePrefix": {
+    "description": "Screen-reader prefix for a tier badge, read as 'Evidence: Strong evidence'"
+  },
+  "evidenceTierStrong": "Strong evidence",
+  "@evidenceTierStrong": {
+    "description": "Tier A label (RESEARCH_ALIGNMENT.md §1): controlled trials measure the claimed outcome"
+  },
+  "evidenceTierMechanistic": "Mechanistically sound",
+  "@evidenceTierMechanistic": {
+    "description": "Tier B label: the physiology follows but superiority over simpler options is unproven"
+  },
+  "evidenceTierConvention": "Practice convention",
+  "@evidenceTierConvention": {
+    "description": "Tier C label: widely practised and face-valid, no controlled trials for this outcome"
+  },
+  "evidenceTierContraindicated": "Contraindicated",
+  "@evidenceTierContraindicated": {
+    "description": "Tier X label: dangerous in the way the app is used; only ever shown as a warning"
+  },
+  "evidenceTierStrongDesc": "Controlled trials measured the outcome this mode claims to improve.",
+  "@evidenceTierStrongDesc": {
+    "description": "One-line meaning of tier A, for the badge tooltip"
+  },
+  "evidenceTierMechanisticDesc": "The physiology is understood, but its advantage over simpler training is unproven.",
+  "@evidenceTierMechanisticDesc": {
+    "description": "One-line meaning of tier B"
+  },
+  "evidenceTierConventionDesc": "Widely practised and reasonable, but not tested in controlled trials for this.",
+  "@evidenceTierConventionDesc": {
+    "description": "One-line meaning of tier C. Must not imply the mode is worse, only less proven"
+  },
+  "evidenceTierContraindicatedDesc": "Unsafe in the way this app is used. Shown only to warn against it.",
+  "@evidenceTierContraindicatedDesc": {
+    "description": "One-line meaning of tier X"
+  },
+  "lanSyncEntryButton": "Sync over Wi-Fi",
+  "@lanSyncEntryButton": {
+    "description": "Settings > Data button that starts QR-paired LAN sync"
+  },
+  "lanSyncTitle": "Sync over Wi-Fi",
+  "@lanSyncTitle": {
+    "description": "Title of both the host (QR) and scan screens"
+  },
+  "lanSyncHostStarting": "Starting…",
+  "@lanSyncHostStarting": {
+    "description": "Shown on the host screen while the local server binds"
+  },
+  "lanSyncHostInstruction": "Open BreathLab on your phone, choose Sync over Wi-Fi, and scan this code.",
+  "@lanSyncHostInstruction": {
+    "description": "Instruction above the QR code on the host screen"
+  },
+  "lanSyncPlaintextNotice": "Anyone on this Wi-Fi network can see the transfer while it runs.",
+  "@lanSyncPlaintextNotice": {
+    "description": "Honest limitation notice on the host screen — the exchange is not encrypted"
+  },
+  "lanSyncFirewallHint": "Windows may ask to allow BreathLab through the firewall — allow it.",
+  "@lanSyncFirewallHint": {
+    "description": "Warns the Windows user to expect the firewall prompt on first listen"
+  },
+  "lanSyncExchanging": "Syncing…",
+  "@lanSyncExchanging": {
+    "description": "Shown on both screens while the merge is in progress"
+  },
+  "lanSyncDoneTitle": "Sync complete",
+  "@lanSyncDoneTitle": {
+    "description": "Heading of the success state after a LAN sync"
+  },
+  "lanSyncRetry": "Try again",
+  "@lanSyncRetry": {
+    "description": "Button that restarts a failed LAN sync"
+  },
+  "lanSyncFailedGeneric": "Sync failed. Try again.",
+  "@lanSyncFailedGeneric": {
+    "description": "Fallback error message for a LAN sync that failed without a specific reason"
+  },
+  "lanSyncScanInstruction": "Point the camera at the code shown on your PC.",
+  "@lanSyncScanInstruction": {
+    "description": "Instruction on the Android scan screen viewfinder"
+  },
+  "lanSyncScanNotRecognised": "That code isn't a BreathLab pairing code.",
+  "@lanSyncScanNotRecognised": {
+    "description": "Shown when the scanned QR is valid but not a BreathLab pairing code"
+  },
+  "lanSyncCameraPermissionTitle": "Camera access needed",
+  "@lanSyncCameraPermissionTitle": {
+    "description": "Heading when camera permission is required to scan"
+  },
+  "lanSyncCameraPermissionBody": "BreathLab needs the camera to scan the pairing code on your PC. It is used for nothing else.",
+  "@lanSyncCameraPermissionBody": {
+    "description": "Rationale shown when camera permission is denied"
+  },
+  "posterScreenTitle": "Training system",
+  "@posterScreenTitle": {
+    "description": "Title of the poster viewer screen and its Settings entry point"
+  },
+  "posterFullSystem": "Full system",
+  "@posterFullSystem": {
+    "description": "Picker label for the overview poster — the week, technique, progression, safety"
+  },
+  "posterDoingAHold": "Doing a hold",
+  "@posterDoingAHold": {
+    "description": "Picker label for the step-by-step hold walkthrough poster"
+  },
+  "posterTimeline": "Timeline",
+  "@posterTimeline": {
+    "description": "Picker label for the progression-expectations poster"
+  },
+  "posterShareImage": "Share this poster",
+  "@posterShareImage": {
+    "description": "Action that shares the current poster as a PNG image"
+  },
+  "posterSharePdf": "Share all three as PDF",
+  "@posterSharePdf": {
+    "description": "Action that shares the whole poster set as one PDF"
+  },
+  "posterShareFailed": "Could not share the poster.",
+  "@posterShareFailed": {
+    "description": "Shown when sharing a poster image or PDF fails"
+  },
+  "contextualTipReadMore": "Read more",
+  "@contextualTipReadMore": {
+    "description": "Link on a contextual tip that opens the research reader at the relevant section"
+  },
+  "settingsResearchSummaryLink": "Research summary",
+  "@settingsResearchSummaryLink": {
+    "description": "Settings → About row that opens the in-app research reader"
+  },
+  "reportReaderTitle": "Research summary",
+  "@reportReaderTitle": {
+    "description": "App-bar title of the in-app research reader screen"
+  },
+  "reportReaderJumpTo": "Jump to section",
+  "@reportReaderJumpTo": {
+    "description": "Header of the reader's section index"
+  },
+  "reportReaderLanguageNotice": "This summary is available in English only.",
+  "@reportReaderLanguageNotice": {
+    "description": "Notice at the top of the reader — the report itself is not translated, only the app around it (RESEARCH_ALIGNMENT.md §5)"
+  },
+  "reportReaderLoadFailed": "The research summary could not be loaded.",
+  "@reportReaderLoadFailed": {
+    "description": "Shown if the bundled report asset fails to load or parse"
   }
 }

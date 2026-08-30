@@ -6,19 +6,23 @@ import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/format_duration.dart';
+import '../../shared/widgets/adaptive_page.dart';
+import '../imst/imst_log_screen.dart';
+import 'log_session_sheet.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 import 'preset_chip_row.dart';
 import 'prep_phase_widget.dart';
 import 'providers.dart';
 import 'result_screen.dart';
 import 'timer_ring.dart';
-
-String _fmtDuration(Duration d) {
-  final m = d.inMinutes.toString().padLeft(2, '0');
-  final s = (d.inSeconds % 60).toString().padLeft(2, '0');
-  return '$m:$s';
-}
+import 'timer_side_panel.dart';
+import 'timer_stage.dart';
+import 'timer_status_row.dart';
+import 'todays_holds_row.dart';
+import '../../shared/widgets/primary_action.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({super.key});
@@ -79,14 +83,45 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     final state = ref.watch(timerProvider);
     final maxMs = ref.watch(currentMaxMsProvider).valueOrNull;
     final c = context.appColors;
-    final isDesktop = MediaQuery.of(context).size.width >= 600;
-    final hPad = isDesktop ? Spacing.xxxl : Spacing.xl;
 
     final ringValue = (maxMs == null || maxMs == 0)
         ? 0.0
-        : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 1.5);
+        // Capped at 2.0 rather than 1.5: the ring's overflow arc closes at
+        // double the PB, and clamping below that hid its top half.
+        : (state.holdElapsed.inMilliseconds / maxMs).clamp(0.0, 2.0);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.navTimer),
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.add),
+            tooltip: l10n.logMenuTooltip,
+            onSelected: (value) {
+              switch (value) {
+                case 'imst':
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const ImstLogScreen(),
+                    ),
+                  );
+                case 'rest':
+                  showLogSessionSheet(context, LoggableSession.rest);
+                case 'stretch':
+                  showLogSessionSheet(context, LoggableSession.stretch);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'imst', child: Text(l10n.imstLogOpen)),
+              PopupMenuItem(value: 'rest', child: Text(l10n.logRestMenuItem)),
+              PopupMenuItem(
+                value: 'stretch',
+                child: Text(l10n.logStretchMenuItem),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: Focus(
         focusNode: _focusNode,
         autofocus: true,
@@ -94,27 +129,73 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         child: SafeArea(
           child: state.isDone
               ? const ResultView()
-              : Padding(
-                  padding: EdgeInsets.symmetric(horizontal: hPad),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: Spacing.lg),
-                      if (state.isIdle) const PresetChipRow(),
-                      Expanded(
-                        child: state.isPrep
-                            ? const PrepPhaseWidget()
-                            : _buildRing(
+              : AdaptivePage(
+                  maxWidth: ContentWidth.wide,
+                  // Held open in every state. During PREP and HOLD the slot
+                  // is deliberately empty — Design's "don't crowd the timer
+                  // screen" — but its width stays reserved so the main
+                  // column, and with it the ring, does not slide sideways
+                  // when it empties.
+                  reserveSide: true,
+                  centerVertically: true,
+                  side: state.isIdle ? const TimerSidePanel() : null,
+                  child: TimerStage(
+                    // Every band carries something in every state, or
+                    // carries nothing and keeps its height. What changes is
+                    // the contents, and those crossfade.
+                    top: switch (state.phase) {
+                      TimerPhase.idle => const Column(
+                        children: [
+                          TimerStatusRow(),
+                          SizedBox(height: Spacing.md),
+                          PresetChipRow(),
+                        ],
+                      ),
+                      TimerPhase.prep => const PrepTopLabel(),
+                      _ => null,
+                    },
+                    hero: AnimatedSwitcher(
+                      duration: Durations.normal,
+                      child: state.isPrep
+                          ? const PrepPhaseWidget(key: ValueKey('prep'))
+                          : KeyedSubtree(
+                              key: const ValueKey('ring'),
+                              child: _buildRing(
                                 context,
                                 state,
                                 l10n,
                                 c,
-                                isDesktop,
                                 ringValue,
                               ),
-                      ),
-                      _buildButton(context, state, l10n, c),
-                      const SizedBox(height: Spacing.xl),
-                    ],
+                            ),
+                    ),
+                    below: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: Spacing.md),
+                        StageBand(
+                          height: TimerStage.contractionBandHeight,
+                          child: state.isPrep
+                              ? const PrepCountdown()
+                              : state.contractionTime == null
+                              ? null
+                              : _ContractionBadge(time: state.contractionTime!),
+                        ),
+                        const SizedBox(height: Spacing.sm),
+                        StageBand(
+                          height: TimerStage.holdsBandHeight,
+                          child: state.isIdle ? const TodaysHoldsRow() : null,
+                        ),
+                        const SizedBox(height: Spacing.md),
+                        StageBand(
+                          height: TimerStage.actionBandHeight,
+                          child: state.isPrep
+                              ? const PrepActionButton()
+                              : _buildButton(context, state, l10n, c),
+                        ),
+                        const SizedBox(height: Spacing.xl),
+                      ],
+                    ),
                   ),
                 ),
         ),
@@ -122,53 +203,63 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     );
   }
 
+  /// The ring, sized and positioned by [TimerStage] rather than by whatever
+  /// height the surrounding rows happened to leave it.
   Widget _buildRing(
     BuildContext context,
     TimerState state,
     AppLocalizations l10n,
     BreathLabColorScheme c,
-    bool isDesktop,
     double ringValue,
   ) {
-    final timerStyle = Theme.of(
-      context,
-    ).textTheme.displayLarge?.copyWith(fontSize: isDesktop ? 64.0 : null);
-
     final elapsed = state.isIdle ? Duration.zero : state.holdElapsed;
 
-    String? stateLabel;
-    if (state.isHolding) stateLabel = l10n.timerStateLabelHold;
-    if (state.isDone) stateLabel = l10n.timerStateLabelDone;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final diameter = constraints.biggest.shortestSide;
+        // `displayLg` is 72, sized for the 280 ring. Five monospace glyphs at
+        // 72 are wider than a 220 ring, so below the expanded diameter the
+        // figure scales to the circle it has to sit inside — the ring can be
+        // any size between the two tokens, not just one of them.
+        final timerStyle = BreathLabTypography.displayLg.copyWith(
+          color: c.textPrimary,
+          fontSize: diameter >= TimerRing.expandedDiameter
+              ? null
+              : BreathLabTypography.displayLg.fontSize! *
+                    (diameter / TimerRing.expandedDiameter),
+        );
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
+        return GestureDetector(
           onDoubleTap: () => ref.read(timerProvider.notifier).markContraction(),
           child: TimerRing(
             value: ringValue,
+            elapsed: elapsed,
+            size: diameter,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_fmtDuration(elapsed), style: timerStyle),
-                if (stateLabel != null) ...[
-                  const SizedBox(height: Spacing.xs),
-                  Text(
-                    stateLabel,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: c.textTertiary),
+                Text(formatMmSs(elapsed), style: timerStyle),
+                // Reserved, not conditional: a label that appears only while
+                // holding would shift the number inside a ring whose own
+                // centre is fixed.
+                SizedBox(
+                  height: 16,
+                  child: AnimatedSwitcher(
+                    duration: Durations.normal,
+                    child: !state.isHolding
+                        ? const SizedBox.shrink()
+                        : Text(
+                            l10n.timerStateLabelHold,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: c.textTertiary),
+                          ),
                   ),
-                ],
+                ),
               ],
             ),
           ),
-        ),
-        if (state.contractionTime != null) ...[
-          const SizedBox(height: Spacing.md),
-          _ContractionBadge(time: state.contractionTime!),
-        ],
-      ],
+        );
+      },
     );
   }
 
@@ -178,19 +269,17 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     AppLocalizations l10n,
     BreathLabColorScheme c,
   ) {
-    if (state.isPrep) return const SizedBox.shrink();
-
     if (state.isHolding) {
-      return SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: c.danger,
-            foregroundColor: c.textOnDanger,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radius.lg),
-            ),
+      // Outline, not a red slab. Design gives red to events — "when it
+      // appears, it means something happened" — and a fill that sits there
+      // for three minutes is the opposite of an event. It was also the
+      // loudest thing on the screen for the whole hold, which the timer
+      // number is supposed to be. The colour stays; only the fill goes.
+      return PrimaryAction(
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: c.dangerText,
+            side: BorderSide(color: c.danger, width: 0.5),
           ),
           onPressed: () => ref.read(timerProvider.notifier).stop(),
           child: Text(l10n.timerStopButton),
@@ -199,11 +288,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     }
 
     // idle — Start button
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
+    return PrimaryAction(
       child: FilledButton(
         style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(TimerStage.actionBandHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Radius.lg),
           ),
@@ -234,7 +322,7 @@ class _ContractionBadge extends StatelessWidget {
         ),
         const SizedBox(width: Spacing.xs),
         Text(
-          _fmtDuration(time),
+          formatMmSs(time),
           style: Theme.of(
             context,
           ).textTheme.labelSmall?.copyWith(color: c.textSecondary),

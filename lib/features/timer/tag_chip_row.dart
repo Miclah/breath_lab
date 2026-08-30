@@ -1,10 +1,15 @@
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/tags_repository.dart';
+import '../../features/safety/samba_response.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/horizontal_scroll_fade.dart';
+import '../../theme/breakpoints.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../../theme/typography.dart';
 import 'providers.dart';
 
 /// Maps a tag's [labelKey] to its display string.
@@ -22,8 +27,19 @@ String _tagLabel(String labelKey, AppLocalizations l10n) => switch (labelKey) {
   _ => labelKey,
 };
 
-/// Horizontally scrollable row of built-in tag chips plus a custom "+ Add tag"
-/// chip. Wires to [selectedTagIdsProvider] and [pendingCustomTagsProvider].
+/// Built-in tag chips plus a custom "+ Add tag" chip, wired to
+/// [selectedTagIdsProvider] and [pendingCustomTagsProvider].
+///
+/// Two layouts, because one does not serve both widths. On a phone the chips
+/// scroll sideways behind an edge fade — vertical space on the result screen
+/// is scarce and nine tags would take three rows of it. Where the column is
+/// wider than a phone they wrap instead: there is room for two rows, and a
+/// wrapped row shows every tag at once rather than hiding most of them behind
+/// a gesture.
+///
+/// The edge fade is only drawn on the scrolling layout. Painted over a row
+/// that does not scroll it is not an affordance, it is a chip with its last
+/// syllable faded out — which is what "Great p…" was.
 class TagChipRow extends ConsumerWidget {
   const TagChipRow({super.key});
 
@@ -36,43 +52,86 @@ class TagChipRow extends ConsumerWidget {
 
     final tags = tagsAsync.valueOrNull ?? [];
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (final tag in tags) ...[
-            _TagChip(
-              label: _tagLabel(tag.labelKey, l10n),
-              selected: selectedIds.contains(tag.id),
-              onTap: () {
-                final current = ref.read(selectedTagIdsProvider);
-                final next = Set<String>.from(current);
-                if (current.contains(tag.id)) {
-                  next.remove(tag.id);
-                } else {
-                  next.add(tag.id);
-                }
-                ref.read(selectedTagIdsProvider.notifier).state = next;
-              },
-            ),
-            const SizedBox(width: Spacing.xs),
-          ],
-          for (final text in pending) ...[
-            _TagChip(label: text, selected: true, onTap: null),
-            const SizedBox(width: Spacing.xs),
-          ],
-          _AddTagChip(
-            onAdd: (text) {
-              ref.read(pendingCustomTagsProvider.notifier).state = [
-                ...ref.read(pendingCustomTagsProvider),
-                text,
-              ];
-            },
-          ),
-        ],
+    final chips = <Widget>[
+      for (final tag in tags)
+        _TagChip(
+          label: _tagLabel(tag.labelKey, l10n),
+          selected: selectedIds.contains(tag.id),
+          onTap: () {
+            final current = ref.read(selectedTagIdsProvider);
+            final next = Set<String>.from(current);
+            final adding = !current.contains(tag.id);
+            if (adding) {
+              next.add(tag.id);
+            } else {
+              next.remove(tag.id);
+            }
+            ref.read(selectedTagIdsProvider.notifier).state = next;
+            if (adding && tag.labelKey == sambaTagKey) {
+              showSambaSafetyResponse(context);
+            }
+          },
+        ),
+      for (final text in pending)
+        _TagChip(label: text, selected: true, onTap: null),
+      _AddTagChip(
+        onAdd: (text) {
+          ref.read(pendingCustomTagsProvider.notifier).state = [
+            ...ref.read(pendingCustomTagsProvider),
+            text,
+          ];
+        },
       ),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (!Breakpoint.forWidth(constraints.maxWidth).isCompact) {
+          return Wrap(
+            spacing: Spacing.xs,
+            runSpacing: Spacing.xs,
+            children: chips,
+          );
+        }
+
+        // Flutter's default dragDevices omit the mouse, so this row could not
+        // be scrolled at all on desktop and any tag past the right edge was
+        // unreachable.
+        return ScrollConfiguration(
+          behavior: const _DragScrollBehavior(),
+          child: HorizontalScrollFade(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+              child: Row(
+                children: [
+                  for (final (i, chip) in chips.indexed) ...[
+                    if (i > 0) const SizedBox(width: Spacing.xs),
+                    chip,
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
+}
+
+/// Scroll behavior that also accepts mouse and trackpad drags, for
+/// horizontal strips that have no other way to be scrolled on desktop.
+class _DragScrollBehavior extends MaterialScrollBehavior {
+  const _DragScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.invertedStylus,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.mouse,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -126,8 +185,8 @@ class _TagChipState extends State<_TagChip> {
           ),
           child: Text(
             widget.label,
-            style: TextStyle(
-              fontSize: 13,
+            // 13 is not a step on the revised scale; a chip label is a label.
+            style: BreathLabTypography.label.copyWith(
               color: selected ? c.primaryText : c.textSecondary,
             ),
           ),
@@ -162,11 +221,11 @@ class _AddTagChip extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.tagAddCancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            child: const Text('Add'),
+            child: Text(l10n.tagAddConfirm),
           ),
         ],
       ),
@@ -192,7 +251,7 @@ class _AddTagChip extends StatelessWidget {
         ),
         child: Text(
           l10n.tagAddLabel,
-          style: TextStyle(fontSize: 13, color: c.textTertiary),
+          style: BreathLabTypography.label.copyWith(color: c.textTertiary),
         ),
       ),
     );
