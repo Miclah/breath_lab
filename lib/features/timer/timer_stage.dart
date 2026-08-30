@@ -56,6 +56,10 @@ class TimerStage extends StatelessWidget {
   /// Breathing room above the top band.
   static const leadIn = Spacing.lg;
 
+  /// Breathing room between the preset row and the hero, so the ring is not
+  /// glued to the bottom of the `Standard` chip.
+  static const heroGap = Spacing.lg;
+
   /// Status row (20) + gap (12) + preset chips (44).
   static const topBandHeight = 76.0;
 
@@ -96,7 +100,11 @@ class TimerStage extends StatelessWidget {
         ? TimerRing.expandedDiameter
         : TimerRing.compactDiameter;
     final byHeight =
-        constraints.maxHeight - leadIn - topBandHeight - reservedBelow;
+        constraints.maxHeight -
+        leadIn -
+        topBandHeight -
+        heroGap -
+        reservedBelow;
     final fitted = math.min(constraints.maxWidth, byHeight);
     return math.max(_minDiameter, math.min(ceiling, fitted));
   }
@@ -116,6 +124,7 @@ class TimerStage extends StatelessWidget {
           children: [
             const SizedBox(height: leadIn),
             SizedBox(height: topBandHeight, width: double.infinity, child: top),
+            const SizedBox(height: heroGap),
             SizedBox(
               height: diameter,
               width: double.infinity,
