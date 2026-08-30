@@ -1064,4 +1064,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get evidenceTierContraindicatedDesc =>
       'Unsafe in the way this app is used. Shown only to warn against it.';
+
+  @override
+  String get reportReaderTitle => 'Research summary';
+
+  @override
+  String get reportReaderJumpTo => 'Jump to section';
+
+  @override
+  String get reportReaderLanguageNotice =>
+      'This summary is available in English only.';
+
+  @override
+  String get reportReaderLoadFailed =>
+      'The research summary could not be loaded.';
 }

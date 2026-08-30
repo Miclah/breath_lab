@@ -1920,6 +1920,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
   String get evidenceTierContraindicatedDesc;
+
+  /// App-bar title of the in-app research reader screen
+  ///
+  /// In en, this message translates to:
+  /// **'Research summary'**
+  String get reportReaderTitle;
+
+  /// Header of the reader's section index
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to section'**
+  String get reportReaderJumpTo;
+
+  /// Notice at the top of the reader — the report itself is not translated, only the app around it (RESEARCH_ALIGNMENT.md §5)
+  ///
+  /// In en, this message translates to:
+  /// **'This summary is available in English only.'**
+  String get reportReaderLanguageNotice;
+
+  /// Shown if the bundled report asset fails to load or parse
+  ///
+  /// In en, this message translates to:
+  /// **'The research summary could not be loaded.'**
+  String get reportReaderLoadFailed;
 }
 
 class _AppLocalizationsDelegate

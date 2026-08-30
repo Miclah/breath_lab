@@ -1341,5 +1341,21 @@
   "evidenceTierContraindicatedDesc": "Unsafe in the way this app is used. Shown only to warn against it.",
   "@evidenceTierContraindicatedDesc": {
     "description": "One-line meaning of tier X"
+  },
+  "reportReaderTitle": "Research summary",
+  "@reportReaderTitle": {
+    "description": "App-bar title of the in-app research reader screen"
+  },
+  "reportReaderJumpTo": "Jump to section",
+  "@reportReaderJumpTo": {
+    "description": "Header of the reader's section index"
+  },
+  "reportReaderLanguageNotice": "This summary is available in English only.",
+  "@reportReaderLanguageNotice": {
+    "description": "Notice at the top of the reader — the report itself is not translated, only the app around it (RESEARCH_ALIGNMENT.md §5)"
+  },
+  "reportReaderLoadFailed": "The research summary could not be loaded.",
+  "@reportReaderLoadFailed": {
+    "description": "Shown if the bundled report asset fails to load or parse"
   }
 }

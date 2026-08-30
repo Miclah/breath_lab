@@ -1074,4 +1074,17 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get evidenceTierContraindicatedDesc =>
       'Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie.';
+
+  @override
+  String get reportReaderTitle => 'Prehľad výskumu';
+
+  @override
+  String get reportReaderJumpTo => 'Preskočiť na časť';
+
+  @override
+  String get reportReaderLanguageNotice =>
+      'Tento prehľad je dostupný iba v angličtine.';
+
+  @override
+  String get reportReaderLoadFailed => 'Prehľad výskumu sa nepodarilo načítať.';
 }
