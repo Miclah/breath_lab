@@ -95,6 +95,7 @@ flutter:
     - assets/fonts/
     - assets/audio/
     - assets/research/
+    - assets/posters/
 
   fonts:
     - family: Inter
