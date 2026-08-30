@@ -61,28 +61,40 @@ class StatCardRow extends ConsumerWidget {
 
     // Hairlines rather than gaps between boxes. Bare on the field, a rule is
     // the only thing saying where one stat ends and the next begins.
-    if (axis == Axis.vertical) {
-      return Column(
-        children: [
-          for (final (i, card) in cards.indexed) ...[
-            if (i > 0) Divider(height: 1, thickness: 1, color: c.border),
-            card,
-          ],
+    Widget stacked() => Column(
+      children: [
+        for (final (i, card) in cards.indexed) ...[
+          if (i > 0) Divider(height: 1, thickness: 1, color: c.border),
+          card,
         ],
-      );
-    }
+      ],
+    );
 
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final (i, card) in cards.indexed) ...[
-            if (i > 0)
-              VerticalDivider(width: Spacing.xl, thickness: 1, color: c.border),
-            Expanded(child: card),
-          ],
-        ],
-      ),
+    if (axis == Axis.vertical) return stacked();
+
+    // Three-up needs room for a `mm:ss` in stat-hero type per card. Below
+    // that the row stacks rather than letting the value wrap mid-digit —
+    // `03:30` breaking to `03:3` / `0` at 400 px.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 480) return stacked();
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (final (i, card) in cards.indexed) ...[
+                if (i > 0)
+                  VerticalDivider(
+                    width: Spacing.xl,
+                    thickness: 1,
+                    color: c.border,
+                  ),
+                Expanded(child: card),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 }
