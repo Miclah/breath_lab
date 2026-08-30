@@ -10,7 +10,9 @@ import '../../domain/models/hold.dart';
 import '../../domain/services/timer_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/format_duration.dart';
+import '../../shared/widgets/contextual_tip.dart';
 import '../../shared/widgets/tier_badge.dart';
+import '../report/report_anchor.dart';
 import 'recovery_breathing.dart';
 import '../../shared/global_messenger.dart';
 import '../../shared/widgets/adaptive_page.dart';
@@ -662,9 +664,10 @@ class _HoldMetrics extends StatelessWidget {
           ],
         ),
         const SizedBox(height: Spacing.sm),
-        Text(
-          l10n.resultStruggleNote,
-          textAlign: TextAlign.center,
+        ContextualTip(
+          text: l10n.resultStruggleNote,
+          anchor: ReportAnchor.mechanisms,
+          center: true,
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
         const SizedBox(height: Spacing.md),

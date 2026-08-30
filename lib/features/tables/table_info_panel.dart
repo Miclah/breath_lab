@@ -3,6 +3,8 @@ import 'package:flutter/material.dart' hide Durations;
 import '../../domain/models/evidence_tier.dart';
 import '../../domain/services/co2_table_calculator.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/contextual_tip.dart';
+import '../report/report_anchor.dart';
 import '../../shared/widgets/tier_badge.dart';
 import '../../theme/colors.dart';
 import '../../theme/surfaces.dart';
@@ -69,8 +71,9 @@ class TableInfoPanel extends StatelessWidget {
         // maximal holds in novices. Stated plainly, not implied by silence.
         const TierBadge(EvidenceTier.mechanistic),
         const SizedBox(height: Spacing.xs),
-        Text(
-          l10n.tablesEvidenceNote,
+        ContextualTip(
+          text: l10n.tablesEvidenceNote,
+          anchor: ReportAnchor.tables,
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],

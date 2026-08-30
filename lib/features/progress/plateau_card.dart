@@ -2,7 +2,9 @@ import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/contextual_tip.dart';
 import '../../shared/widgets/hold_list_item.dart' show fmtHoldDuration;
+import '../report/report_anchor.dart';
 import '../../theme/colors.dart';
 import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
@@ -52,8 +54,9 @@ class PlateauCard extends ConsumerWidget {
             style: BreathLabTypography.body.copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: Spacing.sm),
-          Text(
-            l10n.plateauAdvice,
+          ContextualTip(
+            text: l10n.plateauAdvice,
+            anchor: ReportAnchor.timeline,
             style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
           ),
         ],

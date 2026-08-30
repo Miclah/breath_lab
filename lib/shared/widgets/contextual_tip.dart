@@ -22,6 +22,7 @@ class ContextualTip extends StatelessWidget {
     required this.text,
     required this.anchor,
     this.style,
+    this.center = false,
   });
 
   /// The authored, localised excerpt. Must not overstate the evidence — a
@@ -35,16 +36,23 @@ class ContextualTip extends StatelessWidget {
   /// lines matches them rather than standing above them.
   final TextStyle? style;
 
+  /// Centre the excerpt and the link, for a block that is itself centred
+  /// (the result screen's struggle-phase metric).
+  final bool center;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: center
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         Text(
           text,
+          textAlign: center ? TextAlign.center : TextAlign.start,
           style:
               style ??
               BreathLabTypography.body.copyWith(color: c.textSecondary),

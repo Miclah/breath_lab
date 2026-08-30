@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../domain/models/evidence_tier.dart';
 import '../../l10n/app_localizations.dart';
+import '../../shared/widgets/contextual_tip.dart';
 import '../../shared/widgets/tier_badge.dart';
+import '../report/report_anchor.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
@@ -51,8 +53,9 @@ class ImstSettingsGroup extends StatelessWidget {
         const SizedBox(height: Spacing.md),
         const _ImstPimaxStepper(),
         const SizedBox(height: Spacing.xs),
-        Text(
-          l10n.settingsImstPimaxNote,
+        ContextualTip(
+          text: l10n.settingsImstPimaxNote,
+          anchor: ReportAnchor.imst,
           style: BreathLabTypography.micro.copyWith(color: c.textTertiary),
         ),
       ],
