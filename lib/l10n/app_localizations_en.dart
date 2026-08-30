@@ -1066,6 +1066,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Unsafe in the way this app is used. Shown only to warn against it.';
 
   @override
+  String get settingsResearchSummaryLink => 'Research summary';
+
+  @override
   String get reportReaderTitle => 'Research summary';
 
   @override

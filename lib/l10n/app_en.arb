@@ -1342,6 +1342,10 @@
   "@evidenceTierContraindicatedDesc": {
     "description": "One-line meaning of tier X"
   },
+  "settingsResearchSummaryLink": "Research summary",
+  "@settingsResearchSummaryLink": {
+    "description": "Settings → About row that opens the in-app research reader"
+  },
   "reportReaderTitle": "Research summary",
   "@reportReaderTitle": {
     "description": "App-bar title of the in-app research reader screen"

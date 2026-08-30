@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/colors.dart';
 import '../../theme/tokens.dart';
+import '../report/report_reader_screen.dart';
 import '../safety/safety_screen.dart';
 
 final _packageInfoProvider = FutureProvider<PackageInfo>((ref) {
@@ -28,6 +29,14 @@ class AboutSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
+          title: Text(l10n.settingsResearchSummaryLink),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => const ReportReaderScreen())),
+        ),
         ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
           title: Text(l10n.settingsSafetyInfoLink),

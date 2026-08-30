@@ -1076,6 +1076,9 @@ class AppLocalizationsSk extends AppLocalizations {
       'Nebezpečné pri spôsobe, akým sa táto appka používa. Zobrazené len ako varovanie.';
 
   @override
+  String get settingsResearchSummaryLink => 'Prehľad výskumu';
+
+  @override
   String get reportReaderTitle => 'Prehľad výskumu';
 
   @override

@@ -1921,6 +1921,12 @@ abstract class AppLocalizations {
   /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
   String get evidenceTierContraindicatedDesc;
 
+  /// Settings → About row that opens the in-app research reader
+  ///
+  /// In en, this message translates to:
+  /// **'Research summary'**
+  String get settingsResearchSummaryLink;
+
   /// App-bar title of the in-app research reader screen
   ///
   /// In en, this message translates to:
