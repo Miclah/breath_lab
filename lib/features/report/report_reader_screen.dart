@@ -8,6 +8,7 @@ import '../../theme/surfaces.dart';
 import '../../theme/tokens.dart';
 import '../../theme/typography.dart';
 import 'providers.dart';
+import 'report_anchor.dart';
 import 'report_block_view.dart';
 import 'report_markdown.dart';
 
@@ -17,7 +18,11 @@ import 'report_markdown.dart';
 /// `RESEARCH_ALIGNMENT.md` §5: the report is English-only for now, and the
 /// reader says so rather than presenting English silently inside a Slovak UI.
 class ReportReaderScreen extends ConsumerStatefulWidget {
-  const ReportReaderScreen({super.key});
+  const ReportReaderScreen({super.key, this.initialAnchor});
+
+  /// When set, the reader opens scrolled to this section. Every contextual tip
+  /// opens the reader this way.
+  final ReportAnchor? initialAnchor;
 
   @override
   ConsumerState<ReportReaderScreen> createState() => _ReportReaderScreenState();
@@ -28,18 +33,38 @@ class _ReportReaderScreenState extends ConsumerState<ReportReaderScreen> {
   /// deep-link jump.
   final _anchorKeys = <String, GlobalKey>{};
 
+  bool _deepLinkHandled = false;
+
   GlobalKey _keyFor(String anchor) =>
       _anchorKeys.putIfAbsent(anchor, GlobalKey.new);
 
-  void _jumpTo(String anchor) {
+  void _jumpTo(String anchor, {bool animate = true}) {
     final target = _anchorKeys[anchor]?.currentContext;
-    if (target == null) return;
+    if (target == null) {
+      assert(
+        !_anchorKeys.containsKey(anchor),
+        'report anchor "$anchor" has no rendered heading',
+      );
+      return;
+    }
     Scrollable.ensureVisible(
       target,
-      duration: Durations.slow,
+      duration: animate ? Durations.slow : Duration.zero,
       curve: Curves.easeOut,
       alignment: 0,
     );
+  }
+
+  /// Once the blocks are laid out, jump to the deep-link target. A missing
+  /// anchor asserts in debug and lands at the top of the document in release —
+  /// a contextual tip must never crash the app.
+  void _handleDeepLink() {
+    final anchor = widget.initialAnchor;
+    if (anchor == null || _deepLinkHandled) return;
+    _deepLinkHandled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _jumpTo(anchor.slug, animate: false);
+    });
   }
 
   @override
@@ -62,8 +87,14 @@ class _ReportReaderScreenState extends ConsumerState<ReportReaderScreen> {
               ),
             ),
           ),
-          data: (blocks) =>
-              _Reader(blocks: blocks, keyFor: _keyFor, onJump: _jumpTo),
+          data: (blocks) {
+            _handleDeepLink();
+            return _Reader(
+              blocks: blocks,
+              keyFor: _keyFor,
+              onJump: (anchor) => _jumpTo(anchor),
+            );
+          },
         ),
       ),
     );
