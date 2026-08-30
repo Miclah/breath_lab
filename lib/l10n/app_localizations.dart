@@ -1921,6 +1921,12 @@ abstract class AppLocalizations {
   /// **'Unsafe in the way this app is used. Shown only to warn against it.'**
   String get evidenceTierContraindicatedDesc;
 
+  /// Link on a contextual tip that opens the research reader at the relevant section
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get contextualTipReadMore;
+
   /// Settings → About row that opens the in-app research reader
   ///
   /// In en, this message translates to:

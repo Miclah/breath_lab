@@ -1342,6 +1342,10 @@
   "@evidenceTierContraindicatedDesc": {
     "description": "One-line meaning of tier X"
   },
+  "contextualTipReadMore": "Read more",
+  "@contextualTipReadMore": {
+    "description": "Link on a contextual tip that opens the research reader at the relevant section"
+  },
   "settingsResearchSummaryLink": "Research summary",
   "@settingsResearchSummaryLink": {
     "description": "Settings → About row that opens the in-app research reader"
