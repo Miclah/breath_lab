@@ -90,11 +90,19 @@ class SyncService {
     if (picked == null) return null;
 
     final content = await picked.readAsString();
-    final remote = SyncPayload.decode(content);
+    return applyRemotePayload(SyncPayload.decode(content));
+  }
+
+  /// The shared tail of every inbound sync — file import and LAN sync both
+  /// end here: schema-check the remote payload, merge it against the local
+  /// one, apply the result in a single transaction, and report what changed.
+  /// Older data never overwrites newer, so this is safe to call without a
+  /// confirmation step.
+  Future<SyncImportSummary> applyRemotePayload(SyncPayload remote) async {
     if (remote.schemaVersion > _db.schemaVersion) {
       throw const SyncPayloadException(
         SyncPayloadErrorReason.newerSchema,
-        'This file was exported by a newer version of BreathLab. '
+        'This data was exported by a newer version of BreathLab. '
         'Update the app on this device first.',
       );
     }
@@ -111,6 +119,10 @@ class SyncService {
       peerDeviceName: remote.deviceName,
     );
   }
+
+  /// This device's current state as a payload, for handing to a sync peer.
+  Future<SyncPayload> buildLocalPayload() =>
+      _syncRepo.buildLocalPayload(appVersion: appVersion);
 }
 
 final syncServiceProvider = FutureProvider<SyncService>((ref) async {
