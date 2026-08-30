@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Phase 2B QR-paired LAN sync: the camera scans the pairing QR shown
+         on the Windows machine; INTERNET is the local HTTP POST to it over
+         Wi-Fi (declared explicitly for release builds). -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <application
         android:label="breath_lab"
         android:name="${applicationName}"
