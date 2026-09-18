@@ -173,26 +173,34 @@ class HistoryScreen extends ConsumerWidget {
                         ),
                         decoration: Surfaces.inset(context),
                         clipBehavior: Clip.antiAlias,
-                        child: ListView.separated(
-                          itemCount: entries.length,
-                          separatorBuilder: (context, index) => const Divider(
-                            height: 1,
-                            indent: Spacing.xl,
-                            endIndent: Spacing.xl,
+                        // The inset fill sits between the rows' ListTile and
+                        // the Scaffold's Material, which hides their tap
+                        // splash entirely. This Material gives them a
+                        // painting surface again, without adding a fill of
+                        // its own.
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: ListView.separated(
+                            itemCount: entries.length,
+                            separatorBuilder: (context, index) => const Divider(
+                              height: 1,
+                              indent: Spacing.xl,
+                              endIndent: Spacing.xl,
+                            ),
+                            itemBuilder: (_, i) => switch (entries[i]) {
+                              _HoldEntry(:final hold) => HoldListItem(
+                                hold: hold,
+                                onTap: () => showHoldDetail(context, hold),
+                              ),
+                              _TableSessionEntry(:final session) =>
+                                _TableSessionRow(session: session),
+                              _ImstEntry(:final session) => _ImstSessionRow(
+                                session: session,
+                                onTap: () => showImstDetail(context, session),
+                              ),
+                              _EventEntry(:final hold) => _EventRow(hold: hold),
+                            },
                           ),
-                          itemBuilder: (_, i) => switch (entries[i]) {
-                            _HoldEntry(:final hold) => HoldListItem(
-                              hold: hold,
-                              onTap: () => showHoldDetail(context, hold),
-                            ),
-                            _TableSessionEntry(:final session) =>
-                              _TableSessionRow(session: session),
-                            _ImstEntry(:final session) => _ImstSessionRow(
-                              session: session,
-                              onTap: () => showImstDetail(context, session),
-                            ),
-                            _EventEntry(:final hold) => _EventRow(hold: hold),
-                          },
                         ),
                       );
                     },

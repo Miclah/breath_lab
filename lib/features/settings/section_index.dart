@@ -80,26 +80,31 @@ class SectionIndex extends StatelessWidget {
           decoration: Surfaces.inset(context),
           clipBehavior: Clip.antiAlias,
           padding: const EdgeInsets.symmetric(vertical: Spacing.xs),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (final section in sections.where((s) => s.visible))
-                InkWell(
-                  onTap: () => _jumpTo(section),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Spacing.md,
-                      vertical: Spacing.sm,
-                    ),
-                    child: Text(
-                      section.title,
-                      style: BreathLabTypography.body.copyWith(
-                        color: c.textSecondary,
+          // The inset fill would otherwise hide each InkWell's tap
+          // highlight — see the same fix in history_screen.dart.
+          child: Material(
+            type: MaterialType.transparency,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final section in sections.where((s) => s.visible))
+                  InkWell(
+                    onTap: () => _jumpTo(section),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacing.md,
+                        vertical: Spacing.sm,
+                      ),
+                      child: Text(
+                        section.title,
+                        style: BreathLabTypography.body.copyWith(
+                          color: c.textSecondary,
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

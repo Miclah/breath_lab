@@ -209,28 +209,35 @@ class _JumpList extends StatelessWidget {
       decoration: Surfaces.inset(context),
       clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.symmetric(vertical: Spacing.xs),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final entry in entries)
-            InkWell(
-              onTap: () => onJump(entry.anchor),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: entry.level >= 3 ? Spacing.xl : Spacing.md,
-                  right: Spacing.md,
-                  top: Spacing.sm,
-                  bottom: Spacing.sm,
-                ),
-                child: Text(
-                  entry.title,
-                  style: BreathLabTypography.body.copyWith(
-                    color: entry.level >= 3 ? c.textTertiary : c.textSecondary,
+      // The inset fill would otherwise hide each InkWell's tap highlight —
+      // see the same fix in history_screen.dart.
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final entry in entries)
+              InkWell(
+                onTap: () => onJump(entry.anchor),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: entry.level >= 3 ? Spacing.xl : Spacing.md,
+                    right: Spacing.md,
+                    top: Spacing.sm,
+                    bottom: Spacing.sm,
+                  ),
+                  child: Text(
+                    entry.title,
+                    style: BreathLabTypography.body.copyWith(
+                      color: entry.level >= 3
+                          ? c.textTertiary
+                          : c.textSecondary,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
 

@@ -155,39 +155,44 @@ class RecentHoldsSection extends ConsumerWidget {
         Container(
           decoration: Surfaces.inset(context),
           clipBehavior: Clip.antiAlias,
-          child: recentHolds.isEmpty
-              ? Padding(
-                  padding: const EdgeInsets.all(Spacing.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.historyEmpty,
-                        style: BreathLabTypography.micro.copyWith(
-                          color: c.textTertiary,
+          // The inset fill would otherwise hide the rows' ListTile splash —
+          // see the same fix in history_screen.dart.
+          child: Material(
+            type: MaterialType.transparency,
+            child: recentHolds.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(Spacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.historyEmpty,
+                          style: BreathLabTypography.micro.copyWith(
+                            color: c.textTertiary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: Spacing.md),
-                      const StartHoldButton(),
+                        const SizedBox(height: Spacing.md),
+                        const StartHoldButton(),
+                      ],
+                    ),
+                  )
+                : Column(
+                    children: [
+                      for (final (i, hold) in recentHolds.indexed) ...[
+                        if (i > 0)
+                          const Divider(
+                            height: 1,
+                            indent: Spacing.xl,
+                            endIndent: Spacing.xl,
+                          ),
+                        HoldListItem(
+                          hold: hold,
+                          onTap: () => showHoldDetail(context, hold),
+                        ),
+                      ],
                     ],
                   ),
-                )
-              : Column(
-                  children: [
-                    for (final (i, hold) in recentHolds.indexed) ...[
-                      if (i > 0)
-                        const Divider(
-                          height: 1,
-                          indent: Spacing.xl,
-                          endIndent: Spacing.xl,
-                        ),
-                      HoldListItem(
-                        hold: hold,
-                        onTap: () => showHoldDetail(context, hold),
-                      ),
-                    ],
-                  ],
-                ),
+          ),
         ),
         Align(
           alignment: Alignment.centerRight,
