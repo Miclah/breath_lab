@@ -108,9 +108,15 @@ class CalendarHeatmap extends ConsumerWidget {
               builder: (context, constraints) {
                 final gridWidth =
                     constraints.maxWidth - dayLabelWidth - Spacing.xs;
+                // Floor raised from 10 toward WCAG's 24px touch-target
+                // minimum; ceiling raised to match so a cell that already
+                // has the room doesn't stop short of it. The floor still
+                // can't guarantee 24px at the window's own 400px minimum
+                // width without widening the whole grid past what fits —
+                // it gets close (about 22px there) rather than overflowing.
                 final cellSize =
                     ((gridWidth - (_weeksShown - 1) * _cellGap) / _weeksShown)
-                        .clamp(10.0, 22.0);
+                        .clamp(14.0, 24.0);
                 final colStep = cellSize + _cellGap;
 
                 return Column(
