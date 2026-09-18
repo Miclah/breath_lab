@@ -165,7 +165,9 @@ class BreathLabColors {
     ringTrack: Color(0xFF545F75),
     textPrimary: Color(0xFFE8ECF1),
     textSecondary: Color(0xFF8B95A5),
-    textTertiary: Color(0xFF5A6474),
+    // Raised from 5A6474 (~2.9:1 against panelPrimary) to clear WCAG AA's
+    // 4.5:1 for normal text; still the dimmest of the three text roles.
+    textTertiary: Color(0xFF7A858E),
     textOnPrimary: Color(0xFFEAFBF3),
     textOnDanger: Color(0xFFFDEEEE),
     primary: Color(0xFF1D9E75),
@@ -202,7 +204,10 @@ class BreathLabColors {
     ringTrack: Color(0xFF838D9C),
     textPrimary: Color(0xFF1A1D23),
     textSecondary: Color(0xFF5A6474),
-    textTertiary: Color(0xFF8B95A5),
+    // Raised (darkened) from 8B95A5 (~2.5:1 against insetFill) to clear
+    // WCAG AA's 4.5:1 for normal text; still the dimmest of the three text
+    // roles.
+    textTertiary: Color(0xFF5F6882),
     textOnPrimary: Color(0xFFE1F5EE),
     textOnDanger: Color(0xFFFCEBEB),
     primary: Color(0xFF0F6E56),
