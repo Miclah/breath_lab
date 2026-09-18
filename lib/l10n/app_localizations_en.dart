@@ -876,6 +876,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String progressHeatmapCellLabel(String date, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '1 session',
+      zero: 'no sessions',
+    );
+    return '$date, $_temp0';
+  }
+
+  @override
   String get progressChartEmptyWhy =>
       'Early on, the gain shows up in the struggle phase rather than in your total time.';
 

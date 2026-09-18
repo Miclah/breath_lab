@@ -69,31 +69,37 @@ class _PresetChip extends StatelessWidget {
 
     return Tooltip(
       message: tooltip,
-      child: GestureDetector(
+      child: Semantics(
+        button: true,
+        selected: isSelected,
+        label: label,
         onTap: onTap,
-        child: AnimatedContainer(
-          duration: Durations.fast,
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-          decoration: BoxDecoration(
-            // Matches the selected/unselected pattern _TagChip already
-            // uses — surfaceElevated read as more prominent than the
-            // primary-tinted fill, so the selected chip looked weaker
-            // than the other two instead of standing out.
-            color: isSelected ? c.primarySurface : Colors.transparent,
-            borderRadius: BorderRadius.circular(Radius.lg),
-            border: Border.all(
-              color: isSelected ? c.primary : c.border,
-              width: 0.5,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: Durations.fast,
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+            decoration: BoxDecoration(
+              // Matches the selected/unselected pattern _TagChip already
+              // uses — surfaceElevated read as more prominent than the
+              // primary-tinted fill, so the selected chip looked weaker
+              // than the other two instead of standing out.
+              color: isSelected ? c.primarySurface : Colors.transparent,
+              borderRadius: BorderRadius.circular(Radius.lg),
+              border: Border.all(
+                color: isSelected ? c.primary : c.border,
+                width: 0.5,
+              ),
             ),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: isSelected ? c.primaryText : c.textPrimary,
+            alignment: Alignment.center,
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: isSelected ? c.primaryText : c.textPrimary,
+              ),
             ),
           ),
         ),

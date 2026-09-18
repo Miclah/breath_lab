@@ -292,19 +292,28 @@ class _HeatmapCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.appColors;
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toString();
     // Today is marked by the ring alone. Tinting the fill as well used to be
     // needed because the empty colour was nearly invisible; now that it is a
     // real step, tinting it would invent a fifth value between empty and one
     // session and undo the separation the ramp exists for.
-    return GestureDetector(
-      onTap: count > 0 ? () => onTap(context, date) : null,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: _cellColor(context, count),
-          borderRadius: BorderRadius.circular(Radius.xs),
-          border: isToday ? Border.all(color: c.primary, width: 1) : null,
+    return Semantics(
+      button: count > 0,
+      label: l10n.progressHeatmapCellLabel(
+        DateFormat.yMMMd(locale).format(date),
+        count,
+      ),
+      child: GestureDetector(
+        onTap: count > 0 ? () => onTap(context, date) : null,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: _cellColor(context, count),
+            borderRadius: BorderRadius.circular(Radius.xs),
+            border: isToday ? Border.all(color: c.primary, width: 1) : null,
+          ),
         ),
       ),
     );

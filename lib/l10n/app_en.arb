@@ -1112,6 +1112,18 @@
       }
     }
   },
+  "progressHeatmapCellLabel": "{date}, {count, plural, =0{no sessions} =1{1 session} other{{count} sessions}}",
+  "@progressHeatmapCellLabel": {
+    "description": "Accessibility label for a single heatmap day cell",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressChartEmptyWhy": "Early on, the gain shows up in the struggle phase rather than in your total time.",
   "@progressChartEmptyWhy": {
     "description": "Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md \u00a72, tier A)"

@@ -250,6 +250,7 @@
   "progressHeatmapLegendLess": "Menej",
   "progressHeatmapLegendMore": "Viac",
   "progressHeatmapStat": "{sessions, plural, =1{1 tréning} few{{sessions} tréningy} other{{sessions} tréningov}} · najlepší týždeň: {days, plural, =1{1 deň} few{{days} dni} other{{days} dní}}",
+  "progressHeatmapCellLabel": "{date}, {count, plural, =0{žiadny tréning} =1{1 tréning} few{{count} tréningy} other{{count} tréningov}}",
   "progressChartEmptyWhy": "Na začiatku sa zlepšenie prejaví vo fáze boja, nie v celkovom čase.",
   "progressHeatmapEmpty": "Dvanásť týždňov tréningu toto vyplní.",
   "progressEmptyAction": "Začať zadržanie",

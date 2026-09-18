@@ -71,24 +71,28 @@ class _SettingsSliderState extends State<SettingsSlider> {
             ),
           ],
         ),
-        Slider(
-          value: displayed.toDouble().clamp(
-            widget.min.toDouble(),
-            widget.max.toDouble(),
+        // A bare Slider announces only its value, not what it controls.
+        Semantics(
+          label: widget.label,
+          child: Slider(
+            value: displayed.toDouble().clamp(
+              widget.min.toDouble(),
+              widget.max.toDouble(),
+            ),
+            min: widget.min.toDouble(),
+            max: widget.max.toDouble(),
+            divisions: widget.divisions,
+            label: widget.labelBuilder(displayed),
+            onChanged: !widget.enabled
+                ? null
+                : (v) => setState(() => _dragValue = v.round()),
+            onChangeEnd: !widget.enabled
+                ? null
+                : (v) {
+                    setState(() => _dragValue = null);
+                    widget.onCommit(v.round());
+                  },
           ),
-          min: widget.min.toDouble(),
-          max: widget.max.toDouble(),
-          divisions: widget.divisions,
-          label: widget.labelBuilder(displayed),
-          onChanged: !widget.enabled
-              ? null
-              : (v) => setState(() => _dragValue = v.round()),
-          onChangeEnd: !widget.enabled
-              ? null
-              : (v) {
-                  setState(() => _dragValue = null);
-                  widget.onCommit(v.round());
-                },
         ),
       ],
     );

@@ -1603,6 +1603,12 @@ abstract class AppLocalizations {
   /// **'{sessions, plural, =1{1 session} other{{sessions} sessions}} · best week: {days, plural, =1{1 day} other{{days} days}}'**
   String progressHeatmapStat(int sessions, int days);
 
+  /// Accessibility label for a single heatmap day cell
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, {count, plural, =0{no sessions} =1{1 session} other{{count} sessions}}'**
+  String progressHeatmapCellLabel(String date, int count);
+
   /// Second line of the chart empty state, pointing at the metric that actually moves first (RESEARCH_ALIGNMENT.md §2, tier A)
   ///
   /// In en, this message translates to:
