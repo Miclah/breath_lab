@@ -249,9 +249,13 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     child: !state.isHolding
                         ? const SizedBox.shrink()
                         : Text(
-                            l10n.timerStateLabelHold,
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(color: c.textTertiary),
+                            l10n.timerStateLabelHold.toUpperCase(),
+                            // Design revision §3: micro, uppercase, 0.12em
+                            // tracking — heavier than micro's own default.
+                            style: BreathLabTypography.micro.copyWith(
+                              color: c.textTertiary,
+                              letterSpacing: 1.32,
+                            ),
                           ),
                   ),
                 ),
