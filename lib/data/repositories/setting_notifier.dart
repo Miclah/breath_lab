@@ -24,15 +24,32 @@ abstract class SettingNotifier<T> extends AsyncNotifier<T> {
   @override
   Future<T> build() => read();
 
+  // Writes are chained rather than fired independently: drift's single
+  // writer means completion order is not guaranteed to match call order,
+  // so two rapid set() calls could otherwise persist out of order and
+  // leave the DB holding a stale value the UI never shows again until
+  // restart. Chaining also means an older write's failure can't roll a
+  // newer, already-succeeded write back — see the generation check below.
+  Future<void> _pendingWrites = Future.value();
+  int _generation = 0;
+
   /// Applies [value] to the UI immediately, then persists it. If the write
-  /// fails the previous value is restored and the user is told.
+  /// fails — and no later [set] call has already superseded this one — the
+  /// previous value is restored and the user is told.
   Future<void> set(T value) async {
+    final generation = ++_generation;
     final previous = state;
     state = AsyncData(value);
+
+    final thisWrite = _pendingWrites.then((_) => write(value));
+    _pendingWrites = thisWrite.then((_) {}, onError: (_) {});
+
     try {
-      await write(value);
+      await thisWrite;
     } catch (error, stackTrace) {
-      state = previous;
+      if (generation == _generation) {
+        state = previous;
+      }
       _reportFailure(error, stackTrace);
     }
   }

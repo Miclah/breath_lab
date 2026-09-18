@@ -103,6 +103,16 @@ class SettingsRepository {
     await (_db.delete(_db.settings)..where((t) => t.key.equals(key))).go();
   }
 
+  /// Writes several keys as one transaction, so a multi-field setting (a
+  /// table config, say) never lands with only some of its fields updated.
+  Future<void> _setAll(Map<String, String> values) {
+    return _db.transaction(() async {
+      for (final entry in values.entries) {
+        await _set(entry.key, entry.value);
+      }
+    });
+  }
+
   Future<PrepMode> getDefaultPrepMode() async {
     final value = await _get('default_prep_mode');
     return PrepMode.fromDb(value) ?? PrepMode.threeSeconds;
@@ -239,14 +249,12 @@ class SettingsRepository {
     );
   }
 
-  Future<void> setCo2Rounds(int rounds) =>
-      _set('co2_rounds', rounds.toString());
-
-  Future<void> setCo2HoldPercent(int percent) =>
-      _set('co2_hold_percent', percent.toString());
-
-  Future<void> setCo2RestDecrementSeconds(int seconds) =>
-      _set('co2_rest_decrement_s', seconds.toString());
+  /// Writes rounds, hold percent, and rest decrement as one transaction.
+  Future<void> setCo2TableConfig((int, int, int) value) => _setAll({
+    'co2_rounds': value.$1.toString(),
+    'co2_hold_percent': value.$2.toString(),
+    'co2_rest_decrement_s': value.$3.toString(),
+  });
 
   /// O₂ table config as (rounds, maxHoldPercent 0-100, fixedRestSeconds).
   /// Defaults per PRD: 8 rounds, 80% max hold, 120s fixed rest.
@@ -261,13 +269,12 @@ class SettingsRepository {
     );
   }
 
-  Future<void> setO2Rounds(int rounds) => _set('o2_rounds', rounds.toString());
-
-  Future<void> setO2MaxHoldPercent(int percent) =>
-      _set('o2_max_hold_percent', percent.toString());
-
-  Future<void> setO2RestSeconds(int seconds) =>
-      _set('o2_rest_s', seconds.toString());
+  /// Writes rounds, max hold percent, and fixed rest as one transaction.
+  Future<void> setO2TableConfig((int, int, int) value) => _setAll({
+    'o2_rounds': value.$1.toString(),
+    'o2_max_hold_percent': value.$2.toString(),
+    'o2_rest_s': value.$3.toString(),
+  });
 
   /// Whether sound cues are enabled. Defaults to on.
   Future<bool> getSoundEnabled() async {
@@ -557,11 +564,7 @@ class Co2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
   Future<(int, int, int)> read() => repo.getCo2TableConfig();
 
   @override
-  Future<void> write((int, int, int) value) async {
-    await repo.setCo2Rounds(value.$1);
-    await repo.setCo2HoldPercent(value.$2);
-    await repo.setCo2RestDecrementSeconds(value.$3);
-  }
+  Future<void> write((int, int, int) value) => repo.setCo2TableConfig(value);
 
   Future<void> setRounds(int rounds) => _update(rounds: rounds);
 
@@ -587,11 +590,7 @@ class O2TableConfigNotifier extends _RepoSetting<(int, int, int)> {
   Future<(int, int, int)> read() => repo.getO2TableConfig();
 
   @override
-  Future<void> write((int, int, int) value) async {
-    await repo.setO2Rounds(value.$1);
-    await repo.setO2MaxHoldPercent(value.$2);
-    await repo.setO2RestSeconds(value.$3);
-  }
+  Future<void> write((int, int, int) value) => repo.setO2TableConfig(value);
 
   Future<void> setRounds(int rounds) => _update(rounds: rounds);
 
