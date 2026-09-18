@@ -885,6 +885,19 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String progressHeatmapCellLabel(String date, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tréningov',
+      few: '$count tréningy',
+      one: '1 tréning',
+      zero: 'žiadny tréning',
+    );
+    return '$date, $_temp0';
+  }
+
+  @override
   String get progressChartEmptyWhy =>
       'Na začiatku sa zlepšenie prejaví vo fáze boja, nie v celkovom čase.';
 

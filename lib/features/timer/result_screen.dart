@@ -225,44 +225,52 @@ class _ResultViewState extends ConsumerState<ResultView>
         // No scroll view of its own any more: the page owns the one scroll,
         // so a second one here would trap this content in a nested scrollable
         // that never scrolls.
+        //
+        // This column plus the hero above it still doesn't fit an 860px
+        // window without scrolling — the hero's height is fixed by
+        // TimerStage's reserved-band system (deliberately, so the ring's
+        // centre never moves across state changes; see timer_stage.dart)
+        // and isn't something this screen can shrink on its own. These gaps
+        // are trimmed as far as they safely can be; the rest is a genuine
+        // content-density question for the Result screen, not a spacing bug.
         below: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.md),
 
             // Time-sensitive — hook breaths are for the first half-minute
             // after the hold — so it sits above the metrics, not buried.
             const RecoveryBreathingPrompt(),
 
-            const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.md),
 
             _HoldMetrics(state: state),
 
-            const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.md),
 
             // What today already looks like, so the number above has
             // something to be read against before it is saved.
             const TodaysHoldsRow(),
 
-            const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.md),
 
             const TagChipRow(),
 
-            const SizedBox(height: Spacing.lg),
+            const SizedBox(height: Spacing.md),
 
             const _NoteField(),
 
-            const SizedBox(height: Spacing.xxl),
+            const SizedBox(height: Spacing.lg),
 
             const _LungVolumeSelector(),
 
-            const SizedBox(height: Spacing.xxl),
+            const SizedBox(height: Spacing.lg),
 
             _SaveButton(saving: _saving, onPressed: _save),
 
             _DiscardButton(saving: _saving, onPressed: _discard),
 
-            const SizedBox(height: Spacing.xl),
+            const SizedBox(height: Spacing.lg),
           ],
         ),
       ),

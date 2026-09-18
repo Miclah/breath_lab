@@ -5,10 +5,10 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The v3 migration is additive — it only creates `imst_sessions`. To stand in
-/// for "a database written by a build that predates v3" we realise the current
-/// schema, drop the new table, and roll `user_version` back to 2. Reopening
-/// then drives `onUpgrade(_, 2, 3)`.
+/// Every migration so far is additive (a new table or index). To stand in for
+/// "a database written by an older build" we realise the current schema, drop
+/// what a later version added, and roll `user_version` back. Reopening then
+/// drives `onUpgrade` from that point.
 void main() {
   late Directory dir;
   late File file;
@@ -40,7 +40,12 @@ void main() {
     var db = AppDatabase.forTesting(NativeDatabase(file));
     await insertHold(db, 'h1', 90000);
     await insertHold(db, 'h2', 120000);
+    // Dropping the table takes its index with it; the other two need
+    // dropping explicitly.
     await db.customStatement('DROP TABLE imst_sessions');
+    await db.customStatement('DROP INDEX idx_holds_type_deleted_duration');
+    await db.customStatement('DROP INDEX idx_holds_deleted_created');
+    await db.customStatement('DROP INDEX idx_table_sessions_deleted_created');
     await db.customStatement('PRAGMA user_version = 2');
     await db.close();
 
@@ -54,6 +59,67 @@ void main() {
     // The migration recreated the table and it is usable.
     final imst = await db.select(db.imstSessions).get();
     expect(imst, isEmpty);
+
+    final version = await db.customSelect('PRAGMA user_version').getSingle();
+    expect(version.data.values.single, db.schemaVersion);
+  });
+
+  test('a pre-v4 database migrates, adding the new indices', () async {
+    var db = AppDatabase.forTesting(NativeDatabase(file));
+    await insertHold(db, 'h1', 90000);
+    await db.customStatement('DROP INDEX idx_holds_type_deleted_duration');
+    await db.customStatement('DROP INDEX idx_holds_deleted_created');
+    await db.customStatement('DROP INDEX idx_table_sessions_deleted_created');
+    await db.customStatement('DROP INDEX idx_imst_sessions_deleted_created');
+    await db.customStatement('PRAGMA user_version = 3');
+    await db.close();
+
+    db = AppDatabase.forTesting(NativeDatabase(file));
+    addTearDown(db.close);
+
+    final holds = await db.select(db.holds).get();
+    expect(holds.map((h) => h.id), ['h1']);
+
+    final indexNames = await db
+        .customSelect(
+          "SELECT name FROM sqlite_master WHERE type = 'index' AND name LIKE 'idx_%'",
+        )
+        .get();
+    expect(
+      indexNames.map((r) => r.data['name']),
+      containsAll([
+        'idx_holds_type_deleted_duration',
+        'idx_holds_deleted_created',
+        'idx_table_sessions_deleted_created',
+        'idx_imst_sessions_deleted_created',
+      ]),
+    );
+
+    final version = await db.customSelect('PRAGMA user_version').getSingle();
+    expect(version.data.values.single, db.schemaVersion);
+  });
+
+  test('a pre-v2 database migrates straight to current in one jump', () async {
+    // Stands in for a user who skips several releases in one update, rather
+    // than upgrading one version at a time.
+    var db = AppDatabase.forTesting(NativeDatabase(file));
+    await insertHold(db, 'h1', 90000);
+    await db.customStatement('DROP INDEX idx_holds_type_deleted_duration');
+    await db.customStatement('DROP INDEX idx_holds_deleted_created');
+    await db.customStatement('DROP INDEX idx_table_sessions_deleted_created');
+    await db.customStatement('DROP INDEX idx_imst_sessions_deleted_created');
+    await db.customStatement('DROP TABLE imst_sessions');
+    await db.customStatement('DROP TABLE table_sessions');
+    await db.customStatement('PRAGMA user_version = 1');
+    await db.close();
+
+    db = AppDatabase.forTesting(NativeDatabase(file));
+    addTearDown(db.close);
+
+    final holds = await db.select(db.holds).get();
+    expect(holds.map((h) => h.id), ['h1']);
+    expect(await db.select(db.tableSessions).get(), isEmpty);
+    expect(await db.select(db.imstSessions).get(), isEmpty);
 
     final version = await db.customSelect('PRAGMA user_version').getSingle();
     expect(version.data.values.single, db.schemaVersion);

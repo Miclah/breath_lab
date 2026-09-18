@@ -48,6 +48,22 @@ class ImstSessionsRepository {
     return rows.map(_fromRow).toList();
   }
 
+  /// Non-deleted sessions created on or after [since], newest first. See
+  /// [HoldsRepository.getSince] for why this exists.
+  Future<List<ImstSession>> getSince(DateTime since) async {
+    final cutoff = since.millisecondsSinceEpoch;
+    final rows =
+        await (_db.select(_db.imstSessions)
+              ..where(
+                (t) =>
+                    t.deleted.equals(0) &
+                    t.createdAt.isBiggerOrEqualValue(cutoff),
+              )
+              ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+            .get();
+    return rows.map(_fromRow).toList();
+  }
+
   /// Every row, soft-deleted included — for the sync payload.
   Future<List<SyncImstSessionRecord>> allSyncRecords() async {
     final rows = await _db.select(_db.imstSessions).get();

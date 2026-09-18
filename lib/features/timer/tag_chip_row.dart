@@ -161,33 +161,53 @@ class _TagChipState extends State<_TagChip> {
     final c = context.appColors;
     final selected = widget.selected;
 
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) => setState(() => _pressed = false),
-      onTapCancel: () => setState(() => _pressed = false),
+    return Semantics(
+      button: widget.onTap != null,
+      selected: selected,
+      label: widget.label,
       onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: Durations.fast,
-          padding: const EdgeInsets.symmetric(
-            horizontal: Spacing.md,
-            vertical: Spacing.xxs,
-          ),
-          decoration: BoxDecoration(
-            color: selected ? c.primarySurface : Colors.transparent,
-            border: Border.all(
-              color: selected ? c.primary : c.border,
-              width: 0.5,
-            ),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            widget.label,
-            // 13 is not a step on the revised scale; a chip label is a label.
-            style: BreathLabTypography.label.copyWith(
-              color: selected ? c.primaryText : c.textSecondary,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          // InkWell rather than GestureDetector: keyboard focus (Tab) skips
+          // GestureDetectors entirely, so this chip was unreachable without
+          // a mouse. Matches lung_volume's fix in result_screen.dart.
+          borderRadius: BorderRadius.circular(999),
+          onTapDown: widget.onTap == null
+              ? null
+              : (_) => setState(() => _pressed = true),
+          onTapCancel: () => setState(() => _pressed = false),
+          onTap: widget.onTap == null
+              ? null
+              : () {
+                  setState(() => _pressed = false);
+                  widget.onTap!();
+                },
+          child: AnimatedScale(
+            scale: _pressed ? 0.97 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: AnimatedContainer(
+              duration: Durations.fast,
+              padding: const EdgeInsets.symmetric(
+                horizontal: Spacing.md,
+                vertical: Spacing.xxs,
+              ),
+              decoration: BoxDecoration(
+                color: selected ? c.primarySurface : Colors.transparent,
+                border: Border.all(
+                  color: selected ? c.primary : c.border,
+                  width: 0.5,
+                ),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                widget.label,
+                // 13 is not a step on the revised scale; a chip label is a
+                // label.
+                style: BreathLabTypography.label.copyWith(
+                  color: selected ? c.primaryText : c.textSecondary,
+                ),
+              ),
             ),
           ),
         ),
@@ -238,20 +258,29 @@ class _AddTagChip extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final c = context.appColors;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: l10n.tagAddLabel,
       onTap: () => _showDialog(context),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Spacing.md,
-          vertical: Spacing.xxs,
-        ),
-        decoration: BoxDecoration(
-          border: Border.all(color: c.border, width: 0.5),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
           borderRadius: BorderRadius.circular(999),
-        ),
-        child: Text(
-          l10n.tagAddLabel,
-          style: BreathLabTypography.label.copyWith(color: c.textTertiary),
+          onTap: () => _showDialog(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Spacing.md,
+              vertical: Spacing.xxs,
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(color: c.border, width: 0.5),
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Text(
+              l10n.tagAddLabel,
+              style: BreathLabTypography.label.copyWith(color: c.textTertiary),
+            ),
+          ),
         ),
       ),
     );

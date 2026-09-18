@@ -48,6 +48,22 @@ class TableSessionsRepository {
     return rows.map(_fromRow).toList();
   }
 
+  /// Non-deleted table sessions created on or after [since], newest first.
+  /// See [HoldsRepository.getSince] for why this exists.
+  Future<List<TableSession>> getSince(DateTime since) async {
+    final cutoff = since.millisecondsSinceEpoch;
+    final rows =
+        await (_db.select(_db.tableSessions)
+              ..where(
+                (t) =>
+                    t.deleted.equals(0) &
+                    t.createdAt.isBiggerOrEqualValue(cutoff),
+              )
+              ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+            .get();
+    return rows.map(_fromRow).toList();
+  }
+
   /// Bulk upsert for sync: writes each record's `updatedAt`/`deviceId` as
   /// given, rather than stamping local values the way [save] does.
   Future<void> upsertAll(List<SyncTableSessionRecord> records) async {

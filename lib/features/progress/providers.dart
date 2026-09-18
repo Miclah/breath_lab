@@ -17,9 +17,43 @@ final allTimePbProvider = Provider<Duration?>((ref) {
   return StatsService.allTimePB(holds);
 });
 
+/// The recent-history window shared by every provider below that only
+/// looks at a bounded window — comfortably covers the widest of their
+/// needs (the heatmap's 84-day span) with margin.
+///
+/// [allHoldsProvider] and friends fetch the entire non-deleted history;
+/// fine for [allTimePbProvider], [trainingWeeksProvider] and
+/// [retestPromptProvider], which genuinely need all of it, but everything
+/// here only needs the last few weeks. Querying just that window — on the
+/// `(deleted, createdAt)` index — instead of scanning years of rows on
+/// every save is the point.
+const _recentWindowDays = 90;
+
+DateTime _recentWindowStart() =>
+    DateTime.now().subtract(const Duration(days: _recentWindowDays));
+
+final _recentHoldsProvider = FutureProvider<List<Hold>>((ref) async {
+  final repo = await ref.watch(holdsRepositoryProvider.future);
+  return repo.getSince(_recentWindowStart());
+});
+
+final _recentTableSessionsProvider = FutureProvider<List<TableSession>>((
+  ref,
+) async {
+  final repo = await ref.watch(tableSessionsRepositoryProvider.future);
+  return repo.getSince(_recentWindowStart());
+});
+
+final _recentImstSessionsProvider = FutureProvider<List<ImstSession>>((
+  ref,
+) async {
+  final repo = await ref.watch(imstSessionsRepositoryProvider.future);
+  return repo.getSince(_recentWindowStart());
+});
+
 /// Average max hold duration over the last 30 days.
 final avg30dProvider = Provider<Duration?>((ref) {
-  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final holds = ref.watch(_recentHoldsProvider).valueOrNull ?? const [];
   return StatsService.averageWithinDays(holds, 30);
 });
 
@@ -35,9 +69,10 @@ final trainingWeeksProvider = Provider<int>((ref) {
 /// This week's structure adherence — the headline metric that replaces the
 /// consecutive-days streak on the Timer screen.
 final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
-  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
-  final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  final holds = ref.watch(_recentHoldsProvider).valueOrNull ?? const [];
+  final tables =
+      ref.watch(_recentTableSessionsProvider).valueOrNull ?? const [];
+  final imst = ref.watch(_recentImstSessionsProvider).valueOrNull ?? const [];
   return AdherenceService.currentWeek(holds: holds, tables: tables, imst: imst);
 });
 
@@ -45,7 +80,7 @@ final currentAdherenceProvider = Provider<WeeklyAdherence>((ref) {
 /// 28 before — surfaces the deload card on Progress (`RESEARCH_ALIGNMENT.md`
 /// §3.2).
 final plateauStatusProvider = Provider<PlateauStatus>((ref) {
-  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
+  final holds = ref.watch(_recentHoldsProvider).valueOrNull ?? const [];
   return PlateauService.detect(holds);
 });
 
@@ -121,9 +156,10 @@ class HeatmapData {
 }
 
 final heatmapDataProvider = Provider<HeatmapData>((ref) {
-  final holds = ref.watch(allHoldsProvider).valueOrNull ?? const [];
-  final tables = ref.watch(allTableSessionsProvider).valueOrNull ?? const [];
-  final imst = ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  final holds = ref.watch(_recentHoldsProvider).valueOrNull ?? const [];
+  final tables =
+      ref.watch(_recentTableSessionsProvider).valueOrNull ?? const [];
+  final imst = ref.watch(_recentImstSessionsProvider).valueOrNull ?? const [];
   return computeHeatmapData(holds, tables, imst: imst);
 });
 

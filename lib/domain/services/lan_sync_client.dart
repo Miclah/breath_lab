@@ -68,7 +68,9 @@ class LanSyncClient {
       switch (response.statusCode) {
         case HttpStatus.ok:
           final replyBody = await utf8.decodeStream(response);
-          return _syncService.applyRemotePayload(SyncPayload.decode(replyBody));
+          return await _syncService.applyRemotePayload(
+            SyncPayload.decode(replyBody),
+          );
         case HttpStatus.unauthorized:
           await response.drain<void>();
           throw const LanSyncClientException(

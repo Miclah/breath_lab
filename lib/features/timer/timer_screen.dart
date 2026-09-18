@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Durations;
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -229,33 +230,51 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     (diameter / TimerRing.expandedDiameter),
         );
 
-        return GestureDetector(
-          onDoubleTap: () => ref.read(timerProvider.notifier).markContraction(),
-          child: TimerRing(
-            value: ringValue,
-            elapsed: elapsed,
-            size: diameter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(formatMmSs(elapsed), style: timerStyle),
-                // Reserved, not conditional: a label that appears only while
-                // holding would shift the number inside a ring whose own
-                // centre is fixed.
-                SizedBox(
-                  height: 16,
-                  child: AnimatedSwitcher(
-                    duration: Durations.normal,
-                    child: !state.isHolding
-                        ? const SizedBox.shrink()
-                        : Text(
-                            l10n.timerStateLabelHold,
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(color: c.textTertiary),
-                          ),
+        return Semantics(
+          // The double-tap has no visible affordance, so a screen reader
+          // gets a custom action instead — there is nothing on screen for
+          // it to otherwise announce as tappable here.
+          customSemanticsActions: state.isHolding
+              ? {
+                  CustomSemanticsAction(
+                    label: l10n.notificationMarkContractionAction,
+                  ): () =>
+                      ref.read(timerProvider.notifier).markContraction(),
+                }
+              : null,
+          child: GestureDetector(
+            onDoubleTap: () =>
+                ref.read(timerProvider.notifier).markContraction(),
+            child: TimerRing(
+              value: ringValue,
+              elapsed: elapsed,
+              size: diameter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(formatMmSs(elapsed), style: timerStyle),
+                  // Reserved, not conditional: a label that appears only while
+                  // holding would shift the number inside a ring whose own
+                  // centre is fixed.
+                  SizedBox(
+                    height: 16,
+                    child: AnimatedSwitcher(
+                      duration: Durations.normal,
+                      child: !state.isHolding
+                          ? const SizedBox.shrink()
+                          : Text(
+                              l10n.timerStateLabelHold.toUpperCase(),
+                              // Design revision §3: micro, uppercase, 0.12em
+                              // tracking — heavier than micro's own default.
+                              style: BreathLabTypography.micro.copyWith(
+                                color: c.textTertiary,
+                                letterSpacing: 1.32,
+                              ),
+                            ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

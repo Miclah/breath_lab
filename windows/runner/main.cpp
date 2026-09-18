@@ -34,7 +34,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   const bool restored =
       Win32Window::RestoreGeometry(&origin, &size, &maximized);
 
-  if (!window.Create(L"breath_lab", origin, size)) {
+  if (!window.Create(L"BreathLab", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

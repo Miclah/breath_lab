@@ -58,15 +58,15 @@ dependencies:
   # Utilities
   uuid: ^4.5.1
   shared_preferences: ^2.3.5
-  package_info_plus: ^8.1.2
+  package_info_plus: ^10.2.1
   flutter_local_notifications: ^18.0.1
   screen_brightness: ^2.1.1
   wakelock_plus: ^1.2.10
 
   # Cross-device sync (Phase 2A): .blab file export/import
   file_selector: ^1.1.0
-  share_plus: ^12.0.2
-  device_info_plus: ^12.4.0
+  share_plus: ^13.3.0
+  device_info_plus: ^13.2.0
 
   # Cross-device sync (Phase 2B): QR-paired LAN sync
   qr_flutter: ^4.1.0

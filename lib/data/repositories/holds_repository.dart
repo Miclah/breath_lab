@@ -94,6 +94,27 @@ class HoldsRepository {
     return rows.map(_fromRow).toList();
   }
 
+  /// Non-deleted holds created on or after [since], newest first.
+  ///
+  /// For the providers (30-day average, plateau, weekly adherence, the
+  /// heatmap) that only ever look at a bounded recent window — querying
+  /// just that window, on the `(deleted, createdAt)` index, is the point:
+  /// [getAll] over a years-old history does a full scan and hands back
+  /// thousands of rows the caller immediately throws away.
+  Future<List<Hold>> getSince(DateTime since) async {
+    final cutoff = since.millisecondsSinceEpoch;
+    final rows =
+        await (_db.select(_db.holds)
+              ..where(
+                (t) =>
+                    t.deleted.equals(0) &
+                    t.createdAt.isBiggerOrEqualValue(cutoff),
+              )
+              ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+            .get();
+    return rows.map(_fromRow).toList();
+  }
+
   Future<Hold?> getById(String id) async {
     final row = await (_db.select(
       _db.holds,
