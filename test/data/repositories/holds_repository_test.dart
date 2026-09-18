@@ -172,4 +172,39 @@ void main() {
       expect(best, 60000);
     });
   });
+
+  group('getSince', () {
+    late AppDatabase db;
+    late HoldsRepository repo;
+
+    setUp(() {
+      db = AppDatabase.forTesting(NativeDatabase.memory());
+      repo = HoldsRepository(db, 'local-device');
+    });
+
+    tearDown(() => db.close());
+
+    test('includes the cutoff instant, excludes anything older', () async {
+      await repo.save(_hold('too-old', seconds: 10, createdAtMs: 999));
+      await repo.save(_hold('at-cutoff', seconds: 20, createdAtMs: 1000));
+      await repo.save(_hold('after', seconds: 30, createdAtMs: 1500));
+
+      final since = DateTime.fromMillisecondsSinceEpoch(1000);
+      final result = await repo.getSince(since);
+
+      expect(result.map((h) => h.id), ['after', 'at-cutoff']);
+    });
+
+    test('excludes soft-deleted holds', () async {
+      await repo.save(_hold('kept', seconds: 10, createdAtMs: 2000));
+      await repo.save(_hold('deleted', seconds: 10, createdAtMs: 2000));
+      await repo.delete('deleted');
+
+      final result = await repo.getSince(
+        DateTime.fromMillisecondsSinceEpoch(1000),
+      );
+
+      expect(result.map((h) => h.id), ['kept']);
+    });
+  });
 }
