@@ -2891,6 +2891,22 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SettingsTable settings = $SettingsTable(this);
   late final $TableSessionsTable tableSessions = $TableSessionsTable(this);
   late final $ImstSessionsTable imstSessions = $ImstSessionsTable(this);
+  late final Index idxHoldsTypeDeletedDuration = Index(
+    'idx_holds_type_deleted_duration',
+    'CREATE INDEX idx_holds_type_deleted_duration ON holds (type, deleted, duration_ms)',
+  );
+  late final Index idxHoldsDeletedCreated = Index(
+    'idx_holds_deleted_created',
+    'CREATE INDEX idx_holds_deleted_created ON holds (deleted, created_at)',
+  );
+  late final Index idxTableSessionsDeletedCreated = Index(
+    'idx_table_sessions_deleted_created',
+    'CREATE INDEX idx_table_sessions_deleted_created ON table_sessions (deleted, created_at)',
+  );
+  late final Index idxImstSessionsDeletedCreated = Index(
+    'idx_imst_sessions_deleted_created',
+    'CREATE INDEX idx_imst_sessions_deleted_created ON imst_sessions (deleted, created_at)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2902,6 +2918,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     settings,
     tableSessions,
     imstSessions,
+    idxHoldsTypeDeletedDuration,
+    idxHoldsDeletedCreated,
+    idxTableSessionsDeletedCreated,
+    idxImstSessionsDeletedCreated,
   ];
 }
 

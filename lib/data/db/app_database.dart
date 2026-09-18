@@ -9,6 +9,16 @@ part 'app_database.g.dart';
 // Tables
 // ---------------------------------------------------------------------------
 
+// Every read filters on `deleted` at minimum, and the hot paths (recomputing
+// the PB flag on every max-hold save, listing history) also filter on `type`
+// or order by `createdAt` — all unindexed until now, so every one of those
+// queries full-scans the table. Fine at the row counts this app started
+// with; not fine after a few years of daily use.
+@TableIndex(
+  name: 'idx_holds_type_deleted_duration',
+  columns: {#type, #deleted, #durationMs},
+)
+@TableIndex(name: 'idx_holds_deleted_created', columns: {#deleted, #createdAt})
 class Holds extends Table {
   TextColumn get id => text()();
   IntColumn get createdAt => integer()();
@@ -60,6 +70,10 @@ class Settings extends Table {
   Set<Column> get primaryKey => {key};
 }
 
+@TableIndex(
+  name: 'idx_table_sessions_deleted_created',
+  columns: {#deleted, #createdAt},
+)
 class TableSessions extends Table {
   TextColumn get id => text()();
   IntColumn get createdAt => integer()();
@@ -78,6 +92,10 @@ class TableSessions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@TableIndex(
+  name: 'idx_imst_sessions_deleted_created',
+  columns: {#deleted, #createdAt},
+)
 class ImstSessions extends Table {
   TextColumn get id => text()();
   IntColumn get createdAt => integer()();
@@ -126,7 +144,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -140,6 +158,12 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 3) {
         await m.createTable(imstSessions);
+      }
+      if (from < 4) {
+        await m.createIndex(idxHoldsTypeDeletedDuration);
+        await m.createIndex(idxHoldsDeletedCreated);
+        await m.createIndex(idxTableSessionsDeletedCreated);
+        await m.createIndex(idxImstSessionsDeletedCreated);
       }
     },
   );
