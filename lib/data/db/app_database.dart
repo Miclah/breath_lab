@@ -182,6 +182,44 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
+  /// Permanently removes soft-deleted rows older than [retention].
+  ///
+  /// Tombstones (`deleted = 1`) are kept rather than hard-deleted so a sync
+  /// partner that hasn't connected in a while still learns the row is gone
+  /// instead of resurrecting it. Kept forever, though, they're a monotonic
+  /// leak: `.blab` export size and sync payload size only ever grow. Six
+  /// months is long enough for any of the user's own devices — the only
+  /// sync partners this app has — to have reconnected at least once.
+  Future<void> purgeOldTombstones({
+    Duration retention = const Duration(days: 180),
+  }) async {
+    final cutoff = DateTime.now().subtract(retention).millisecondsSinceEpoch;
+    await transaction(() async {
+      final staleHoldIds =
+          await (select(holds)..where(
+                (t) =>
+                    t.deleted.equals(1) &
+                    t.updatedAt.isSmallerThanValue(cutoff),
+              ))
+              .map((row) => row.id)
+              .get();
+      if (staleHoldIds.isNotEmpty) {
+        await (delete(
+          holdTags,
+        )..where((t) => t.holdId.isIn(staleHoldIds))).go();
+        await (delete(holds)..where((t) => t.id.isIn(staleHoldIds))).go();
+      }
+      await (delete(tableSessions)..where(
+            (t) => t.deleted.equals(1) & t.updatedAt.isSmallerThanValue(cutoff),
+          ))
+          .go();
+      await (delete(imstSessions)..where(
+            (t) => t.deleted.equals(1) & t.updatedAt.isSmallerThanValue(cutoff),
+          ))
+          .go();
+    });
+  }
+
   Future<void> _seedBuiltInTags() async {
     const uuid = Uuid();
     final now = DateTime.now().millisecondsSinceEpoch;
