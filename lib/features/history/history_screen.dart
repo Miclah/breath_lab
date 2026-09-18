@@ -86,6 +86,49 @@ class _EventEntry extends _HistoryEntry {
   DateTime get createdAt => hold.createdAt;
 }
 
+/// The merged, filtered, sorted history list.
+///
+/// A plain [Provider] rather than computed inline in `build()`: Riverpod
+/// caches it and only recomputes when a watched dependency actually
+/// changes, instead of on every rebuild the screen goes through (a filter
+/// chip toggling, or any unrelated invalidation elsewhere in the app).
+/// Null while the underlying holds/table-session data hasn't loaded yet.
+final _historyEntriesProvider = Provider<List<_HistoryEntry>?>((ref) {
+  final holds = ref.watch(allHoldsProvider).valueOrNull;
+  final tableSessions = ref.watch(allTableSessionsProvider).valueOrNull;
+  if (holds == null || tableSessions == null) return null;
+
+  final imstSessions =
+      ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
+  final holdTagIds = ref.watch(holdTagIdsProvider).valueOrNull ?? const {};
+  final types = ref.watch(historyTypeFilterProvider);
+  final lungVolumes = ref.watch(historyLungVolumeFilterProvider);
+  final tagFilter = ref.watch(historyTagFilterProvider);
+
+  return <_HistoryEntry>[
+    for (final hold in holds)
+      if ((hold.type == HoldType.rest || hold.type == HoldType.stretch) &&
+          types.isEmpty)
+        _EventEntry(hold)
+      else if (!hold.type.isEvent &&
+          hold.type != HoldType.co2 &&
+          hold.type != HoldType.o2 &&
+          holdMatchesHistoryFilters(
+            hold,
+            types: types,
+            lungVolumes: lungVolumes,
+            tagFilter: tagFilter,
+            holdTagIds: holdTagIds[hold.id] ?? const {},
+          ))
+        _HoldEntry(hold),
+    for (final session in tableSessions)
+      if (tableSessionMatchesHistoryFilters(session, types))
+        _TableSessionEntry(session),
+    for (final session in imstSessions)
+      if (imstMatchesHistoryFilters(types)) _ImstEntry(session),
+  ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+});
+
 /// Opens the read-only IMST session detail sheet.
 void showImstDetail(BuildContext context, ImstSession session) {
   showModalBottomSheet(
@@ -107,14 +150,7 @@ class HistoryScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final holdsAsync = ref.watch(allHoldsProvider);
     final tableSessionsAsync = ref.watch(allTableSessionsProvider);
-    final holds = holdsAsync.valueOrNull;
-    final tableSessions = tableSessionsAsync.valueOrNull;
-    final imstSessions =
-        ref.watch(allImstSessionsProvider).valueOrNull ?? const [];
-    final holdTagIds = ref.watch(holdTagIdsProvider).valueOrNull ?? const {};
-    final types = ref.watch(historyTypeFilterProvider);
-    final lungVolumes = ref.watch(historyLungVolumeFilterProvider);
-    final tagFilter = ref.watch(historyTagFilterProvider);
+    final entries = ref.watch(_historyEntriesProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.historyTitle)),
@@ -122,37 +158,12 @@ class HistoryScreen extends ConsumerWidget {
         children: [
           const HistoryFilterBar(),
           Expanded(
-            child: holds == null || tableSessions == null
+            child: entries == null
                 ? holdsAsync.hasError || tableSessionsAsync.hasError
                       ? const SizedBox.shrink()
                       : const Center(child: CircularProgressIndicator())
                 : Builder(
                     builder: (context) {
-                      final entries = <_HistoryEntry>[
-                        for (final hold in holds)
-                          if ((hold.type == HoldType.rest ||
-                                  hold.type == HoldType.stretch) &&
-                              types.isEmpty)
-                            _EventEntry(hold)
-                          else if (!hold.type.isEvent &&
-                              hold.type != HoldType.co2 &&
-                              hold.type != HoldType.o2 &&
-                              holdMatchesHistoryFilters(
-                                hold,
-                                types: types,
-                                lungVolumes: lungVolumes,
-                                tagFilter: tagFilter,
-                                holdTagIds: holdTagIds[hold.id] ?? const {},
-                              ))
-                            _HoldEntry(hold),
-                        for (final session in tableSessions)
-                          if (tableSessionMatchesHistoryFilters(session, types))
-                            _TableSessionEntry(session),
-                        for (final session in imstSessions)
-                          if (imstMatchesHistoryFilters(types))
-                            _ImstEntry(session),
-                      ]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
                       if (entries.isEmpty) {
                         return Center(
                           child: Text(
