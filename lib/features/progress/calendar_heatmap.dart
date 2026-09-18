@@ -310,15 +310,21 @@ class _HeatmapCell extends StatelessWidget {
         DateFormat.yMMMd(locale).format(date),
         count,
       ),
-      child: GestureDetector(
-        onTap: count > 0 ? () => onTap(context, date) : null,
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: _cellColor(context, count),
-            borderRadius: BorderRadius.circular(Radius.xs),
-            border: isToday ? Border.all(color: c.primary, width: 1) : null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          // InkWell rather than GestureDetector: keyboard focus (Tab) skips
+          // GestureDetectors entirely.
+          borderRadius: BorderRadius.circular(Radius.xs),
+          onTap: count > 0 ? () => onTap(context, date) : null,
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: _cellColor(context, count),
+              borderRadius: BorderRadius.circular(Radius.xs),
+              border: isToday ? Border.all(color: c.primary, width: 1) : null,
+            ),
           ),
         ),
       ),
