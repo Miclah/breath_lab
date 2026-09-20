@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/db/database_provider.dart';
 import '../../data/repositories/holds_repository.dart';
+import '../../data/repositories/imst_sessions_repository.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/table_sessions_repository.dart';
 import '../../data/repositories/tags_repository.dart';
@@ -113,8 +114,15 @@ class _ResetAllDataRow extends ConsumerWidget {
     // re-seeded every table, so the existing connection is correct — only
     // the things that cached its contents need to re-read.
     ref.invalidate(settingsRepositoryProvider);
-    ref.invalidate(allHoldsProvider);
-    ref.invalidate(allTableSessionsProvider);
+    // Invalidated at the repository root, not the derived list providers:
+    // Progress's own recent-window providers (30d avg, adherence, heatmap,
+    // plateau) fetch straight from these repositories rather than from
+    // allHoldsProvider/allTableSessionsProvider, so invalidating only the
+    // latter left them holding pre-reset data. Invalidating the repository
+    // providers cascades to every provider built on top of them.
+    ref.invalidate(holdsRepositoryProvider);
+    ref.invalidate(tableSessionsRepositoryProvider);
+    ref.invalidate(imstSessionsRepositoryProvider);
     ref.invalidate(holdTagIdsProvider);
     ref.invalidate(holdTagCountsProvider);
     ref.invalidate(builtInTagsProvider);
