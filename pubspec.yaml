@@ -65,7 +65,7 @@ dependencies:
 
   # Cross-device sync (Phase 2A): .blab file export/import
   file_selector: ^1.1.0
-  share_plus: ^13.3.0
+  share_plus: ">=13.0.0 <13.2.0"
   device_info_plus: ^13.2.0
 
   # Cross-device sync (Phase 2B): QR-paired LAN sync
